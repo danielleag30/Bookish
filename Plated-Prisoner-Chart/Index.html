@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Plated Prisoner – Character Chart</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0e0e18; font-family: Georgia, serif; color: #ddd; }
+    ::-webkit-scrollbar { width: 6px; } 
+    ::-webkit-scrollbar-track { background: #1a1228; }
+    ::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState, useRef, useCallback } = React;
+
+    const BOOKS = ["Book 1: Gild","Book 2: Glint","Book 3: Gleam","Book 4: Glow","Book 5: Gold","Book 6: Goldfinch"];
+    const BOOK_EVENTS = [
+      { title:"Book 1: Gild", events:["Auren lives in Midas's gilded cage in Highbell","King Fulke demands a night with Auren — Midas agrees","Fulke is killed by Digby saving Auren","Sail is killed by the Red Raids","The caravan is attacked — Auren captured by Commander Rip"], dominant:"Sixth Kingdom" },
+      { title:"Book 2: Glint", events:["Auren is prisoner of the Fourth Kingdom's army","She meets the Wrath: Osrik, Lu, Judd, and Hojat","Slow-burn tension builds between Auren and Rip","Rip reveals the gold touch is Auren's power — not Midas's","Malina begins secretly rebelling against Midas"], dominant:"Fourth Kingdom" },
+      { title:"Book 3: Gleam", events:["Auren is back with Midas at Ranhold (Fifth Kingdom)","Queen Kaila of Third Kingdom allies with Midas","Auren kills Midas — traps him in gold","Mist is killed by Kaila","Rip is revealed to be King Slade Ravinger","Ryatt was 'Fake Rip' the whole time"], dominant:"Third Kingdom (rising)" },
+      { title:"Book 4: Glow", events:["Slade hides Auren in Deadwell to recover","Kaila frames Auren — all kingdoms turn against her","Malina unintentionally reopens the bridge to Annwyn","Prince Niven killed by Kaila — puppet king Hagan installed","Auren falls through a portal into Annwyn"], dominant:"Third Kingdom (Kaila)" },
+      { title:"Book 5: Gold", events:["Auren wakes in Annwyn — her ancestral home","She joins the Vulmin rebels led by Wick","Slade's heart is rotting without Auren","Auren and Slade confirmed as Päyur — fated mates","Lord Cull (Slade's father) revealed as villain"], dominant:"Annwyn (Carrick/Cull)" },
+      { title:"Book 6: Goldfinch", events:["Auren's memories stolen by Una on Carrick's orders","War breaks out between Annwyn and Orea","Malina sacrifices herself to protect her kingdom","Judd is killed in battle","Ryatt kills King Carrick","Slade kills Lord Cull — his own father","Auren and Slade reunite in Annwyn"], dominant:"Annwyn (Turley restored)" },
+    ];
+
+    const KINGDOMS = {
+      sixth:   { label:"Sixth Kingdom (Highbell)",   color:"#d4af3722", border:"#d4af37", x:30,  y:115, w:320, h:375, power:"Gold magic (Midas)" },
+      fourth:  { label:"Fourth Kingdom (Brackhill)",  color:"#4a4a8a22", border:"#4a4a8a", x:660, y:115, w:330, h:375, power:"Rot magic (Slade)" },
+      fifth:   { label:"Fifth Kingdom (Ranhold)",     color:"#8b1a1a22", border:"#8b1a1a", x:30,  y:35,  w:200, h:72,  power:"Pleasure / scheming" },
+      third:   { label:"Third Kingdom",               color:"#9c27b022", border:"#9c27b0", x:250, y:35,  w:200, h:72,  power:"Word-stealing (Kaila)" },
+      first:   { label:"First Kingdom",               color:"#00897b22", border:"#00897b", x:470, y:35,  w:180, h:72,  power:"Political / pragmatic" },
+      second:  { label:"Second Kingdom",              color:"#5d402022", border:"#5d4020", x:660, y:35,  w:155, h:72,  power:"Fanatical cleansing" },
+      seventh: { label:"Seventh Kingdom (destroyed)", color:"#37474f33", border:"#607d8b", x:825, y:35,  w:165, h:72,  power:"Destroyed — bridge fell" },
+      pirates: { label:"Red Raids (Pirates)",         color:"#e7650022", border:"#e76500", x:360, y:115, w:130, h:100, power:"Raiding / kidnapping" },
+      neutral: { label:"Neutral / Traveling",         color:"#27ae6022", border:"#27ae60", x:360, y:223, w:130, h:85,  power:"—" },
+      annwyn:  { label:"ANNWYN — Fae Realm",          color:"#7e57c233", border:"#9575cd", x:30,  y:505, w:960, h:225, power:"Ancient fae magic" },
+    };
+
+    const MAGIC_ICONS = { gold:"✦", rot:"☠", ice:"❄", shadow:"🌑", word:"👂", glamour:"🎭", breaking:"💥", divination:"🔮", memory:"🧠", none:"" };
+    const STATUS_ICONS = { killed:"💀", alive:"", sacrifices:"🌟" };
+
+    const KING_COLORS = {
+      midas:   { bg:"#b8860b", border:"#7a5900", label:"#fff",    desc:"Manipulative · Greedy · Charismatic" },
+      rip:     { bg:"#1a1a2e", border:"#4a4a8a", label:"#c8c8ff", desc:"Fierce · Loyal · Protective" },
+      fulke:   { bg:"#8b1a1a", border:"#5a0000", label:"#ffd0d0", desc:"Cruel · Lecherous · Scheming" },
+      malina:  { bg:"#e3f2fd", border:"#90caf9", label:"#1a237e", desc:"Cold → Selfless · Sacrificial arc" },
+      kaila:   { bg:"#4a148c", border:"#7b1fa2", label:"#e1bee7", desc:"Cunning · Manipulative · Power-hungry" },
+      thold:   { bg:"#00695c", border:"#004d40", label:"#b2dfdb", desc:"Pragmatic · Diplomatic" },
+      hagan:   { bg:"#bf360c", border:"#7f1d00", label:"#ffccbc", desc:"Puppet king · Weak" },
+      carrick: { bg:"#1b1b1b", border:"#555",    label:"#fff",    desc:"Tyrannical · Brutal · Genocidal" },
+      niven:   { bg:"#fbc02d", border:"#f57f17", label:"#3e2723", desc:"Innocent heir · killed by Kaila" },
+    };
+
+    const RELATION_STYLES = {
+      "Captor/Captive":     { color:"#c0392b", dash:"6,3",      label:"⛓ Captor/Captive" },
+      "Slow-burn romance":  { color:"#ad1457", dash:"4,2",      label:"♥ Slow-burn" },
+      "Love Interest":      { color:"#e91e8c", dash:"0",        label:"♥ Love Interest" },
+      "Fated Mates (Päyur)":{ color:"#ff1744", dash:"0",        label:"💞 Fated Mates" },
+      "Married":            { color:"#8e44ad", dash:"0",        label:"⚭ Married" },
+      "Ally":               { color:"#27ae60", dash:"0",        label:"✦ Ally" },
+      "Enemy":              { color:"#e74c3c", dash:"4,2",      label:"✕ Enemy" },
+      "Trusted Guard":      { color:"#2980b9", dash:"0",        label:"🛡 Guard" },
+      "Friend":             { color:"#16a085", dash:"0",        label:"★ Friend" },
+      "Commander":          { color:"#34495e", dash:"3,3",      label:"⚔ Commander" },
+      "Wrath (squad)":      { color:"#546e7a", dash:"2,2",      label:"⚔ Wrath" },
+      "Hostile":            { color:"#f39c12", dash:"5,3",      label:"⚡ Hostile" },
+      "Political Deal":     { color:"#795548", dash:"8,2,2,2",  label:"🤝 Political" },
+      "Sibling":            { color:"#ec407a", dash:"0",        label:"👫 Sibling" },
+      "Parent/Child":       { color:"#d81b60", dash:"0",        label:"👪 Parent/Child" },
+      "Family":             { color:"#c2185b", dash:"0",        label:"👪 Family" },
+      "Ancestor":           { color:"#6a1b9a", dash:"1,3",      label:"⏳ Ancestor" },
+      "Killed":             { color:"#212121", dash:"1,2",      label:"💀 Killed" },
+      "Sacrifices for":     { color:"#ffc107", dash:"0",        label:"🌟 Sacrifice" },
+      "Rebellion":          { color:"#1e88e5", dash:"5,2",      label:"🔥 Rebel ally" },
+      "Mentor / Loyalist":  { color:"#00838f", dash:"0",        label:"📜 Loyalist" },
+    };
+
+    const ALL_NODES = [
+      { id:"midas",        label:"King Midas",      role:"King of Sixth Kingdom",             kingdom:"sixth",   size:"main", book:0, lastBook:2, x:200, y:205, king:"midas",  magic:"gold",    status:"killed",    bio:"Born 'Barden East', a flesh trader. Has no real power — uses Auren's gold touch as his own. Manipulates Auren for a decade before she kills him by melting the castle around him in Book 3." },
+      { id:"malina",       label:"Queen Malina",    role:"Queen of Sixth Kingdom · Ice magic", kingdom:"sixth",   size:"main", book:0, lastBook:5, x:95,  y:205, king:"malina", magic:"ice",     status:"sacrifices",bio:"Midas's wife. Cold and arrogant initially. Gradually becomes the series' most surprising redemption arc — eventually sacrificing herself to protect her kingdom from the Fae invasion." },
+      { id:"auren",        label:"Auren",           role:"Protagonist · Lyäri Ulvêre",         kingdom:"sixth",   size:"main", book:0, lastBook:5, x:285, y:315, king:null,     magic:"gold",    status:"alive",     bio:"Gold-skinned Fae woman raised in Annwyn, kidnapped as a child. Spent 10 years in Midas's gilded cage. Discovers the gold touch is her own power. Kills Midas in Book 3. Falls into Annwyn in Book 4. Discovered to be the Turley heir — rightful ruler of Annwyn. Fated mate to Slade." },
+      { id:"digby",        label:"Digby",           role:"Auren's personal guard",             kingdom:"sixth",   size:"side", book:0, lastBook:5, x:140, y:330, king:null,     magic:"none",    status:"alive",     bio:"Auren's most loyal guard. One of the few people who genuinely cares for her wellbeing. Thought dead after Gleam but survives." },
+      { id:"rissa",        label:"Rissa",           role:"Royal Saddle → free woman",          kingdom:"sixth",   size:"side", book:0, lastBook:5, x:225, y:420, king:null,     magic:"none",    status:"alive",     bio:"One of Midas's royal saddles. Eventually becomes a true ally and friend to Auren. Develops a slow-burn romance with Commander Osrik." },
+      { id:"polly",        label:"Polly",           role:"Royal Saddle · rose addict",         kingdom:"sixth",   size:"side", book:0, lastBook:3, x:320, y:455, king:null,     magic:"none",    status:"alive",     bio:"One of Midas's saddles. Addicted to the rose drug Midas uses to control his court." },
+      { id:"mist",         label:"Mist",            role:"Royal Saddle · pregnant",            kingdom:"sixth",   size:"side", book:0, lastBook:2, x:80,  y:380, king:null,     magic:"none",    status:"killed",    bio:"One of Midas's saddles who becomes pregnant with his child. Killed by Kaila in Book 3." },
+      { id:"dommik",       label:"Dommik",          role:"Assassin · Malina's love",           kingdom:"sixth",   size:"side", book:3, lastBook:5, x:58,  y:280, king:null,     magic:"shadow",  status:"alive",     bio:"A shadow-traveling assassin hired to deal with Malina. Develops a protective bond and love for her instead." },
+      { id:"jeo",          label:"Jeo",             role:"Malina's saddle (deceased)",         kingdom:"sixth",   size:"side", book:2, lastBook:2, x:60,  y:455, king:null,     magic:"none",    status:"killed",    bio:"A saddle loyal to Malina. Killed during the events of Book 3." },
+      { id:"fulke",        label:"King Fulke",      role:"King of Fifth Kingdom",              kingdom:"fifth",   size:"side", book:0, lastBook:0, x:80,  y:68,  king:"fulke",  magic:"none",    status:"killed",    bio:"King of the Fifth Kingdom. Killed by Digby after threatening Auren in Book 1." },
+      { id:"niven",        label:"Prince Niven",    role:"Fulke's heir · killed Bk4",          kingdom:"fifth",   size:"side", book:2, lastBook:3, x:185, y:68,  king:"niven",  magic:"none",    status:"killed",    bio:"Son of King Fulke. Killed by Kaila to justify crowning puppet king Hagan." },
+      { id:"hagan",        label:"King Hagan",      role:"Puppet king of Fifth",               kingdom:"fifth",   size:"side", book:3, lastBook:4, x:80,  y:95,  king:"hagan",  magic:"none",    status:"alive",     bio:"Installed as puppet king of the Fifth Kingdom by Kaila after Niven's death." },
+      { id:"kaila",        label:"Queen Kaila",     role:"Queen of Third Kingdom",             kingdom:"third",   size:"main", book:2, lastBook:5, x:295, y:68,  king:"kaila",  magic:"word",    status:"alive",     bio:"Queen of the Third Kingdom with the ability to 'pull' words and replay them. Frames Auren as a magic thief, turning all of Orea against her." },
+      { id:"manu",         label:"Manu",            role:"Kaila's brother · betrays Auren",    kingdom:"third",   size:"side", book:3, lastBook:4, x:415, y:68,  king:null,     magic:"none",    status:"alive",     bio:"Kaila's brother and enforcer. Kidnaps Auren and forces her to stand trial at the Conflux." },
+      { id:"thold",        label:"King Thold",      role:"King of First Kingdom",              kingdom:"first",   size:"side", book:4, lastBook:5, x:560, y:68,  king:"thold",  magic:"none",    status:"alive",     bio:"King of the First Kingdom. A pragmatic ruler who eventually allies with Slade against the Fae threat." },
+      { id:"second_temple",label:"Cleansing Temple",role:"Auren's 'Clearing' — Bk4",          kingdom:"second",  size:"side", book:3, lastBook:3, x:738, y:68,  king:null,     magic:"none",    status:null,        bio:"A fanatical religious institution. Auren is subjected to a 'Clearing' here — a ritual that drains her magic." },
+      { id:"seventh_ruins",label:"Seventh Kingdom", role:"Destroyed — bridge fell",            kingdom:"seventh", size:"side", book:3, lastBook:4, x:907, y:68,  king:null,     magic:"none",    status:null,        bio:"Destroyed 300 years ago when the bridge between Orea and Annwyn fell. Malina is tricked into reopening the bridge here in Book 4." },
+      { id:"fane",         label:"Capt. Fane",      role:"Red Raid pirate captain",            kingdom:"pirates", size:"side", book:0, lastBook:4, x:425, y:153, king:null,     magic:"none",    status:"killed",    bio:"Captain of the Red Raids. Kills Sail in Book 1. Abuses Rissa. Hunted down by Slade in Book 5." },
+      { id:"sail",         label:"Sail",            role:"Friend · caravan guard",             kingdom:"neutral", size:"side", book:0, lastBook:0, x:425, y:252, king:null,     magic:"none",    status:"killed",    bio:"A kind caravan guard who befriends Auren. Killed by the Red Raids in Book 1." },
+      { id:"rip",          label:"Slade / Rip",     role:"King of Fourth · Fae · Auren's mate",kingdom:"fourth",  size:"main", book:0, lastBook:5, x:800, y:220, king:"rip",    magic:"rot",     status:"alive",     bio:"King of the Fourth Kingdom, also known as Commander Rip. Has rot and shape-shifting powers. The first person who truly sees Auren. Confirmed fated mate (Päyur) to Auren in Book 5." },
+      { id:"ryatt",        label:"Ryatt",           role:"Slade's brother · Commander",        kingdom:"fourth",  size:"side", book:1, lastBook:5, x:700, y:200, king:null,     magic:"none",    status:"alive",     bio:"Slade's half-brother. Secretly played 'Fake Rip' as Commander. Kills King Carrick in the finale." },
+      { id:"osrik",        label:"Osrik",           role:"Wrath Commander · Rissa's love",     kingdom:"fourth",  size:"side", book:1, lastBook:5, x:920, y:230, king:null,     magic:"none",    status:"alive",     bio:"Slade's most trusted Wrath commander. Develops a slow-burn romance with Rissa." },
+      { id:"lu",           label:"Lu",              role:"Wrath Commander",                    kingdom:"fourth",  size:"side", book:1, lastBook:5, x:945, y:320, king:null,     magic:"none",    status:"alive",     bio:"One of the Wrath. Quick-witted and fierce. One of the first to befriend Auren." },
+      { id:"judd",         label:"Judd",            role:"Wrath · KILLED Bk6",                 kingdom:"fourth",  size:"side", book:1, lastBook:5, x:920, y:415, king:null,     magic:"none",    status:"killed",    bio:"Wrath commander known for humor. Killed in the final battle — one of the series' most devastating losses." },
+      { id:"hojat",        label:"Hojat",           role:"Army medic",                         kingdom:"fourth",  size:"side", book:1, lastBook:5, x:800, y:380, king:null,     magic:"none",    status:"alive",     bio:"The Fourth Kingdom's army medic. Gentle and caring. Befriends Auren during her time with the army." },
+      { id:"keg",          label:"Keg",             role:"Fourth Kingdom soldier",             kingdom:"fourth",  size:"side", book:1, lastBook:3, x:715, y:450, king:null,     magic:"none",    status:"alive",     bio:"A soldier in the Fourth Kingdom's army. Part of the found-family around Auren." },
+      { id:"elore",        label:"Elore Ravinger",  role:"Slade & Ryatt's mother · diviner",   kingdom:"fourth",  size:"side", book:3, lastBook:5, x:700, y:295, king:null,     magic:"divination",status:"killed",  bio:"Slade and Ryatt's mother. An Orean woman with divination powers. Stabbed by Lord Cull in Book 6." },
+      { id:"carrick",      label:"King Carrick",    role:"Fae tyrant · main villain Bk5–6",   kingdom:"annwyn",  size:"main", book:4, lastBook:5, x:695, y:605, king:"carrick", magic:"none",    status:"killed",    bio:"The tyrannical Fae king of Annwyn. Has Auren's memories stolen to brainwash her. Killed by Ryatt in the finale." },
+      { id:"cull",         label:"Lord Cull",       role:"Slade's father · Breaking magic",   kingdom:"annwyn",  size:"main", book:4, lastBook:5, x:855, y:605, king:null,     magic:"breaking",status:"killed",    bio:"Slade's biological Fae father. Broke the bridge between worlds, destroying the Seventh Kingdom. Killed by Slade in the finale." },
+      { id:"isolte",       label:"Queen Isolte",    role:"Fae queen · ally of Carrick",        kingdom:"annwyn",  size:"side", book:4, lastBook:5, x:575, y:605, king:null,     magic:"none",    status:"alive",     bio:"A Fae queen allied with King Carrick. Has a 'pinch' magic used for pain and submission." },
+      { id:"una",          label:"Una",             role:"Memory thief · brainwashes Auren",   kingdom:"annwyn",  size:"side", book:5, lastBook:5, x:780, y:665, king:null,     magic:"memory",  status:"alive",     bio:"A fae with memory-stealing abilities. Works for King Carrick. Strips Auren of her memories in Book 6." },
+      { id:"brennur",      label:"Brennur",         role:"Fae traitor · betrays Vulmin",       kingdom:"annwyn",  size:"side", book:5, lastBook:5, x:635, y:668, king:null,     magic:"none",    status:"alive",     bio:"Appears to be part of the Vulmin rebels but secretly betrays them, leading Auren's group into a trap." },
+      { id:"wick",         label:"Wick",            role:"Vulmin rebel leader · Turley",       kingdom:"annwyn",  size:"side", book:4, lastBook:5, x:98,  y:605, king:null,     magic:"gold",    status:"alive",     bio:"Leader of the Vulmin Dyrunia rebel resistance. Bleeds gold — secretly a Turley, related to Auren's bloodline." },
+      { id:"emonie",       label:"Emonie",          role:"Vulmin fighter · glamour magic",     kingdom:"annwyn",  size:"side", book:4, lastBook:5, x:220, y:605, king:null,     magic:"glamour", status:"alive",     bio:"The only other female fae in the Vulmin. Has glamour magic. Becomes one of Auren's closest friends in Annwyn." },
+      { id:"nenet",        label:"Nenet",           role:"Turley loyalist · stabbed Bk6",      kingdom:"annwyn",  size:"side", book:4, lastBook:5, x:98,  y:685, king:null,     magic:"none",    status:"alive",     bio:"An elderly Turley loyalist who first recognizes Auren as the Lyäri Ulvêre. Stabbed in Book 6." },
+      { id:"estelia",      label:"Estelia",         role:"Healer · Turley loyalist",           kingdom:"annwyn",  size:"side", book:4, lastBook:5, x:220, y:685, king:null,     magic:"none",    status:"alive",     bio:"A fae healer and Turley loyalist. In a relationship with Thursil. Heals Rissa in Book 5." },
+      { id:"thursil",      label:"Thursil",         role:"Nenet's grandson · Estelia's love",  kingdom:"annwyn",  size:"side", book:4, lastBook:5, x:340, y:660, king:null,     magic:"none",    status:"alive",     bio:"Nenet's grandson and Estelia's lover. Part of the Turley loyalist network in Annwyn." },
+      { id:"saira",        label:"Saira Turley",    role:"Auren's ancestor · 'the Ocean'",     kingdom:"annwyn",  size:"side", book:4, lastBook:5, x:468, y:605, king:null,     magic:"gold",    status:"killed",    bio:"Auren's distant ancestor. The Turley line descends from Saira. Her family once ruled Annwyn before being displaced by the Carricks." },
+      { id:"auren_parents",label:"Auren's Parents", role:"Fae · killed in raid · from Byrol",  kingdom:"annwyn",  size:"side", book:4, lastBook:4, x:468, y:685, king:null,     magic:"none",    status:"killed",    bio:"Auren's Fae parents. Both killed or lost during the Fae war. Auren was taken from them as a child and transported to Orea." },
+    ];
+
+    const ALL_EDGES = [
+      { from:"midas",  to:"auren",        type:"Captor/Captive",     book:0 },
+      { from:"midas",  to:"malina",       type:"Married",            book:0 },
+      { from:"midas",  to:"fulke",        type:"Political Deal",     book:0 },
+      { from:"malina", to:"midas",        type:"Enemy",              book:0 },
+      { from:"malina", to:"auren",        type:"Hostile",            book:0 },
+      { from:"midas",  to:"rip",          type:"Enemy",              book:0 },
+      { from:"midas",  to:"rissa",        type:"Captor/Captive",     book:0 },
+      { from:"midas",  to:"mist",         type:"Captor/Captive",     book:0 },
+      { from:"midas",  to:"polly",        type:"Captor/Captive",     book:0 },
+      { from:"auren",  to:"digby",        type:"Trusted Guard",      book:0 },
+      { from:"auren",  to:"sail",         type:"Friend",             book:0 },
+      { from:"auren",  to:"fane",         type:"Enemy",              book:0 },
+      { from:"fane",   to:"sail",         type:"Killed",             book:0 },
+      { from:"fulke",  to:"auren",        type:"Hostile",            book:0 },
+      { from:"digby",  to:"fulke",        type:"Killed",             book:0 },
+      { from:"rip",    to:"auren",        type:"Captor/Captive",     book:1 },
+      { from:"auren",  to:"rip",          type:"Slow-burn romance",  book:1 },
+      { from:"rip",    to:"osrik",        type:"Commander",          book:1 },
+      { from:"rip",    to:"lu",           type:"Commander",          book:1 },
+      { from:"rip",    to:"judd",         type:"Commander",          book:1 },
+      { from:"rip",    to:"hojat",        type:"Ally",               book:1 },
+      { from:"rip",    to:"ryatt",        type:"Sibling",            book:1 },
+      { from:"osrik",  to:"lu",           type:"Wrath (squad)",      book:1 },
+      { from:"osrik",  to:"judd",         type:"Wrath (squad)",      book:1 },
+      { from:"lu",     to:"judd",         type:"Wrath (squad)",      book:1 },
+      { from:"auren",  to:"rissa",        type:"Ally",               book:1 },
+      { from:"auren",  to:"hojat",        type:"Friend",             book:1 },
+      { from:"auren",  to:"lu",           type:"Friend",             book:1 },
+      { from:"auren",  to:"judd",         type:"Friend",             book:1 },
+      { from:"auren",  to:"osrik",        type:"Ally",               book:1 },
+      { from:"rissa",  to:"polly",        type:"Friend",             book:1 },
+      { from:"fane",   to:"rissa",        type:"Hostile",            book:1 },
+      { from:"kaila",  to:"midas",        type:"Political Deal",     book:2 },
+      { from:"kaila",  to:"auren",        type:"Enemy",              book:2 },
+      { from:"auren",  to:"midas",        type:"Killed",             book:2 },
+      { from:"kaila",  to:"mist",         type:"Killed",             book:2 },
+      { from:"auren",  to:"rip",          type:"Love Interest",      book:2 },
+      { from:"ryatt",  to:"rip",          type:"Ally",               book:2 },
+      { from:"malina", to:"jeo",          type:"Friend",             book:2 },
+      { from:"kaila",  to:"jeo",          type:"Killed",             book:2 },
+      { from:"fulke",  to:"niven",        type:"Parent/Child",       book:2 },
+      { from:"rissa",  to:"osrik",        type:"Slow-burn romance",  book:3 },
+      { from:"polly",  to:"rissa",        type:"Enemy",              book:3 },
+      { from:"kaila",  to:"niven",        type:"Killed",             book:3 },
+      { from:"kaila",  to:"hagan",        type:"Political Deal",     book:3 },
+      { from:"manu",   to:"kaila",        type:"Sibling",            book:3 },
+      { from:"manu",   to:"auren",        type:"Enemy",              book:3 },
+      { from:"manu",   to:"rissa",        type:"Hostile",            book:3 },
+      { from:"rip",    to:"elore",        type:"Parent/Child",       book:3 },
+      { from:"ryatt",  to:"elore",        type:"Parent/Child",       book:3 },
+      { from:"malina", to:"dommik",       type:"Love Interest",      book:3 },
+      { from:"malina", to:"kaila",        type:"Enemy",              book:3 },
+      { from:"auren",  to:"second_temple",type:"Captor/Captive",     book:3 },
+      { from:"auren",  to:"rip",          type:"Fated Mates (Päyur)",book:4 },
+      { from:"carrick",to:"auren",        type:"Enemy",              book:4 },
+      { from:"cull",   to:"auren",        type:"Enemy",              book:4 },
+      { from:"carrick",to:"cull",         type:"Ally",               book:4 },
+      { from:"wick",   to:"auren",        type:"Rebellion",          book:4 },
+      { from:"emonie", to:"auren",        type:"Friend",             book:4 },
+      { from:"wick",   to:"emonie",       type:"Rebellion",          book:4 },
+      { from:"nenet",  to:"auren",        type:"Mentor / Loyalist",  book:4 },
+      { from:"estelia",to:"auren",        type:"Mentor / Loyalist",  book:4 },
+      { from:"estelia",to:"thursil",      type:"Love Interest",      book:4 },
+      { from:"nenet",  to:"thursil",      type:"Family",             book:4 },
+      { from:"saira",  to:"auren",        type:"Ancestor",           book:4 },
+      { from:"auren_parents",to:"auren",  type:"Parent/Child",       book:4 },
+      { from:"saira",  to:"auren_parents",type:"Ancestor",           book:4 },
+      { from:"thold",  to:"rip",          type:"Ally",               book:4 },
+      { from:"thold",  to:"kaila",        type:"Hostile",            book:4 },
+      { from:"isolte", to:"carrick",      type:"Ally",               book:4 },
+      { from:"cull",   to:"elore",        type:"Family",             book:4 },
+      { from:"rip",    to:"cull",         type:"Parent/Child",       book:4 },
+      { from:"una",    to:"auren",        type:"Captor/Captive",     book:5 },
+      { from:"carrick",to:"una",          type:"Commander",          book:5 },
+      { from:"brennur",to:"wick",         type:"Enemy",              book:5 },
+      { from:"wick",   to:"saira",        type:"Family",             book:5 },
+      { from:"ryatt",  to:"carrick",      type:"Killed",             book:5 },
+      { from:"auren",  to:"cull",         type:"Killed",             book:5 },
+      { from:"rip",    to:"cull",         type:"Killed",             book:5 },
+      { from:"malina", to:"auren",        type:"Sacrifices for",     book:5 },
+      { from:"dommik", to:"malina",       type:"Sacrifices for",     book:5 },
+      { from:"carrick",to:"judd",         type:"Killed",             book:5 },
+      { from:"carrick",to:"elore",        type:"Hostile",            book:5 },
+      { from:"rip",    to:"malina",       type:"Ally",               book:5 },
+    ];
+
+    const MAIN_R = 36, SIDE_R = 22;
+    const getR = s => s === "main" ? MAIN_R : SIDE_R;
+
+    function App() {
+      const [bookIdx, setBookIdx] = useState(0);
+      const [showKingdoms, setShowKingdoms] = useState(true);
+      const [filterType, setFilterType] = useState(null);
+      const [selectedNode, setSelectedNode] = useState(null);
+      const [tooltip, setTooltip] = useState(null);
+      const [nodes, setNodes] = useState(ALL_NODES);
+      const [dragging, setDragging] = useState(null);
+      const svgRef = useRef(null);
+      const dragOff = useRef({ x:0, y:0 });
+
+      const lastBookMap = {};
+      ALL_NODES.forEach(n => { lastBookMap[n.id] = n.lastBook ?? n.book; });
+
+      const visN = nodes.filter(n => n.book <= bookIdx);
+      const visIds = new Set(visN.map(n => n.id));
+      const visE = ALL_EDGES.filter(e =>
+        e.book <= bookIdx && visIds.has(e.from) && visIds.has(e.to) &&
+        (!filterType || e.type === filterType)
+      );
+      const getNode = id => nodes.find(n => n.id === id);
+      const hlE = selectedNode ? visE.filter(e => e.from === selectedNode || e.to === selectedNode) : [];
+      const hlIds = selectedNode ? new Set([selectedNode, ...hlE.flatMap(e => [e.from, e.to])]) : null;
+      const visKingdoms = new Set(visN.map(n => n.kingdom));
+      const cardNode = selectedNode ? ALL_NODES.find(n => n.id === selectedNode) : null;
+
+      const onMouseDown = useCallback((e, id) => {
+        e.preventDefault();
+        const svg = svgRef.current;
+        const pt = svg.createSVGPoint();
+        pt.x = e.clientX; pt.y = e.clientY;
+        const sp = pt.matrixTransform(svg.getScreenCTM().inverse());
+        const nd = nodes.find(n => n.id === id);
+        dragOff.current = { x: sp.x - nd.x, y: sp.y - nd.y };
+        setDragging(id);
+      }, [nodes]);
+
+      const onMouseMove = useCallback((e) => {
+        if (!dragging) return;
+        const svg = svgRef.current;
+        const pt = svg.createSVGPoint();
+        pt.x = e.clientX; pt.y = e.clientY;
+        const sp = pt.matrixTransform(svg.getScreenCTM().inverse());
+        setNodes(p => p.map(n => n.id === dragging ? { ...n, x: sp.x - dragOff.current.x, y: sp.y - dragOff.current.y } : n));
+      }, [dragging]);
+
+      const onMouseUp = useCallback(() => setDragging(null), []);
+
+      function edgeEnd(n1, n2) {
+        const dx = n2.x-n1.x, dy = n2.y-n1.y, d = Math.sqrt(dx*dx+dy*dy)||1;
+        const r1 = getR(n1.size), r2 = getR(n2.size);
+        return { x1:n1.x+(dx/d)*r1, y1:n1.y+(dy/d)*r1, x2:n2.x-(dx/d)*r2, y2:n2.y-(dy/d)*r2 };
+      }
+      function edgeOff(arr, idx) {
+        const e = arr[idx];
+        return arr.filter((o,i)=>i<idx&&((o.from===e.from&&o.to===e.to)||(o.from===e.to&&o.to===e.from))).length*16;
+      }
+
+      const ev = BOOK_EVENTS[bookIdx];
+
+      return (
+        React.createElement('div', { style:{fontFamily:"Georgia,serif",background:"#0e0e18",minHeight:"100vh",color:"#ddd",userSelect:"none"} },
+          React.createElement('div', { style:{textAlign:"center",padding:"14px 16px 6px",background:"linear-gradient(180deg,#1a1228,#0e0e18)"} },
+            React.createElement('h1', { style:{margin:0,fontSize:20,letterSpacing:2,color:"#d4af37",textShadow:"0 0 20px #b8860b88"} }, "✦ THE PLATED PRISONER ✦"),
+            React.createElement('p', { style:{margin:"3px 0 10px",color:"#9a8060",fontSize:11} }, "Complete Character Relationship Chart · Books 1–6"),
+            React.createElement('div', { style:{display:"flex",gap:6,justifyContent:"center",marginBottom:5} },
+              BOOKS.slice(0,3).map((b,i) => React.createElement('button', { key:i, onClick:()=>setBookIdx(i), style:{padding:"5px 0",borderRadius:16,border:"none",cursor:"pointer",fontSize:11,minWidth:115,background:bookIdx===i?"#d4af37":"#2a2240",color:bookIdx===i?"#1a1228":"#bbb",fontWeight:bookIdx===i?"bold":"normal"} }, b))
+            ),
+            React.createElement('div', { style:{display:"flex",gap:6,justifyContent:"center",marginBottom:5} },
+              BOOKS.slice(3).map((b,i) => React.createElement('button', { key:i+3, onClick:()=>setBookIdx(i+3), style:{padding:"5px 0",borderRadius:16,border:"none",cursor:"pointer",fontSize:11,minWidth:115,background:bookIdx===i+3?"#d4af37":"#2a2240",color:bookIdx===i+3?"#1a1228":"#bbb",fontWeight:bookIdx===i+3?"bold":"normal"} }, b))
+            ),
+            React.createElement('div', { style:{display:"flex",justifyContent:"center",marginBottom:6} },
+              React.createElement('button', { onClick:()=>setShowKingdoms(p=>!p), style:{padding:"4px 20px",borderRadius:14,border:"1px solid #555",cursor:"pointer",fontSize:11,background:showKingdoms?"#2a2240":"transparent",color:showKingdoms?"#d4af37":"#777"} }, showKingdoms?"🏰 Kingdom Regions ON":"🏰 Kingdom Regions OFF")
+            )
+          ),
+          React.createElement('div', { style:{background:"#12101e",borderTop:"1px solid #2a2240",borderBottom:"1px solid #2a2240",padding:"8px 16px",display:"flex",gap:16,flexWrap:"wrap",maxWidth:1100,margin:"0 auto"} },
+            React.createElement('div', { style:{flex:1,minWidth:240} },
+              React.createElement('div', { style:{fontSize:11,fontWeight:"bold",color:"#d4af37",marginBottom:4} }, "📖 Key Events — " + ev.title),
+              ev.events.map((e,i) => React.createElement('div', { key:i, style:{fontSize:10,color:"#bbb",marginBottom:2} }, "· " + e))
+            ),
+            React.createElement('div', { style:{minWidth:160} },
+              React.createElement('div', { style:{fontSize:11,fontWeight:"bold",color:"#d4af37",marginBottom:4} }, "⚔ Dominant Power"),
+              React.createElement('div', { style:{fontSize:13,color:"#fff",background:"#1a1228",borderRadius:8,padding:"6px 12px",border:"1px solid #333"} }, ev.dominant),
+              React.createElement('div', { style:{fontSize:10,color:"#666",marginTop:6} }, "Click a node to view character card"),
+              React.createElement('div', { style:{fontSize:10,color:"#666"} }, "Faded = no longer in story")
+            )
+          ),
+          React.createElement('div', { style:{padding:"6px 16px",maxWidth:1100,margin:"0 auto",display:"flex",gap:4,flexWrap:"wrap",alignItems:"center"} },
+            React.createElement('span', { style:{fontSize:10,color:"#666",marginRight:4} }, "Filter:"),
+            React.createElement('button', { onClick:()=>setFilterType(null), style:{padding:"2px 8px",borderRadius:10,border:"none",cursor:"pointer",fontSize:9,background:!filterType?"#d4af37":"#2a2240",color:!filterType?"#1a1228":"#aaa"} }, "All"),
+            Object.entries(RELATION_STYLES).map(([t,s]) =>
+              React.createElement('button', { key:t, onClick:()=>setFilterType(filterType===t?null:t), style:{padding:"2px 8px",borderRadius:10,border:"none",cursor:"pointer",fontSize:9,background:filterType===t?s.color:"#1e1e32",color:filterType===t?"#fff":"#999"} }, s.label)
+            )
+          ),
+          React.createElement('div', { style:{position:"relative",margin:"0 auto",maxWidth:1100} },
+            React.createElement('svg', { ref:svgRef, viewBox:"0 0 1020 745", style:{width:"100%",display:"block",cursor:dragging?"grabbing":"default"}, onMouseMove:onMouseMove, onMouseUp:onMouseUp, onMouseLeave:onMouseUp, onClick:e=>{if(e.target===svgRef.current)setSelectedNode(null);} },
+              React.createElement('defs', null,
+                Object.entries(RELATION_STYLES).map(([t,s]) =>
+                  React.createElement('marker', { key:t, id:`a-${t.replace(/\W/g,"_")}`, markerWidth:"8", markerHeight:"8", refX:"6", refY:"3", orient:"auto" },
+                    React.createElement('path', { d:"M0,0 L0,6 L8,3 z", fill:s.color, opacity:"0.85" })
+                  )
+                )
+              ),
+              React.createElement('line', { x1:"0", y1:"500", x2:"1020", y2:"500", stroke:"#7e57c2", strokeWidth:"1", strokeDasharray:"2,6", opacity:"0.35" }),
+              React.createElement('text', { x:"8", y:"496", fontSize:"9", fill:"#888", opacity:"0.6" }, "— OREA —"),
+              React.createElement('text', { x:"8", y:"513", fontSize:"9", fill:"#9575cd", opacity:"0.6" }, "— ANNWYN (Fae Realm) —"),
+              showKingdoms && Object.entries(KINGDOMS).map(([k,km]) =>
+                visKingdoms.has(k) ? React.createElement('g', { key:k },
+                  React.createElement('rect', { x:km.x, y:km.y, width:km.w, height:km.h, rx:14, fill:km.color, stroke:km.border, strokeWidth:1.5, strokeDasharray:"6,4", opacity:0.7 }),
+                  React.createElement('text', { x:km.x+10, y:km.y+16, fontSize:10, fontWeight:"bold", fill:km.border, opacity:0.85 }, km.label),
+                  React.createElement('text', { x:km.x+10, y:km.y+28, fontSize:8, fill:km.border, opacity:0.5 }, km.power)
+                ) : null
+              ),
+              visE.map((edge,i) => {
+                const n1=getNode(edge.from), n2=getNode(edge.to);
+                if(!n1||!n2) return null;
+                const {x1,y1,x2,y2}=edgeEnd(n1,n2);
+                const s=RELATION_STYLES[edge.type]||{color:"#888",dash:"0"};
+                const off=edgeOff(visE,i);
+                const isHl=hlE.includes(edge);
+                const dim=selectedNode&&!isHl;
+                const mx=(x1+x2)/2,my=(y1+y2)/2,dx=y2-y1,dy=-(x2-x1),len=Math.sqrt(dx*dx+dy*dy)||1;
+                const cx=mx+(dx/len)*off,cy=my+(dy/len)*off;
+                const d=off>0?`M${x1},${y1} Q${cx},${cy} ${x2},${y2}`:`M${x1},${y1} L${x2},${y2}`;
+                const mid=off>0?{x:(x1/4+cx/2+x2/4),y:(y1/4+cy/2+y2/4)}:{x:mx,y:my};
+                return React.createElement('g', { key:i, opacity:dim?0.07:1, onMouseEnter:()=>setTooltip({x:mid.x,y:mid.y,text:s.label}), onMouseLeave:()=>setTooltip(null) },
+                  React.createElement('path', { d, fill:"none", stroke:s.color, strokeWidth:isHl?2.8:1.4, strokeDasharray:s.dash, markerEnd:`url(#a-${edge.type.replace(/\W/g,"_")})`, opacity:0.85 })
+                );
+              }),
+              visN.map(node => {
+                const r=getR(node.size);
+                const kc=node.king?KING_COLORS[node.king]:null;
+                const isSel=selectedNode===node.id;
+                const isPast=lastBookMap[node.id]<bookIdx;
+                const isNew=node.book===bookIdx;
+                const dim=selectedNode&&!hlIds?.has(node.id);
+                const bg=kc?kc.bg:(node.size==="main"?"#2a2240":"#1e1e32");
+                const bdr=kc?kc.border:(node.size==="main"?"#d4af37":"#555");
+                const tc=kc?kc.label:(node.size==="main"?"#d4af37":"#aaa");
+                const opacity=dim?0.1:isPast?0.22:1;
+                const magicIcon=MAGIC_ICONS[node.magic]||"";
+                const statusIcon=STATUS_ICONS[node.status]||"";
+                const words=node.label.split(" ");
+                return React.createElement('g', { key:node.id, opacity, transform:`translate(${node.x},${node.y})`, onMouseDown:e=>{onMouseDown(e,node.id);if(!dragging)setSelectedNode(node.id);}, onMouseEnter:()=>setTooltip({x:node.x,y:node.y-r-8,text:`${node.label} · ${node.role}`}), onMouseLeave:()=>setTooltip(null), style:{cursor:"pointer"} },
+                  isNew&&!isPast&&React.createElement('circle',{r:r+9,fill:"none",stroke:"#d4af37",strokeWidth:"1.5",opacity:"0.5",strokeDasharray:"3,3"}),
+                  (isSel||node.size==="main")&&React.createElement('circle',{r:r+5,fill:bg,opacity:0.25}),
+                  React.createElement('circle',{r,fill:bg,stroke:isSel?"#fff":bdr,strokeWidth:isSel?3:node.size==="main"?2.5:1.5}),
+                  React.createElement('text',{textAnchor:"middle",dominantBaseline:"middle",fontSize:node.size==="main"?11:8.5,fontWeight:node.size==="main"?"bold":"normal",fill:tc,style:{pointerEvents:"none"}},
+                    words.map((w,wi)=>React.createElement('tspan',{key:wi,x:"0",dy:wi===0?(words.length>1&&node.size==="main"?-5:-3):(node.size==="main"?12:10)},w))
+                  ),
+                  magicIcon&&React.createElement('text',{x:r-4,y:-r+4,fontSize:"9",textAnchor:"middle",style:{pointerEvents:"none"}},magicIcon),
+                  statusIcon&&isPast&&React.createElement('text',{x:"0",y:r+14,fontSize:"9",textAnchor:"middle",style:{pointerEvents:"none"}},statusIcon)
+                );
+              }),
+              tooltip&&React.createElement('g',{transform:`translate(${Math.min(Math.max(tooltip.x,80),890)},${Math.max(tooltip.y-30,12)})`,style:{pointerEvents:"none"}},
+                React.createElement('rect',{x:-8,y:-14,width:Math.min(tooltip.text.length*5.6+16,340),height:22,rx:5,fill:"#1a1228ee",stroke:"#444",strokeWidth:1}),
+                React.createElement('text',{fontSize:10,fill:"#e0c97f",dominantBaseline:"middle"},tooltip.text)
+              )
+            ),
+            cardNode&&React.createElement('div',{style:{position:"absolute",top:10,right:10,width:230,background:"#12101eee",border:`1px solid ${cardNode.king?KING_COLORS[cardNode.king].border:"#444"}`,borderRadius:12,padding:"14px",zIndex:10,boxShadow:"0 4px 30px #00000088"}},
+              React.createElement('div',{style:{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:8}},
+                React.createElement('div',null,
+                  React.createElement('div',{style:{fontSize:14,fontWeight:"bold",color:cardNode.king?KING_COLORS[cardNode.king].label:"#d4af37"}},cardNode.label),
+                  React.createElement('div',{style:{fontSize:10,color:"#999",marginTop:2}},cardNode.role)
+                ),
+                React.createElement('button',{onClick:()=>setSelectedNode(null),style:{background:"none",border:"none",color:"#666",cursor:"pointer",fontSize:16}},"✕")
+              ),
+              React.createElement('div',{style:{display:"flex",gap:6,flexWrap:"wrap",marginBottom:8}},
+                React.createElement('span',{style:{background:"#1a1228",borderRadius:6,padding:"2px 7px",fontSize:9,color:"#9575cd"}},KINGDOMS[cardNode.kingdom]?.label||cardNode.kingdom),
+                cardNode.magic&&cardNode.magic!=="none"&&React.createElement('span',{style:{background:"#1a1228",borderRadius:6,padding:"2px 7px",fontSize:9,color:"#d4af37"}},(MAGIC_ICONS[cardNode.magic]||"")+" "+cardNode.magic+" magic"),
+                cardNode.status&&cardNode.status!=="alive"&&React.createElement('span',{style:{background:"#1a1228",borderRadius:6,padding:"2px 7px",fontSize:9,color:cardNode.status==="killed"?"#ef5350":"#ffc107"}},(STATUS_ICONS[cardNode.status]||"")+" "+cardNode.status)
+              ),
+              React.createElement('div',{style:{fontSize:10,color:"#bbb",lineHeight:1.6,marginBottom:8,maxHeight:160,overflowY:"auto"}},cardNode.bio),
+              React.createElement('div',{style:{fontSize:9,color:"#555",borderTop:"1px solid #2a2240",paddingTop:6}},"Introduced: "+BOOKS[cardNode.book]+" · Last: "+BOOKS[cardNode.lastBook??cardNode.book]),
+              React.createElement('div',{style:{fontSize:9,color:"#666",marginTop:6}},
+                React.createElement('strong',{style:{color:"#888"}},"Connections:"),
+                hlE.length===0?React.createElement('span',null," None visible"):hlE.map((e,i)=>{
+                  const other=e.from===cardNode.id?e.to:e.from;
+                  const oNode=ALL_NODES.find(n=>n.id===other);
+                  const s=RELATION_STYLES[e.type];
+                  return React.createElement('div',{key:i,style:{color:s?.color||"#aaa"}},"· "+(oNode?.label||other)+" — "+e.type);
+                })
+              )
+            )
+          ),
+          React.createElement('div',{style:{padding:"8px 16px 18px",maxWidth:1100,margin:"0 auto"}},
+            React.createElement('div',{style:{display:"flex",gap:10,flexWrap:"wrap",marginBottom:6}},
+              React.createElement('span',{style:{fontSize:10,color:"#666"}},"✦ badge = magic power"),
+              React.createElement('span',{style:{fontSize:10,color:"#666"}},"💀 = killed in story"),
+              React.createElement('span',{style:{fontSize:10,color:"#666"}},"dashed ring = new this book"),
+              React.createElement('span',{style:{fontSize:10,color:"#666"}},"faded = no longer in story"),
+              React.createElement('span',{style:{fontSize:10,color:"#666"}},"drag nodes to rearrange")
+            ),
+            React.createElement('div',{style:{display:"flex",flexWrap:"wrap",gap:"3px 10px"}},
+              Object.entries(RELATION_STYLES).map(([t,s])=>
+                React.createElement('div',{key:t,style:{display:"flex",alignItems:"center",gap:4,fontSize:9}},
+                  React.createElement('svg',{width:"20",height:"8"},React.createElement('line',{x1:"0",y1:"4",x2:"20",y2:"4",stroke:s.color,strokeWidth:"2",strokeDasharray:s.dash})),
+                  React.createElement('span',{style:{color:"#888"}},s.label)
+                )
+              )
+            )
+          )
+        )
+      );
+    }
+
+    ReactDOM.render(React.createElement(App), document.getElementById('root'));
+  </script>
+</body>
+</html>
