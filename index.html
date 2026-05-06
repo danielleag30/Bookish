@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookish – Fantasy Series Companion</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0612;
+            --bg-secondary: #1a0f2e;
+            --bg-card: #2a1a3e;
+            --accent-purple: #8b5cf6;
+            --accent-gold: #fbbf24;
+            --accent-rose: #f472b6;
+            --text-primary: #f3f4f6;
+            --text-secondary: #d1d5db;
+            --text-muted: #9ca3af;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 30%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, rgba(244, 114, 182, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(251, 191, 36, 0.05) 0%, transparent 50%);
+            z-index: -1;
+            animation: backgroundPulse 20s ease-in-out infinite;
+        }
+
+        @keyframes backgroundPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        /* Starfield effect */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 4s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 4rem 0 3rem;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-purple) 50%, var(--accent-rose) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            letter-spacing: 0.02em;
+        }
+
+        .tagline {
+            font-family: 'Lora', serif;
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: clamp(0.875rem, 1.5vw, 1rem);
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .series-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+            padding: 2rem 0;
+        }
+
+        .series-card {
+            position: relative;
+            background: var(--bg-card);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            animation: fadeInUp 0.8s ease-out backwards;
+        }
+
+        .series-card:nth-child(1) { animation-delay: 0.1s; }
+        .series-card:nth-child(2) { animation-delay: 0.2s; }
+        .series-card:nth-child(3) { animation-delay: 0.3s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .series-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent-purple);
+            box-shadow: 
+                0 20px 40px rgba(139, 92, 246, 0.3),
+                0 0 60px rgba(139, 92, 246, 0.1);
+        }
+
+        .series-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+        }
+
+        .series-card:hover::before {
+            opacity: 1;
+        }
+
+        .card-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .series-card:hover .card-image {
+            transform: scale(1.05);
+        }
+
+        .card-content {
+            padding: 2rem;
+            position: relative;
+        }
+
+        .card-badge {
+            display: inline-block;
+            padding: 0.375rem 0.875rem;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-rose));
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-radius: 20px;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .card-description {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .card-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            color: var(--accent-gold);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .card-cta:hover {
+            gap: 0.75rem;
+            color: var(--accent-purple);
+        }
+
+        .card-cta::after {
+            content: '→';
+            font-size: 1.25rem;
+            transition: transform 0.3s ease;
+        }
+
+        .series-card:hover .card-cta::after {
+            transform: translateX(4px);
+        }
+
+        /* Coming Soon Card Styling */
+        .coming-soon {
+            opacity: 0.7;
+            cursor: default;
+        }
+
+        .coming-soon:hover {
+            transform: none;
+            box-shadow: none;
+            border-color: rgba(139, 92, 246, 0.2);
+        }
+
+        .coming-soon .card-image {
+            filter: grayscale(0.3);
+        }
+
+        .coming-soon:hover .card-image {
+            transform: none;
+        }
+
+        .coming-soon::before {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+            opacity: 1;
+        }
+
+        /* No-image card styling */
+        .no-image-card {
+            background: linear-gradient(135deg, 
+                rgba(139, 92, 246, 0.15) 0%, 
+                rgba(244, 114, 182, 0.1) 50%, 
+                rgba(251, 191, 36, 0.05) 100%);
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .no-image-card .card-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .no-image-card .card-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.5;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+            border-top: 1px solid rgba(139, 92, 246, 0.2);
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        footer p {
+            margin-bottom: 0.5rem;
+        }
+
+        footer a {
+            color: var(--accent-purple);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: var(--accent-gold);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem 1rem;
+            }
+
+            header {
+                padding: 2rem 0 2rem;
+            }
+
+            .series-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+                margin-top: 2rem;
+            }
+
+            .card-image {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="starfield"></div>
+    
+    <div class="container">
+        <header>
+            <h1>Bookish</h1>
+            <p class="tagline">Your companion to fantasy worlds</p>
+            <p class="subtitle">Interactive guides, character charts, and resources for your favorite romantasy series</p>
+        </header>
+
+        <div class="series-grid">
+            <!-- The Plated Prisoner Card -->
+            <a href="./Plated-Prisoner-Chart/" class="series-card" style="text-decoration: none;">
+                <img src="./images/Plated_Prisoner.png" 
+                     alt="The Plated Prisoner Series" 
+                     class="card-image">
+                <div class="card-content">
+                    <span class="card-badge">Interactive Chart</span>
+                    <h2 class="card-title">The Plated Prisoner</h2>
+                    <p class="card-description">
+                        Explore the complete character relationship chart for Raven Kennedy's beloved series. 
+                        Track relationships, alliances, and betrayals across all six books.
+                    </p>
+                    <span class="card-cta">Explore Characters</span>
+                </div>
+            </a>
+
+            <!-- DCC Card - Coming Soon -->
+            <div class="series-card coming-soon">
+                <img src="./images/dcc.png" 
+                     alt="Dungeon Crawl Classics" 
+                     class="card-image">
+                <div class="card-content">
+                    <span class="card-badge">Coming Soon</span>
+                    <h2 class="card-title">Dungeon Crawl Classics</h2>
+                    <p class="card-description">
+                        RPG resources, character guides, and campaign tools for DCC adventurers. 
+                        Currently in development.
+                    </p>
+                    <span class="card-cta" style="color: var(--text-muted); pointer-events: none;">Coming Soon</span>
+                </div>
+            </div>
+
+            <!-- Placeholder for Future Content -->
+            <div class="series-card coming-soon no-image-card">
+                <div class="card-content">
+                    <div class="card-icon">✨</div>
+                    <span class="card-badge">Future Content</span>
+                    <h2 class="card-title">More Adventures Await</h2>
+                    <p class="card-description">
+                        Additional romantasy series guides and interactive resources are on the way. 
+                        Stay tuned for updates!
+                    </p>
+                    <span class="card-cta" style="color: var(--text-muted); pointer-events: none;">Stay Tuned</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Created with ✨ by a fellow fantasy reader</p>
+        <p>Have suggestions or feedback? <a href="https://github.com/danielleag30/Bookish">Visit the GitHub repo</a></p>
+    </footer>
+
+    <script>
+        // Create starfield effect
+        function createStars() {
+            const starfield = document.getElementById('starfield');
+            const numberOfStars = 100;
+
+            for (let i = 0; i < numberOfStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 4 + 's';
+                star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                starfield.appendChild(star);
+            }
+        }
+
+        createStars();
+
+        // Add smooth scroll behavior
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
