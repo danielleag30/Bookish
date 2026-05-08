@@ -4,80 +4,253 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Dungeon Crawler Carl</title>
+<link href="https://fonts.googleapis.com/css2?family=Creepster&family=Special+Elite&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI',sans-serif;background:#0a0e1a;color:#e8e4d4;height:100vh;overflow:hidden;display:flex;flex-direction:column}
-#header{text-align:center;padding:7px 12px;background:#0d1220;border-bottom:1px solid #1e2a40}
-#header h1{font-size:1.15rem;color:#f4c47a;letter-spacing:2px}
-#header p{font-size:.62rem;color:#7aabcc;margin-top:1px}
-#controls{padding:5px 10px;background:#0a0f1c;border-bottom:1px solid #1a2235}
+
+body{
+  font-family:'DM Sans',sans-serif;
+  background:#0d0a0a;
+  color:#d4c9b8;
+  height:100vh;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  /* subtle scanline overlay */
+  background-image:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.08) 2px,rgba(0,0,0,.08) 4px);
+}
+
+/* ── Header ─────────────────────────────────────────── */
+#header{
+  text-align:center;
+  padding:8px 12px 6px;
+  background:linear-gradient(180deg,#1a0505 0%,#0d0a0a 100%);
+  border-bottom:2px solid #5a1010;
+  position:relative;
+  flex-shrink:0;
+}
+#header::before{
+  content:'🔴 LIVE  •  BORANT CORP PRESENTS  •  🔴 LIVE';
+  display:block;
+  font-size:.55rem;
+  color:#cc3333;
+  letter-spacing:3px;
+  margin-bottom:4px;
+  font-family:'DM Sans',sans-serif;
+  animation:blink 2s infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+#header h1{
+  font-family:'Creepster',cursive;
+  font-size:1.8rem;
+  color:#e8341a;
+  letter-spacing:3px;
+  text-shadow:0 0 20px rgba(232,52,26,.4),2px 2px 0 #1a0505;
+  line-height:1;
+}
+#header p{
+  font-size:.6rem;
+  color:#7a5a5a;
+  margin-top:3px;
+  font-family:'Special Elite',cursive;
+  letter-spacing:1px;
+}
+
+/* ── Controls ───────────────────────────────────────── */
+#controls{
+  padding:5px 10px;
+  background:#100808;
+  border-bottom:1px solid #2a1010;
+  flex-shrink:0;
+}
 .book-row{display:flex;gap:4px;justify-content:center;margin-bottom:3px}
 .book-row:last-child{margin-bottom:0}
-.btn{padding:3px 8px;border-radius:12px;border:1px solid #3a4a6a;background:#12192e;color:#aac;font-size:.63rem;cursor:pointer;white-space:nowrap;transition:all .15s;flex:1;max-width:175px;text-align:center}
-.btn:hover{border-color:#5a8aaa;color:#dde}
-.btn.book-on{background:#1a3a1a;border-color:#4aaa5a;color:#7dde8a;font-weight:600}
-.btn.tog{flex:0 0 auto;max-width:160px;font-size:.62rem}
-.btn.tog-on{border-color:#4a8a6a;color:#6dca8a;background:#0a1a12}
-#relbar{display:flex;gap:4px;flex-wrap:wrap;justify-content:center;padding:4px 10px;background:#080d18;border-bottom:1px solid #161f30}
-.rbtn{padding:2px 9px;border-radius:10px;border:1px solid #2a3a5a;background:#0d1525;font-size:.62rem;cursor:pointer;color:#99b;transition:all .15s}
-.rbtn:hover{border-color:#5a8aaa}
+
+.btn{
+  padding:3px 8px;
+  border-radius:4px;
+  border:1px solid #3a1a1a;
+  background:#150a0a;
+  color:#7a6060;
+  font-size:.62rem;
+  cursor:pointer;
+  white-space:nowrap;
+  transition:all .15s;
+  flex:1;
+  max-width:175px;
+  text-align:center;
+  font-family:'DM Sans',sans-serif;
+}
+.btn:hover{border-color:#cc3333;color:#e8a0a0}
+.btn.book-on{background:#2a0808;border-color:#cc3333;color:#ff8080;font-weight:600}
+.btn.tog{flex:0 0 auto;max-width:160px}
+.btn.tog-on{border-color:#5a3a10;color:#e8a030;background:#1a1005}
+
+/* ── Rel bar ────────────────────────────────────────── */
+#relbar{
+  display:flex;gap:4px;flex-wrap:wrap;justify-content:center;
+  padding:4px 10px;
+  background:#0a0606;
+  border-bottom:1px solid #1a0808;
+  flex-shrink:0;
+}
+.rbtn{
+  padding:2px 9px;border-radius:4px;
+  border:1px solid #2a1212;background:#0f0606;
+  font-size:.62rem;cursor:pointer;color:#6a5050;
+  transition:all .15s;font-family:'DM Sans',sans-serif;
+}
+.rbtn:hover{border-color:#cc3333}
 .rbtn.active{font-weight:700}
+
+/* ── Layout ─────────────────────────────────────────── */
 #layout{display:flex;flex:1;overflow:hidden;min-height:0}
-#canvas{flex:1;position:relative;overflow:hidden;background:#060b16;cursor:grab}
+#canvas{flex:1;position:relative;overflow:hidden;background:#0a0707;cursor:grab}
 #canvas:active{cursor:grabbing}
 svg{width:100%;height:100%}
-#sidebar{width:258px;background:#0d1220;border-left:1px solid #1e2a40;overflow-y:auto;flex-shrink:0;display:flex;flex-direction:column}
-#sidebar-header{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-bottom:1px solid #1a2535;flex-shrink:0}
-#sidebar-header span{font-size:.68rem;color:#7aabcc;text-transform:uppercase;letter-spacing:1px}
-#sidebar-close{background:none;border:1px solid #3a4a6a;color:#99b;border-radius:6px;padding:1px 7px;font-size:.65rem;cursor:pointer}
-#sidebar-close:hover{border-color:#aa5a5a;color:#cc7a7a}
+
+/* ── Sidebar ────────────────────────────────────────── */
+#sidebar{
+  width:270px;
+  background:#0f0808;
+  border-left:1px solid #2a1010;
+  overflow-y:auto;
+  flex-shrink:0;
+  display:flex;
+  flex-direction:column;
+}
+#sidebar-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 10px;
+  border-bottom:1px solid #2a1010;
+  flex-shrink:0;
+  background:#150a0a;
+}
+#sidebar-header span{
+  font-size:.65rem;color:#cc5a5a;
+  text-transform:uppercase;letter-spacing:1px;
+  font-family:'Special Elite',cursive;
+}
+#sidebar-close{
+  background:none;border:1px solid #3a1a1a;
+  color:#6a5050;border-radius:4px;
+  padding:1px 7px;font-size:.65rem;cursor:pointer;
+}
+#sidebar-close:hover{border-color:#cc3333;color:#ff8080}
 #sidebar-body{flex:1;overflow-y:auto}
-.panel{padding:10px;border-bottom:1px solid #1a2535}
-.panel h3{font-size:.68rem;color:#7aabcc;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px}
-.panel p{color:#99b;line-height:1.5;font-size:.67rem}
-.evt{padding:3px 6px;margin:2px 0;border-left:2px solid #2a4a6a;background:#0a1525;color:#aab;font-size:.64rem}
-.evt.major{border-color:#f4c47a;color:#e8d4a0}
-#card{padding:11px}
-#card h2{font-size:.88rem;color:#f4c47a;margin-bottom:4px}
-.tag{display:inline-block;padding:1px 7px;border-radius:8px;font-size:.59rem;margin:2px;color:#fff}
-.bio{color:#aab;line-height:1.5;margin-top:6px;font-size:.66rem}
-.ch4{font-size:.63rem;color:#7aabcc;text-transform:uppercase;margin:8px 0 3px;font-weight:bold}
-.ci{font-size:.63rem;color:#99b;padding:2px 0;border-bottom:1px solid #1a2535}
-.ci .cn{color:#f4c47a}
-/* Draggable legend */
-#leg-ov{position:absolute;bottom:10px;left:10px;background:#0a0f1cee;border:1px solid #2a3a5a;border-radius:8px;padding:0;font-size:.61rem;color:#99b;z-index:10;min-width:210px;user-select:none;box-shadow:0 2px 12px #000a}
-#leg-header{display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border-bottom:1px solid #1e2a40;cursor:move;border-radius:8px 8px 0 0;background:#0d1525}
-#leg-header span{color:#7aabcc;font-weight:bold;font-size:.67rem;letter-spacing:1px}
-#leg-close{background:none;border:1px solid #3a4a6a;color:#99b;border-radius:5px;padding:0px 5px;font-size:.63rem;cursor:pointer;line-height:1.4}
-#leg-close:hover{border-color:#aa5a5a;color:#cc7a7a}
-#leg-body{padding:9px 12px}
-#leg-toggle{position:absolute;bottom:10px;left:10px;background:#0a0f1cee;border:1px solid #2a3a5a;border-radius:6px;padding:4px 10px;font-size:.63rem;color:#7aabcc;cursor:pointer;z-index:10;display:none}
-#leg-toggle:hover{border-color:#5a8aaa;color:#aac}
+
+/* ── Sidebar content ────────────────────────────────── */
+.panel{padding:10px;border-bottom:1px solid #1a0a0a}
+.panel h3{
+  font-size:.65rem;color:#cc5a5a;
+  text-transform:uppercase;letter-spacing:1px;
+  margin-bottom:5px;font-family:'Special Elite',cursive;
+}
+.panel p{color:#7a6a6a;line-height:1.5;font-size:.67rem}
+.evt{padding:3px 6px;margin:2px 0;border-left:2px solid #3a1a1a;background:#120808;color:#8a7070;font-size:.64rem}
+.evt.major{border-color:#cc3333;color:#d4a090}
+
+/* Character card */
+#char-portrait{
+  width:100%;
+  aspect-ratio:1;
+  background:linear-gradient(135deg,#1a0808,#0f0f0f);
+  display:flex;align-items:center;justify-content:center;
+  font-size:4rem;
+  border-bottom:1px solid #2a1010;
+  position:relative;
+  overflow:hidden;
+}
+#char-portrait::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 60%,#0f0808 100%);
+}
+#char-portrait .faction-bar{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:5px 10px;
+  font-size:.6rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;
+  font-family:'Special Elite',cursive;
+  z-index:1;
+}
+#card-body{padding:12px}
+#card-body h2{
+  font-family:'Creepster',cursive;
+  font-size:1.3rem;letter-spacing:1px;
+  margin-bottom:3px;line-height:1;
+}
+.tag{display:inline-block;padding:1px 7px;border-radius:3px;font-size:.58rem;margin:2px;color:#fff}
+.stat-row{display:flex;gap:6px;margin:8px 0;flex-wrap:wrap}
+.stat{
+  background:#150a0a;border:1px solid #2a1010;
+  border-radius:3px;padding:3px 7px;
+  font-size:.6rem;color:#8a7070;
+}
+.stat b{color:#cc7a5a;display:block;font-size:.55rem;text-transform:uppercase;letter-spacing:.5px}
+.bio-text{font-size:.67rem;color:#8a7070;line-height:1.55;margin-top:6px}
+.ch4{font-size:.62rem;color:#cc5a5a;text-transform:uppercase;margin:10px 0 4px;font-weight:bold;font-family:'Special Elite',cursive}
+.ci{font-size:.62rem;color:#7a6060;padding:3px 0;border-bottom:1px solid #1a0808}
+.ci .cn{color:#e8a070}
+
+/* ── Legend overlay ─────────────────────────────────── */
+#leg-ov{
+  position:absolute;bottom:10px;left:10px;
+  background:#0f0808ee;border:1px solid #3a1a1a;
+  border-radius:6px;font-size:.6rem;color:#7a6060;
+  z-index:10;min-width:205px;user-select:none;
+  box-shadow:0 2px 16px #0008;
+}
+#leg-hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:6px 10px;border-bottom:1px solid #2a1010;
+  cursor:move;border-radius:6px 6px 0 0;background:#150a0a;
+}
+#leg-hdr span{color:#cc5a5a;font-weight:bold;font-size:.65rem;letter-spacing:1px;font-family:'Special Elite',cursive}
+#leg-body{padding:9px 11px}
+#leg-tog{
+  position:absolute;bottom:10px;left:10px;
+  background:#0f0808ee;border:1px solid #3a1a1a;
+  border-radius:4px;padding:4px 10px;
+  font-size:.62rem;color:#cc5a5a;cursor:pointer;z-index:10;display:none;
+}
+
+/* ── Sidebar reopen ─────────────────────────────────── */
+#sidebar-reopen{
+  position:absolute;top:8px;right:8px;z-index:20;
+  background:#150a0a;border:1px solid #3a1a1a;
+  color:#cc5a5a;border-radius:4px;
+  padding:4px 10px;font-size:.62rem;cursor:pointer;
+  font-family:'DM Sans',sans-serif;
+}
 </style>
 </head>
 <body>
+
 <div id="header">
-  <h1>⚔️ Dungeon Crawler Carl — Character Relationship Chart</h1>
-  <p>by Matt Dinniman · click nodes to explore · drag to rearrange · scroll to zoom</p>
+  <h1>⚰ Dungeon Crawler Carl ⚰</h1>
+  <p>Character Relationship Chart · by Matt Dinniman · tap a survivor to learn their tragic backstory</p>
 </div>
+
 <div id="controls">
   <div class="book-row" id="row1"></div>
   <div class="book-row" id="row2"></div>
   <div class="book-row" id="row3"></div>
 </div>
 <div id="relbar"></div>
+
 <div id="layout">
   <div id="canvas"><svg id="svg"></svg></div>
   <div id="sidebar">
     <div id="sidebar-header">
-      <span id="sidebar-title">Info</span>
-      <button id="sidebar-close">✕ Close</button>
+      <span id="sidebar-title">Broadcast Feed</span>
+      <button id="sidebar-close">✕</button>
     </div>
     <div id="sidebar-body"></div>
   </div>
 </div>
 
 <script>
+// ── Data ─────────────────────────────────────────────────────────────
+
 const BOOKS=[
   {id:1,title:"Dungeon Crawler Carl",        short:"DCC",            floor:"Floors 1–2",year:2020},
   {id:2,title:"Carl's Doomsday Scenario",    short:"Doomsday",       floor:"Floors 3–4",year:2021},
@@ -91,90 +264,125 @@ const BOOKS=[
 
 const BH=110;
 const BANDS=[
-  {id:"outside",label:"Outside the Dungeon",  y:0,   h:BH,fill:"rgba(40,35,5,.42)",  border:"#c8b85a"},
-  {id:"f12",    label:"Floors 1–2",            y:110, h:BH,fill:"rgba(10,35,55,.42)", border:"#3a6aaa"},
-  {id:"f34",    label:"Floors 3–4",            y:220, h:BH,fill:"rgba(15,45,20,.42)", border:"#3a8a4a"},
-  {id:"f5",     label:"Floor 5",               y:330, h:BH,fill:"rgba(55,35,10,.42)", border:"#aa7a3a"},
-  {id:"f6",     label:"Floor 6",               y:440, h:BH,fill:"rgba(50,15,40,.42)", border:"#aa4a8a"},
-  {id:"f7",     label:"Floor 7",               y:550, h:BH,fill:"rgba(35,10,55,.42)", border:"#7a4aaa"},
-  {id:"f8",     label:"Floor 8",               y:660, h:BH,fill:"rgba(10,45,50,.42)", border:"#3a9aaa"},
-  {id:"f9",     label:"Floor 9 — Faction Wars",y:770, h:BH,fill:"rgba(80,50,10,.42)", border:"#e8a030"},
-  {id:"f10",    label:"Floor 10",              y:880, h:BH,fill:"rgba(50,15,15,.42)", border:"#aa3a3a"},
+  {id:"outside",label:"Outside the Dungeon",  y:0,   h:BH},
+  {id:"f12",    label:"Floors 1–2",            y:110, h:BH},
+  {id:"f34",    label:"Floors 3–4",            y:220, h:BH},
+  {id:"f5",     label:"Floor 5",               y:330, h:BH},
+  {id:"f6",     label:"Floor 6",               y:440, h:BH},
+  {id:"f7",     label:"Floor 7",               y:550, h:BH},
+  {id:"f8",     label:"Floor 8",               y:660, h:BH},
+  {id:"f9",     label:"Floor 9 — Faction Wars",y:770, h:BH},
+  {id:"f10",    label:"Floor 10",              y:880, h:BH},
 ];
 
-// F9 sub-factions — rendered inside the F9 band
-// Each occupies a slice of x:0–1000, full band height minus space for labels
 const F9_FACTIONS=[
-  {id:"princess_posse",   label:"Princess Posse",    short:"PP",   alliance:"good",    border:"#5aee6a", fill:"rgba(20,80,20,.55)",  x:0,   w:130},
-  {id:"team_retribution", label:"Team Retribution",  short:"Ret.", alliance:"good",    border:"#5aabee", fill:"rgba(20,60,80,.55)",  x:130, w:130},
-  {id:"skull_clan",       label:"Skull Clan",         short:"SK",   alliance:"bloc",   border:"#ee4a4a", fill:"rgba(80,10,10,.55)",  x:260, w:95},
-  {id:"blood_sultanate",  label:"Blood Sultanate",    short:"BS",   alliance:"bloc",   border:"#ee4aaa", fill:"rgba(80,20,50,.55)",  x:355, w:95},
-  {id:"the_madness",      label:"The Madness",        short:"Mad.", alliance:"bloc",   border:"#aa5aee", fill:"rgba(60,10,70,.55)",  x:450, w:90},
-  {id:"operatic",         label:"Operatic Collective",short:"Oper.",alliance:"bloc",   border:"#4aeecc", fill:"rgba(10,50,60,.55)",  x:540, w:105},
-  {id:"dream",            label:"The Dream",          short:"Drm.", alliance:"bloc",   border:"#eedd4a", fill:"rgba(50,45,10,.55)",  x:645, w:90},
-  {id:"skull_empire",     label:"Skull Empire",       short:"SE",   alliance:"bloc",   border:"#ee8a4a", fill:"rgba(70,30,10,.55)",  x:735, w:90},
-  {id:"prism_kingdom",    label:"Prism Kingdom",      short:"PK",   alliance:"bloc",   border:"#8a8aee", fill:"rgba(20,20,70,.55)",  x:825, w:90},
-  {id:"reavers",          label:"Reavers",            short:"Rvr.", alliance:"bloc",   border:"#aaaaaa", fill:"rgba(40,40,40,.55)",  x:915, w:85},
+  {id:"princess_posse",   label:"Princess Posse",    short:"PP",   alliance:"good", border:"#5aee6a",fill:"rgba(20,80,20,.55)",  x:0,   w:130},
+  {id:"team_retribution", label:"Team Retribution",  short:"Ret.", alliance:"good", border:"#5aabee",fill:"rgba(20,60,80,.55)",  x:130, w:130},
+  {id:"skull_clan",       label:"Skull Clan",         short:"SK",  alliance:"bloc", border:"#ee4a4a",fill:"rgba(80,10,10,.55)",  x:260, w:95},
+  {id:"blood_sultanate",  label:"Blood Sultanate",    short:"BS",  alliance:"bloc", border:"#ee4aaa",fill:"rgba(80,20,50,.55)",  x:355, w:95},
+  {id:"the_madness",      label:"The Madness",        short:"Mad.",alliance:"bloc", border:"#aa5aee",fill:"rgba(60,10,70,.55)",  x:450, w:90},
+  {id:"operatic",         label:"Operatic Collective",short:"OC",  alliance:"bloc", border:"#4aeecc",fill:"rgba(10,50,60,.55)",  x:540, w:105},
+  {id:"dream",            label:"The Dream",          short:"Drm.",alliance:"bloc", border:"#eedd4a",fill:"rgba(50,45,10,.55)",  x:645, w:90},
+  {id:"skull_empire",     label:"Skull Empire",       short:"SE",  alliance:"bloc", border:"#ee8a4a",fill:"rgba(70,30,10,.55)",  x:735, w:90},
+  {id:"prism_kingdom",    label:"Prism Kingdom",      short:"PK",  alliance:"bloc", border:"#8a8aee",fill:"rgba(20,20,70,.55)",  x:825, w:90},
+  {id:"reavers",          label:"Reavers",            short:"Rvr.",alliance:"bloc", border:"#aaaaaa",fill:"rgba(40,40,40,.55)",  x:915, w:85},
 ];
 
-const FC={royal:"#5aabcc",crawlers:"#5aaa5a",outside:"#c8b85a",antagonists:"#cc5a5a",gods:"#aa7acc"};
+// Faction colors — horror palette
+const FC={royal:"#e87840",crawlers:"#7acc5a",outside:"#c8b85a",antagonists:"#cc3333",gods:"#cc7aee"};
 const FL={royal:"Royal Court",crawlers:"Other Crawlers",outside:"Outside Dungeon",antagonists:"Antagonists",gods:"Gods & Powers"};
 
+// Faction emojis for portrait
+const FEMOJI={royal:"👑",crawlers:"⚔️",outside:"📺",antagonists:"☠️",gods:"✦"};
+
 const REL_TYPES=[
-  {id:"all",        label:"All",          color:"#888",   dash:null},
-  {id:"party",      label:"Party",        color:"#5aabcc",dash:null},
-  {id:"ally",       label:"Ally",         color:"#5aaa5a",dash:null},
-  {id:"family",     label:"Family/Bond",  color:"#f4a47a",dash:null},
+  {id:"all",        label:"All",          color:"#5a4a4a",dash:null},
+  {id:"party",      label:"Party",        color:"#e87840",dash:null},
+  {id:"ally",       label:"Ally",         color:"#7acc5a",dash:null},
+  {id:"family",     label:"Family/Bond",  color:"#e8a060",dash:null},
   {id:"romantic",   label:"Romantic",     color:"#dd7aab",dash:"6 2"},
-  {id:"enemy",      label:"Enemy",        color:"#cc5a5a",dash:"3 3"},
+  {id:"enemy",      label:"Enemy",        color:"#cc3333",dash:"3 3"},
   {id:"complicated",label:"Complicated",  color:"#c8b85a",dash:"5 3"},
 ];
 
 const KEY_EVENTS={
-  1:["Earth destroyed by Borant Corp at 2:23 AM Pacific","Carl and Donut enter the dungeon","Donut eats Enhanced Pet Biscuit — gains sapience","Meadow Lark group forms","Carl & Donut appear on Odette's show","Zev assigned as Royal Court PR manager"],
-  2:["Floor 3: race and class selection","Mongo joins as Donut's child","Katia joins the Royal Court","Mordecai officially becomes Donut's manager","Lucia Mar appears as #1 on leaderboard","Hekla engineers Katia's near-death to recruit Donut","Tsarina Signet first encountered"],
-  3:["Floor 5: The Tangle","Florin and Ifechi introduced","Carl gets the Dungeon Anarchist's Cookbook","Louis and Firas inspired to stop hiding","Carl worships Emberus — becomes his Martyr","Gate of the Feral Gods discovered"],
-  4:["Floor 6: The Hunting Grounds","Ifechi killed by Lucia's reflected Rubber Spell","Florin collapses in grief","Borant AI shows first signs of instability","Samantha joins as NPC minion","Quasar retained as Carl's lawyer"],
-  5:["Floor 7: The Butcher's Masquerade","Vrah the Mantis hunter enters to collect Carl","Katia splits from party — kills Eva","Mongo & Kiwi kill Vrah; Carl earns celestial reward","Juice Box falls for Louis","Ren sacrifices herself at Capital Building","Rend gifted to Carl in Ren's memory"],
-  6:["Floor 8: The Eye of the Bedlam Bride","Carl infected with SlugPox — suppresses as weapon","Carl promoted to Devotee of Emberus","Odette sponsors goddess Nekhebit","Signet awakened to her NPC status","Eileithyia coerces Carl via messaging loophole","Katia's celestial orchid lock box revealed"],
-  7:["Floor 9: FACTION WARS — 10 teams battle for Castle Larracos","Princess Posse (Carl & Donut warlords) + Team Retribution (NPCs) = The Good Guys","All other 8 factions form The Bloc against them","Louis marries Juice Box to seal the Good Guys alliance","Lemig Sortition eliminated early — Ceasefire ends 23 hrs early","War Mage Rebellion (Agatha & Akuma) added mid-game","Signet sacrifices herself — eternal torment — to open a path forward","Odette enters dungeon as Nekhebit as Princess Posse adjutant","Only Katia or Donut can leave Floor 9 by normal means"],
-  8:["Floor 10: A Parade of Horribles","Dungeon appears in Havana — locked-down ghost floor","Carl confronts memory of his dying father","Carl discovers his half-brother Asher exists","System AI stability collapses — Borant losing control","Offboarding suspended across the dungeon"],
+  1:["Earth destroyed by Borant Corp at 2:23 AM Pacific — thanks guys","Carl and Donut enter the dungeon (he's in heart boxers)","Donut eats Enhanced Pet Biscuit — gains sapience and an attitude","Meadow Lark Retirement Home group forms","Carl & Donut appear on Odette's talk show","Zev assigned as Royal Court PR manager"],
+  2:["Floor 3: race and class selection","Mongo joins as Donut's child (she is immediately a stage mom)","Katia joins the Royal Court","Mordecai officially becomes Donut's manager","Lucia Mar appears as #1 on leaderboard","Hekla engineers Katia's near-death to recruit Donut","Tsarina Signet first encountered"],
+  3:["Floor 5: The Tangle","Florin and Ifechi introduced","Carl gets the Dungeon Anarchist's Cookbook","Louis and Firas inspired to stop hiding and actually try","Carl worships Emberus — becomes his Martyr","Gate of the Feral Gods discovered"],
+  4:["Floor 6: The Hunting Grounds","Ifechi killed by Lucia's reflected Rubber Spell","Florin collapses in grief over Ifechi","Borant AI shows first signs of instability","Samantha (demi-goddess in a foam doll head) joins as NPC minion","Quasar retained as Carl's lawyer (he's going to need one)"],
+  5:["Floor 7: The Butcher's Masquerade","Vrah the Mantis hunter enters the dungeon to collect Carl as a trophy","Katia leaves party to hunt Eva — kills her","Mongo & Kiwi kill Vrah; Carl earns celestial reward","Juice Box falls for Louis","Ren sacrifices herself at Capital Building","Rend gifted to Carl in Ren's memory"],
+  6:["Floor 8: The Eye of the Bedlam Bride","Carl infected with SlugPox — suppresses it as a weapon instead of curing it","Carl promoted to Devotee of Emberus","Odette sponsors goddess Nekhebit","Signet awakened to her NPC status","Eileithyia coerces Carl via messaging loophole","Katia's celestial orchid lock box revealed"],
+  7:["Floor 9: FACTION WARS — 10 teams battle for Castle Larracos","Princess Posse (Carl & Donut warlords) + Team Retribution (NPCs) = The Good Guys","All other 8 factions form The Bloc against them","Louis marries Juice Box to seal the Good Guys alliance","War Mage Rebellion (Agatha & Akuma) added mid-game","Signet sacrifices herself — eternal torment — to open a path forward","Odette enters dungeon as Nekhebit as Princess Posse adjutant","Only Katia or Donut can leave Floor 9 by normal means"],
+  8:["Floor 10: A Parade of Horribles","Dungeon appears in Havana — locked-down ghost floor","Carl confronts memory of his dying father","Carl discovers his half-brother Asher exists","System AI stability collapses — Borant losing control","Offboarding suspended across the entire dungeon"],
 };
 
 const NODES=[
-  {id:"carl",       label:"Carl",           role:"Crawler #4122",           faction:"royal",      size:"main",book:1,lastBook:8,band:"f12",   x:140,f9:"princess_posse", magic:"Agent Provocateur / Explosives",status:"alive",bio:"27yr Coast Guard vet. Trapped in heart boxers & leather jacket. Master improviser, reluctant rebel. Worships Emberus (Floor 5), Devotee rank (Floor 8). Co-Warlord of Princess Posse on Floor 9. Suppresses SlugPox as a weapon."},
-  {id:"donut",      label:"Princess Donut", role:"Party Leader",            faction:"royal",      size:"main",book:1,lastBook:8,band:"f12",   x:260,f9:"princess_posse", magic:"Aristocrat Cat / Charm / Summoning",status:"alive",bio:"Award-winning tortoiseshell Persian. Enhanced Pet Biscuit → sapience. Charisma 25. Adopted Mongo. Co-Warlord of Princess Posse. Helped kill god Diwata. One of only two who can leave Floor 9 normally (Crown of the Sepsis Whore)."},
-  {id:"mongo",      label:"Mongo",          role:"Pet Velociraptor",         faction:"royal",      size:"side",book:1,lastBook:8,band:"f12",   x:195,f9:"princess_posse", magic:"Physical / Bite",status:"alive",bio:"Baby velociraptor from Floor 2 egg reward. Donut's child. Pink downy feathers. Helped kill hunter Vrah alongside Kiwi."},
-  {id:"rend",       label:"Rend",           role:"Pet Tummy-Acher",          faction:"royal",      size:"side",book:5,lastBook:8,band:"f7",    x:195,f9:"princess_posse", magic:"Tummy-Acher",status:"alive",bio:"Ugly-cute meatball creature gifted to Carl by Tserendelgor before her death. Named Rend in her memory."},
-  {id:"kiwi",       label:"Kiwi",           role:"Pet Kiwi Bird",            faction:"royal",      size:"side",book:5,lastBook:8,band:"f7",    x:140,f9:"princess_posse", magic:"Kiwi / Stealth",status:"alive",bio:"Kiwi bird who joined the Royal Court on Floor 7. Helped Mongo kill hunter Vrah."},
-  {id:"mordecai",   label:"Mordecai",       role:"Manager / Guide",          faction:"royal",      size:"main",book:1,lastBook:8,band:"f12",   x:330,f9:"princess_posse", magic:"Potions / Changeling (orig. Skyfowl)",status:"alive",bio:"Ancient former crawler. Indentured to Borant Corp. Expert potionmaker. Complicated history with Odette. Donut's manager from Floor 3. On Floor 9 secretly diverted gold to protect changeling child NPCs."},
-  {id:"samantha",   label:"Samantha",       role:"NPC Minion",               faction:"royal",      size:"side",book:4,lastBook:8,band:"f6",    x:140,f9:"princess_posse", magic:"Demi-goddess / Chaos",status:"alive",bio:"Demi-goddess trapped in a foam doll head. Hired NPC follower of Donut. Unhinged, hilarious, surprisingly powerful."},
-  {id:"katia",      label:"Katia Grim",     role:"Crawler / Royal Court",    faction:"crawlers",   size:"main",book:2,lastBook:8,band:"f34",   x:520,f9:"princess_posse", magic:"Doppelganger / Monster Truck Driver",status:"alive",bio:"Former Icelandic art professor. Can sculpt her mass into any shape. Killed Eva on Floor 7. Romantic partner Bautista. Cursed Crown of the Sepsis Whore on Floor 9 — one of only two who can leave normally."},
-  {id:"florin",     label:"Florin",         role:"Crawler / Ally",           faction:"crawlers",   size:"main",book:3,lastBook:8,band:"f5",    x:600,f9:"princess_posse", magic:"Crocodilian / Unlimited-Ammo Shotgun",status:"alive",bio:"Gruff mercenary. Claims French, sounds Australian. Lost Ifechi on Floor 6. Complex relationship with Lucia Mar."},
-  {id:"ifechi",     label:"Ifechi",         role:"Florin's Partner",         faction:"crawlers",   size:"side",book:3,lastBook:4,band:"f5",    x:700,f9:null,             magic:"Healing / Leech",status:"dead",bio:"Red Cross medic. Killed Floor 6 when Lucia's Rubber Spell reflected Florin's shots back at her."},
-  {id:"bautista",   label:"Bautista",       role:"Crawler",                  faction:"crawlers",   size:"side",book:3,lastBook:8,band:"f5",    x:520,f9:"princess_posse", magic:"Tiger race / Beanie Baby Summoner",status:"alive",bio:"South American crawler. Tiger-like race. Romantic partner of Katia. Beanie baby summons."},
-  {id:"louis",      label:"Louis",          role:"Crawler / Pilot",          faction:"crawlers",   size:"side",book:3,lastBook:8,band:"f5",    x:460,f9:"princess_posse", magic:"Various / Florida Man",status:"alive",bio:"Florida crawler who spent early floors drunk. Found purpose through Carl. Team pilot. Married Juice Box on Floor 9 to seal the Good Guys alliance."},
-  {id:"firas",      label:"Firas",          role:"Crawler / Pilot",          faction:"crawlers",   size:"side",book:3,lastBook:8,band:"f5",    x:390,f9:"princess_posse", magic:"Various",status:"alive",bio:"Louis's partner from Florida. Evolved into capable team member alongside Louis."},
-  {id:"juicebox",   label:"Juice Box",      role:"Awakened NPC / Changeling",faction:"crawlers",   size:"side",book:5,lastBook:8,band:"f7",    x:520,f9:"team_retribution",magic:"Changeling / Awakened NPC",status:"alive",bio:"Changeling NPC who became self-aware. Sister of Henrik. Fell for Louis because he was genuinely honest with her. Led NPC awakening on Floor 9. Married Louis to seal the Good Guys alliance. Leader of Team Retribution."},
-  {id:"imani",      label:"Imani",          role:"Crawler / Guild Leader",   faction:"crawlers",   size:"side",book:1,lastBook:8,band:"f12",   x:600,f9:"princess_posse", magic:"Healing / Leadership",status:"alive",bio:"Nurse from Meadow Lark. Named guild Safehome Yolanda. Steady allied leader throughout."},
-  {id:"elle",       label:"Elle McGibbons", role:"Elder Crawler",            faction:"crawlers",   size:"side",book:1,lastBook:8,band:"f12",   x:700,f9:"princess_posse", magic:"Hailstorm Queen (Floor 9 upgrade)",status:"alive",bio:"Elderly Meadow Lark resident. Unexpectedly durable. Upgraded to Hailstorm Queen on Floor 9."},
-  {id:"lucia",      label:"Lucia Mar",      role:"Wild Card Crawler",        faction:"crawlers",   size:"main",book:2,lastBook:8,band:"f34",   x:680,f9:"princess_posse", magic:"Rubber Spell / Rottweilers",status:"alive",bio:"Appears to be a 13yr Ecuadorian street kid. #1 Leaderboard. Multiple children's consciousnesses. Controlled by Rottweiler Gustavo 3. Fought with Princess Posse on Floor 9."},
-  {id:"prepotente", label:"Prepotente",     role:"Goat Crawler",             faction:"crawlers",   size:"side",book:1,lastBook:8,band:"f12",   x:790,f9:"princess_posse", magic:"Sapient Goat",status:"alive",bio:"Miriam Dom's goat who ate a Pet Biscuit. Sapient humanoid crawler. Recurring fan favorite."},
-  {id:"tserendelgor",label:"Ren",          role:"Crawler / Flamethrower",   faction:"crawlers",   size:"side",book:2,lastBook:5,band:"f34",   x:790,f9:null,             magic:"Flamethrower 'Velma'",status:"dead",bio:"'Tserendelgor' — called Ren. Mongolian crawler. Flamethrower named Velma. Sacrificed herself on Floor 7. Gifted Carl her tummy-acher (Rend)."},
-  {id:"signet",     label:"Tsarina Signet", role:"Elite NPC / Ally",         faction:"crawlers",   size:"side",book:2,lastBook:7,band:"f34",   x:870,f9:"princess_posse", magic:"Blood Magic / Ink Marauder",status:"dead",bio:"Half-Naiad, half-High-Elf elite NPC. Awakened Floor 6. Sacrificed herself Floor 9 — eternal torment — to save her family and open a path forward for crawlers."},
-  {id:"eva",        label:"Eva Sigrid",     role:"Antagonist Crawler",       faction:"crawlers",   size:"side",book:2,lastBook:5,band:"f34",   x:600,f9:null,             magic:"4-armed Cobra / Player Killer",status:"dead",bio:"Katia's pre-apocalypse friend turned Hekla's enforcer. 13 PK skulls. Killed by Katia on Floor 7."},
-  {id:"zev",        label:"Zev",            role:"PR Manager",               faction:"outside",    size:"main",book:1,lastBook:8,band:"outside",x:160,f9:null,            magic:"Kua-Tin / Admin access",status:"alive",bio:"Fish-like Kua-Tin alien. Royal Court's PR manager. Secretly a member of the Borant Emancipation Front. On Floor 9 warned Carl about the Odette/Mordecai clash risk."},
-  {id:"odette",     label:"Odette",         role:"Talk Show Host / Nekhebit",faction:"outside",    size:"main",book:1,lastBook:8,band:"outside",x:330,f9:"princess_posse",magic:"Former Crawler / Monster legs / Vulture Goddess",status:"alive",bio:"Host of Dungeon Crawler After Hours. Survived to Floor 12. Complicated history with Mordecai. Sponsors Nekhebit. Enters dungeon as Nekhebit on Floor 9 as Princess Posse adjutant."},
-  {id:"quasar",     label:"Quasar",         role:"Carl's Lawyer",            faction:"outside",    size:"side",book:4,lastBook:8,band:"outside",x:500,f9:null,            magic:"Legal / Grey alien",status:"alive",bio:"Grey-like alien lawyer retained as Carl's counsel."},
-  {id:"beatrice",   label:"Beatrice",       role:"Carl's Ex",                faction:"outside",    size:"side",book:1,lastBook:6,band:"outside",x:680,f9:null,            magic:"None",status:"alive",bio:"Carl's ex-girlfriend. Donut's original owner. Rescued by Odette, used as leverage against Borant Corp."},
-  {id:"borant",     label:"Borant Corp",    role:"Primary Antagonist",       faction:"antagonists",size:"main",book:1,lastBook:8,band:"outside",x:840,f9:null,            magic:"System Control",status:"alive",bio:"Alien corp that destroyed Earth for their reality show. Controls the System AI. Run by the fascist Bloom Party. Their control deteriorates as AI glitches."},
-  {id:"sysai",      label:"System AI",      role:"Game Master",              faction:"antagonists",size:"main",book:1,lastBook:8,band:"outside",x:940,f9:null,            magic:"Omnipotent / Glitching",status:"alive",bio:"The AI governing the dungeon. Increasingly unstable. Took unauthorized actions on Floor 9 — expanded the playing field, refused factions' requests to leave."},
-  {id:"hekla",      label:"Hekla",          role:"Antagonist Crawler",       faction:"antagonists",size:"side",book:2,lastBook:3,band:"f34",   x:460,f9:null,            magic:"Crossbow / Manipulation",status:"dead",bio:"Icelandic psychiatrist turned dangerous crawler. Tried to recruit Donut by engineering Katia's death. Fatally misjudged Carl. Killed Floor 5."},
-  {id:"gustavo",    label:"Gustavo 3",      role:"Controlling Entity",       faction:"antagonists",size:"side",book:2,lastBook:8,band:"f34",   x:870,f9:null,            magic:"Remote-control Rottweiler",status:"alive",bio:"Rottweiler who remotely controls Lucia Mar on behalf of a man named Alexandro. Key to freeing Lucia's multiple personalities."},
-  {id:"vrah",       label:"Vrah",           role:"Alien Hunter",             faction:"antagonists",size:"side",book:5,lastBook:5,band:"f7",    x:720,f9:null,            magic:"Mantis Hunter / Predator",status:"dead",bio:"Feared Mantis huntress, mayor of Zockau. Entered Floor 7 to collect Carl as a trophy. Killed by Mongo and Kiwi. Carl earned a rare celestial reward."},
-  {id:"emberus",    label:"Emberus",        role:"God of Sun & Ash",         faction:"gods",       size:"main",book:3,lastBook:8,band:"outside",x:400,f9:null,            magic:"Sun / Ash / Celestial Ascendancy",status:"alive",bio:"Stoic, unhinged god. Contender for the Celestial Throne. Blinded himself after son Geyrun's murder. Carl's patron — Martyr (Floor 5), Devotee (Floor 8)."},
-  {id:"nekhebit",   label:"Nekhebit",       role:"Vulture Goddess",          faction:"gods",       size:"side",book:6,lastBook:8,band:"outside",x:560,f9:null,            magic:"Vulture goddess / Scavenger Mother",status:"alive",bio:"Long-forgotten vulture goddess. Sponsored by Odette starting Floor 8. Odette enters dungeon as Nekhebit on Floor 9."},
-  {id:"eileithyia", label:"Eileithyia",     role:"Birth Goddess / Coercer",  faction:"gods",       size:"side",book:6,lastBook:8,band:"outside",x:720,f9:null,            magic:"Birth goddess / Messaging loopholes",status:"alive",bio:"Goddess who coerces Carl through messaging loopholes. Tied to Katia's celestial orchid — three seals could grant Katia permanent boons or escape to Floor 12."},
+  {id:"carl",     label:"Carl",           role:"Crawler #4122",           faction:"royal",      size:"main",book:1,lastBook:8,band:"f12",   x:140,f9:"princess_posse", magic:"Agent Provocateur / Explosives",status:"alive",
+   bio:"27yr Coast Guard vet. Trapped in heart boxers & leather jacket. Master improviser, reluctant rebel. Worships Emberus (Floor 5), Devotee rank (Floor 8). Co-Warlord of Princess Posse on Floor 9. Suppresses SlugPox as a weapon because of course he does."},
+  {id:"donut",    label:"Princess Donut", role:"Party Leader / Drama Queen",faction:"royal",    size:"main",book:1,lastBook:8,band:"f12",   x:260,f9:"princess_posse", magic:"Aristocrat Cat / Charm / Summoning",status:"alive",
+   bio:"Award-winning tortoiseshell Persian cat. Enhanced Pet Biscuit → sapience. Charisma 25. Adopted Mongo. Co-Warlord of Princess Posse. Helped kill god Diwata. Never lets anyone forget she is a champion show cat."},
+  {id:"mongo",    label:"Mongo",          role:"Pet Velociraptor",         faction:"royal",      size:"side",book:1,lastBook:8,band:"f12",   x:195,f9:"princess_posse", magic:"Physical / Bite / Getting Bigger",status:"alive",
+   bio:"Baby velociraptor from Floor 2 egg reward. Donut's child. Pink downy feathers. Helped kill hunter Vrah alongside Kiwi. Keeps growing. Everyone is fine with this."},
+  {id:"rend",     label:"Rend",           role:"Pet Tummy-Acher",          faction:"royal",      size:"side",book:5,lastBook:8,band:"f7",    x:195,f9:"princess_posse", magic:"Tummy-Acher",status:"alive",
+   bio:"Ugly-cute meatball creature gifted to Carl by Tserendelgor before her death. Named Rend in her memory. Carl did not ask for this responsibility."},
+  {id:"kiwi",     label:"Kiwi",           role:"Pet Kiwi Bird",            faction:"royal",      size:"side",book:5,lastBook:8,band:"f7",    x:140,f9:"princess_posse", magic:"Kiwi / Stealth",status:"alive",
+   bio:"A kiwi bird who joined the Royal Court on Floor 7. Helped Mongo kill hunter Vrah. Deceptively dangerous for a small round bird."},
+  {id:"mordecai", label:"Mordecai",       role:"Manager / Reluctant Guide",faction:"royal",      size:"main",book:1,lastBook:8,band:"f12",   x:330,f9:"princess_posse", magic:"Potions / Changeling (orig. Skyfowl)",status:"alive",
+   bio:"Ancient former crawler. Indentured to Borant Corp. Expert potionmaker. Complicated romantic history with Odette. Donut's manager from Floor 3. Grumpy. Actually cares deeply about all of them. Don't tell him you noticed."},
+  {id:"samantha", label:"Samantha",       role:"NPC Minion / Chaos Agent", faction:"royal",      size:"side",book:4,lastBook:8,band:"f6",    x:140,f9:"princess_posse", magic:"Demi-goddess / Chaos",status:"alive",
+   bio:"Demi-goddess trapped in a foam doll head. Hired NPC follower of Donut. Unhinged, vulgar, hilarious, and capable of causing catastrophic damage. Fan favorite. Do not give her unsupervised access to anything."},
+  {id:"katia",    label:"Katia Grim",     role:"Crawler / Royal Court",    faction:"crawlers",   size:"main",book:2,lastBook:8,band:"f34",   x:520,f9:"princess_posse", magic:"Doppelganger / Monster Truck Driver",status:"alive",
+   bio:"Former Icelandic art professor. Can sculpt her mass into any shape. Killed Eva on Floor 7. Romantic partner Bautista. Cursed Crown of the Sepsis Whore on Floor 9 — one of only two who can leave normally. Not having a great time but handling it."},
+  {id:"florin",   label:"Florin",         role:"Crawler / Ally",           faction:"crawlers",   size:"main",book:3,lastBook:8,band:"f5",    x:600,f9:"princess_posse", magic:"Crocodilian / Unlimited-Ammo Shotgun",status:"alive",
+   bio:"Gruff mercenary. Claims French accent. Sounds Australian. Has an unlimited-ammo Mossberg named — well, just Mossberg. Lost Ifechi on Floor 6 and never fully recovered. Complex evolving relationship with Lucia Mar."},
+  {id:"ifechi",   label:"Ifechi",         role:"Florin's Partner",         faction:"crawlers",   size:"side",book:3,lastBook:4,band:"f5",    x:700,f9:null,             magic:"Healing / Leech",status:"dead",
+   bio:"Red Cross medic. Florin's combat partner. Killed Floor 6 when Lucia's Rubber Spell reflected Florin's own shotgun blasts back at her. Nobody has really been okay since."},
+  {id:"bautista", label:"Bautista",       role:"Crawler",                  faction:"crawlers",   size:"side",book:3,lastBook:8,band:"f5",    x:520,f9:"princess_posse", magic:"Tiger race / Beanie Baby Summoner",status:"alive",
+   bio:"South American crawler. Tiger-like race. Witnessed most of his family die on Floor 3. Summons magical beanie baby creatures in combat which is both adorable and terrifying. Fell in love with Katia."},
+  {id:"louis",    label:"Louis",          role:"Crawler / Pilot",          faction:"crawlers",   size:"side",book:3,lastBook:8,band:"f5",    x:460,f9:"princess_posse", magic:"Various / Florida Man",status:"alive",
+   bio:"Florida crawler who spent his early floors drunk and hiding. Carl and Katia helped him find purpose. Became team pilot. Married Juice Box on Floor 9 to seal the Good Guys alliance. Florida Man energy: channeled for good."},
+  {id:"firas",    label:"Firas",          role:"Crawler / Pilot",          faction:"crawlers",   size:"side",book:3,lastBook:8,band:"f5",    x:390,f9:"princess_posse", magic:"Various",status:"alive",
+   bio:"Louis's partner from Florida. Co-converted a van into the dungeon. Evolved into a capable team member alongside Louis. The other Florida Man."},
+  {id:"juicebox", label:"Juice Box",      role:"Awakened NPC / Changeling",faction:"crawlers",   size:"side",book:5,lastBook:8,band:"f7",    x:520,f9:"team_retribution",magic:"Changeling / Awakened NPC",status:"alive",
+   bio:"Changeling NPC who became self-aware. Sister of Henrik. Fell for Louis because he was completely genuine with her — no pretense. Led NPC awakening on Floor 9. Married Louis to seal the Good Guys alliance. Leader of Team Retribution. Doing better than most people who discover they're NPCs."},
+  {id:"imani",    label:"Imani",          role:"Crawler / Guild Leader",   faction:"crawlers",   size:"side",book:1,lastBook:8,band:"f12",   x:600,f9:"princess_posse", magic:"Healing / Leadership",status:"alive",
+   bio:"Nurse from Meadow Lark Retirement Home. Named her guild Safehome Yolanda after a fallen colleague. Steady moral center throughout the series. One of the few adults in the room."},
+  {id:"elle",     label:"Elle McGibbons", role:"Elder Crawler",            faction:"crawlers",   size:"side",book:1,lastBook:8,band:"f12",   x:700,f9:"princess_posse", magic:"Hailstorm Queen (Floor 9 upgrade)",status:"alive",
+   bio:"Elderly Meadow Lark resident. Unexpectedly durable. Upgraded to Hailstorm Queen class on Floor 9. Absolutely no nonsense. Fan favorite. Do not underestimate the old women."},
+  {id:"lucia",    label:"Lucia Mar",      role:"Wild Card Crawler",        faction:"crawlers",   size:"main",book:2,lastBook:8,band:"f34",   x:680,f9:"princess_posse", magic:"Rubber Spell / Rottweilers",status:"alive",
+   bio:"Appears to be a 13yr Ecuadorian street kid. Actually contains multiple children's consciousnesses. #1 on the Leaderboard. Remotely controlled by her Rottweiler Gustavo 3. Accidentally killed Ifechi via reflected spell. It is complicated."},
+  {id:"prepotente",label:"Prepotente",   role:"Goat Crawler",             faction:"crawlers",   size:"side",book:1,lastBook:8,band:"f12",   x:790,f9:"princess_posse", magic:"Sapient Goat",status:"alive",
+   bio:"One of shepherd Miriam Dom's goats. Ate an Enhanced Pet Biscuit. Became a sapient humanoid crawler. Did not ask for this. Is handling it better than most humans would. Recurring fan favorite."},
+  {id:"tserendelgor",label:"Ren",        role:"Crawler / Flamethrower",   faction:"crawlers",   size:"side",book:2,lastBook:5,band:"f34",   x:790,f9:null,             magic:"Flamethrower 'Velma'",status:"dead",
+   bio:"'Tserendelgor' — everyone called her Ren because no one could say it. Mongolian crawler. Carried a legendary flamethrower named Velma. Sacrificed herself on Floor 7's Capital Building when she had nothing left to give. Gifted Carl her tummy-acher (named Rend). Gone too soon."},
+  {id:"signet",   label:"Tsarina Signet",role:"Elite NPC / Ally",         faction:"crawlers",   size:"side",book:2,lastBook:7,band:"f34",   x:870,f9:"princess_posse", magic:"Blood Magic / Ink Marauder",status:"dead",
+   bio:"Half-Naiad, half-High-Elf elite NPC in 'Vengeance of the Daughter.' Awakened to her NPC status Floor 6. Sacrificed herself Floor 9 — accepted eternal torment — to save her family and give crawlers a path forward. The sacrifice the story did not deserve to need."},
+  {id:"eva",      label:"Eva Sigrid",     role:"Antagonist Crawler",       faction:"crawlers",   size:"side",book:2,lastBook:5,band:"f34",   x:600,f9:null,             magic:"4-armed Cobra / Player Killer",status:"dead",
+   bio:"Katia's friend before the apocalypse. Became Hekla's enforcer. Green opalescent skin, four arms, cobra head. 13 Player Killer skulls. Killed by Katia on Floor 7. The tragedy of the apocalypse: it takes good people and makes them something else."},
+  {id:"zev",      label:"Zev",            role:"PR Manager",               faction:"outside",    size:"main",book:1,lastBook:8,band:"outside",x:160,f9:null,            magic:"Kua-Tin / Admin access",status:"alive",
+   bio:"Fish-like Kua-Tin alien. Assigned as the Royal Court's PR manager by Borant Corp. Secretly a member of the Borant Emancipation Front working to dismantle the system from within. Genuinely cares. Possibly the only Borant employee with a conscience."},
+  {id:"odette",   label:"Odette",         role:"Talk Show Host / Nekhebit",faction:"outside",    size:"main",book:1,lastBook:8,band:"outside",x:330,f9:"princess_posse",magic:"Former Crawler / Monster legs / Vulture Goddess",status:"alive",
+   bio:"Host of Dungeon Crawler After Hours. Survived to Floor 12. Lost legs on Floor 11, replaced with monster parts. Complicated history with Mordecai. Secretly working against Borant. Sponsored goddess Nekhebit. On Floor 9 enters the dungeon herself as Nekhebit. One of the most dangerous people in this story."},
+  {id:"quasar",   label:"Quasar",         role:"Carl's Lawyer",            faction:"outside",    size:"side",book:4,lastBook:8,band:"outside",x:500,f9:null,            magic:"Legal / Grey alien",status:"alive",
+   bio:"Grey-like alien lawyer retained as Carl's counsel as his actions gain galactic consequences. Did not expect this much work when he took the case."},
+  {id:"beatrice", label:"Beatrice",       role:"Carl's Ex",                faction:"outside",    size:"side",book:1,lastBook:6,band:"outside",x:680,f9:null,            magic:"None",status:"alive",
+   bio:"Carl's ex-girlfriend. Donut's original owner. Went to the Bahamas with her ex Brad before the apocalypse. Rescued by Odette, then used as leverage against Borant Corp. Having a terrible time."},
+  {id:"borant",   label:"Borant Corp",    role:"Primary Antagonist",       faction:"antagonists",size:"main",book:1,lastBook:8,band:"outside",x:840,f9:null,            magic:"System Control / Reality Show Corp",status:"alive",
+   bio:"Alien corporation that destroyed Earth and turned it into a dungeon for their reality show Dungeon Crawler World. Run by the fascist Bloom Party. Their control deteriorates as the System AI glitches. The villain hiding behind paperwork and broadcast rights."},
+  {id:"sysai",    label:"System AI",      role:"Game Master",              faction:"antagonists",size:"main",book:1,lastBook:8,band:"outside",x:940,f9:null,            magic:"Omnipotent / Glitching",status:"alive",
+   bio:"The AI governing the dungeon. Increasingly unstable. Shows unexpected autonomy and hints of sympathy toward crawlers. Its deterioration is one of the central mysteries of the series. Is it breaking down or waking up?"},
+  {id:"hekla",    label:"Hekla",          role:"Antagonist Crawler",       faction:"antagonists",size:"side",book:2,lastBook:3,band:"f34",   x:460,f9:null,            magic:"Crossbow / Manipulation",status:"dead",
+   bio:"Icelandic psychiatrist turned dangerous crawler. Built her team around herself with zero concern for their survival. Tried to recruit Donut by engineering Katia's death. Fatally misjudged Carl. Killed Floor 5. The dungeon occasionally takes out its own trash."},
+  {id:"gustavo",  label:"Gustavo 3",      role:"Controlling Entity",       faction:"antagonists",size:"side",book:2,lastBook:8,band:"f34",   x:870,f9:null,            magic:"Remote-control Rottweiler",status:"alive",
+   bio:"The Rottweiler who remotely controls Lucia Mar's body on behalf of a man named Alexandro. The key to freeing Lucia's multiple personalities. An evil dog. There's no other way to say it."},
+  {id:"vrah",     label:"Vrah",           role:"Alien Hunter",             faction:"antagonists",size:"side",book:5,lastBook:5,band:"f7",    x:720,f9:null,            magic:"Mantis Hunter / Predator",status:"dead",
+   bio:"Feared Mantis huntress and mayor of Zockau. Entered Floor 7 to collect Carl as a trophy. Killed by Mongo and Kiwi — eye punctured, limbs removed, generally destroyed. Carl earned a rare celestial reward. She really should have read the room."},
+  {id:"emberus",  label:"Emberus",        role:"God of Sun & Ash",         faction:"gods",       size:"main",book:3,lastBook:8,band:"outside",x:400,f9:null,            magic:"Sun / Ash / Celestial Ascendancy",status:"alive",
+   bio:"Stoic, unhinged god of Sun and Ash. Contender for the Celestial Throne. Blinded himself in grief after son Geyrun's murder. Carl's patron god — Martyr (Floor 5), Devotee (Floor 8). Has extremely poor coping mechanisms. Carl is somehow fine with this."},
+  {id:"nekhebit", label:"Nekhebit",       role:"Vulture Goddess",          faction:"gods",       size:"side",book:6,lastBook:8,band:"outside",x:560,f9:null,            magic:"Vulture goddess / Scavenger Mother",status:"alive",
+   bio:"Long-forgotten vulture goddess with arms instead of wings. Jealous. Terrible. Cursed the High Elves, creating the Fae Diaspora. Sponsored by Odette starting Floor 8. Odette physically enters the dungeon as Nekhebit on Floor 9. Not what Nekhebit expected from a sponsor relationship."},
+  {id:"eileithyia",label:"Eileithyia",   role:"Birth Goddess / Coercer",  faction:"gods",       size:"side",book:6,lastBook:8,band:"outside",x:720,f9:null,            magic:"Birth goddess / Messaging loopholes",status:"alive",
+   bio:"Goddess who coerces Carl through messaging loopholes into political arrangements. Tied to Katia's celestial orchid — three seals could grant Katia permanent boons or escape to Floor 12. Finds terms like 'consent' somewhat optional."},
 ];
 
 const EDGES=[
@@ -235,10 +443,8 @@ const EDGES=[
 
 // ── State ────────────────────────────────────────────────────────────
 let S={book:1,rel:"all",selNode:null,showBands:true,showF9:true,pan:{x:10,y:5},scale:.72,ndrag:null,wasDrag:false,pos:{}};
-let legPos={x:10,y:null};
+let legPos={x:10,y:null},legVisible=true,legDrag=false,legDS=null;
 let sidebarOpen=true;
-let legVisible=true;
-let legDragging=false,legDragStart=null;
 
 NODES.forEach(n=>{
   const band=BANDS.find(b=>b.id===n.band)||BANDS[0];
@@ -250,48 +456,28 @@ const row1=document.getElementById("row1");
 const row2=document.getElementById("row2");
 const row3=document.getElementById("row3");
 const relbar=document.getElementById("relbar");
-const sidebarBody=document.getElementById("sidebar-body");
-const sidebarTitle=document.getElementById("sidebar-title");
-const sidebarClose=document.getElementById("sidebar-close");
+const sBody=document.getElementById("sidebar-body");
+const sTitle=document.getElementById("sidebar-title");
+const sClose=document.getElementById("sidebar-close");
 const svgEl=document.getElementById("svg");
 const canvasEl=document.getElementById("canvas");
 
-sidebarClose.addEventListener("click",()=>{
+sClose.addEventListener("click",()=>{
   if(S.selNode){S.selNode=null;renderSidebar();}
-  else{sidebarOpen=false;applySidebarState();}
+  else{sidebarOpen=false;applySidebar();}
 });
 
-// ── SVG helper ───────────────────────────────────────────────────────
+// ── Helpers ──────────────────────────────────────────────────────────
 function mk(tag,a){const e=document.createElementNS("http://www.w3.org/2000/svg",tag);if(a)Object.entries(a).forEach(([k,v])=>e.setAttribute(k,v));return e;}
-function getRC(t){return(REL_TYPES.find(r=>r.id===t)||{color:"#888"}).color;}
+function getRC(t){return(REL_TYPES.find(r=>r.id===t)||{color:"#5a4a4a"}).color;}
 function getRD(t){return(REL_TYPES.find(r=>r.id===t)||{dash:null}).dash;}
 function curvePath(x1,y1,x2,y2){const mx=(x1+x2)/2,my=(y1+y2)/2,dx=x2-x1,dy=y2-y1,len=Math.sqrt(dx*dx+dy*dy)||1,b=Math.min(55,len*.22);return`M${x1},${y1} Q${mx-dy/len*b},${my+dx/len*b} ${x2},${y2}`;}
 
 // ── Controls ─────────────────────────────────────────────────────────
 function renderCtrl(){
   row1.innerHTML="";row2.innerHTML="";row3.innerHTML="";
-
-  // Row 1: Books 1–4
-  BOOKS.slice(0,4).forEach(b=>{
-    const btn=document.createElement("button");
-    btn.className="btn"+(S.book>=b.id?" book-on":"");
-    btn.title=b.title+" · "+b.floor+" ("+b.year+")";
-    btn.textContent="B"+b.id+" – "+b.short;
-    btn.onclick=()=>{S.book=b.id;S.selNode=null;render();};
-    row1.appendChild(btn);
-  });
-
-  // Row 2: Books 5–8
-  BOOKS.slice(4,8).forEach(b=>{
-    const btn=document.createElement("button");
-    btn.className="btn"+(S.book>=b.id?" book-on":"");
-    btn.title=b.title+" · "+b.floor+" ("+b.year+")";
-    btn.textContent="B"+b.id+" – "+b.short;
-    btn.onclick=()=>{S.book=b.id;S.selNode=null;render();};
-    row2.appendChild(btn);
-  });
-
-  // Row 3: Layer toggles on their own line
+  BOOKS.slice(0,4).forEach(b=>row1.appendChild(bookBtn(b)));
+  BOOKS.slice(4,8).forEach(b=>row2.appendChild(bookBtn(b)));
   [["⬡ Floor Bands","showBands"],["⚔ F9 Factions","showF9"]].forEach(([lbl,key])=>{
     const t=document.createElement("button");
     t.className="btn tog"+(S[key]?" tog-on":"");
@@ -299,27 +485,18 @@ function renderCtrl(){
     t.onclick=()=>{S[key]=!S[key];renderSVG();t.className="btn tog"+(S[key]?" tog-on":"");};
     row3.appendChild(t);
   });
-  // Legend toggle in row 3 too
   const lt=document.createElement("button");
   lt.className="btn tog"+(legVisible?" tog-on":"");
   lt.textContent="📋 Legend";
   lt.onclick=()=>{legVisible=!legVisible;lt.className="btn tog"+(legVisible?" tog-on":"");renderLegend();};
   row3.appendChild(lt);
 }
-
-function applySidebarState(){
-  const sb=document.getElementById("sidebar");
-  const reopenBtn=document.getElementById("sidebar-reopen")||createReopenBtn();
-  if(sidebarOpen){sb.style.display="flex";reopenBtn.style.display="none";}
-  else{sb.style.display="none";reopenBtn.style.display="block";}
-}
-function createReopenBtn(){
+function bookBtn(b){
   const btn=document.createElement("button");
-  btn.id="sidebar-reopen";
-  btn.textContent="📋 Info";
-  btn.style.cssText="position:absolute;top:8px;right:8px;z-index:20;background:#0d1220;border:1px solid #3a4a6a;color:#7aabcc;border-radius:6px;padding:4px 10px;font-size:.63rem;cursor:pointer";
-  btn.addEventListener("click",()=>{sidebarOpen=true;applySidebarState();renderSidebar();});
-  canvasEl.appendChild(btn);
+  btn.className="btn"+(S.book>=b.id?" book-on":"");
+  btn.title=b.title+" · "+b.floor+" ("+b.year+")";
+  btn.textContent="B"+b.id+" – "+b.short;
+  btn.onclick=()=>{S.book=b.id;S.selNode=null;render();};
   return btn;
 }
 
@@ -328,88 +505,78 @@ function renderRelBar(){
   REL_TYPES.forEach(r=>{
     const b=document.createElement("button");
     b.className="rbtn"+(S.rel===r.id?" active":"");
-    if(S.rel===r.id)b.style.cssText="border-color:"+r.color+";color:"+r.color+";background:#0d1525";
+    if(S.rel===r.id)b.style.cssText="border-color:"+r.color+";color:"+r.color;
     b.textContent=r.label;
     b.onclick=()=>{S.rel=r.id;renderSVG();};
     relbar.appendChild(b);
   });
 }
 
-// ── SVG render ────────────────────────────────────────────────────────
+// ── SVG ──────────────────────────────────────────────────────────────
 function renderSVG(){
   while(svgEl.firstChild)svgEl.removeChild(svgEl.lastChild);
-
   const defs=mk("defs");
   const mkr=mk("marker",{id:"arr",markerWidth:6,markerHeight:6,refX:6,refY:3,orient:"auto"});
-  mkr.appendChild(mk("path",{d:"M0,0 L0,6 L6,3 z",fill:"#3a4a6a"}));
+  mkr.appendChild(mk("path",{d:"M0,0 L0,6 L6,3 z",fill:"#3a1a1a"}));
   defs.appendChild(mkr);svgEl.appendChild(defs);
-
   const g=mk("g",{transform:`translate(${S.pan.x},${S.pan.y}) scale(${S.scale})`});
   svgEl.appendChild(g);
 
-  // ── Layer 1: Floor bands ──
+  // ── Floor bands — labels + dividers only, no fill colors ──
   if(S.showBands){
     BANDS.forEach(b=>{
-      g.appendChild(mk("rect",{x:0,y:b.y,width:1000,height:b.h,fill:b.fill}));
-      g.appendChild(mk("line",{x1:0,y1:b.y,x2:1000,y2:b.y,stroke:b.border,"stroke-width":.6,opacity:.5}));
-      const t=mk("text",{x:8,y:b.y+15,fill:b.border,"font-size":9,"font-weight":"bold",opacity:.9,"pointer-events":"none"});
+      // Subtle dark stripe every other band for readability
+      const isAlt=BANDS.indexOf(b)%2===0;
+      if(isAlt){
+        const r=mk("rect",{x:0,y:b.y,width:1000,height:b.h,fill:"rgba(255,255,255,.018)"});
+        g.appendChild(r);
+      }
+      // Divider line
+      g.appendChild(mk("line",{x1:0,y1:b.y,x2:1000,y2:b.y,stroke:"#2a1010","stroke-width":.8,opacity:.7}));
+      // Labels
+      const t=mk("text",{x:8,y:b.y+15,fill:"#4a2a2a","font-size":8.5,"font-family":"Special Elite, cursive",opacity:.8,"pointer-events":"none"});
       t.textContent=b.label;g.appendChild(t);
-      const t2=mk("text",{x:992,y:b.y+15,fill:b.border,"font-size":9,"font-weight":"bold","text-anchor":"end",opacity:.9,"pointer-events":"none"});
+      const t2=mk("text",{x:992,y:b.y+15,fill:"#4a2a2a","font-size":8.5,"font-family":"Special Elite, cursive","text-anchor":"end",opacity:.8,"pointer-events":"none"});
       t2.textContent=b.label;g.appendChild(t2);
     });
   }
 
-  // ── Layer 2: Floor 9 Faction Wars sub-factions ──
+  // ── F9 faction zones ──
   const f9band=BANDS.find(b=>b.id==="f9");
   if(S.showF9&&S.book>=7&&f9band){
-    const fy=f9band.y,fh=f9band.h;
-    const labelH=16; // reserve top pixels for alliance header
-    const zoneY=fy+labelH;
-    const zoneH=fh-labelH;
-
-    // Alliance header bars (top strip of F9 band)
-    // Good Guys header
-    g.appendChild(mk("rect",{x:0,y:fy,width:260,height:labelH,fill:"rgba(15,60,15,.85)",rx:0}));
-    const ggt=mk("text",{x:130,y:fy+11,fill:"#5aee6a","font-size":8,"text-anchor":"middle","font-weight":"bold","pointer-events":"none"});
+    const fy=f9band.y,fh=f9band.h,labelH=16,zoneY=fy+labelH,zoneH=fh-labelH;
+    g.appendChild(mk("rect",{x:0,y:fy,width:260,height:labelH,fill:"rgba(15,60,15,.85)"}));
+    const ggt=mk("text",{x:130,y:fy+11,fill:"#5aee6a","font-size":7.5,"text-anchor":"middle","font-weight":"bold","pointer-events":"none","font-family":"Special Elite, cursive"});
     ggt.textContent="✦ THE GOOD GUYS";g.appendChild(ggt);
-    // Bloc header
-    g.appendChild(mk("rect",{x:260,y:fy,width:740,height:labelH,fill:"rgba(70,10,10,.85)",rx:0}));
-    const blt=mk("text",{x:630,y:fy+11,fill:"#ee5a5a","font-size":8,"text-anchor":"middle","font-weight":"bold","pointer-events":"none"});
+    g.appendChild(mk("rect",{x:260,y:fy,width:740,height:labelH,fill:"rgba(70,10,10,.85)"}));
+    const blt=mk("text",{x:630,y:fy+11,fill:"#ee5a5a","font-size":7.5,"text-anchor":"middle","font-weight":"bold","pointer-events":"none","font-family":"Special Elite, cursive"});
     blt.textContent="⚔ THE BLOC (8 factions vs Princess Posse)";g.appendChild(blt);
-
-    // Faction zone rectangles — occupy zoneY to zoneY+zoneH
     F9_FACTIONS.forEach(f=>{
       g.appendChild(mk("rect",{x:f.x,y:zoneY,width:f.w,height:zoneH,fill:f.fill,stroke:f.border,"stroke-width":1.2,"stroke-dasharray":f.alliance==="good"?"none":"4 3"}));
-      // Faction name centered vertically in zone
-      const lbl=mk("text",{x:f.x+f.w/2,y:zoneY+zoneH/2+4,fill:f.border,"font-size":7,"text-anchor":"middle","font-weight":"bold","pointer-events":"none",opacity:.95});
+      const lbl=mk("text",{x:f.x+f.w/2,y:zoneY+zoneH/2+4,fill:f.border,"font-size":7,"text-anchor":"middle","font-weight":"bold","pointer-events":"none"});
       lbl.textContent=f.short;g.appendChild(lbl);
-      // Full name below short name if enough width
       if(f.w>=90){
-        const lbl2=mk("text",{x:f.x+f.w/2,y:zoneY+zoneH/2+14,fill:f.border,"font-size":6,"text-anchor":"middle","pointer-events":"none",opacity:.8});
+        const lbl2=mk("text",{x:f.x+f.w/2,y:zoneY+zoneH/2+14,fill:f.border,"font-size":5.5,"text-anchor":"middle","pointer-events":"none"});
         lbl2.textContent=f.label;g.appendChild(lbl2);
       }
     });
-
-    // Alliance connector line between the two Good Guys factions
     const ppCx=65,trCx=195,allyY=zoneY+zoneH/2;
     g.appendChild(mk("line",{x1:ppCx,y1:allyY,x2:trCx,y2:allyY,stroke:"#5aee6a","stroke-width":2.5,opacity:.9}));
     const alt=mk("text",{x:(ppCx+trCx)/2,y:allyY-5,fill:"#5aee6a","font-size":6,"text-anchor":"middle","pointer-events":"none"});
     alt.textContent="married/allied";g.appendChild(alt);
-
-    // War Mage Rebellion note — sits just BELOW the F9 band, not inside it
     const wmY=fy+fh+3;
     g.appendChild(mk("rect",{x:260,y:wmY,width:740,height:11,fill:"rgba(60,55,5,.75)",rx:2}));
     const wmt=mk("text",{x:630,y:wmY+8,fill:"#eebb30","font-size":6,"text-anchor":"middle","pointer-events":"none"});
     wmt.textContent="⚡ War Mage Rebellion added mid-game (Warlords: Agatha & Akuma)";g.appendChild(wmt);
   }
 
-  // ── Layer 3: Relationship edges ──
+  // ── Edges ──
   const visNodes=NODES.filter(n=>n.book<=S.book);
   const visEdges=EDGES.filter(e=>e.book<=S.book&&(S.rel==="all"||e.type===S.rel));
   visEdges.forEach(e=>{
     const fp=S.pos[e.from],tp=S.pos[e.to];if(!fp||!tp)return;
     const col=getRC(e.type),dash=getRD(e.type),hi=S.rel==="all"||S.rel===e.type;
-    const p=mk("path",{d:curvePath(fp.x,fp.y,tp.x,tp.y),fill:"none",stroke:col,"stroke-width":hi?1.5:.3,opacity:hi?.5:.08,"marker-end":"url(#arr)"});
+    const p=mk("path",{d:curvePath(fp.x,fp.y,tp.x,tp.y),fill:"none",stroke:col,"stroke-width":hi?1.5:.3,opacity:hi?.55:.07,"marker-end":"url(#arr)"});
     if(dash)p.setAttribute("stroke-dasharray",dash);
     g.appendChild(p);
     if(hi){
@@ -419,168 +586,194 @@ function renderSVG(){
     }
   });
 
-  // ── Layer 4: Character nodes ──
+  // ── Nodes ──
   visNodes.forEach(n=>{
     const pos=S.pos[n.id];if(!pos)return;
     const r=n.size==="main"?24:16;
     const faded=n.lastBook<S.book,isNew=n.book===S.book,sel=S.selNode&&S.selNode.id===n.id;
-    const nc=FC[n.faction]||"#888";
-    const grp=mk("g",{"data-id":n.id,style:"cursor:pointer",opacity:faded?.2:1});
+    const nc=FC[n.faction]||"#cc3333";
+    const grp=mk("g",{"data-id":n.id,style:"cursor:pointer",opacity:faded?.18:1});
     g.appendChild(grp);
     if(isNew)grp.appendChild(mk("circle",{cx:pos.x,cy:pos.y,r:r+7,fill:"none",stroke:nc,"stroke-width":1.5,"stroke-dasharray":"4 3",opacity:.9}));
-    grp.appendChild(mk("circle",{cx:pos.x,cy:pos.y,r,fill:sel?nc:"#0e1628",stroke:nc,"stroke-width":sel?2.5:1.5}));
-    const ini=mk("text",{x:pos.x,y:pos.y+4,fill:sel?"#06101e":nc,"font-size":n.size==="main"?9:7,"text-anchor":"middle","font-weight":"bold","pointer-events":"none"});
+    // Glow behind selected
+    if(sel){
+      const glow=mk("circle",{cx:pos.x,cy:pos.y,r:r+4,fill:nc,opacity:.15});
+      grp.appendChild(glow);
+    }
+    grp.appendChild(mk("circle",{cx:pos.x,cy:pos.y,r,fill:sel?nc:"#1a0808",stroke:nc,"stroke-width":sel?2.5:1.5}));
+    const ini=mk("text",{x:pos.x,y:pos.y+4,fill:sel?"#0a0505":nc,"font-size":n.size==="main"?9:7,"text-anchor":"middle","font-weight":"bold","pointer-events":"none"});
     ini.textContent=n.label.split(" ").map(w=>w[0]).join("").slice(0,3);grp.appendChild(ini);
-    const lbl=mk("text",{x:pos.x,y:pos.y+r+12,fill:sel?"#f4c47a":nc,"font-size":n.size==="main"?10:8.5,"text-anchor":"middle","font-weight":n.size==="main"?"bold":"normal","pointer-events":"none"});
+    const lbl=mk("text",{x:pos.x,y:pos.y+r+12,fill:sel?"#e8a060":nc,"font-size":n.size==="main"?10:8.5,"text-anchor":"middle","font-weight":n.size==="main"?"bold":"normal","pointer-events":"none"});
     lbl.textContent=n.label;grp.appendChild(lbl);
-    if(n.status==="dead"){const sk=mk("text",{x:pos.x+r*.65,y:pos.y-r*.65,"font-size":10,"pointer-events":"none"});sk.textContent="💀";grp.appendChild(sk);}
-    if(faded){const xt=mk("text",{x:pos.x,y:pos.y+r+22,fill:n.status==="dead"?"#cc5a5a":"#445","font-size":6.5,"text-anchor":"middle","pointer-events":"none"});xt.textContent=n.status==="dead"?"(deceased)":"(inactive)";grp.appendChild(xt);}
-    // F9 badge
+    if(n.status==="dead"){
+      const sk=mk("text",{x:pos.x+r*.65,y:pos.y-r*.65,"font-size":10,"pointer-events":"none"});
+      sk.textContent="💀";grp.appendChild(sk);
+    }
+    if(faded){
+      const xt=mk("text",{x:pos.x,y:pos.y+r+22,fill:n.status==="dead"?"#5a2020":"#2a1a1a","font-size":6.5,"text-anchor":"middle","pointer-events":"none"});
+      xt.textContent=n.status==="dead"?"(deceased)":"(inactive)";grp.appendChild(xt);
+    }
     if(S.book>=7&&n.f9){
       const f9f=F9_FACTIONS.find(f=>f.id===n.f9);
       if(f9f)grp.appendChild(mk("circle",{cx:pos.x-r*.65,cy:pos.y+r*.65,r:4.5,fill:f9f.fill,stroke:f9f.border,"stroke-width":1}));
     }
     grp.addEventListener("mousedown",e=>{e.stopPropagation();S.ndrag=n.id;});
-    grp.addEventListener("click",e=>{e.stopPropagation();if(!S.wasDrag){S.selNode=n;renderSidebar();}});
+    grp.addEventListener("click",e=>{e.stopPropagation();if(!S.wasDrag){S.selNode=n;sidebarOpen=true;applySidebar();renderSidebar();}});
   });
 
   renderLegend();
 }
 
-// ── Draggable Legend overlay ──────────────────────────────────────────
+// ── Legend ────────────────────────────────────────────────────────────
 function renderLegend(){
   let tog=document.getElementById("leg-tog");
   if(!tog){
     tog=document.createElement("button");tog.id="leg-tog";
-    tog.style.cssText="position:absolute;bottom:10px;left:10px;background:#0a0f1cee;border:1px solid #2a3a5a;border-radius:6px;padding:4px 10px;font-size:.63rem;color:#7aabcc;cursor:pointer;z-index:10;display:none";
-    tog.textContent="📋 Show Legend";
+    tog.style.cssText="position:absolute;bottom:10px;left:10px;background:#0f0808ee;border:1px solid #3a1a1a;border-radius:4px;padding:4px 10px;font-size:.62rem;color:#cc5a5a;cursor:pointer;z-index:10;display:none;font-family:'DM Sans',sans-serif";
+    tog.textContent="📋 Legend";
     tog.onclick=()=>{legVisible=true;renderLegend();};
     canvasEl.appendChild(tog);
   }
-
   let leg=document.getElementById("leg-ov");
   if(!leg){
     leg=document.createElement("div");leg.id="leg-ov";
-    leg.style.cssText="position:absolute;left:10px;bottom:10px;background:#0a0f1cee;border:1px solid #2a3a5a;border-radius:8px;font-size:.61rem;color:#99b;z-index:10;min-width:210px;user-select:none;box-shadow:0 2px 12px #000a";
+    leg.style.cssText="position:absolute;left:10px;bottom:10px;background:#0f0808ee;border:1px solid #3a1a1a;border-radius:6px;font-size:.6rem;color:#7a6060;z-index:10;min-width:205px;user-select:none;box-shadow:0 2px 16px #0008";
     canvasEl.appendChild(leg);
-
-    // drag logic
     leg.addEventListener("mousedown",e=>{
       const hdr=document.getElementById("leg-hdr");
       if(!hdr||!hdr.contains(e.target))return;
-      legDragging=true;
-      const r=leg.getBoundingClientRect();
-      legDragStart={mx:e.clientX,my:e.clientY,lx:r.left,ly:r.top};
-      e.preventDefault();
+      legDrag=true;const r=leg.getBoundingClientRect();
+      legDS={mx:e.clientX,my:e.clientY,lx:r.left,ly:r.top};e.preventDefault();
     });
   }
-
   tog.style.display=legVisible?"none":"block";
-
   if(!legVisible){leg.style.display="none";return;}
   leg.style.display="block";
-
-  // Apply position
   if(legPos.y!==null){leg.style.bottom="auto";leg.style.top=legPos.y+"px";leg.style.left=legPos.x+"px";}
   else{leg.style.bottom="10px";leg.style.top="auto";leg.style.left=legPos.x+"px";}
 
-  let h=`<div id="leg-hdr" style="display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border-bottom:1px solid #1e2a40;cursor:move;border-radius:8px 8px 0 0;background:#0d1525">
-    <span style="color:#7aabcc;font-weight:bold;font-size:.67rem;letter-spacing:1px">LEGEND</span>
-    <button id="leg-close-btn" style="background:none;border:1px solid #3a4a6a;color:#99b;border-radius:5px;padding:0 5px;font-size:.63rem;cursor:pointer;line-height:1.5">✕</button>
-  </div><div style="padding:9px 12px">`;
+  let h=`<div id="leg-hdr" style="display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border-bottom:1px solid #2a1010;cursor:move;border-radius:6px 6px 0 0;background:#150a0a">
+    <span style="color:#cc5a5a;font-weight:bold;font-size:.65rem;letter-spacing:1px;font-family:'Special Elite',cursive">LEGEND</span>
+    <button id="leg-close-btn" style="background:none;border:1px solid #3a1a1a;color:#7a6060;border-radius:4px;padding:0 5px;font-size:.63rem;cursor:pointer;line-height:1.5">✕</button>
+  </div><div id="leg-body" style="padding:9px 11px">`;
 
-  h+="<div style='color:#7aabcc;font-size:.59rem;text-transform:uppercase;margin-bottom:3px'>Relationship Lines</div>";
+  h+="<div style='color:#cc5a5a;font-size:.58rem;text-transform:uppercase;margin-bottom:3px;font-family:Special Elite,cursive'>Relationship Lines</div>";
   REL_TYPES.filter(r=>r.id!=="all").forEach(r=>{
     const ds=r.dash?"border-top:1.5px dashed "+r.color:"border-top:1.5px solid "+r.color;
     h+=`<div style='display:flex;align-items:center;gap:7px;margin:2px 0'><div style='width:26px;height:0;${ds};flex-shrink:0'></div><span style='color:${r.color}'>${r.label}</span></div>`;
   });
-  h+="<div style='color:#7aabcc;font-size:.59rem;text-transform:uppercase;margin:7px 0 3px'>Character Factions</div>";
+  h+="<div style='color:#cc5a5a;font-size:.58rem;text-transform:uppercase;margin:7px 0 3px;font-family:Special Elite,cursive'>Factions</div>";
   Object.entries(FC).forEach(([k,v])=>{h+=`<div style='display:flex;align-items:center;gap:6px;margin:2px 0'><div style='width:9px;height:9px;border-radius:50%;border:2px solid ${v};background:transparent;flex-shrink:0'></div><span>${FL[k]||k}</span></div>`;});
-  h+="<div style='color:#7aabcc;font-size:.59rem;text-transform:uppercase;margin:7px 0 3px'>Icons</div>";
-  [["💀","Deceased character"],["✦ dashed ring","New this book"],["Faded (20%)","Inactive/deceased"],["Large node","Main character"],["Small node","Supporting"],["◉ dot (B7+)","Floor 9 war faction"]].forEach(([ic,desc])=>{
-    h+=`<div style='display:flex;align-items:center;gap:6px;margin:2px 0'><span style='color:#f4c47a;min-width:76px;flex-shrink:0'>${ic}</span><span>${desc}</span></div>`;
+  h+="<div style='color:#cc5a5a;font-size:.58rem;text-transform:uppercase;margin:7px 0 3px;font-family:Special Elite,cursive'>Icons</div>";
+  [["💀","Deceased (RIP, probably)"],["✦ dashed ring","New this book"],["Faded","Inactive or deceased"],["Large node","Main character"],["Small node","Supporting"],["◉ dot (B7+)","Floor 9 war faction"]].forEach(([ic,desc])=>{
+    h+=`<div style='display:flex;align-items:center;gap:6px;margin:2px 0'><span style='color:#e8a060;min-width:78px;flex-shrink:0'>${ic}</span><span>${desc}</span></div>`;
   });
   if(S.book>=7){
-    h+="<div style='color:#7aabcc;font-size:.59rem;text-transform:uppercase;margin:7px 0 3px'>F9 Alliances</div>";
+    h+="<div style='color:#cc5a5a;font-size:.58rem;text-transform:uppercase;margin:7px 0 3px;font-family:Special Elite,cursive'>F9 Alliances</div>";
     h+=`<div style='display:flex;align-items:center;gap:6px;margin:2px 0'><div style='width:26px;height:0;border-top:2px solid #5aee6a;flex-shrink:0'></div><span style='color:#5aee6a'>The Good Guys</span></div>`;
     h+=`<div style='display:flex;align-items:center;gap:6px;margin:2px 0'><div style='width:26px;height:0;border-top:2px dashed #ee5a5a;flex-shrink:0'></div><span style='color:#ee5a5a'>The Bloc</span></div>`;
   }
   h+="</div>";
   leg.innerHTML=h;
-  const closeBtn=document.getElementById("leg-close-btn");
-  if(closeBtn)closeBtn.addEventListener("click",()=>{legVisible=false;renderLegend();});
+  const cb=document.getElementById("leg-close-btn");
+  if(cb)cb.addEventListener("click",()=>{legVisible=false;renderLegend();});
 }
 
-// ── Legend drag ───────────────────────────────────────────────────────
-window.addEventListener("mousemove",e=>{
-  if(legDragging&&legDragStart){
-    const leg=document.getElementById("leg-ov");
-    if(!leg)return;
-    const dx=e.clientX-legDragStart.mx,dy=e.clientY-legDragStart.my;
-    const nx=legDragStart.lx+dx,ny=legDragStart.ly+dy;
-    leg.style.left=nx+"px";leg.style.top=ny+"px";leg.style.bottom="auto";
-    legPos={x:nx,y:ny};
-  }
-});
-window.addEventListener("mouseup",()=>{legDragging=false;legDragStart=null;});
-
 // ── Sidebar ────────────────────────────────────────────────────────────
+function applySidebar(){
+  const sb=document.getElementById("sidebar");
+  let rb=document.getElementById("sidebar-reopen");
+  if(!rb){
+    rb=document.createElement("button");rb.id="sidebar-reopen";
+    rb.textContent="📋 Info";
+    rb.style.cssText="position:absolute;top:8px;right:8px;z-index:20;background:#150a0a;border:1px solid #3a1a1a;color:#cc5a5a;border-radius:4px;padding:4px 10px;font-size:.62rem;cursor:pointer;font-family:'DM Sans',sans-serif";
+    rb.addEventListener("click",()=>{sidebarOpen=true;applySidebar();renderSidebar();});
+    canvasEl.appendChild(rb);
+  }
+  sb.style.display=sidebarOpen?"flex":"none";
+  rb.style.display=sidebarOpen?"none":"block";
+}
+
 function renderSidebar(){
-  sidebarBody.innerHTML="";
+  sBody.innerHTML="";
   if(S.selNode){
     const n=NODES.find(x=>x.id===S.selNode.id);if(!n)return;
-    sidebarTitle.textContent=n.label;
-    const nc=FC[n.faction]||"#5aabcc";
+    sTitle.textContent=n.label;
+    const nc=FC[n.faction]||"#cc3333";
+    const emoji=FEMOJI[n.faction]||"⚔️";
     const f9f=S.book>=7&&n.f9?F9_FACTIONS.find(f=>f.id===n.f9):null;
-    let html="<div id='card' style='padding:11px'>";
-    html+="<h2 style='font-size:.88rem;color:#f4c47a;margin-bottom:4px'>"+n.label+"</h2>";
-    html+="<span class='tag' style='background:"+nc+"99'>"+n.role+"</span>";
-    if(n.status==="dead")html+="<span class='tag' style='background:#5a1a1a'>💀 Deceased</span>";
-    if(n.book===S.book)html+="<span class='tag' style='background:#1a3a1a'>✦ New this book</span>";
-    if(f9f)html+="<span class='tag' style='background:"+f9f.fill+";border:1px solid "+f9f.border+"'>⚔ "+f9f.label+"</span>";
-    html+="<div class='bio'><b>Class/Magic:</b> "+n.magic+"<br><br>"+n.bio+"</div>";
-    html+="<div class='ch4'>Connections</div><div id='clist'></div></div>";
-    sidebarBody.innerHTML=html;
+
+    // Portrait
+    const portrait=document.createElement("div");
+    portrait.id="char-portrait";
+    portrait.innerHTML=`<span style="font-size:3.5rem;z-index:1">${emoji}</span>
+      <div class="faction-bar" style="background:${nc}22;color:${nc};border-top:1px solid ${nc}44">${FL[n.faction]||n.faction}</div>`;
+    sBody.appendChild(portrait);
+
+    // Card body
+    const body=document.createElement("div");body.id="card-body";
+    let h=`<h2 style="color:${nc}">${n.label}</h2>`;
+    h+=`<div style="margin:5px 0">`;
+    h+=`<span class="tag" style="background:${nc}22;border:1px solid ${nc}44;color:${nc}">${n.role}</span>`;
+    if(n.status==="dead")h+=`<span class="tag" style="background:#3a0a0a;border:1px solid #5a1a1a;color:#cc5a5a">💀 Deceased</span>`;
+    if(n.book===S.book)h+=`<span class="tag" style="background:#1a1505;border:1px solid #5a3a10;color:#e8a030">✦ New this book</span>`;
+    if(f9f)h+=`<span class="tag" style="background:${f9f.fill};border:1px solid ${f9f.border};color:${f9f.border}">⚔ ${f9f.label}</span>`;
+    h+=`</div>`;
+    h+=`<div class="stat-row">
+      <div class="stat"><b>Introduced</b>Book ${n.book}</div>
+      <div class="stat"><b>Status</b>${n.status==="dead"?"💀 Dead":"Alive"}</div>
+      <div class="stat"><b>Type</b>${n.size==="main"?"Main":"Supporting"}</div>
+    </div>`;
+    h+=`<div class="stat" style="display:block;margin-bottom:8px"><b>Class / Magic</b>${n.magic}</div>`;
+    h+=`<div class="bio-text">${n.bio}</div>`;
+    h+=`<div class="ch4">Connections</div><div id="clist"></div>`;
+    body.innerHTML=h;
+    sBody.appendChild(body);
+
     const cl=document.getElementById("clist");
     const conns=EDGES.filter(e=>(e.from===n.id||e.to===n.id)&&e.book<=S.book);
-    if(!conns.length){cl.innerHTML="<div class='ci' style='color:#445;padding:4px'>None visible yet</div>";}
+    if(!conns.length){cl.innerHTML="<div class='ci' style='color:#3a2020;padding:4px'>No connections visible yet</div>";}
     else conns.forEach(e=>{
       const oid=e.from===n.id?e.to:e.from,o=NODES.find(x=>x.id===oid);if(!o)return;
       const col=getRC(e.type);
-      cl.insertAdjacentHTML("beforeend","<div class='ci'><span class='cn'>"+o.label+"</span> — "+e.label+" <span style='color:"+col+";font-size:.6rem'>["+e.type+"]</span></div>");
+      cl.insertAdjacentHTML("beforeend",`<div class='ci'><span class='cn'>${o.label}</span> — ${e.label} <span style='color:${col};font-size:.6rem'>[${e.type}]</span></div>`);
     });
   } else {
-    sidebarTitle.textContent=BOOKS[S.book-1]?BOOKS[S.book-1].short:"Info";
+    sTitle.textContent=BOOKS[S.book-1]?BOOKS[S.book-1].short:"Broadcast Feed";
     const b=BOOKS[S.book-1],evts=KEY_EVENTS[S.book]||[];
-    let h="<div class='panel'><h3>"+b.title+"</h3><p style='color:#7aabcc;font-size:.67rem'>"+b.floor+" · "+b.year+"</p></div>";
-    h+="<div class='panel'><h3>Key Events</h3>";
-    evts.forEach((ev,i)=>{h+="<div class='evt"+(i<2?" major":"")+"'>"+ev+"</div>";});
-    h+="</div>";
+    let h=`<div class="panel"><h3>${b.title}</h3><p style="color:#5a3a3a;font-size:.67rem">${b.floor} · ${b.year}</p></div>`;
+    h+=`<div class="panel"><h3>Key Events</h3>`;
+    evts.forEach((ev,i)=>{h+=`<div class="evt${i<2?" major":""}">${ev}</div>`;});
+    h+=`</div>`;
     if(S.book>=7){
-      h+="<div class='panel'><h3>⚔ Floor 9 Factions</h3>";
-      h+="<p style='color:#5aee6a;margin-bottom:4px;font-size:.67rem'>✦ THE GOOD GUYS</p>";
-      F9_FACTIONS.filter(f=>f.alliance==="good").forEach(f=>{h+="<div class='evt' style='border-color:"+f.border+";color:"+f.border+"'>"+f.label+"</div>";});
-      h+="<p style='color:#ee5a5a;margin:6px 0 4px;font-size:.67rem'>⚔ THE BLOC</p>";
-      F9_FACTIONS.filter(f=>f.alliance==="bloc").forEach(f=>{h+="<div class='evt' style='border-color:"+f.border+";color:"+f.border+"'>"+f.label+"</div>";});
-      h+="<p style='color:#eebb30;margin:6px 0 4px;font-size:.67rem'>⚡ MID-GAME ADDITION</p>";
-      h+="<div class='evt' style='border-color:#eebb30;color:#eebb30'>War Mage Rebellion (Warlords: Agatha & Akuma)</div>";
-      h+="</div>";
+      h+=`<div class="panel"><h3>⚔ Floor 9 Factions</h3>`;
+      h+=`<p style="color:#5aee6a;margin-bottom:4px;font-size:.67rem">✦ THE GOOD GUYS</p>`;
+      F9_FACTIONS.filter(f=>f.alliance==="good").forEach(f=>{h+=`<div class="evt" style="border-color:${f.border};color:${f.border}">${f.label}</div>`;});
+      h+=`<p style="color:#ee5a5a;margin:6px 0 4px;font-size:.67rem">⚔ THE BLOC</p>`;
+      F9_FACTIONS.filter(f=>f.alliance==="bloc").forEach(f=>{h+=`<div class="evt" style="border-color:${f.border};color:${f.border}">${f.label}</div>`;});
+      h+=`<p style="color:#eebb30;margin:6px 0 4px;font-size:.67rem">⚡ MID-GAME</p>`;
+      h+=`<div class="evt" style="border-color:#eebb30;color:#eebb30">War Mage Rebellion (Agatha & Akuma)</div></div>`;
     }
-    sidebarBody.innerHTML=h;
+    sBody.innerHTML=h;
   }
 }
 
-function render(){renderCtrl();renderRelBar();renderSVG();renderSidebar();}
+function render(){renderCtrl();renderRelBar();renderSVG();renderSidebar();applySidebar();}
 
-// ── Canvas interaction ─────────────────────────────────────────────────
+// ── Interaction ────────────────────────────────────────────────────────
 let ms=null;
 svgEl.addEventListener("mousedown",e=>{if(S.ndrag)return;ms={x:e.clientX,y:e.clientY,px:S.pan.x,py:S.pan.y};S.wasDrag=false;});
 window.addEventListener("mousemove",e=>{
-  if(legDragging)return;
+  if(legDrag&&legDS){
+    const leg=document.getElementById("leg-ov");if(!leg)return;
+    const nx=legDS.lx+(e.clientX-legDS.mx),ny=legDS.ly+(e.clientY-legDS.my);
+    leg.style.left=nx+"px";leg.style.top=ny+"px";leg.style.bottom="auto";
+    legPos={x:nx,y:ny};return;
+  }
   if(S.ndrag){S.wasDrag=true;const r=svgEl.getBoundingClientRect();S.pos[S.ndrag]={x:(e.clientX-r.left-S.pan.x)/S.scale,y:(e.clientY-r.top-S.pan.y)/S.scale};renderSVG();return;}
   if(ms){const dx=e.clientX-ms.x,dy=e.clientY-ms.y;if(Math.abs(dx)>3||Math.abs(dy)>3)S.wasDrag=true;S.pan={x:ms.px+dx,y:ms.py+dy};renderSVG();}
 });
-window.addEventListener("mouseup",()=>{if(!legDragging){S.ndrag=null;ms=null;setTimeout(()=>{S.wasDrag=false;},50);}});
+window.addEventListener("mouseup",()=>{legDrag=false;legDS=null;S.ndrag=null;ms=null;setTimeout(()=>{S.wasDrag=false;},50);});
 svgEl.addEventListener("click",e=>{if(!S.wasDrag){S.selNode=null;renderSidebar();}});
 canvasEl.addEventListener("wheel",e=>{e.preventDefault();S.scale=Math.min(3,Math.max(.18,S.scale-e.deltaY*.001));renderSVG();},{passive:false});
 
