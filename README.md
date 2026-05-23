@@ -21,7 +21,11 @@ This is not a reading tracker or progress dashboard. It's a visual reference too
 
 ## Screenshots
 
-> *(Add screenshots here — one per series chart)*
+<img src="https://github.com/user-attachments/assets/9e5bbe71-8310-4f28-a606-6e1aec80abc8" alt="Empyrean Chart" width="650" />
+
+<img src="https://github.com/user-attachments/assets/80292b6a-d5e4-4e64-ada6-50f31e00a35b" alt="Dungeon Crawler Carl Chart" width="650" />
+
+<img src="https://github.com/user-attachments/assets/047436ec-12b5-4ca7-8ce9-b037d15f4c07" alt="Plated Prisoner Chart" width="650" />
 
 ---
 
