@@ -5,13 +5,13 @@
 [![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?logo=vercel)](https://bookish-bay.vercel.app)
 [![Live Site](https://img.shields.io/badge/Live-bookish--bay.vercel.app-5b21b6)](https://bookish-bay.vercel.app)
 
-> ⚠️ **Spoiler Warning** — Each chart displays character relationships, status, and key events across an entire series. If you haven't finished a series, use the per-book timeline controls to limit what's revealed.
+> ⚠️ **Spoiler Warning** — Each chart displays character relationships, status, and key events across an entire series. If you haven't finished a series, use the per-book timeline controls to progress safely.
 
 ---
 
 ## What This Is
 
-Bookish is a collection of SVG-based, interactive character relationship charts for fantasy and genre fiction series. Each chart lets you explore who's connected to whom, filter by relationship type, step through the story book by book, and inspect individual character cards — all in the browser, no backend required.
+Bookish is a collection of SVG-based, interactive character relationship charts for fantasy and genre fiction series. Each chart lets you explore who's connected to whom, filter by relationship type, and track character arcs book-by-book.
 
 This is not a reading tracker or progress dashboard. It's a visual reference tool.
 
@@ -34,23 +34,23 @@ This is not a reading tracker or progress dashboard. It's a visual reference too
 ### The Empyrean — *Rebecca Yarros*
 `/index.html`
 
-Four-book series. Chart covers 50+ characters across dragons, riders, venin, gods, gryphons, and irids. Nodes are typed by shape and colored by faction and dragon den. Faction bands divide the canvas by allegiance.
+Four-book series. Chart covers 50+ characters across dragons, riders, venin, gods, gryphons, and irids. Nodes are typed by shape and colored by faction and dragon den. Faction bands divide the canvas by story region.
 
 Books: *Fourth Wing · Iron Flame · Onyx Storm · [Book 4 — TBA]*
 
 ---
 
-### Dungeon Crawler Carl — *Matt Dougherty*
+### Dungeon Crawler Carl — *Matt Dinniman*
 `/DCC-Chart/`
 
-A progressively expanding cast across a brutal, satirical dungeon-crawl series. Chart tracks character introductions, deaths, and relationships floor by floor.
+Eight-book progressively expanding cast across a brutal, satirical dungeon-crawl series. Chart tracks character introductions, deaths, and relationships floor by floor.
 
 ---
 
 ### The Plated Prisoner — *Raven Kennedy*
 `/Plated-Prisoner-Chart/`
 
-Five-book series with a gilded court aesthetic. Chart maps alliances, betrayals, and character arcs across the full run.
+Six-book series with a gilded court aesthetic. Chart maps alliances, betrayals, and character arcs across the full run.
 
 ---
 
@@ -65,23 +65,23 @@ Five-book series with a gilded court aesthetic. Chart maps alliances, betrayals,
 ### Character Nodes
 - **Shape = character type** (humans → circles, dragons → diamonds, gryphons → triangles, venin → hexagons, gods → 6-point stars, irids → 8-point stars, wyverns → chevrons)
 - **Border color = faction/affiliation**
-- **Fill color = dragon den** (for dragon nodes — black, blue, green, brown, red, orange, gold)
+- **Fill color = dragon den** (for dragon nodes — black, blue, green, brown, red, orange, gold, iridescent)
 - **Glowing dashed ring** marks characters newly introduced in the current book
 
 ### Character Cards (Sidebar)
 Click any node to open a detailed card:
 - Bio, status, and character type
 - Introduced in / current status tags
-- Signet, Wing, Homeland, Dragon Bond fields
+- Signet, Wing, Homeland, Dragon Bond fields (where applicable)
 - Full connection list filtered to the current book
 
 ### Book Panel (Sidebar)
 Click off any node to see:
 - Key events for the selected book
-- How-to-read guide for shapes, colors, and bands
+- Legend guide for shapes, colors, and relationship types
 
 ### Research Methodology
-Character data is sourced across multiple reference sites — not limited to Amazon or Goodreads. Sources include fan wikis, StoryGraph, LibraryThing, author sites, Fandom wikis, BookTok/BookTube community references, and editorial reviews — cross-referenced for accuracy.
+Character data is sourced across multiple reference sites — not limited to Amazon or Goodreads. Sources include fan wikis, StoryGraph, LibraryThing, author sites, Fandom wikis, and community discussions.
 
 ---
 
@@ -89,13 +89,22 @@ Character data is sourced across multiple reference sites — not limited to Ama
 
 | Layer | Technology |
 |---|---|
-| **Rendering** | SVG (hand-positioned, JavaScript-driven) |
-| **Frontend** | HTML5, CSS3, Vanilla JavaScript |
-| **Data** | Hardcoded JS objects (nodes, edges, book metadata) |
-| **Fonts** | Google Fonts (Cinzel, Cormorant Garamond, DM Sans) |
+| **JavaScript** | Vanilla JS (+ React 18.2 via CDN for Plated Prisoner only) |
+| **Rendering** | SVG (hand-positioned, DOM-driven) |
+| **Frontend** | HTML5, CSS3 |
+| **Fonts** | Google Fonts (Cinzel, Cormorant Garamond, DM Sans, Special Elite) |
 | **Deployment** | Vercel (auto-deploy on push to `main`) |
 
-No frameworks. No build step. No database.
+**Build tooling:** None  
+**Package manager:** None  
+**Database:** None  
+**Dependencies:** Hardcoded JS objects (nodes, edges, book metadata)
+
+### Framework Breakdown
+
+- **Plated Prisoner Chart** — React 18.2.0 (from CDN) + Babel Standalone (browser JSX transformation)
+- **Dungeon Crawler Carl & Empyrean Charts** — 100% vanilla JavaScript, no dependencies
+- **Landing Page** — Vanilla HTML/CSS/JavaScript
 
 ---
 
@@ -103,10 +112,12 @@ No frameworks. No build step. No database.
 
 ```
 Bookish/
-├── DCC-Chart/              # Dungeon Crawler Carl — chart HTML, data, assets
-├── Plated-Prisoner-Chart/  # Plated Prisoner — chart HTML, data, assets
-├── images/                 # Shared UI icons and series assets
-├── index.html              # Empyrean series chart (root entry point)
+├── index.html                  # Empyrean series chart (root entry point)
+├── DCC-Chart/
+│   └── index.html              # Dungeon Crawler Carl chart
+├── Plated-Prisoner-Chart/
+│   └── index.html              # Plated Prisoner chart (React-based)
+├── images/                     # Shared UI icons and series assets
 └── README.md
 ```
 
@@ -116,13 +127,13 @@ Each series lives in its own directory with self-contained logic and data. Addin
 
 ## How It Works
 
-**Data model** — Each chart defines two flat arrays: `NODES` (characters) and `EDGES` (relationships). Every node and edge carries a `book` field (integer) marking when it enters the story. The timeline controls filter both arrays by `book <= currentBook`.
+**Data model** — Each chart defines two flat arrays: `NODES` (characters) and `EDGES` (relationships). Every node and edge carries a `book` field (integer) marking when it enters the story. The UI filters both arrays by the currently selected book.
 
-**Rendering** — On each state change, the SVG is cleared and redrawn from scratch. Node positions are stored in a `pos` map (keyed by node ID) and persist across re-renders within a session. No layout algorithm — initial positions are hand-tuned per series.
+**Rendering** — On each state change, the SVG is cleared and redrawn from scratch. Node positions are stored in a `pos` map (keyed by node ID) and persist across re-renders within a session. No layout algorithm — all positions are hardcoded or draggable.
 
-**Sidebar** — A single sidebar panel is reused for both character cards and the book event panel, swapping content based on `S.selNode`.
+**Sidebar** — A single sidebar panel is reused for both character cards and the book event panel, swapping content based on selection state.
 
-**Theming** — Each series chart has its own CSS variables and atmospheric effects (the Empyrean chart uses a lightning flicker animation and a starfield; other charts follow their own aesthetic).
+**Theming** — Each series chart has its own CSS variables and atmospheric effects (the Empyrean chart uses a lightning flicker animation and a starfield; others follow their own aesthetic themes).
 
 ---
 
@@ -159,6 +170,7 @@ Live URL: **[bookish-bay.vercel.app](https://bookish-bay.vercel.app)**
 - [ ] Mobile layout improvements
 - [ ] Search / filter nodes by name
 - [ ] Exportable chart snapshots
+- [ ] Character bio export (PDF or markdown)
 
 ---
 
