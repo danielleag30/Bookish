@@ -25,14 +25,14 @@ Bookish/
 ├── index.html             # Entry point / Series Dashboard
 └── README.md
 
-How the Tracker Works
+##How the Tracker Works
 The application leverages a lightweight approach to status management:
 
 Entry Point: index.html acts as the main hub, rendering a dashboard of available series.
 Series Isolation: Each sub-directory (DCC-Chart, etc.) contains its own specific logic and data structure. This ensures that adding a new series only requires adding a new directory rather than modifying the core application code.
 State Management: Series progress is handled via client-side storage, allowing for persistent tracking across browser sessions without a requirement for a database.
 
-Local Development
+##Local Development
 Prerequisites
 
 A standard web browser
@@ -49,7 +49,9 @@ cd Bookish
 # Launch the application
 # Simply open index.html in your browser, or use 'npx serve'
 npx serve .
-Deployment
+##Deployment
 This project is configured for continuous deployment via Vercel. Any push to the main branch automatically triggers a build and redeploys the site to bookish-bay.vercel.app.
+
+
 Updated: May 23, 2026
 
