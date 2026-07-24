@@ -1,93 +1,58 @@
 # Bookish
 
-**Interactive character relationship charts for book series — built for readers, designed like a map.**
+<p align="center">
+  <img src="docs/hero-banner.png" alt="Bookish — a constellation-style map of connected character nodes" width="700">
+</p>
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?logo=vercel)](https://bookish-bay.vercel.app)
-[![Live Site](https://img.shields.io/badge/Live-bookish--bay.vercel.app-5b21b6)](https://bookish-bay.vercel.app)
 
-> ⚠️ **Spoiler Warning** — Each chart displays character relationships, status, and key events across an entire series. If you haven't finished a series, use the per-book timeline controls to [...]
+**Hand-built, spoiler-aware character relationship charts for fantasy series — because I got tired of losing track of who bonded to which dragon, who's dead, and who betrayed whom by book four.**
+
+> ⚠️ **Spoiler Warning** — Every chart plots relationships, status, and events across an entire series. Use the per-book timeline controls to stay within where you've actually read.
 
 ---
 
-## What This Is
+## Why I Built This
 
-Bookish is a collection of SVG-based, interactive character relationship charts for fantasy and genre fiction series. Each chart lets you explore who's connected to whom, filter by relationship ty [...]
+I read fast-moving series with huge, shifting casts — new characters every book, alliances that flip, people who die and stay dead (or don't). Wikis spoil you instantly and reading trackers just tell you *what page you're on*, not *who's still alive and who they're bonded to right now*. I wanted something you could step through book-by-book without getting ahead of your own reading.
 
-This is not a reading tracker or progress dashboard. It's a visual reference tool.
+So each chart here is a small, self-contained relationship map: nodes are characters, edges are relationships, and a book selector controls which of both are visible. No backend, no database, no build step — just an SVG I draw and redraw by hand in response to state changes.
+
+This is not a reading tracker or a progress dashboard. It's a visual reference tool.
 
 **Live:** [bookish-bay.vercel.app](https://bookish-bay.vercel.app)
 
 ---
 
-## Currently Reading
-
-📚 Currently reading the **Fae and Alchemy** series
-
----
-
-## Screenshots
-
-<img src="https://github.com/user-attachments/assets/9e5bbe71-8310-4f28-a606-6e1aec80abc8" alt="Empyrean Chart" width="650" />
-
-<img src="https://github.com/user-attachments/assets/80292b6a-d5e4-4e64-ada6-50f31e00a35b" alt="Dungeon Crawler Carl Chart" width="650" />
-
-<img src="https://github.com/user-attachments/assets/047436ec-12b5-4ca7-8ce9-b037d15f4c07" alt="Plated Prisoner Chart" width="650" />
-
----
-
 ## Series
 
-### The Empyrean — *Rebecca Yarros*
-`/index.html`
+### The Empyrean
+`/Empyrean-Chart/`
 
-Four-book series. Chart covers 50+ characters across dragons, riders, venin, gods, gryphons, and irids. Nodes are typed by shape and colored by faction and dragon den. Faction bands divide the can [...]
+Four-book series (book 4 unreleased, tracked as "TBA"). 72 characters and 115 relationships across dragons, riders, venin, gods, gryphons, and irids — typed by shape, colored by faction and dragon den.
 
-Books: *Fourth Wing · Iron Flame · Onyx Storm · [Book 4 — TBA]*
+### Dungeon Crawler Carl
+Live separately at a companion deployment · source also mirrored in `/DCC-Chart/`
 
----
+Eight books mapped to ten dungeon floors. Cast, deaths, and floor-by-floor events tracked as the party descends.
 
-### Dungeon Crawler Carl — *Matt Dinniman*
-`/DCC-Chart/`
-
-Eight-book progressively expanding cast across a brutal, satirical dungeon-crawl series. Chart tracks character introductions, deaths, and relationships floor by floor.
-
----
-
-### The Plated Prisoner — *Raven Kennedy*
+### The Plated Prisoner
 `/Plated-Prisoner-Chart/`
 
-Six-book series with a gilded court aesthetic. Chart maps alliances, betrayals, and character arcs across the full run.
+Six-book gilded-court series. Alliances, betrayals, and arcs across the full run — the one chart built in React instead of vanilla JS (see below).
 
 ---
 
-## Features
+## What's Actually Interactive
 
-### Chart Core
-- **Interactive SVG graph** — pan, zoom, and drag individual nodes to rearrange the layout
-- **Book-by-book timeline** — step forward through the series; characters fade out when they exit the story and highlight when they're introduced
-- **Relationship filtering** — filter visible edges by type (romantic, allies, rivals, bonded, family, etc.)
-- **Draggable, minimizable legend** — stays out of the way when you don't need it
+Every chart is a genuinely hand-authored SVG scene graph, not a canvas snapshot or a charting library output. Concretely, per chart:
 
-### Character Nodes
-- **Shape = character type** (humans → circles, dragons → diamonds, gryphons → triangles, venin → hexagons, gods → 6-point stars, irids → 8-point stars, wyverns → chevrons)
-- **Border color = faction/affiliation**
-- **Fill color = dragon den** (for dragon nodes — black, blue, green, brown, red, orange, gold, iridescent)
-- **Glowing dashed ring** marks characters newly introduced in the current book
+- **Pan, zoom, and drag** — click-drag the canvas to pan, scroll to zoom (clamped 0.18×–3×), grab any node and reposition it; positions persist for the session.
+- **Book-by-book timeline** — a row of book buttons drives which nodes/edges are visible; characters introduced in the current book get a glowing dashed ring, characters who've exited the story fade or drop out.
+- **Relationship filtering** — a filter bar toggles edge types on/off (family, bonded, romantic, rivals, allies, etc.) plus a "clear all" reset.
+- **Draggable, collapsible, hideable legend** and a **draggable search overlay** (type a name, hit Enter, jump to and center that node).
+- **Sidebar** that swaps between two views: click a node for its character card; click empty canvas for the current book's event log and a legend key.
 
-### Character Cards (Sidebar)
-Click any node to open a detailed card:
-- Bio, status, and character type
-- Introduced in / current status tags
-- Signet, Wing, Homeland, Dragon Bond fields (where applicable)
-- Full connection list filtered to the current book
-
-### Book Panel (Sidebar)
-Click off any node to see:
-- Key events for the selected book
-- Legend guide for shapes, colors, and relationship types
-
-### Research Methodology
-Character data is sourced across multiple reference sites — not limited to Amazon or Goodreads. Sources include fan wikis, StoryGraph, LibraryThing, author sites, Fandom wikis, and community dis [...]
+Under the hood, state lives in one small object per chart. Every state change clears the SVG and rebuilds it from that state — there's no virtual DOM, no diffing, just `createElementNS` calls and a full redraw. It's a deliberately simple render loop, and at this scale (dozens of nodes, not thousands) it's fast enough that the simplicity is a feature, not a shortcut.
 
 ---
 
@@ -95,89 +60,21 @@ Character data is sourced across multiple reference sites — not limited to Ama
 
 | Layer | Technology |
 |---|---|
-| **JavaScript** | Vanilla JS (+ React 18.2 via CDN for Plated Prisoner only) |
-| **Rendering** | SVG (hand-positioned, DOM-driven) |
+| **JavaScript** | Vanilla JS (Empyrean & Dungeon Crawler Carl) — React 18 + Babel Standalone via CDN for Plated Prisoner only |
+| **Rendering** | Hand-positioned SVG, built with `document.createElementNS`, fully re-rendered on state change |
 | **Frontend** | HTML5, CSS3 |
-| **Fonts** | Google Fonts (Cinzel, Cormorant Garamond, DM Sans, Special Elite) |
 | **Deployment** | Vercel (auto-deploy on push to `main`) |
 
-**Build tooling:** None  
-**Package manager:** None  
-**Database:** None  
-**Dependencies:** Hardcoded JS objects (nodes, edges, book metadata)
+**Build tooling:** none · **Package manager:** none · **Database:** none
+**Data:** hardcoded node/edge/book arrays, inline in each chart's own HTML file
 
-### Framework Breakdown
+---
 
-- **Plated Prisoner Chart** — React 18.2.0 (from CDN) + Babel Standalone (browser JSX transformation)
-- **Dungeon Crawler Carl & Empyrean Charts** — 100% vanilla JavaScript, no dependencies
-- **Landing Page** — Vanilla HTML/CSS/JavaScript
+## Why Hand-Built SVG, No Framework
+
+This isn't a "no time to learn React" excuse — I *did* use React for Plated Prisoner, so the choice elsewhere was deliberate. For the Empyrean and DCC charts, the actual problem is closer to a small, bespoke diagramming tool than a typical app UI: custom node shapes per character type, curved relationship edges, draggable free-form layout, and a redraw that has to stay in sync with a single source of truth (the current book). A charting library would fight the "step through book by book, characters fade/appear, positions persist" behavior at every turn, and a full framework buys nothing when the entire state surface is one object and the entire view is one `<svg>`. Hand-rolling it means every pixel is something I directly control and can debug by reading the function that draws it.
 
 ---
 
 ## Directory Structure
 
-```
-Bookish/
-├── index.html                  # Empyrean series chart (root entry point)
-├── DCC-Chart/
-│   └── index.html              # Dungeon Crawler Carl chart
-├── Plated-Prisoner-Chart/
-│   └── index.html              # Plated Prisoner chart (React-based)
-├── images/                     # Shared UI icons and series assets
-└── README.md
-```
-
-Each series lives in its own directory with self-contained logic and data. Adding a new series means adding a new directory — nothing in the root changes.
-
----
-
-## How It Works
-
-**Data model** — Each chart defines two flat arrays: `NODES` (characters) and `EDGES` (relationships). Every node and edge carries a `book` field (integer) marking when it enters the story. The [...]
-
-**Rendering** — On each state change, the SVG is cleared and redrawn from scratch. Node positions are stored in a `pos` map (keyed by node ID) and persist across re-renders within a session. No [...]
-
-**Sidebar** — A single sidebar panel is reused for both character cards and the book event panel, swapping content based on selection state.
-
-**Theming** — Each series chart has its own CSS variables and atmospheric effects (the Empyrean chart uses a lightning flicker animation and a starfield; others follow their own aesthetic theme [...]
-
----
-
-## Local Development
-
-No build tooling required.
-
-```bash
-# Clone
-git clone https://github.com/danielleag30/Bookish.git
-cd Bookish
-
-# Open directly in browser
-open index.html
-
-# Or serve locally (recommended to avoid any path issues)
-npx serve .
-```
-
----
-
-## Deployment
-
-Continuous deployment via Vercel. Every push to `main` triggers a redeploy.
-
-Live URL: **[bookish-bay.vercel.app](https://bookish-bay.vercel.app)**
-
----
-
-## Roadmap
-
-- [ ] Additional series charts
-- [ ] Series index / landing page with chart navigation
-- [ ] Mobile layout improvements
-- [ ] Search / filter nodes by name
-- [ ] Exportable chart snapshots
-- [ ] Character bio export (PDF or markdown)
-
----
-
-*Updated: June 2026*
