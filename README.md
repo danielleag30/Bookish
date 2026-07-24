@@ -78,3 +78,40 @@ This isn't a "no time to learn React" excuse — I *did* use React for Plated Pr
 
 ## Directory Structure
 
+```
+Bookish/
+├── index.html                     # Landing page — gallery of series cards
+├── Empyrean-Chart/
+│   └── index.html                 # The Empyrean chart (vanilla JS, largest: 72 nodes / 115 edges)
+├── DCC-Chart/
+│   └── index.html                 # Dungeon Crawler Carl chart (vanilla JS; canonical copy deploys separately)
+├── Plated-Prisoner-Chart/
+│   └── index.html                 # Plated Prisoner chart (React 18 + Babel Standalone via CDN)
+├── images/                        # Landing-page screenshot art for each series card
+└── README.md
+```
+
+Each chart is fully self-contained — its own HTML, CSS, JS, and data live in one file. Adding a new series means adding a new directory; nothing in the root has to change except a card on the landing page.
+
+---
+
+## Local Development
+
+No build tooling required.
+
+```bash
+git clone https://github.com/danielleag30/Bookish.git
+cd Bookish
+open index.html
+```
+
+## Deployment
+
+Continuous deployment via Vercel — every push to `main` redeploys. Live at [bookish-bay.vercel.app](https://bookish-bay.vercel.app).
+
+## Roadmap
+
+- [ ] Reunify the DCC chart under the main site instead of a separate deployment
+- [ ] Additional series charts
+- [ ] Mobile layout improvements
+- [ ] Exportable chart snapshots
