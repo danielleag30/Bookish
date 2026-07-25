@@ -12,6 +12,9 @@
     "noFallthroughCasesInSwitch": true,
 
     "noEmit": true,
+    // Source is run directly by tsx and vitest and never emitted, so explicit
+    // .ts import specifiers are correct here.
+    "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
     "skipLibCheck": true,

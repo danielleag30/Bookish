@@ -1,0 +1,2712 @@
+{
+  "id": "empyrean",
+  "title": "The Empyrean",
+  "author": "Rebecca Yarros",
+  "books": [
+    {
+      "id": 1,
+      "title": "Fourth Wing",
+      "short": "Fourth Wing",
+      "year": 2023,
+      "era": "First-year cadet"
+    },
+    {
+      "id": 2,
+      "title": "Iron Flame",
+      "short": "Iron Flame",
+      "year": 2023,
+      "era": "Second-year · Revolution begins"
+    },
+    {
+      "id": 3,
+      "title": "Onyx Storm",
+      "short": "Onyx Storm",
+      "year": 2025,
+      "era": "Quest for the Irids"
+    },
+    {
+      "id": 4,
+      "title": "Untitled (Book 4)",
+      "short": "Book 4 (TBA)",
+      "year": 2027,
+      "era": "Coming · post-Onyx Storm cliffhanger",
+      "future": true
+    }
+  ],
+  "bands": [
+    {
+      "id": "gods",
+      "label": "Gods & Mythic",
+      "y": 0,
+      "h": 90
+    },
+    {
+      "id": "leadership",
+      "label": "Navarre Leadership · House Tauri · Faculty",
+      "y": 90,
+      "h": 190
+    },
+    {
+      "id": "riders",
+      "label": "Riders Quadrant — Basgiath War College",
+      "y": 280,
+      "h": 480
+    },
+    {
+      "id": "support",
+      "label": "Scribes · Healers · Allies",
+      "y": 760,
+      "h": 90
+    },
+    {
+      "id": "aretia",
+      "label": "Marked Ones · Revolution · Aretia",
+      "y": 850,
+      "h": 170
+    },
+    {
+      "id": "poromiel",
+      "label": "Poromiel · Gryphon Fliers",
+      "y": 1020,
+      "h": 105
+    },
+    {
+      "id": "venin",
+      "label": "The Barrens · Venin · Wyvern",
+      "y": 1125,
+      "h": 155
+    }
+  ],
+  "affiliations": {
+    "riders_4w": {
+      "label": "Fourth Wing · Riders",
+      "color": "#a78bfa",
+      "border": "#7c3aed"
+    },
+    "riders_other": {
+      "label": "Riders (other Wings)",
+      "color": "#8a7eaa",
+      "border": "#5a4a7a"
+    },
+    "scribes": {
+      "label": "Scribes Quadrant",
+      "color": "#fbbf24",
+      "border": "#b8860b"
+    },
+    "healers": {
+      "label": "Healers Quadrant",
+      "color": "#34d399",
+      "border": "#0e7c5a"
+    },
+    "faculty": {
+      "label": "Faculty / Leadership",
+      "color": "#60a5fa",
+      "border": "#1e40af"
+    },
+    "royal": {
+      "label": "House Tauri (Royal)",
+      "color": "#f472b6",
+      "border": "#9d174d"
+    },
+    "marked": {
+      "label": "Marked Ones / Aretia",
+      "color": "#ef4444",
+      "border": "#7f1d1d"
+    },
+    "poromiel": {
+      "label": "Poromiel / Fliers",
+      "color": "#f59e0b",
+      "border": "#92400e"
+    },
+    "venin": {
+      "label": "Venin / Dark wielders",
+      "color": "#dc2626",
+      "border": "#450a0a"
+    },
+    "god": {
+      "label": "Gods / Mythic",
+      "color": "#fde68a",
+      "border": "#a16207"
+    },
+    "irid": {
+      "label": "Irid (hidden archipelago)",
+      "color": "#22d3ee",
+      "border": "#0e7490"
+    },
+    "rebellion": {
+      "label": "Rebellion (pre-series)",
+      "color": "#a16207",
+      "border": "#451a03"
+    }
+  },
+  "relationshipTypes": [
+    {
+      "id": "bonded",
+      "label": "Bonded (rider/dragon)",
+      "color": "#a78bfa",
+      "dash": null,
+      "symmetric": false
+    },
+    {
+      "id": "mated",
+      "label": "Mated dragons",
+      "color": "#f472b6",
+      "dash": null,
+      "symmetric": true
+    },
+    {
+      "id": "romantic",
+      "label": "Romantic / Married",
+      "color": "#ec4899",
+      "dash": "6 2",
+      "symmetric": true
+    },
+    {
+      "id": "family",
+      "label": "Family",
+      "color": "#fbbf24",
+      "dash": null,
+      "symmetric": false
+    },
+    {
+      "id": "squad",
+      "label": "Squad / Friend",
+      "color": "#34d399",
+      "dash": null,
+      "symmetric": true
+    },
+    {
+      "id": "ally",
+      "label": "Ally",
+      "color": "#60a5fa",
+      "dash": null,
+      "symmetric": true
+    },
+    {
+      "id": "enemy",
+      "label": "Enemy",
+      "color": "#ef4444",
+      "dash": "3 3",
+      "symmetric": false
+    },
+    {
+      "id": "mentor",
+      "label": "Mentor",
+      "color": "#22d3ee",
+      "dash": null,
+      "symmetric": false
+    },
+    {
+      "id": "betrayer",
+      "label": "Betrayer",
+      "color": "#f59e0b",
+      "dash": "5 3",
+      "symmetric": false
+    },
+    {
+      "id": "killed",
+      "label": "Killed",
+      "color": "#7f1d1d",
+      "dash": "1 3",
+      "symmetric": false
+    },
+    {
+      "id": "complicated",
+      "label": "Complicated",
+      "color": "#c084fc",
+      "dash": "5 3",
+      "symmetric": true
+    }
+  ],
+  "characters": [
+    {
+      "id": "dunne",
+      "label": "Dunne",
+      "role": "Goddess of War",
+      "affil": "god",
+      "band": "gods",
+      "book": 1,
+      "lastBook": 4,
+      "size": "side",
+      "x": 154,
+      "status": "alive",
+      "type": "god",
+      "bio": "The goddess of war. Her temple in Aretia houses sacred relics. Her wrath is invoked when Theophanie — a former high priestess who turned venin — abandoned her. The marble dagger Aaric gives Violet, made from temple stone, is what kills Theophanie."
+    },
+    {
+      "id": "malek",
+      "label": "Malek",
+      "role": "God of Death",
+      "affil": "god",
+      "band": "gods",
+      "book": 2,
+      "lastBook": 4,
+      "size": "side",
+      "x": 330,
+      "status": "alive",
+      "type": "god",
+      "bio": "God of death. Often invoked across Navarre when riders fall — 'Malek take you' is a common saying."
+    },
+    {
+      "id": "amari",
+      "label": "Amari",
+      "role": "Queen of Gods",
+      "affil": "god",
+      "band": "gods",
+      "book": 1,
+      "lastBook": 4,
+      "size": "side",
+      "x": 506,
+      "status": "alive",
+      "type": "god",
+      "bio": "Queen of the gods in the Empyrean pantheon. Frequently invoked in oaths and prayers throughout Navarre."
+    },
+    {
+      "id": "zihnal",
+      "label": "Zihnal",
+      "role": "God of Luck",
+      "affil": "god",
+      "band": "gods",
+      "book": 1,
+      "lastBook": 4,
+      "size": "side",
+      "x": 682,
+      "status": "alive",
+      "type": "god",
+      "bio": "God of luck — invoked by riders before deadly tasks. 'Zihnal's blessing' is what cadets pray for at the parapet."
+    },
+    {
+      "id": "hedaoth",
+      "label": "Hedaoth",
+      "role": "God of Wisdom",
+      "affil": "god",
+      "band": "gods",
+      "book": 2,
+      "lastBook": 4,
+      "size": "side",
+      "x": 858,
+      "status": "alive",
+      "type": "god",
+      "bio": "God of wisdom. Worshipped by scribes, including Violet's father Asher Sorrengail."
+    },
+    {
+      "id": "king_tauri",
+      "label": "King Tauri",
+      "role": "King of Navarre",
+      "affil": "royal",
+      "band": "leadership",
+      "book": 1,
+      "lastBook": 4,
+      "size": "side",
+      "x": 99,
+      "status": "alive",
+      "type": "human",
+      "bio": "Ruling monarch of Navarre. Father to Halden, Aaric (Cam), and Alic. Conservative and complicit in Navarre's centuries-long lie about the venin threat. His youngest son Aaric defies him by enlisting as a rider under an alias.",
+      "yOffset": -23
+    },
+    {
+      "id": "halden",
+      "label": "Prince Halden",
+      "role": "Crown Prince · Violet's ex",
+      "affil": "royal",
+      "band": "leadership",
+      "book": 3,
+      "lastBook": 4,
+      "size": "side",
+      "x": 220,
+      "status": "alive",
+      "type": "human",
+      "bio": "Eldest son of King Tauri and Violet's ex-boyfriend. She broke up with him after catching him cheating with his professor. Cruel, immature, prone to tantrums. Joins the quest squad in Onyx Storm but his incompetence nearly gets everyone killed — replaced by his brother Aaric.",
+      "yOffset": -23
+    },
+    {
+      "id": "lilith",
+      "label": "Lilith Sorrengail",
+      "role": "Commanding General · Violet's mother",
+      "affil": "faculty",
+      "band": "leadership",
+      "book": 1,
+      "lastBook": 1,
+      "size": "main",
+      "x": 374,
+      "status": "dead",
+      "statusDetail": "sacrificed",
+      "type": "human",
+      "bio": "Commanding General of Basgiath War College. Storm-wielder, bonded to brown dragon Aimsir. Cold and exacting mother to Violet, Mira, and Brennan — but secretly loved them. Forced Violet into the Riders quadrant to keep her away from Markham. Sacrifices herself in Iron Flame to power the wards and save Basgiath. Sloane siphons her power for the activation.",
+      "yOffset": -23
+    },
+    {
+      "id": "asher",
+      "label": "Asher Sorrengail",
+      "role": "Scribe · Violet's father",
+      "affil": "scribes",
+      "band": "leadership",
+      "book": 1,
+      "lastBook": 1,
+      "size": "side",
+      "x": 495,
+      "status": "dead",
+      "statusDetail": "deceased",
+      "type": "human",
+      "bio": "A scribe in the Scribes Quadrant. Husband to Lilith, father to Brennan, Mira, and Violet. Died before the events of the series. Left unfinished research that Violet uses in Onyx Storm — research that connects venin to deeper truths about Navarre's history.",
+      "yOffset": -23
+    },
+    {
+      "id": "col_aetos",
+      "label": "Colonel/Gen Aetos",
+      "role": "Dain's father · villain",
+      "affil": "faculty",
+      "band": "leadership",
+      "book": 1,
+      "lastBook": 4,
+      "size": "main",
+      "x": 616,
+      "status": "alive",
+      "type": "human",
+      "bio": "Dain's father. Originally a colonel and close advisor to Lilith Sorrengail, ascends to General/Commander of Basgiath after her death. Iron Flame reveals he is working with venin — sending assassins after Athebyne survivors. In Onyx Storm he resents Violet and uses every chance to punish her.",
+      "yOffset": -23
+    },
+    {
+      "id": "melgren",
+      "label": "Gen Melgren",
+      "role": "General of all Navarre's armies",
+      "affil": "faculty",
+      "band": "leadership",
+      "book": 1,
+      "lastBook": 4,
+      "size": "side",
+      "x": 748,
+      "status": "alive",
+      "type": "human",
+      "bio": "General of all Navarre's armies. Bonded to Codagh (largest black dragon on the continent). His signet lets him see the outcome of any battle — except when 3+ marked ones gather, which is why Codagh gave the rebellion children rebellion relics.",
+      "yOffset": -23
+    },
+    {
+      "id": "markham",
+      "label": "Markham",
+      "role": "Curator of Scribes · liar",
+      "affil": "scribes",
+      "band": "leadership",
+      "book": 1,
+      "lastBook": 4,
+      "size": "side",
+      "x": 869,
+      "status": "alive",
+      "type": "human",
+      "bio": "Curator of the Scribes Quadrant. Violet's mentor before she was forced into the Riders. Co-teaches Battle Brief. Knew about venin all along — Lilith feared he would groom Violet as his successor and then have her killed when she tried to expose the truth. Expels Jesinia from the adept program in retaliation.",
+      "yOffset": -23
+    },
+    {
+      "id": "devera",
+      "label": "Prof. Devera",
+      "role": "Battle Brief professor",
+      "affil": "faculty",
+      "band": "leadership",
+      "book": 1,
+      "lastBook": 4,
+      "size": "side",
+      "x": 979,
+      "status": "alive",
+      "type": "human",
+      "bio": "Rider professor who teaches Battle Brief. Defects with the rebels when truth comes out — choosing the students over Navarre's lies. One of the few faculty who proves trustworthy.",
+      "yOffset": -23
+    },
+    {
+      "id": "violet",
+      "label": "Violet Sorrengail",
+      "role": "Protagonist · Lightning Wielder",
+      "affil": "riders_4w",
+      "band": "riders",
+      "book": 1,
+      "lastBook": 4,
+      "size": "main",
+      "x": 374,
+      "status": "alive",
+      "type": "human",
+      "bio": "The protagonist. Trained for 20 years to be a scribe like her father — forced into the Riders by her mother. Smaller and frail-jointed (Yarros wrote her with Ehlers-Danlos syndrome, which Yarros herself has). Survives by intellect and grit. Bonds with TWO dragons (Tairn the black + Andarna the gold) — first ever in history. Signet: lightning wielder. A second signet — dreamwalking (intinnsic) — manifests in Onyx Storm. Married Xaden in Onyx Storm but Imogen erased her memory of the wedding.",
+      "yOffset": -60,
+      "attrs": {
+        "signet": "Lightning Wielder",
+        "wing": "Fourth Wing, Flame Section",
+        "homeland": "Navarre (Basgiath)",
+        "trait": "The scribe in a rider's quadrant. Trades brute strength for outthinking the room — and burns the room down with lightning when that fails."
+      }
+    },
+    {
+      "id": "xaden",
+      "label": "Xaden Riorson",
+      "role": "Wingleader · Shadow Wielder · Lt",
+      "affil": "marked",
+      "band": "riders",
+      "book": 1,
+      "lastBook": 4,
+      "size": "main",
+      "x": 616,
+      "status": "alive",
+      "type": "human",
+      "bio": "Wingleader of Fourth Wing in book 1. Marked One — son of Fen Riorson, leader of the executed Tyrrish rebellion. Bonded to navy-blue daggertail Sgaeyl — mated to Tairn, which forces him into Violet's orbit. Signet: shadow wielder. Reveals a SECOND, illegal signet in Iron Flame: inntinnsic (sense intentions). At end of Iron Flame channels from the source to save Violet — turns VENIN. By Onyx Storm his eyes carry the red rings. Married Violet in OS, then disappears with the message 'Don't look for me.'",
+      "yOffset": -60,
+      "attrs": {
+        "signet": "Shadow Wielder + Inntinnsic (sense intentions)",
+        "wing": "Fourth Wing (Wingleader)",
+        "homeland": "Tyrrendor (Aretia)",
+        "trait": "Carries his father's treason as a brand and his lover's life as a debt. The one who will burn the world for her — and become the dark thing she fears."
+      }
+    },
+    {
+      "id": "dain",
+      "label": "Dain Aetos",
+      "role": "Wingleader · Retrocognition",
+      "affil": "riders_4w",
+      "band": "riders",
+      "book": 1,
+      "lastBook": 4,
+      "size": "main",
+      "x": 253,
+      "status": "alive",
+      "type": "human",
+      "bio": "Violet's childhood best friend. Second-year, then Wingleader of Fourth Wing in Iron Flame. Bonded to red swordtail Cath. Signet: retrocognition — can read recent memories by touch. Reads Violet's mind under Varrish's coercion in IF — sees the truth about Resson and venin, then turns on Varrish and stabs him. Slow redemption arc continuing into Book 4. Yarros confirmed Book 4 will include Dain POV chapters.",
+      "yOffset": -60,
+      "attrs": {
+        "signet": "Retrocognition (read recent memories by touch)",
+        "wing": "Fourth Wing (Wingleader)",
+        "homeland": "Navarre (Basgiath)",
+        "trait": "The childhood friend who'd sacrifice her free will to keep her safe. Useful exactly until the day his definition of 'safe' becomes the cage."
+      }
+    },
+    {
+      "id": "liam",
+      "label": "Liam Mairi",
+      "role": "Violet's bodyguard · Farsight",
+      "affil": "marked",
+      "band": "riders",
+      "book": 1,
+      "lastBook": 1,
+      "size": "main",
+      "x": 143,
+      "status": "dead",
+      "statusDetail": "killed",
+      "type": "human",
+      "bio": "Marked One, raised with Xaden after their parents' executions. First-year. Charming, loyal, the best of his class. Xaden assigns him as Violet's bodyguard. Signet: farsight. KILLED at the Battle of Resson when his dragon Deigh is fatally wounded — riders cannot survive their dragon's death. Dies in Violet's arms after making her promise to protect his sister Sloane.",
+      "yOffset": -60,
+      "attrs": {
+        "trait": "The bodyguard you'd want and the friend you'd grieve. Sunshine wrapped around a death sentence — and he knew it."
+      }
+    },
+    {
+      "id": "rhiannon",
+      "label": "Rhiannon Matthias",
+      "role": "Best Friend · Summoner",
+      "affil": "riders_4w",
+      "band": "riders",
+      "book": 1,
+      "lastBook": 4,
+      "size": "main",
+      "x": 473,
+      "status": "alive",
+      "type": "human",
+      "bio": "Violet's best friend — they meet on the parapet when Violet gives her a boot for grip. Becomes Squad Leader in Onyx Storm. Bonded to green daggertail Feirge. Signet: summoning objects — can teleport items. Her power saves Violet repeatedly (notably hiding Xaden's dagger from Varrish). Loyal, steady, the heart of Violet's squad. Has a twin Raegan and is dating a girl named Tara.",
+      "yOffset": -60,
+      "attrs": {
+        "signet": "Summoning (object teleportation)",
+        "wing": "Fourth Wing, Flame Section",
+        "homeland": "Navarre",
+        "trait": "Best friend on day one of the parapet and squad leader by Onyx Storm. The one who keeps the squad alive while Violet is busy keeping the empire alive."
+      }
+    },
+    {
+      "id": "ridoc",
+      "label": "Ridoc Gamlyn",
+      "role": "Squad Friend · Ice Wielder",
+      "affil": "riders_4w",
+      "band": "riders",
+      "book": 1,
+      "lastBook": 4,
+      "size": "side",
+      "x": 528,
+      "status": "alive",
+      "type": "human",
+      "bio": "First-year (then second, etc) in Violet's squad. Humorist of the group — keeps spirits up. Bonded to brown swordtail Aotrom. Signet: ice wielder. Among the friends Violet finally tells about venin in Iron Flame. Confirmed as a Book 4 POV character.",
+      "yOffset": 60
+    },
+    {
+      "id": "sawyer",
+      "label": "Sawyer Henrick",
+      "role": "Squad Friend · Metal Affinity",
+      "affil": "riders_4w",
+      "band": "riders",
+      "book": 1,
+      "lastBook": 4,
+      "size": "side",
+      "x": 429,
+      "status": "alive",
+      "type": "human",
+      "bio": "Repeated his first year after failing to bond — bonds Sleiseag (red swordtail) the second year, after his metal affinity manifests. Squad Leader in Iron Flame. Loses a leg to a wyvern bite at the Battle of Basgiath. By Onyx Storm focuses on building a prosthetic to ride again.",
+      "yOffset": 60
+    },
+    {
+      "id": "imogen",
+      "label": "Imogen Cardulo",
+      "role": "Marked · Memory Eraser",
+      "affil": "marked",
+      "band": "riders",
+      "book": 1,
+      "lastBook": 4,
+      "size": "main",
+      "x": 737,
+      "status": "alive",
+      "type": "human",
+      "bio": "Third-year Marked One, half-pink hair, one of Fourth Wing's best fighters. Initially Violet's tormentor — later her ally. Signet: memory erasure (revealed in Onyx Storm). Erased Jack's memory after he was captured. Erased Violet's memory of marrying Xaden at Violet's own request. Devastated when Quinn — her best friend — is killed defending the Draithus tower.",
+      "yOffset": -60,
+      "attrs": {
+        "trait": "Pink-haired, scarred, terrifying — and the one you want at your back. Edits people's minds the way a surgeon cuts. Loses the only person she didn't want to lose."
+      }
+    },
+    {
+      "id": "quinn",
+      "label": "Quinn Hollis",
+      "role": "Imogen's BF · Astral Project",
+      "affil": "marked",
+      "band": "riders",
+      "book": 1,
+      "lastBook": 3,
+      "size": "side",
+      "x": 814,
+      "status": "dead",
+      "statusDetail": "killed",
+      "type": "human",
+      "bio": "Third-year, Imogen's best friend. Signet: astral projection — can project an image of herself elsewhere. KILLED at the Battle of Draithus while defending a tower with Imogen — a venin's blade lodges between her ribs near her heart. Her death is told from Imogen's POV and is one of the most devastating losses of the series.",
+      "yOffset": 70
+    },
+    {
+      "id": "garrick",
+      "label": "Garrick Tavis",
+      "role": "Marked · Distance Wielder",
+      "affil": "marked",
+      "band": "riders",
+      "book": 1,
+      "lastBook": 4,
+      "size": "main",
+      "x": 671,
+      "status": "missing",
+      "type": "human",
+      "bio": "Xaden's best friend. Marked One. Stationed at Samara with Xaden after graduation. Bonded to brown scorpiontail Chradh. Signet: distance wielding (and a second wind-wielding signet revealed in Onyx Storm — a gift from his rebellion relic). Helps protect Xaden's secret about being venin. MISSING at the end of Onyx Storm with Xaden, Bodhi, and Aaric.",
+      "yOffset": -60
+    },
+    {
+      "id": "bodhi",
+      "label": "Bodhi Durran",
+      "role": "Xaden's cousin · Counter-signet",
+      "affil": "marked",
+      "band": "riders",
+      "book": 1,
+      "lastBook": 4,
+      "size": "side",
+      "x": 825,
+      "status": "missing",
+      "type": "human",
+      "bio": "Xaden's cousin and a third-year. Marked One. Member of the rebellion long before Navarre learned about venin. Bonded to green swordtail Cuir. Signet: counter — can negate an opponent's signet. Resents Xaden for treating him as the heir to the Tyrrendor dukedom. MISSING at end of Onyx Storm.",
+      "yOffset": -60
+    },
+    {
+      "id": "aaric",
+      "label": "Aaric / Cam Tauri",
+      "role": "Hidden Prince · Precog",
+      "affil": "royal",
+      "band": "riders",
+      "book": 2,
+      "lastBook": 4,
+      "size": "main",
+      "x": 313,
+      "status": "missing",
+      "type": "human",
+      "bio": "Real name Prince Camlaen Aaric Tauri — King Tauri's youngest son. Joined the Rider Quadrant under the alias 'Aaric Graycastle' without his family's knowledge after learning the truth about venin. Bonded to blue dragon Molvic. Signet: PRECOGNITION (revealed in Onyx Storm — he gives Violet the marble dagger that kills Theophanie). MISSING at the end of Onyx Storm.",
+      "yOffset": -60,
+      "attrs": {
+        "trait": "Walked away from a throne to enlist in the quadrant under a fake name. The brother who chose the right side — and the precog who handed Violet the knife that ended Theophanie."
+      }
+    },
+    {
+      "id": "sloane",
+      "label": "Sloane Mairi",
+      "role": "Liam's sister · Siphon",
+      "affil": "marked",
+      "band": "riders",
+      "book": 2,
+      "lastBook": 4,
+      "size": "side",
+      "x": 181,
+      "status": "alive",
+      "type": "human",
+      "bio": "Liam Mairi's younger sister. Crosses parapet at the start of Iron Flame. Initially blames Violet for Liam's death. Bonded to dragon Thoirt. Signet: SIPHON — can transfer power between people. She siphons power for Lilith's sacrifice that activates the wardstone. In Onyx Storm she uses it again to save Mira (siphoning from Dain to Brennan). Terrified of her own power.",
+      "yOffset": -60
+    },
+    {
+      "id": "jack",
+      "label": "Jack Barlowe",
+      "role": "Antagonist · Pain · → Venin",
+      "affil": "venin",
+      "band": "riders",
+      "book": 1,
+      "lastBook": 4,
+      "size": "main",
+      "x": 957,
+      "status": "prisoner",
+      "type": "human",
+      "bio": "First-year sociopath in First Wing. Makes it his mission to kill Violet. Bonded to orange scorpiontail Baide. Signet: inflicting pain. Violet 'kills' him in Fourth Wing by collapsing a building on him — but Nolon mends him under Varrish's orders. Returns in Iron Flame as VENIN. Caught in Onyx Storm and held prisoner — Imogen erases his memory. Source of intel on venin throughout OS.",
+      "yOffset": -60
+    },
+    {
+      "id": "oren",
+      "label": "Oren Seifert",
+      "role": "Hostile First-Year",
+      "affil": "riders_other",
+      "band": "riders",
+      "book": 1,
+      "lastBook": 1,
+      "size": "side",
+      "x": 1012,
+      "status": "dead",
+      "statusDetail": "killed",
+      "type": "human",
+      "bio": "A jealous first-year in First Wing who, with Jack and Tynan, tries to kill the gold feathertail dragon (Andarna) at Threshing — fighting Violet too. Tynan is killed by Tairn. Oren remains a recurring antagonist and is later killed.",
+      "yOffset": 60
+    },
+    {
+      "id": "amber",
+      "label": "Amber Mavis",
+      "role": "Wingleader · Dain's friend",
+      "affil": "riders_other",
+      "band": "riders",
+      "book": 1,
+      "lastBook": 1,
+      "size": "side",
+      "x": 60,
+      "status": "alive",
+      "type": "human",
+      "bio": "Wingleader for Third Wing. Strawberry-blonde, blue-eyed. Close friend of Dain's. Helped unbonded cadets attempt to kill Violet in her sleep at the start of Fourth Wing — Andarna's time-stop saved Violet.",
+      "yOffset": 60
+    },
+    {
+      "id": "lynx",
+      "label": "Lynx",
+      "role": "First-year · Shadow Wielder",
+      "affil": "riders_4w",
+      "band": "riders",
+      "book": 3,
+      "lastBook": 4,
+      "size": "side",
+      "x": 803,
+      "status": "alive",
+      "type": "human",
+      "bio": "First-year in Violet's squad. Manifests as a SHADOW WIELDER in Onyx Storm — making him the new generation's shadow balance now that Xaden has turned. His emergence is what causes Xaden to retreat to Aretia in despair, feeling magic has abandoned him.",
+      "yOffset": -60
+    },
+    {
+      "id": "jesinia",
+      "label": "Jesinia Neilwart",
+      "role": "Scribe · Violet's friend",
+      "affil": "scribes",
+      "band": "support",
+      "book": 1,
+      "lastBook": 4,
+      "size": "side",
+      "x": 154,
+      "status": "alive",
+      "type": "human",
+      "bio": "First-year in the Scribes Quadrant. Deaf, communicates with sign language. Violet's friend from her scribe-training years. Smuggles forbidden books for Violet. Helps locate the journals of the First Six. Expelled from the adept program by Markham as punishment in Onyx Storm — remains loyal."
+    },
+    {
+      "id": "nolon",
+      "label": "Nolon",
+      "role": "Mender · Betrayer",
+      "affil": "healers",
+      "band": "support",
+      "book": 1,
+      "lastBook": 2,
+      "size": "side",
+      "x": 330,
+      "status": "alive",
+      "type": "human",
+      "bio": "An 84-year-old rider with the rare signet of mending — a supercharged healing power. Initially a benevolent figure who heals injured cadets. Forced (or coerced) by Varrish into mending Jack Barlowe back to life. BETRAYS Violet in Iron Flame — drugs her in the courtyard so Varrish can capture and torture her. His wife Winifred is from the Healers Quadrant."
+    },
+    {
+      "id": "naolin",
+      "label": "Naolin",
+      "role": "Tairn's previous rider",
+      "affil": "riders_other",
+      "band": "support",
+      "book": 2,
+      "lastBook": 2,
+      "size": "side",
+      "x": 473,
+      "status": "dead",
+      "statusDetail": "deceased",
+      "type": "human",
+      "bio": "Tairn's previous rider before Violet. Died at the Battle of Aretia trying to use his siphoning power to resurrect Brennan after Brennan was 'killed' by Fen Riorson — depleting himself in the process. Brennan survived and was hidden in caves beneath Aretia."
+    },
+    {
+      "id": "carr",
+      "label": "Prof. Carr",
+      "role": "Signet Professor · Executioner",
+      "affil": "faculty",
+      "band": "support",
+      "book": 1,
+      "lastBook": 4,
+      "size": "side",
+      "x": 638,
+      "status": "alive",
+      "type": "human",
+      "bio": "Professor who teaches cadets to harness and control their signets. Pushes cadets brutally — also serves as the War College's executioner when cadets manifest forbidden signets. A constant looming threat for any rider with a 'wrong' power."
+    },
+    {
+      "id": "kaori",
+      "label": "Prof. Kaori",
+      "role": "Dragon Professor",
+      "affil": "faculty",
+      "band": "support",
+      "book": 1,
+      "lastBook": 4,
+      "size": "side",
+      "x": 803,
+      "status": "alive",
+      "type": "human",
+      "bio": "Professor in charge of teaching cadets about dragons. Fascinated by dragonkind to a fault — but won't stand by injustice. Confirms Sgaeyl is the most powerful blue in active service. One of the academic figures cadets actually like."
+    },
+    {
+      "id": "brennan",
+      "label": "Brennan Sorrengail",
+      "role": "Violet's brother · Mender",
+      "affil": "marked",
+      "band": "aretia",
+      "book": 1,
+      "lastBook": 4,
+      "size": "main",
+      "x": 154,
+      "status": "alive",
+      "type": "human",
+      "bio": "Violet's older brother — presumed DEAD before the series. Actually alive and leading the Aretian revolution under an alias. Bonded to orange daggertail Marbh. Signet: MENDING (the rare supercharged version of healing). Was 'killed' by Fen Riorson during the rebellion — Naolin used his siphon to bring him back at the cost of his own life. Reveals himself in Iron Flame. In Onyx Storm he heroically mends Mira after Theophanie cuts her throat.",
+      "yOffset": -30,
+      "attrs": {
+        "trait": "Officially dead for years. Actually running a revolution and mending the dying back from the brink — including, in Onyx Storm, his own sister Mira."
+      }
+    },
+    {
+      "id": "fen",
+      "label": "Fen Riorson",
+      "role": "Xaden's father · Great Betrayer",
+      "affil": "rebellion",
+      "band": "aretia",
+      "book": 1,
+      "lastBook": 1,
+      "size": "side",
+      "x": 352,
+      "status": "dead",
+      "statusDetail": "executed",
+      "type": "human",
+      "bio": "Xaden's father. Infantryman who became leader of the Tyrrish rebellion against Navarre. Killed Brennan Sorrengail (or thought he did) during the rebellion. Executed by General Lilith Sorrengail along with all the other separatist leaders. The Tyrrish 'Great Betrayer' — a label Xaden has spent his life living under.",
+      "yOffset": -30
+    },
+    {
+      "id": "talia",
+      "label": "Talia Riorson",
+      "role": "Xaden's estranged mother",
+      "affil": "rebellion",
+      "band": "aretia",
+      "book": 3,
+      "lastBook": 4,
+      "size": "side",
+      "x": 517,
+      "status": "alive",
+      "type": "human",
+      "bio": "Xaden's mother. Now married to a member of the Hedotis Triumvirate (a council on a foreign isle). Tries to rekindle her relationship with Xaden in Onyx Storm during the squad's quest stop on Hedotis — Xaden wants nothing to do with her. Years of abandonment between them.",
+      "yOffset": -30
+    },
+    {
+      "id": "mira",
+      "label": "Mira Sorrengail",
+      "role": "Violet's sister · Ward Extension",
+      "affil": "marked",
+      "band": "aretia",
+      "book": 1,
+      "lastBook": 4,
+      "size": "main",
+      "x": 682,
+      "status": "alive",
+      "type": "human",
+      "bio": "Violet's older sister. Decorated lieutenant dragon rider in the Eastern Wing. Bonded to green clubtail Teine — gave Violet a breastplate of Teine's scales before the parapet. Signet: ward extension. Strongly opposed her mother's choice to force Violet into the Riders. By Onyx Storm she's nearly killed by Theophanie (throat cut, leveraging her against Violet) — saved by Brennan's mending and Sloane's siphoning.",
+      "yOffset": -30,
+      "attrs": {
+        "trait": "The decorated lieutenant who tried to protect Violet from their mother's quadrant — failed, then armored her with dragon scales anyway. Survives a slit throat because her brother won't let her go."
+      }
+    },
+    {
+      "id": "tecarus",
+      "label": "Viscount/King Tecarus",
+      "role": "Poromiel · Cat's uncle",
+      "affil": "poromiel",
+      "band": "aretia",
+      "book": 2,
+      "lastBook": 4,
+      "size": "side",
+      "x": 869,
+      "status": "alive",
+      "type": "human",
+      "bio": "A political figure of Poromiel. Old ally of Fen Riorson. In Iron Flame holds the LUMINARY needed to power Aretia's forges — gives it in exchange for Violet killing a venin and Aretia training 100 gryphon fliers. By Onyx Storm crowns himself King of Poromiel after Queen Maraya is killed. Cat and Maren's uncle.",
+      "yOffset": -30
+    },
+    {
+      "id": "maraya",
+      "label": "Queen Maraya",
+      "role": "Queen of Poromiel",
+      "affil": "poromiel",
+      "band": "aretia",
+      "book": 3,
+      "lastBook": 3,
+      "size": "side",
+      "x": 1001,
+      "status": "dead",
+      "statusDetail": "killed",
+      "type": "human",
+      "bio": "Queen of Poromiel. KILLED in Onyx Storm — her death is what allows Tecarus to crown himself king.",
+      "yOffset": -30
+    },
+    {
+      "id": "cat",
+      "label": "Catriona 'Cat' Cordella",
+      "role": "Flier · Xaden's ex",
+      "affil": "poromiel",
+      "band": "poromiel",
+      "book": 2,
+      "lastBook": 4,
+      "size": "main",
+      "x": 253,
+      "status": "alive",
+      "type": "human",
+      "bio": "Talented gryphon flier from Poromiel. Tecarus's niece. Xaden's EX-BETROTHED — her family's political alliance was broken when Xaden chose Violet. Initially antagonistic toward Violet but they slowly become allies. Bonded to gryphon Kiralair. Signet: emotion-heightening. Begins a relationship with Trager in Onyx Storm — devastated when he's killed. Now third in line for the Poromish throne.",
+      "attrs": {
+        "trait": "Promised to Xaden by her crown, replaced by Violet, and somehow still ends up in the same squad. Loses Trager on Zinhal — her grief gives the back half of Onyx Storm its teeth."
+      }
+    },
+    {
+      "id": "maren",
+      "label": "Maren Zina",
+      "role": "Flier · Cat's best friend",
+      "affil": "poromiel",
+      "band": "poromiel",
+      "book": 2,
+      "lastBook": 4,
+      "size": "side",
+      "x": 418,
+      "status": "alive",
+      "type": "human",
+      "bio": "Petite gryphon flier. Catriona's best friend. After losing her parents, saves her brothers and brings them to Aretia. Bonded to a gryphon. A steady, kind ally to Violet's circle."
+    },
+    {
+      "id": "trager",
+      "label": "Trager",
+      "role": "Flier · Healer · Cat's love",
+      "affil": "poromiel",
+      "band": "poromiel",
+      "book": 3,
+      "lastBook": 3,
+      "size": "side",
+      "x": 583,
+      "status": "dead",
+      "statusDetail": "killed",
+      "type": "human",
+      "bio": "Gryphon flier in Bragen's drift. A healer. Begins a relationship with Cat in Onyx Storm during the quest. Bonded to gryphon Silaraine. KILLED on the island of Zinhal — pierced through the heart by an arrow given as a 'gift' by the locals. His and Silaraine's bodies are burned by the squad."
+    },
+    {
+      "id": "drake",
+      "label": "Drake Cordella",
+      "role": "Cat's cousin · researcher",
+      "affil": "poromiel",
+      "band": "poromiel",
+      "book": 3,
+      "lastBook": 4,
+      "size": "side",
+      "x": 748,
+      "status": "alive",
+      "type": "human",
+      "bio": "Catriona's cousin. A captain and researcher into dark wielders. Brings comic relief to the squad. Helps with the Onyx Storm quest research."
+    },
+    {
+      "id": "theophanie",
+      "label": "Theophanie",
+      "role": "Venin Maven · Storm Wielder",
+      "affil": "venin",
+      "band": "venin",
+      "book": 3,
+      "lastBook": 3,
+      "size": "main",
+      "x": 253,
+      "status": "dead",
+      "statusDetail": "killed",
+      "type": "venin",
+      "bio": "Silver-haired Maven venin (mentor-rank). Once a high priestess of Dunne — abandoned the goddess for venin power. Storm-wielder — the dark mirror to Lilith Sorrengail. Pursues Violet relentlessly, wanting to mentor her when she 'turns'. Cuts Mira's throat to lure Violet. KILLED by Violet using the marble dagger Aaric forged from Dunne's temple stone — Dunne's wrath makes the stone capable of killing her former priestess.",
+      "yOffset": -23,
+      "attrs": {
+        "trait": "Dunne's former high priestess, now her opposite. The storm-wielder who is to Violet what Lilith was to Navarre — and she wants Violet to inherit the dark crown."
+      }
+    },
+    {
+      "id": "berwyn",
+      "label": "Berwyn",
+      "role": "Venin Sage · turned Xaden",
+      "affil": "venin",
+      "band": "venin",
+      "book": 3,
+      "lastBook": 4,
+      "size": "main",
+      "x": 473,
+      "status": "alive",
+      "type": "venin",
+      "bio": "A SAGE-rank venin (older than Maven). Wields blue fire he can throw like daggers. Responsible for turning Xaden venin at the end of Iron Flame. Haunts Xaden's nightmares — Xaden cannot harm his own Sage due to the venin bond. Berwyn refers to a 'son' — possibly Jack Barlowe.",
+      "yOffset": -23
+    },
+    {
+      "id": "panchek",
+      "label": "Col. Panchek",
+      "role": "Commandant · Venin Spy",
+      "affil": "venin",
+      "band": "venin",
+      "book": 3,
+      "lastBook": 3,
+      "size": "side",
+      "x": 638,
+      "status": "alive",
+      "type": "venin",
+      "bio": "Commandant of the Riders Quadrant. Revealed in Onyx Storm to be a VENIN SPY — bonded to Berwyn. The infiltration is deep: he was running Basgiath itself. Xaden cannot kill him because of the venin bond between them.",
+      "yOffset": -23
+    },
+    {
+      "id": "varrish",
+      "label": "Major Varrish",
+      "role": "Vice Commandant · Sadist",
+      "affil": "faculty",
+      "band": "venin",
+      "book": 2,
+      "lastBook": 2,
+      "size": "main",
+      "x": 803,
+      "status": "dead",
+      "statusDetail": "killed",
+      "type": "human",
+      "bio": "The vice commandant in Iron Flame — replaces Colonel Aetos. Sadistic, obsessed with breaking Violet. Tortures her for 5 days. Forces Nolon to mend Jack Barlowe back from death. KILLED by Violet (with Xaden's help) after Dain turns on him. His dragon Solas is the one who burns cadets — later killed by Andarna in retaliation.",
+      "yOffset": -23
+    },
+    {
+      "id": "wyvern_rep",
+      "label": "Wyvern (general)",
+      "role": "Created by venin",
+      "affil": "venin",
+      "band": "venin",
+      "book": 1,
+      "lastBook": 4,
+      "size": "side",
+      "x": 968,
+      "status": "alive",
+      "type": "wyvern",
+      "bio": "Wyverns are the lesser, twisted cousins of dragons — created by venin. They cannot channel for riders the way dragons can. They are what Navarre's leadership initially passes off as 'large birds' to its citizens. The carcasses Xaden drops at Navarrian outposts in Iron Flame are what finally crack the lie wide open.",
+      "yOffset": -23
+    },
+    {
+      "id": "tairn",
+      "label": "Tairn",
+      "role": "Black Morningstartail · Violet",
+      "affil": "riders_4w",
+      "band": "riders",
+      "book": 1,
+      "lastBook": 4,
+      "size": "main",
+      "x": 308,
+      "status": "alive",
+      "type": "dragon",
+      "bio": "Tairneanach — Scottish Gaelic for 'thunder.' Colossal black morningstartail. Mated to Sgaeyl. Wisdom, snark, sarcasm, and crushing power. Chose Violet at Threshing for her courage defending Andarna. His previous rider was Naolin. Second-strongest dragon on the continent (only behind Codagh).",
+      "yOffset": 120,
+      "attrs": {
+        "den": "black",
+        "trait": "Second-largest beast on the continent and twice as sarcastic. Chose the smallest cadet because she fought for a feathertail at Threshing."
+      }
+    },
+    {
+      "id": "andarna",
+      "label": "Andarna",
+      "role": "Irid · Color-shifter",
+      "affil": "irid",
+      "band": "riders",
+      "book": 1,
+      "lastBook": 4,
+      "size": "main",
+      "x": 440,
+      "status": "alive",
+      "type": "irid",
+      "bio": "Andarnaurram — 'the second honour'. Began as a 'gold feathertail' (apparent juvenile). Actually the SEVENTH BREED — an Irid scorpiontail. Waited 600 years to hatch, waiting for Violet specifically. Can shift the color of her scales. Original ability: stop time briefly. Killed Solas. Severs her bond with Violet at the end of Onyx Storm to leave with Leothan and learn Irid ways — though she returns at the very end.",
+      "yOffset": 120,
+      "attrs": {
+        "den": "gold",
+        "trait": "Waited 600 years to hatch — for Violet specifically. The seventh breed nobody believed existed. Severs the bond at the end of Onyx Storm to go learn what she actually is."
+      }
+    },
+    {
+      "id": "sgaeyl",
+      "label": "Sgaeyl",
+      "role": "Blue Daggertail · Xaden",
+      "affil": "marked",
+      "band": "riders",
+      "book": 1,
+      "lastBook": 4,
+      "size": "main",
+      "x": 687,
+      "status": "alive",
+      "type": "dragon",
+      "bio": "Navy-blue daggertail — the rarest of the blues. Knife-tipped tail. Mated to Tairn. Chose Xaden because of the scars on his back and because he is the grandson of her second rider (who didn't survive the quadrant). Most powerful blue in active service. Ruthless. Sgaeyl is why Xaden has his second illegal signet — inntinnsic — passed through the bond.",
+      "yOffset": 120,
+      "attrs": {
+        "den": "blue",
+        "trait": "Navy daggertail with a knife-tipped tail and zero patience. Mated to Tairn — which is why Violet and Xaden orbit each other whether they want to or not."
+      }
+    },
+    {
+      "id": "cath",
+      "label": "Cath",
+      "role": "Red Swordtail · Dain",
+      "affil": "riders_4w",
+      "band": "riders",
+      "book": 1,
+      "lastBook": 4,
+      "size": "side",
+      "x": 192,
+      "status": "alive",
+      "type": "dragon",
+      "bio": "Dain's red swordtail. Source of his retrocognition signet.",
+      "yOffset": 120,
+      "attrs": {
+        "den": "red"
+      }
+    },
+    {
+      "id": "deigh",
+      "label": "Deigh",
+      "role": "Red Daggertail · Liam",
+      "affil": "marked",
+      "band": "riders",
+      "book": 1,
+      "lastBook": 1,
+      "size": "side",
+      "x": 88,
+      "status": "dead",
+      "statusDetail": "killed",
+      "type": "dragon",
+      "bio": "Liam's red daggertail. KILLED at the Battle of Resson — fatally wounded by wyvern. Liam dies with him.",
+      "yOffset": 120,
+      "attrs": {
+        "den": "red"
+      }
+    },
+    {
+      "id": "feirge",
+      "label": "Feirge",
+      "role": "Green Daggertail · Rhiannon",
+      "affil": "riders_4w",
+      "band": "riders",
+      "book": 1,
+      "lastBook": 4,
+      "size": "side",
+      "x": 489,
+      "status": "alive",
+      "type": "dragon",
+      "bio": "Rhiannon's green daggertail. Source of her summoning signet.",
+      "yOffset": 120,
+      "attrs": {
+        "den": "green"
+      }
+    },
+    {
+      "id": "aotrom",
+      "label": "Aotrom",
+      "role": "Brown Swordtail · Ridoc",
+      "affil": "riders_4w",
+      "band": "riders",
+      "book": 1,
+      "lastBook": 4,
+      "size": "side",
+      "x": 572,
+      "status": "alive",
+      "type": "dragon",
+      "bio": "Ridoc's brown swordtail. Source of his ice signet.",
+      "yOffset": 120,
+      "attrs": {
+        "den": "brown"
+      }
+    },
+    {
+      "id": "sleiseag",
+      "label": "Sleiseag",
+      "role": "Red Swordtail · Sawyer",
+      "affil": "riders_4w",
+      "band": "riders",
+      "book": 1,
+      "lastBook": 4,
+      "size": "side",
+      "x": 390,
+      "status": "alive",
+      "type": "dragon",
+      "bio": "Sawyer's red swordtail — bonded after Sawyer's metal affinity manifests in his repeat year.",
+      "yOffset": 120,
+      "attrs": {
+        "den": "red"
+      }
+    },
+    {
+      "id": "glane",
+      "label": "Glane",
+      "role": "Orange Daggertail · Imogen",
+      "affil": "marked",
+      "band": "riders",
+      "book": 1,
+      "lastBook": 4,
+      "size": "side",
+      "x": 781,
+      "status": "alive",
+      "type": "dragon",
+      "bio": "Imogen's orange daggertail. We get glimpses of her relationship with Glane through Imogen's POV in Onyx Storm.",
+      "yOffset": 120,
+      "attrs": {
+        "den": "orange"
+      }
+    },
+    {
+      "id": "chradh",
+      "label": "Chradh",
+      "role": "Brown Scorpiontail · Garrick",
+      "affil": "marked",
+      "band": "riders",
+      "book": 1,
+      "lastBook": 4,
+      "size": "side",
+      "x": 638,
+      "status": "alive",
+      "type": "dragon",
+      "bio": "Garrick's brown scorpiontail. Stationed at Samara with Sgaeyl after graduation.",
+      "yOffset": 120,
+      "attrs": {
+        "den": "brown"
+      }
+    },
+    {
+      "id": "cuir",
+      "label": "Cuir",
+      "role": "Green Swordtail · Bodhi",
+      "affil": "marked",
+      "band": "riders",
+      "book": 1,
+      "lastBook": 4,
+      "size": "side",
+      "x": 869,
+      "status": "alive",
+      "type": "dragon",
+      "bio": "Bodhi's green swordtail. Source of his counter-signet.",
+      "yOffset": 120,
+      "attrs": {
+        "den": "green"
+      }
+    },
+    {
+      "id": "molvic",
+      "label": "Molvic",
+      "role": "Blue Dragon · Aaric",
+      "affil": "royal",
+      "band": "riders",
+      "book": 2,
+      "lastBook": 4,
+      "size": "side",
+      "x": 247,
+      "status": "alive",
+      "type": "dragon",
+      "bio": "Aaric/Cam's blue dragon. In Onyx Storm, brings a thousand soldiers and horses from Zehyllna to the battle of Draithus — a massive intervention.",
+      "yOffset": 120,
+      "attrs": {
+        "den": "blue"
+      }
+    },
+    {
+      "id": "baide",
+      "label": "Baide",
+      "role": "Orange Scorpiontail · Jack",
+      "affil": "venin",
+      "band": "riders",
+      "book": 1,
+      "lastBook": 3,
+      "size": "side",
+      "x": 1012,
+      "status": "alive",
+      "type": "dragon",
+      "bio": "Jack Barlowe's orange scorpiontail — unsurprisingly vicious. Holds grudges. Loyal to Jack throughout his transformation.",
+      "yOffset": 120,
+      "attrs": {
+        "den": "orange"
+      }
+    },
+    {
+      "id": "thoirt",
+      "label": "Thoirt",
+      "role": "Sloane's dragon",
+      "affil": "marked",
+      "band": "riders",
+      "book": 2,
+      "lastBook": 4,
+      "size": "side",
+      "x": 126,
+      "status": "alive",
+      "type": "dragon",
+      "bio": "Sloane Mairi's bonded dragon. Source of her siphon signet.",
+      "yOffset": 120,
+      "attrs": {
+        "den": "black"
+      }
+    },
+    {
+      "id": "aimsir",
+      "label": "Aimsir",
+      "role": "Brown · Lilith Sorrengail",
+      "affil": "faculty",
+      "band": "leadership",
+      "book": 1,
+      "lastBook": 1,
+      "size": "side",
+      "x": 418,
+      "status": "dead",
+      "statusDetail": "deceased",
+      "type": "dragon",
+      "bio": "Lilith Sorrengail's brown dragon. Source of her storm-wielding signet. Dies/is lost when Lilith sacrifices herself at the Battle of Basgiath.",
+      "yOffset": 38,
+      "attrs": {
+        "den": "brown"
+      }
+    },
+    {
+      "id": "teine",
+      "label": "Teine",
+      "role": "Green Clubtail · Mira",
+      "affil": "marked",
+      "band": "aretia",
+      "book": 1,
+      "lastBook": 4,
+      "size": "side",
+      "x": 726,
+      "status": "alive",
+      "type": "dragon",
+      "bio": "Mira Sorrengail's green clubtail. Mira gave Violet a breastplate of Teine's scales for the parapet. Captured/chained briefly during the Draithus battle by Theophanie's forces.",
+      "yOffset": 38,
+      "attrs": {
+        "den": "green"
+      }
+    },
+    {
+      "id": "marbh",
+      "label": "Marbh",
+      "role": "Orange Daggertail · Brennan",
+      "affil": "marked",
+      "band": "aretia",
+      "book": 1,
+      "lastBook": 4,
+      "size": "side",
+      "x": 192,
+      "status": "alive",
+      "type": "dragon",
+      "bio": "Brennan Sorrengail's orange daggertail. Both went into hiding in the caves below Aretia after Brennan's near-death.",
+      "yOffset": 38,
+      "attrs": {
+        "den": "orange"
+      }
+    },
+    {
+      "id": "codagh",
+      "label": "Codagh",
+      "role": "Black Dragon Elder · Melgren",
+      "affil": "faculty",
+      "band": "leadership",
+      "book": 1,
+      "lastBook": 4,
+      "size": "side",
+      "x": 786,
+      "status": "alive",
+      "type": "dragon",
+      "bio": "The strongest dragon on the entire continent. Bonded to General Melgren. Codagh chose to give the rebellion children rebellion relics — extending some protection from Melgren's signet — a deeply political act.",
+      "yOffset": 38,
+      "attrs": {
+        "den": "black"
+      }
+    },
+    {
+      "id": "solas",
+      "label": "Solas",
+      "role": "Varrish's dragon",
+      "affil": "venin",
+      "band": "venin",
+      "book": 2,
+      "lastBook": 2,
+      "size": "side",
+      "x": 858,
+      "status": "dead",
+      "statusDetail": "killed",
+      "type": "dragon",
+      "bio": "Varrish's dragon — unstable, blinded in one eye. Burns cadets indiscriminately at Conscription Day. Tairn threatens to take Solas's other eye if he doesn't behave. After Varrish dies, Solas seeks revenge — Andarna kills him during a training exercise.",
+      "yOffset": 45,
+      "attrs": {
+        "den": "orange"
+      }
+    },
+    {
+      "id": "leothan",
+      "label": "Leothan",
+      "role": "Irid · keeper of the hidden",
+      "affil": "irid",
+      "band": "venin",
+      "book": 3,
+      "lastBook": 4,
+      "size": "main",
+      "x": 99,
+      "status": "alive",
+      "type": "irid",
+      "bio": "An Irid dragon — Andarna's kin. The Irids live on a hidden archipelago, hundreds of them. They are dragons of PEACE — refuse to give the squad a venin cure or aid in the war. Leothan recharges Aretia's wardstone and orders Andarna home to be educated. Andarna leaves with Leothan at the end of Onyx Storm.",
+      "yOffset": 38,
+      "attrs": {
+        "den": "irid"
+      }
+    },
+    {
+      "id": "kiralair",
+      "label": "Kiralair",
+      "role": "Cat's Gryphon",
+      "affil": "poromiel",
+      "band": "poromiel",
+      "book": 2,
+      "lastBook": 4,
+      "size": "side",
+      "x": 192,
+      "status": "alive",
+      "type": "gryphon",
+      "bio": "Catriona's bonded gryphon. Source of her emotion-heightening signet."
+    },
+    {
+      "id": "silaraine",
+      "label": "Silaraine",
+      "role": "Trager's Gryphon",
+      "affil": "poromiel",
+      "band": "poromiel",
+      "book": 3,
+      "lastBook": 3,
+      "size": "side",
+      "x": 522,
+      "status": "dead",
+      "statusDetail": "killed",
+      "type": "gryphon",
+      "bio": "Trager's bonded gryphon. KILLED with Trager on Zinhal — both burned together by the squad."
+    }
+  ],
+  "relationships": [
+    {
+      "from": "violet",
+      "to": "lilith",
+      "type": "family",
+      "book": 1,
+      "label": "mother"
+    },
+    {
+      "from": "violet",
+      "to": "asher",
+      "type": "family",
+      "book": 1,
+      "label": "father (deceased)"
+    },
+    {
+      "from": "violet",
+      "to": "mira",
+      "type": "family",
+      "book": 1,
+      "label": "sister"
+    },
+    {
+      "from": "violet",
+      "to": "brennan",
+      "type": "family",
+      "book": 1,
+      "label": "brother (alive!)"
+    },
+    {
+      "from": "mira",
+      "to": "lilith",
+      "type": "family",
+      "book": 1,
+      "label": "mother"
+    },
+    {
+      "from": "brennan",
+      "to": "lilith",
+      "type": "family",
+      "book": 1,
+      "label": "mother"
+    },
+    {
+      "from": "xaden",
+      "to": "fen",
+      "type": "family",
+      "book": 1,
+      "label": "father (executed)"
+    },
+    {
+      "from": "xaden",
+      "to": "talia",
+      "type": "family",
+      "book": 3,
+      "label": "mother (estranged)"
+    },
+    {
+      "from": "xaden",
+      "to": "bodhi",
+      "type": "family",
+      "book": 1,
+      "label": "cousin"
+    },
+    {
+      "from": "king_tauri",
+      "to": "halden",
+      "type": "family",
+      "book": 1,
+      "label": "father"
+    },
+    {
+      "from": "king_tauri",
+      "to": "aaric",
+      "type": "family",
+      "book": 2,
+      "label": "father (hidden)"
+    },
+    {
+      "from": "halden",
+      "to": "aaric",
+      "type": "family",
+      "book": 2,
+      "label": "brother"
+    },
+    {
+      "from": "cat",
+      "to": "tecarus",
+      "type": "family",
+      "book": 2,
+      "label": "uncle"
+    },
+    {
+      "from": "maren",
+      "to": "cat",
+      "type": "squad",
+      "book": 2,
+      "label": "best friend"
+    },
+    {
+      "from": "drake",
+      "to": "cat",
+      "type": "family",
+      "book": 3,
+      "label": "cousin"
+    },
+    {
+      "from": "violet",
+      "to": "tairn",
+      "type": "bonded",
+      "book": 1,
+      "label": "bonded"
+    },
+    {
+      "from": "violet",
+      "to": "andarna",
+      "type": "bonded",
+      "book": 1,
+      "label": "bonded (2nd)"
+    },
+    {
+      "from": "xaden",
+      "to": "sgaeyl",
+      "type": "bonded",
+      "book": 1,
+      "label": "bonded"
+    },
+    {
+      "from": "dain",
+      "to": "cath",
+      "type": "bonded",
+      "book": 1,
+      "label": "bonded"
+    },
+    {
+      "from": "liam",
+      "to": "deigh",
+      "type": "bonded",
+      "book": 1,
+      "label": "bonded"
+    },
+    {
+      "from": "rhiannon",
+      "to": "feirge",
+      "type": "bonded",
+      "book": 1,
+      "label": "bonded"
+    },
+    {
+      "from": "ridoc",
+      "to": "aotrom",
+      "type": "bonded",
+      "book": 1,
+      "label": "bonded"
+    },
+    {
+      "from": "sawyer",
+      "to": "sleiseag",
+      "type": "bonded",
+      "book": 1,
+      "label": "bonded (yr 2)"
+    },
+    {
+      "from": "imogen",
+      "to": "glane",
+      "type": "bonded",
+      "book": 1,
+      "label": "bonded"
+    },
+    {
+      "from": "garrick",
+      "to": "chradh",
+      "type": "bonded",
+      "book": 1,
+      "label": "bonded"
+    },
+    {
+      "from": "bodhi",
+      "to": "cuir",
+      "type": "bonded",
+      "book": 1,
+      "label": "bonded"
+    },
+    {
+      "from": "aaric",
+      "to": "molvic",
+      "type": "bonded",
+      "book": 2,
+      "label": "bonded"
+    },
+    {
+      "from": "jack",
+      "to": "baide",
+      "type": "bonded",
+      "book": 1,
+      "label": "bonded"
+    },
+    {
+      "from": "sloane",
+      "to": "thoirt",
+      "type": "bonded",
+      "book": 2,
+      "label": "bonded"
+    },
+    {
+      "from": "lilith",
+      "to": "aimsir",
+      "type": "bonded",
+      "book": 1,
+      "label": "bonded"
+    },
+    {
+      "from": "mira",
+      "to": "teine",
+      "type": "bonded",
+      "book": 1,
+      "label": "bonded"
+    },
+    {
+      "from": "brennan",
+      "to": "marbh",
+      "type": "bonded",
+      "book": 1,
+      "label": "bonded"
+    },
+    {
+      "from": "melgren",
+      "to": "codagh",
+      "type": "bonded",
+      "book": 1,
+      "label": "bonded"
+    },
+    {
+      "from": "varrish",
+      "to": "solas",
+      "type": "bonded",
+      "book": 2,
+      "label": "bonded"
+    },
+    {
+      "from": "naolin",
+      "to": "tairn",
+      "type": "complicated",
+      "book": 2,
+      "label": "prev rider"
+    },
+    {
+      "from": "cat",
+      "to": "kiralair",
+      "type": "bonded",
+      "book": 2,
+      "label": "bonded"
+    },
+    {
+      "from": "trager",
+      "to": "silaraine",
+      "type": "bonded",
+      "book": 3,
+      "label": "bonded"
+    },
+    {
+      "from": "tairn",
+      "to": "sgaeyl",
+      "type": "mated",
+      "book": 1,
+      "label": "mated pair"
+    },
+    {
+      "from": "violet",
+      "to": "xaden",
+      "type": "romantic",
+      "book": 1,
+      "label": "slow burn → married (Bk3)"
+    },
+    {
+      "from": "violet",
+      "to": "dain",
+      "type": "complicated",
+      "book": 1,
+      "label": "childhood crush"
+    },
+    {
+      "from": "violet",
+      "to": "halden",
+      "type": "complicated",
+      "book": 3,
+      "label": "ex-boyfriend"
+    },
+    {
+      "from": "xaden",
+      "to": "cat",
+      "type": "complicated",
+      "book": 2,
+      "label": "ex-betrothed"
+    },
+    {
+      "from": "cat",
+      "to": "trager",
+      "type": "romantic",
+      "book": 3,
+      "label": "romantic"
+    },
+    {
+      "from": "violet",
+      "to": "rhiannon",
+      "type": "squad",
+      "book": 1,
+      "label": "best friend"
+    },
+    {
+      "from": "violet",
+      "to": "ridoc",
+      "type": "squad",
+      "book": 1,
+      "label": "squad"
+    },
+    {
+      "from": "violet",
+      "to": "sawyer",
+      "type": "squad",
+      "book": 1,
+      "label": "squad"
+    },
+    {
+      "from": "violet",
+      "to": "liam",
+      "type": "squad",
+      "book": 1,
+      "label": "bodyguard/friend"
+    },
+    {
+      "from": "rhiannon",
+      "to": "ridoc",
+      "type": "squad",
+      "book": 1,
+      "label": "squadmates"
+    },
+    {
+      "from": "rhiannon",
+      "to": "sawyer",
+      "type": "squad",
+      "book": 1,
+      "label": "squadmates"
+    },
+    {
+      "from": "ridoc",
+      "to": "sawyer",
+      "type": "squad",
+      "book": 1,
+      "label": "squadmates"
+    },
+    {
+      "from": "violet",
+      "to": "jesinia",
+      "type": "squad",
+      "book": 1,
+      "label": "old scribe friend"
+    },
+    {
+      "from": "violet",
+      "to": "aaric",
+      "type": "squad",
+      "book": 2,
+      "label": "squad / ally"
+    },
+    {
+      "from": "violet",
+      "to": "sloane",
+      "type": "squad",
+      "book": 2,
+      "label": "promised Liam to protect"
+    },
+    {
+      "from": "violet",
+      "to": "imogen",
+      "type": "complicated",
+      "book": 1,
+      "label": "enemy → ally"
+    },
+    {
+      "from": "imogen",
+      "to": "quinn",
+      "type": "squad",
+      "book": 1,
+      "label": "best friend"
+    },
+    {
+      "from": "violet",
+      "to": "lynx",
+      "type": "squad",
+      "book": 3,
+      "label": "squadmate"
+    },
+    {
+      "from": "xaden",
+      "to": "liam",
+      "type": "family",
+      "book": 1,
+      "label": "raised together"
+    },
+    {
+      "from": "xaden",
+      "to": "garrick",
+      "type": "squad",
+      "book": 1,
+      "label": "best friend"
+    },
+    {
+      "from": "xaden",
+      "to": "imogen",
+      "type": "ally",
+      "book": 1,
+      "label": "marked / loyal"
+    },
+    {
+      "from": "xaden",
+      "to": "bodhi",
+      "type": "ally",
+      "book": 1,
+      "label": "cousin / heir"
+    },
+    {
+      "from": "liam",
+      "to": "garrick",
+      "type": "squad",
+      "book": 1,
+      "label": "marked"
+    },
+    {
+      "from": "violet",
+      "to": "brennan",
+      "type": "ally",
+      "book": 1,
+      "label": "revolution"
+    },
+    {
+      "from": "xaden",
+      "to": "brennan",
+      "type": "ally",
+      "book": 1,
+      "label": "co-leader"
+    },
+    {
+      "from": "sloane",
+      "to": "liam",
+      "type": "family",
+      "book": 2,
+      "label": "sister"
+    },
+    {
+      "from": "xaden",
+      "to": "sloane",
+      "type": "ally",
+      "book": 2,
+      "label": "protects"
+    },
+    {
+      "from": "markham",
+      "to": "violet",
+      "type": "betrayer",
+      "book": 1,
+      "label": "groomed her"
+    },
+    {
+      "from": "devera",
+      "to": "violet",
+      "type": "mentor",
+      "book": 1,
+      "label": "trustworthy prof"
+    },
+    {
+      "from": "carr",
+      "to": "violet",
+      "type": "mentor",
+      "book": 1,
+      "label": "signet training"
+    },
+    {
+      "from": "kaori",
+      "to": "violet",
+      "type": "mentor",
+      "book": 1,
+      "label": "dragon professor"
+    },
+    {
+      "from": "jack",
+      "to": "violet",
+      "type": "enemy",
+      "book": 1,
+      "label": "hunts her"
+    },
+    {
+      "from": "oren",
+      "to": "violet",
+      "type": "enemy",
+      "book": 1,
+      "label": "hunts her"
+    },
+    {
+      "from": "amber",
+      "to": "violet",
+      "type": "enemy",
+      "book": 1,
+      "label": "unlocked door for assassins"
+    },
+    {
+      "from": "violet",
+      "to": "jack",
+      "type": "killed",
+      "book": 1,
+      "label": "'killed' (Bk1)"
+    },
+    {
+      "from": "fen",
+      "to": "brennan",
+      "type": "killed",
+      "book": 1,
+      "label": "struck him down"
+    },
+    {
+      "from": "naolin",
+      "to": "brennan",
+      "type": "family",
+      "book": 2,
+      "label": "died saving him"
+    },
+    {
+      "from": "lilith",
+      "to": "fen",
+      "type": "killed",
+      "book": 1,
+      "label": "executed him"
+    },
+    {
+      "from": "varrish",
+      "to": "violet",
+      "type": "enemy",
+      "book": 2,
+      "label": "tortures her"
+    },
+    {
+      "from": "nolon",
+      "to": "violet",
+      "type": "betrayer",
+      "book": 2,
+      "label": "drugs her"
+    },
+    {
+      "from": "nolon",
+      "to": "jack",
+      "type": "complicated",
+      "book": 2,
+      "label": "mended"
+    },
+    {
+      "from": "varrish",
+      "to": "jack",
+      "type": "ally",
+      "book": 2,
+      "label": "wields him"
+    },
+    {
+      "from": "varrish",
+      "to": "nolon",
+      "type": "ally",
+      "book": 2,
+      "label": "controls him"
+    },
+    {
+      "from": "violet",
+      "to": "varrish",
+      "type": "killed",
+      "book": 2,
+      "label": "kills him"
+    },
+    {
+      "from": "dain",
+      "to": "varrish",
+      "type": "killed",
+      "book": 2,
+      "label": "stabs him"
+    },
+    {
+      "from": "andarna",
+      "to": "solas",
+      "type": "killed",
+      "book": 2,
+      "label": "in revenge"
+    },
+    {
+      "from": "col_aetos",
+      "to": "violet",
+      "type": "enemy",
+      "book": 2,
+      "label": "sends assassins"
+    },
+    {
+      "from": "col_aetos",
+      "to": "dain",
+      "type": "family",
+      "book": 1,
+      "label": "father"
+    },
+    {
+      "from": "col_aetos",
+      "to": "lilith",
+      "type": "complicated",
+      "book": 1,
+      "label": "advisor"
+    },
+    {
+      "from": "lilith",
+      "to": "violet",
+      "type": "complicated",
+      "book": 2,
+      "label": "forced into riders"
+    },
+    {
+      "from": "lilith",
+      "to": "sloane",
+      "type": "complicated",
+      "book": 2,
+      "label": "died to power wards"
+    },
+    {
+      "from": "sloane",
+      "to": "lilith",
+      "type": "killed",
+      "book": 2,
+      "label": "siphoned her"
+    },
+    {
+      "from": "theophanie",
+      "to": "violet",
+      "type": "enemy",
+      "book": 3,
+      "label": "hunts to turn her"
+    },
+    {
+      "from": "theophanie",
+      "to": "mira",
+      "type": "enemy",
+      "book": 3,
+      "label": "slits her throat"
+    },
+    {
+      "from": "violet",
+      "to": "theophanie",
+      "type": "killed",
+      "book": 3,
+      "label": "marble dagger"
+    },
+    {
+      "from": "berwyn",
+      "to": "xaden",
+      "type": "enemy",
+      "book": 2,
+      "label": "turned him venin"
+    },
+    {
+      "from": "berwyn",
+      "to": "panchek",
+      "type": "ally",
+      "book": 3,
+      "label": "venin bond"
+    },
+    {
+      "from": "panchek",
+      "to": "violet",
+      "type": "betrayer",
+      "book": 3,
+      "label": "venin spy"
+    },
+    {
+      "from": "col_aetos",
+      "to": "melgren",
+      "type": "ally",
+      "book": 3,
+      "label": "command structure"
+    },
+    {
+      "from": "trager",
+      "to": "silaraine",
+      "type": "killed",
+      "book": 3,
+      "label": "both killed"
+    },
+    {
+      "from": "violet",
+      "to": "cat",
+      "type": "ally",
+      "book": 3,
+      "label": "quest squad"
+    },
+    {
+      "from": "violet",
+      "to": "maren",
+      "type": "ally",
+      "book": 3,
+      "label": "quest squad"
+    },
+    {
+      "from": "violet",
+      "to": "drake",
+      "type": "ally",
+      "book": 3,
+      "label": "quest squad"
+    },
+    {
+      "from": "imogen",
+      "to": "violet",
+      "type": "ally",
+      "book": 3,
+      "label": "erased her memory"
+    },
+    {
+      "from": "quinn",
+      "to": "theophanie",
+      "type": "killed",
+      "book": 3,
+      "label": "venin blade"
+    },
+    {
+      "from": "tecarus",
+      "to": "xaden",
+      "type": "ally",
+      "book": 2,
+      "label": "luminary deal"
+    },
+    {
+      "from": "tecarus",
+      "to": "violet",
+      "type": "ally",
+      "book": 2,
+      "label": "trained at Aretia"
+    },
+    {
+      "from": "maraya",
+      "to": "tecarus",
+      "type": "complicated",
+      "book": 3,
+      "label": "queen → he crowns himself"
+    },
+    {
+      "from": "aaric",
+      "to": "halden",
+      "type": "complicated",
+      "book": 3,
+      "label": "replaces him"
+    },
+    {
+      "from": "leothan",
+      "to": "andarna",
+      "type": "family",
+      "book": 3,
+      "label": "calls her home"
+    },
+    {
+      "from": "andarna",
+      "to": "leothan",
+      "type": "complicated",
+      "book": 3,
+      "label": "severs Violet's bond"
+    },
+    {
+      "from": "wyvern_rep",
+      "to": "theophanie",
+      "type": "ally",
+      "book": 1,
+      "label": "venin steeds"
+    },
+    {
+      "from": "wyvern_rep",
+      "to": "berwyn",
+      "type": "ally",
+      "book": 1,
+      "label": "venin steeds"
+    },
+    {
+      "from": "violet",
+      "to": "dunne",
+      "type": "complicated",
+      "book": 3,
+      "label": "temple/dagger"
+    },
+    {
+      "from": "theophanie",
+      "to": "dunne",
+      "type": "betrayer",
+      "book": 3,
+      "label": "abandoned her"
+    }
+  ],
+  "events": [
+    {
+      "book": 1,
+      "text": "Violet Sorrengail forced from Scribes into the Riders Quadrant by her mother",
+      "involves": [
+        "violet"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Crosses the parapet — befriends Rhiannon",
+      "involves": [
+        "rhiannon"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Threshing: bonds TWO dragons (Tairn & Andarna) — unprecedented",
+      "involves": [
+        "andarna",
+        "tairn"
+      ],
+      "kind": "bond"
+    },
+    {
+      "book": 1,
+      "text": "Manifests her signet — lightning wielder",
+      "involves": [],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Squad assigned: Liam Mairi (her bodyguard), Ridoc, Sawyer",
+      "involves": [
+        "liam",
+        "sawyer",
+        "ridoc"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Falls for Xaden Riorson · their dragons are mated",
+      "involves": [
+        "xaden"
+      ],
+      "kind": "bond"
+    },
+    {
+      "book": 1,
+      "text": "Battle of Resson: Liam dies protecting Violet · Brennan revealed alive",
+      "involves": [
+        "brennan",
+        "violet",
+        "liam"
+      ],
+      "kind": "death"
+    },
+    {
+      "book": 1,
+      "text": "Truth revealed: VENIN are real · gryphon fliers are not the enemy",
+      "involves": [],
+      "kind": "reveal"
+    },
+    {
+      "book": 2,
+      "text": "Vice Commandant Varrish targets and tortures Violet",
+      "involves": [
+        "varrish",
+        "violet"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 2,
+      "text": "Prince Cam joins the quadrant under alias 'Aaric Graycastle'",
+      "involves": [
+        "aaric"
+      ],
+      "kind": "bond"
+    },
+    {
+      "book": 2,
+      "text": "Jack Barlowe returns — secretly venin, mended by Nolon",
+      "involves": [
+        "jack",
+        "nolon"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 2,
+      "text": "Heist: Violet steals journals of the First Six from royal vault",
+      "involves": [
+        "violet"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 2,
+      "text": "Nolon betrays Violet — captured and tortured by Varrish",
+      "involves": [
+        "varrish",
+        "violet",
+        "nolon"
+      ],
+      "kind": "betrayal"
+    },
+    {
+      "book": 2,
+      "text": "Dain Aetos turns on Varrish · Violet kills Varrish",
+      "involves": [
+        "dain",
+        "varrish",
+        "violet"
+      ],
+      "kind": "death"
+    },
+    {
+      "book": 2,
+      "text": "Half the quadrant defects to Aretia with the revolution",
+      "involves": [],
+      "kind": "betrayal"
+    },
+    {
+      "book": 2,
+      "text": "Battle of Basgiath: Lilith Sorrengail sacrifices herself to power the wards",
+      "involves": [
+        "lilith"
+      ],
+      "kind": "death"
+    },
+    {
+      "book": 2,
+      "text": "Andarna revealed to be a 7th-breed Irid",
+      "involves": [
+        "andarna"
+      ],
+      "kind": "reveal"
+    },
+    {
+      "book": 2,
+      "text": "XADEN TURNS VENIN to save Violet — channels from the source",
+      "involves": [
+        "violet",
+        "xaden"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 3,
+      "text": "Quest for the Irids — searching for a cure for Xaden",
+      "involves": [
+        "xaden"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 3,
+      "text": "Senarium peace talks · Navarre + Poromiel uneasy alliance",
+      "involves": [],
+      "kind": "other"
+    },
+    {
+      "book": 3,
+      "text": "Cat Cordella joins the quest squad · forms relationship with Trager",
+      "involves": [
+        "trager",
+        "cat"
+      ],
+      "kind": "bond"
+    },
+    {
+      "book": 3,
+      "text": "Theophanie (Maven venin) hunts Violet · wants her to turn",
+      "involves": [
+        "theophanie",
+        "violet"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 3,
+      "text": "Jack Barlowe held prisoner · interrogated for venin secrets",
+      "involves": [
+        "jack"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 3,
+      "text": "Garrick reveals second signet · Aaric reveals he's a precog",
+      "involves": [
+        "garrick",
+        "aaric"
+      ],
+      "kind": "reveal"
+    },
+    {
+      "book": 3,
+      "text": "Trager killed by an arrow on the island of Zinhal",
+      "involves": [
+        "trager"
+      ],
+      "kind": "death"
+    },
+    {
+      "book": 3,
+      "text": "Battle of Draithus: Quinn Hollis killed in tower defense",
+      "involves": [
+        "quinn"
+      ],
+      "kind": "death"
+    },
+    {
+      "book": 3,
+      "text": "Violet kills Theophanie with Aaric's marble dagger from Dunne's temple",
+      "involves": [
+        "theophanie",
+        "violet",
+        "dunne",
+        "aaric"
+      ],
+      "kind": "death"
+    },
+    {
+      "book": 3,
+      "text": "Andarna severs bond and leaves with Leothan to learn Irid ways",
+      "involves": [
+        "andarna",
+        "leothan"
+      ],
+      "kind": "reveal"
+    },
+    {
+      "book": 3,
+      "text": "Xaden, Garrick, Bodhi, Aaric, dragon eggs all missing",
+      "involves": [
+        "garrick",
+        "xaden",
+        "bodhi",
+        "aaric"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 3,
+      "text": "Violet wakes up married to Xaden — Imogen erased her memory",
+      "involves": [
+        "violet",
+        "imogen",
+        "xaden"
+      ],
+      "kind": "bond"
+    },
+    {
+      "book": 4,
+      "text": "Untitled · Rebecca Yarros began writing in early 2026",
+      "involves": [],
+      "kind": "other"
+    },
+    {
+      "book": 4,
+      "text": "Yarros confirmed: 'someone you love won't make it'",
+      "involves": [],
+      "kind": "other"
+    },
+    {
+      "book": 4,
+      "text": "Likely POVs: Violet, Xaden, Dain, Ridoc",
+      "involves": [
+        "violet",
+        "xaden",
+        "ridoc",
+        "dain"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 4,
+      "text": "Plot threads: cure for Xaden's venin · find the missing dragon eggs",
+      "involves": [
+        "xaden"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 4,
+      "text": "Map of the Isles likely included",
+      "involves": [],
+      "kind": "other"
+    },
+    {
+      "book": 4,
+      "text": "Dain redemption arc continuing",
+      "involves": [
+        "dain"
+      ],
+      "kind": "other"
+    }
+  ],
+  "characterTypes": {
+    "human": {
+      "label": "Human",
+      "shape": "circle"
+    },
+    "dragon": {
+      "label": "Dragon",
+      "shape": "diamond"
+    },
+    "irid": {
+      "label": "Irid Dragon",
+      "shape": "star8"
+    },
+    "wyvern": {
+      "label": "Wyvern",
+      "shape": "chevron"
+    },
+    "gryphon": {
+      "label": "Gryphon",
+      "shape": "triangle"
+    },
+    "venin": {
+      "label": "Venin",
+      "shape": "hexagon"
+    },
+    "god": {
+      "label": "God",
+      "shape": "star6"
+    }
+  },
+  "subgroups": {
+    "dens": {
+      "black": {
+        "label": "Black",
+        "fill": "#1a1a1a",
+        "stroke": "#666",
+        "glow": "#333"
+      },
+      "blue": {
+        "label": "Blue",
+        "fill": "#1e3a8a",
+        "stroke": "#60a5fa",
+        "glow": "#3b82f6"
+      },
+      "green": {
+        "label": "Green",
+        "fill": "#14532d",
+        "stroke": "#22c55e",
+        "glow": "#16a34a"
+      },
+      "brown": {
+        "label": "Brown",
+        "fill": "#451a03",
+        "stroke": "#b45309",
+        "glow": "#92400e"
+      },
+      "red": {
+        "label": "Red",
+        "fill": "#7f1d1d",
+        "stroke": "#ef4444",
+        "glow": "#dc2626"
+      },
+      "orange": {
+        "label": "Orange",
+        "fill": "#7c2d12",
+        "stroke": "#fb923c",
+        "glow": "#ea580c"
+      },
+      "gold": {
+        "label": "Gold (Irid)",
+        "fill": "#78350f",
+        "stroke": "#fbbf24",
+        "glow": "#fde68a"
+      },
+      "irid": {
+        "label": "Iridescent",
+        "fill": "#0e7490",
+        "stroke": "#22d3ee",
+        "glow": "#67e8f9"
+      }
+    }
+  },
+  "glyphs": {
+    "violet": {
+      "sym": "⚡",
+      "color": "#fde68a"
+    },
+    "xaden": {
+      "sym": "◐",
+      "color": "#a78bfa"
+    },
+    "ridoc": {
+      "sym": "❄",
+      "color": "#67e8f9"
+    },
+    "rhiannon": {
+      "sym": "◇",
+      "color": "#34d399"
+    },
+    "dain": {
+      "sym": "◉",
+      "color": "#fbbf24"
+    },
+    "imogen": {
+      "sym": "∅",
+      "color": "#f472b6"
+    },
+    "sloane": {
+      "sym": "⟳",
+      "color": "#22d3ee"
+    },
+    "sawyer": {
+      "sym": "⛓",
+      "color": "#9ca3af"
+    },
+    "brennan": {
+      "sym": "✚",
+      "color": "#34d399"
+    },
+    "mira": {
+      "sym": "◈",
+      "color": "#60a5fa"
+    },
+    "aaric": {
+      "sym": "◐",
+      "color": "#fde68a"
+    },
+    "liam": {
+      "sym": "◎",
+      "color": "#fbbf24"
+    },
+    "garrick": {
+      "sym": "➤",
+      "color": "#f59e0b"
+    },
+    "bodhi": {
+      "sym": "⊘",
+      "color": "#34d399"
+    },
+    "quinn": {
+      "sym": "◍",
+      "color": "#c084fc"
+    },
+    "cat": {
+      "sym": "♥",
+      "color": "#ec4899"
+    },
+    "lilith": {
+      "sym": "☇",
+      "color": "#60a5fa"
+    },
+    "theophanie": {
+      "sym": "☇",
+      "color": "#dc2626"
+    },
+    "jack": {
+      "sym": "✦",
+      "color": "#dc2626"
+    },
+    "lynx": {
+      "sym": "◐",
+      "color": "#7c3aed"
+    },
+    "nolon": {
+      "sym": "✚",
+      "color": "#22d3ee"
+    },
+    "carr": {
+      "sym": "⚔",
+      "color": "#9ca3af"
+    }
+  },
+  "bookTransitions": {
+    "1": null,
+    "2": {
+      "title": "Book 2 · Iron Flame",
+      "changes": [
+        "💀 Liam Mairi killed at Resson",
+        "✦ Sloane crosses the parapet",
+        "✦ Aaric joins under alias",
+        "⭐ Lilith sacrifices herself",
+        "💀 Varrish killed by Violet",
+        "⚠ Xaden turns venin"
+      ]
+    },
+    "3": {
+      "title": "Book 3 · Onyx Storm",
+      "changes": [
+        "💀 Trager killed on Zinhal",
+        "💀 Quinn killed at Draithus",
+        "💀 Queen Maraya killed",
+        "💀 Theophanie killed by Violet",
+        "⚠ Garrick, Bodhi, Aaric MISSING",
+        "✦ Andarna leaves with Leothan"
+      ]
+    },
+    "4": {
+      "title": "Book 4 · Untitled (TBA)",
+      "changes": [
+        "📖 Yarros writing in early 2026",
+        "⚠ 'Someone you love won't make it'",
+        "✦ Dain redemption arc continues",
+        "✦ Likely POVs: Violet, Xaden, Dain, Ridoc"
+      ]
+    }
+  }
+}
