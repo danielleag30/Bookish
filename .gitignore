@@ -14,6 +14,11 @@ dist/
 .DS_Store
 Thumbs.db
 
+# Claude Code local state — .claude/launch.json IS committed (shared dev-server
+# config); per-machine settings and worktrees are not
+.claude/settings.local.json
+.claude/worktrees/
+
 # Archives (a stray files.zip once got committed here)
 *.zip
 
