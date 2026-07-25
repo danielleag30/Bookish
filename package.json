@@ -1,0 +1,37 @@
+{
+  "name": "bookish",
+  "version": "1.0.0",
+  "description": "Spoiler-aware character relationship charts for fantasy series",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "validate": "tsx scripts/validate.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danielleag30/Bookish.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/danielleag30/Bookish/issues"
+  },
+  "homepage": "https://github.com/danielleag30/Bookish#readme",
+  "private": "true",
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "tsx": "^4.23.1",
+    "typescript": "^7.0.2",
+    "vite": "^8.1.5",
+    "vitest": "^4.1.10",
+    "zod": "^4.4.3"
+  }
+}
