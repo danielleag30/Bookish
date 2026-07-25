@@ -263,6 +263,67 @@ function normaliseCharacter(n, yOffsets, notes) {
   return out;
 }
 
+// ── Canon corrections ──────────────────────────────────────────────────────
+/**
+ * Corrections to the source data, each verified against series canon rather
+ * than guessed. Applied here so they survive re-extraction instead of being
+ * hand-edited into the JSON. See DATA-REVIEW.md for the reasoning and sources.
+ *
+ * Note that the fix direction differs case by case, which is exactly why these
+ * were not resolved by one blanket rule:
+ *  - Halden and Theophanie genuinely first appear later, so the RELATIONSHIP's
+ *    book was wrong.
+ *  - Berwyn genuinely appears earlier (he turns Xaden venin at the end of Iron
+ *    Flame, book 2), so the CHARACTER's book was wrong.
+ */
+const CORRECTIONS = {
+  empyrean: {
+    characters: [
+      { id: 'lilith', set: { lastBook: 2 },
+        why: 'Dies at the Battle of Basgiath in Iron Flame (book 2); lastBook 1 hid her from the book she dies in' },
+      { id: 'aimsir', set: { lastBook: 2 },
+        why: "Lilith's dragon — her lifeforce is siphoned into the wardstone in the same book-2 scene" },
+      { id: 'berwyn', set: { book: 2 },
+        why: 'The venin general who turns Xaden venin at the end of Iron Flame (book 2), not book 3' },
+    ],
+    relationships: [
+      { match: 'king_tauri>halden:family', set: { book: 3 },
+        why: 'Halden is referenced in book 1 but first appears on-page in Onyx Storm (book 3)' },
+      { match: 'halden>aaric:family', set: { book: 3 },
+        why: 'Same — the edge cannot render before Halden appears' },
+      { match: 'wyvern_rep>theophanie:ally', set: { book: 3 },
+        why: 'Theophanie first appears in Onyx Storm (book 3)' },
+      { match: 'wyvern_rep>berwyn:ally', set: { book: 2 },
+        why: 'Follows Berwyn moving to book 2' },
+    ],
+    dropRelationships: [
+      { match: 'quinn>theophanie:killed',
+        why: 'Quinn is killed by an unnamed venin in a tower at Draithus, and Violet — not Quinn — ' +
+             'kills Theophanie. The edge is wrong in both directions; her death is already carried by ' +
+             'status "dead" and the book-3 event' },
+      { match: 'trager>silaraine:killed',
+        why: 'Neither killed the other — rider and gryphon were burned together on Zinhal. ' +
+             'A `bonded` edge between them already exists, and the shared death is in both statuses' },
+    ],
+  },
+};
+
+function applyCharacterCorrections(characters, seriesId, notes) {
+  for (const c of CORRECTIONS[seriesId]?.characters ?? []) {
+    const target = characters.find((x) => x.id === c.id);
+    if (!target) {
+      notes.push(`correction skipped — no character "${c.id}"`);
+      continue;
+    }
+    for (const [k, v] of Object.entries(c.set)) {
+      if (target[k] === v) continue;
+      notes.push(`corrected ${c.id}.${k}: ${target[k]} -> ${v} (${c.why})`);
+      target[k] = v;
+    }
+  }
+  return characters;
+}
+
 // ── Relationship normalisation, incl. reversed-duplicate merge ─────────────
 /**
  * Reversed duplicates found in the Empyrean data. Both directions describe one
@@ -281,6 +342,10 @@ function normaliseRelationships(edges, seriesId, notes) {
   const dropKeys = new Set(merges.map((m) => m.drop));
   const relabel = new Map(merges.filter((m) => m.label).map((m) => [m.keep, m.label]));
 
+  const corr = CORRECTIONS[seriesId] ?? {};
+  const setBy = new Map((corr.relationships ?? []).map((r) => [r.match, r]));
+  const dropBy = new Map((corr.dropRelationships ?? []).map((r) => [r.match, r]));
+
   const out = [];
   for (const e of edges) {
     const key = `${e.from}>${e.to}:${e.type}`;
@@ -288,10 +353,22 @@ function normaliseRelationships(edges, seriesId, notes) {
       notes.push(`merged reversed duplicate: dropped ${key}`);
       continue;
     }
+    if (dropBy.has(key)) {
+      notes.push(`dropped ${key} — ${dropBy.get(key).why}`);
+      continue;
+    }
     const rel = { from: e.from, to: e.to, type: e.type, book: e.book, label: e.label ?? '' };
     if (relabel.has(key) && relabel.get(key) !== rel.label) {
       notes.push(`relabelled ${key}: "${rel.label}" -> "${relabel.get(key)}"`);
       rel.label = relabel.get(key);
+    }
+    if (setBy.has(key)) {
+      const { set, why } = setBy.get(key);
+      for (const [k, v] of Object.entries(set)) {
+        if (rel[k] === v) continue;
+        notes.push(`corrected ${key}.${k}: ${rel[k]} -> ${v} (${why})`);
+        rel[k] = v;
+      }
     }
     out.push(rel);
   }
@@ -381,7 +458,11 @@ for (const s of SERIES) {
   if (missing.length) notes.push(`consts not present in source: ${missing.join(', ')}`);
 
   const extra = s.build(values);
-  const characters = values.NODES.map((n) => normaliseCharacter(n, extra.yOffsets, notes));
+  const characters = applyCharacterCorrections(
+    values.NODES.map((n) => normaliseCharacter(n, extra.yOffsets, notes)),
+    s.id,
+    notes,
+  );
   const relationships = normaliseRelationships(values.EDGES, s.id, notes);
   const events = normaliseEvents(values.KEY_EVENTS, characters);
 

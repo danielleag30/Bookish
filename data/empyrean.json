@@ -326,7 +326,7 @@
       "affil": "faculty",
       "band": "leadership",
       "book": 1,
-      "lastBook": 1,
+      "lastBook": 2,
       "size": "main",
       "x": 374,
       "status": "dead",
@@ -956,7 +956,7 @@
       "role": "Venin Sage · turned Xaden",
       "affil": "venin",
       "band": "venin",
-      "book": 3,
+      "book": 2,
       "lastBook": 4,
       "size": "main",
       "x": 473,
@@ -1274,7 +1274,7 @@
       "affil": "faculty",
       "band": "leadership",
       "book": 1,
-      "lastBook": 1,
+      "lastBook": 2,
       "size": "side",
       "x": 418,
       "status": "dead",
@@ -1475,7 +1475,7 @@
       "from": "king_tauri",
       "to": "halden",
       "type": "family",
-      "book": 1,
+      "book": 3,
       "label": "father"
     },
     {
@@ -1489,7 +1489,7 @@
       "from": "halden",
       "to": "aaric",
       "type": "family",
-      "book": 2,
+      "book": 3,
       "label": "brother"
     },
     {
@@ -2088,13 +2088,6 @@
       "label": "command structure"
     },
     {
-      "from": "trager",
-      "to": "silaraine",
-      "type": "killed",
-      "book": 3,
-      "label": "both killed"
-    },
-    {
       "from": "violet",
       "to": "cat",
       "type": "ally",
@@ -2121,13 +2114,6 @@
       "type": "ally",
       "book": 3,
       "label": "erased her memory"
-    },
-    {
-      "from": "quinn",
-      "to": "theophanie",
-      "type": "killed",
-      "book": 3,
-      "label": "venin blade"
     },
     {
       "from": "tecarus",
@@ -2175,14 +2161,14 @@
       "from": "wyvern_rep",
       "to": "theophanie",
       "type": "ally",
-      "book": 1,
+      "book": 3,
       "label": "venin steeds"
     },
     {
       "from": "wyvern_rep",
       "to": "berwyn",
       "type": "ally",
-      "book": 1,
+      "book": 2,
       "label": "venin steeds"
     },
     {

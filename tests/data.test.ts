@@ -56,8 +56,43 @@ describe('empyrean', () => {
     expect(s.books).toHaveLength(4);
   });
 
-  it('kept 113 relationships — 115 source edges minus the 2 merged duplicates', () => {
-    expect(s.relationships).toHaveLength(113);
+  it('kept 111 relationships — 115 source edges, minus 2 merged duplicates and 2 incorrect', () => {
+    expect(s.relationships).toHaveLength(111);
+  });
+
+  it('applied the canon corrections', () => {
+    // Lilith dies at the Battle of Basgiath in Iron Flame (book 2). lastBook 1
+    // hid her from the book she dies in.
+    const lilith = s.characters.find((c) => c.id === 'lilith');
+    expect(lilith?.lastBook).toBe(2);
+
+    // Her dragon's lifeforce goes into the wardstone in the same scene.
+    expect(s.characters.find((c) => c.id === 'aimsir')?.lastBook).toBe(2);
+
+    // Berwyn turns Xaden venin at the end of Iron Flame, so he appears in
+    // book 2 — here the character was wrong, not the relationship.
+    expect(s.characters.find((c) => c.id === 'berwyn')?.book).toBe(2);
+
+    // Halden is referenced in book 1 but first appears in Onyx Storm, so here
+    // the relationship was wrong, not the character.
+    expect(s.characters.find((c) => c.id === 'halden')?.book).toBe(3);
+    const halden = s.relationships.find(
+      (r) => r.from === 'king_tauri' && r.to === 'halden' && r.type === 'family',
+    );
+    expect(halden?.book).toBe(3);
+  });
+
+  it('dropped the two factually wrong killed edges', () => {
+    const has = (from: string, to: string, type: string) =>
+      s.relationships.some((r) => r.from === from && r.to === to && r.type === type);
+
+    // Quinn is killed by an unnamed venin; Violet kills Theophanie.
+    expect(has('quinn', 'theophanie', 'killed')).toBe(false);
+
+    // Trager and his gryphon were burned together — neither killed the other.
+    expect(has('trager', 'silaraine', 'killed')).toBe(false);
+    // The bonded edge between them must survive.
+    expect(has('trager', 'silaraine', 'bonded')).toBe(true);
   });
 
   it('dropped the reversed duplicates rather than both copies', () => {
