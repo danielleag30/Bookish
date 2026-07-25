@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+.vercel/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# OS cruft
+.DS_Store
+Thumbs.db
+
+# Archives (a stray files.zip once got committed here)
+*.zip
+
+# Test / coverage output
+coverage/
+
+# Pipeline run artifacts — traces and token logs are per-run, not source
+pipeline/runs/
+evals/runs/

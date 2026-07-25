@@ -1,0 +1,6 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "buildCommand": "echo 'Static site — charts are self-contained HTML, no build step.'",
+  "outputDirectory": "."
+}
