@@ -82,4 +82,8 @@ console.log(
   `\n${files.length} file(s) checked — ${totalErrors} error(s), ${totalWarnings} warning(s).`,
 );
 
-if (totalErrors > 0) process.exit(1);
+// Both counts are at zero as of the Phase 1 canon corrections, so warnings now
+// fail the build too. This is a ratchet: it keeps resolved contradictions from
+// quietly reappearing. If a new series legitimately needs a warning tolerated,
+// fix the data or argue the rule down — do not loosen this silently.
+if (totalErrors > 0 || totalWarnings > 0) process.exit(1);

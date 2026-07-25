@@ -4,7 +4,7 @@ What the schema and integrity checks caught in the hand-entered chart data, and 
 
 Reproduce with `npm run validate`.
 
-**Status: 0 errors, 6 warnings.** Nothing is broken enough to render wrong; all six are internal contradictions worth a human eye.
+**Status: 0 errors, 0 warnings.** The six warnings found in the first pass were each researched against series canon and resolved — see the next section. `npm run validate` now fails on warnings too, as a ratchet against regressions.
 
 ---
 
@@ -67,7 +67,52 @@ Rendered with *"Killed by"*, that edge reads **"Lilith killed by Fen"** — the 
 
 ---
 
-## ⚠️ Needs your decision — not changed
+## ✅ Resolved against canon
+
+All six warnings are now closed. Each was checked against series canon rather than guessed, and the fixes live in the `CORRECTIONS` block of `scripts/extract-charts.mjs` so they survive re-extraction.
+
+**Result: 0 errors, 0 warnings.**
+
+The important lesson: **the fix direction was not the same in every case.** Two of them turned out to be the *character* being wrong and two the *relationship* — which is exactly why a single blanket rule would have introduced new errors.
+
+| # | Finding | Verdict | Fix |
+|---|---|---|---|
+| 1 | Lilith `lastBook: 1` | She dies at the Battle of Basgiath in **Iron Flame (book 2)** — Sloane siphons her lifeforce into the wardstone at her request | `lastBook` → **2** |
+| 2 | Aimsir `lastBook: 1` | *Found by inference, not by the validator.* Lilith's dragon dies in the same scene — "Lilith and Aimsir's lifeforce" go into the stone together | `lastBook` → **2** |
+| 3 | `berwyn → xaden` book 2, Berwyn book 3 | Berwyn is the venin general who **turns Xaden venin at the end of Iron Flame** — so he appears in book 2. **The character was wrong, the edge was right.** | Berwyn `book` → **2** |
+| 4 | `king_tauri → halden` book 1, Halden book 3 | Halden is *referenced* in book 1 (Violet's ex) but **first appears on-page in Onyx Storm**. **The edge was wrong, the character was right.** | edge `book` → **3** |
+| 5 | `halden → aaric` book 2 | Same reasoning | edge `book` → **3** |
+| 6 | `wyvern_rep → theophanie` book 1 | Theophanie first appears in **Onyx Storm (book 3)** | edge `book` → **3** |
+| 7 | `wyvern_rep → berwyn` book 1 | Follows Berwyn moving to book 2 | edge `book` → **2** |
+| 8 | `quinn → theophanie` *"venin blade"* | **Wrong in both directions.** Quinn is killed by an *unnamed* venin in a tower at Draithus, dying in Imogen's arms. And *Violet* — not Quinn — kills Theophanie with the marble dagger. | edge **dropped** |
+| 9 | `trager → silaraine` *"both killed"* | Neither killed the other; rider and gryphon were **burned together on Zinhal**. A `bonded` edge between them already exists. | edge **dropped** |
+
+Relationships: 115 source edges → **111** (2 merged duplicates, 2 factually wrong).
+
+### The semantic question, now decided
+
+Does `relationship.book` mean *"when this became true"* or *"when it becomes visible"*?
+
+**Answer: visible from.** King Tauri has been Halden's father since birth, but the edge cannot be drawn before Halden is on the chart. This is now the documented rule, which prevents the next batch of these.
+
+### Systematic follow-up
+
+Since Lilith/Aimsir was a rider–dragon pair drifting apart, every bonded pair was scanned for mismatched `book`/`lastBook`. Only one other turned up — **Jack Barlowe (bk1–4) and Baide (bk1–3)** — and that one is speculative either way because book 4 is unreleased. Left alone deliberately.
+
+### Sources
+
+- [Lilith Sorrengail — The Empyrean Wiki](https://the-empyrean-series.fandom.com/wiki/Lilith_Sorrengail) · [Battle of Basgiath](https://the-empyrean-series.fandom.com/wiki/Battle_of_Basgiath) · [Iron Flame ending explained](https://theliterarylifestyle.com/iron-flame-ending/)
+- [Battle of Draithus — The Empyrean Wiki](https://the-empyrean-series.fandom.com/wiki/Battle_of_Draithus) · [Every major death in Onyx Storm](https://screenrant.com/onyx-storm-major-deaths/) · [Quinn Hollis](https://thebookfeed.com/fourth-wing-guide/quinn-hollis/)
+- [Theophanie explained](https://screenrant.com/onyx-storm-silver-haired-venin-theophanie-villain-explained/) · [Theophanie — The Empyrean Wiki](https://the-empyrean-series.fandom.com/wiki/Theophanie)
+- [Halden Tauri — Empyrean Riders](https://www.empyreanriders.com/articles/halden-tauri/) · [King Tauri — The Empyrean Wiki](https://the-empyrean-series.fandom.com/wiki/King_Tauri)
+
+### Not a contradiction after all
+
+`violet → jack` *"'killed' (Bk1)"* with Jack's status `prisoner` was on the suspect list, but the two describe different moments and are consistent: Violet does kill him in book 1, he is mended and returns, and `prisoner` is his state at the end of book 3. The scare quotes were doing real work. **Left exactly as written.**
+
+---
+
+## Original findings — historical record
 
 ### A. Lilith's `lastBook` contradicts her own death event
 
@@ -135,6 +180,8 @@ One is a genuine limitation worth noting, because it is exactly what Phase 3's m
 
 ---
 
-## Why the warnings stay in CI
+## CI behaviour
 
-`npm run validate` exits non-zero on **errors** only. These six are **warnings** — printed, visible, but non-blocking. They describe data that contradicts itself, and each needs a canon judgment rather than a mechanical fix. Once you decide A, B and C, they should go to zero and can be promoted to errors to keep them from coming back.
+`npm run validate` now exits non-zero on **errors or warnings**. Both were at zero once the canon corrections landed, so the stricter gate locks that in and stops resolved contradictions from quietly reappearing when a new series is added.
+
+The `error` / `warning` split is still meaningful in `checkIntegrity()` — errors are things that would render wrong, warnings are self-contradictions — it just no longer changes the exit code.
