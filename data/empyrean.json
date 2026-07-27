@@ -1922,9 +1922,9 @@
     {
       "from": "fen",
       "to": "brennan",
-      "type": "killed",
+      "type": "enemy",
       "book": 1,
-      "label": "struck him down"
+      "label": "struck him down (survived)"
     },
     {
       "from": "naolin",

@@ -145,7 +145,7 @@
   },
   "relationshipTypes": [
     {
-      "id": "party",
+      "id": "squad",
       "label": "Party",
       "color": "#e87840",
       "dash": null,
@@ -740,7 +740,7 @@
     {
       "from": "carl",
       "to": "donut",
-      "type": "party",
+      "type": "squad",
       "book": 1,
       "label": "inseparable party"
     },
@@ -880,7 +880,7 @@
     {
       "from": "florin",
       "to": "ifechi",
-      "type": "party",
+      "type": "squad",
       "book": 3,
       "label": "combat partner"
     },
@@ -936,14 +936,14 @@
     {
       "from": "imani",
       "to": "elle",
-      "type": "party",
+      "type": "squad",
       "book": 1,
       "label": "Meadow Lark"
     },
     {
       "from": "imani",
       "to": "tserendelgor",
-      "type": "party",
+      "type": "squad",
       "book": 2,
       "label": "Meadow Lark"
     },
@@ -957,7 +957,7 @@
     {
       "from": "louis",
       "to": "firas",
-      "type": "party",
+      "type": "squad",
       "book": 3,
       "label": "party"
     },
