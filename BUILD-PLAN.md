@@ -100,7 +100,7 @@ Sequential. Each has a **Ship** (the artifact) and a **Domain** (what it teaches
 
 ---
 
-### Phase 1.5 — Spoiler-safe ask box ← **first visible feature**
+### Phase 1.5 — Spoiler-safe ask box ✅ **shipped** ← first visible feature
 **Ship:** a sidebar panel you can actually use, on the live site · **Domain:** 6 (guardrails, in the data layer) · **Effort:** 1 weekend
 
 Added after the original plan was written, because Phases 1–2 are invisible plumbing and there needs to be something clickable early.

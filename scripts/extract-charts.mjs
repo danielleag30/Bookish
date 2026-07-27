@@ -300,7 +300,7 @@ const CORRECTIONS = {
     // state, which is not the story as read.
     perceived: [
       { id: 'brennan',
-        set: { status: 'dead', untilBook: 1,
+        set: { status: 'dead', role: "Violet's brother (presumed dead)", untilBook: 1,
                note: 'Presumed dead before the series. Revealed alive in the final paragraph of ' +
                      'Fourth Wing, and reveals himself properly in Iron Flame.' } },
       { id: 'aaric',

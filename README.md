@@ -56,6 +56,33 @@ Under the hood, state lives in one small object per chart. Every state change cl
 
 ---
 
+## The Ask Box — spoiler-bounded questions
+
+Every chart carries a panel in the corner that answers questions about it, bounded by where you've actually read. Set the timeline to book 2 and ask *"who is alive?"* — you get the book-2 answer, and nothing later.
+
+```
+who is Violet in a squad with     →  5 squadmates, with how each one knows her
+who died                          →  the dead, as of your position
+how are Violet and Dain connected →  the shortest path between them
+what happened to Liam             →  his events, up to your position
+```
+
+**There is no language model in it.** The data is structured, so *"who is Xaden bonded to as of book 2"* is a filter, not a generation problem. That makes the feature instant, free, offline-capable, and permanently available — 15 kB, no API key, no rate limit.
+
+### The lock is on the door, not in the instructions
+
+The interesting part is where the boundary lives. Filtering happens in one function in `src/spoiler.ts`, and every read goes through it. Nothing is filtered by asking a model nicely to withhold things — a hidden character is never loaded into the answer in the first place.
+
+The test suite attacks it from five directions at once: exact id lookup, fuzzy name search, relationship traversal from a visible character, the event log, and path-finding. All five must come back empty. A sixth test sweeps every answer shape and asserts no later-book character's name appears anywhere in the output.
+
+A refusal also has to avoid confirming what it is hiding. Asking about a book-3 character from book 1 returns *"I couldn't match that to anyone on the chart"* — not *"that character appears later"*, which would leak the fact they exist.
+
+### Modelling what the reader believes, not just what is true
+
+A status field records the end state, which is not the story as you read it. Brennan Sorrengail is presumed dead until the final paragraph of *Fourth Wing*, so at book 1 the chart says he is dead and marks it **as far as you know**. At book 2 he moves to alive. Aaric appears under his alias until the reveal.
+
+Three fields turned out to carry spoilers, not one: status, identity, and role — Brennan's real role names a signet he is only known to have *after* he is found alive. Biographies are withheld below the final book entirely, because they are written as whole-series prose; `npm run spoiler-audit` reports that 25 of them name a character who has not appeared yet.
+
 ## Tech Stack
 
 | Layer | Technology |

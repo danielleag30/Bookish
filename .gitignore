@@ -28,3 +28,6 @@ coverage/
 # Pipeline run artifacts — traces and token logs are per-run, not source
 pipeline/runs/
 evals/runs/
+
+# Ask box bundle — built by `npm run build:askbox`, and by Vercel on deploy
+askbox/
