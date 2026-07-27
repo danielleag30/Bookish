@@ -624,6 +624,11 @@
       "yOffset": -60,
       "attrs": {
         "trait": "Walked away from a throne to enlist in the quadrant under a fake name. The brother who chose the right side — and the precog who handed Violet the knife that ended Theophanie."
+      },
+      "perceived": {
+        "identity": "Aaric Graycastle",
+        "untilBook": 2,
+        "note": "Actually Prince Camlaen Aaric Tauri, King Tauri's youngest son, enlisted under an alias."
       }
     },
     {
@@ -789,6 +794,11 @@
       "yOffset": -30,
       "attrs": {
         "trait": "Officially dead for years. Actually running a revolution and mending the dying back from the brink — including, in Onyx Storm, his own sister Mira."
+      },
+      "perceived": {
+        "status": "dead",
+        "untilBook": 1,
+        "note": "Presumed dead before the series. Revealed alive in the final paragraph of Fourth Wing, and reveals himself properly in Iron Flame."
       }
     },
     {

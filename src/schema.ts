@@ -111,7 +111,50 @@ export const CharacterSchema = z.object({
   size: z.string().describe('Relative node size, e.g. "main" or "side"'),
   x: z.number().describe('Horizontal position in chart units'),
   yOffset: z.number().optional().describe('Manual vertical nudge within the band'),
-  bio: z.string().optional().describe('Spoiler-bearing biography'),
+
+  /**
+   * What the reader believed before the truth came out.
+   *
+   * `status` alone records the end state, which is not what a spoiler-aware
+   * reader wants. Brennan is presumed dead until the final paragraph of book 1;
+   * Aaric serves under an alias; Panchek is not revealed as a venin spy until
+   * book 3. A chart that only knows the end state cannot show the reader the
+   * story as they experienced it.
+   */
+  perceived: z
+    .object({
+      status: StatusSchema.optional().describe('What the reader believed the status was'),
+      identity: z.string().optional().describe('The alias or false identity the reader knew'),
+      untilBook: z
+        .number()
+        .int()
+        .positive()
+        .describe('The reader holds this belief through the end of this book'),
+      note: z.string().min(1).describe('What actually happened and when it was revealed'),
+    })
+    .optional(),
+
+  bio: z
+    .string()
+    .optional()
+    .describe(
+      'Full biography. SPOILER-BEARING across the whole series — 16 of 48 book-1 ' +
+        'Empyrean bios name a character who has not appeared yet. Never serve this ' +
+        'below the maximum reading position; use bioByBook where present.',
+    ),
+  bioByBook: z
+    .array(
+      z.object({
+        book: z.number().int().positive(),
+        text: z.string().min(1),
+      }),
+    )
+    .optional()
+    .describe(
+      'Biography split so each segment only reveals what is known by that book. ' +
+        'A reader at book k sees segments where book <= k. Segmenting the existing ' +
+        'bios is a Phase 3 pipeline task.',
+    ),
   attrs: z
     .record(z.string(), z.string())
     .optional()
@@ -240,6 +283,29 @@ export function checkIntegrity(series: Series): Issue[] {
     }
     if (c.lastBook > maxBook || c.lastBook < minBook) {
       err('lastbook-out-of-range', at, `lastBook ${c.lastBook} is outside books ${minBook}-${maxBook}`);
+    }
+
+    // A perceived belief must be held from the character's first appearance and
+    // must actually differ from the truth, or it is recording nothing.
+    if (c.perceived) {
+      if (!bookIds.has(c.perceived.untilBook)) {
+        err('book-out-of-range', at, `perceived.untilBook ${c.perceived.untilBook} is not a series book`);
+      }
+      if (c.perceived.status === undefined && c.perceived.identity === undefined) {
+        err('empty-perceived', at, 'perceived must set status, identity, or both');
+      }
+      if (c.perceived.status !== undefined && c.perceived.status === c.status) {
+        warn('perceived-matches-actual', at,
+          `perceived.status "${c.perceived.status}" equals the real status, so it records nothing`);
+      }
+    }
+
+    // Segmented bios must stay inside the character's own window.
+    for (const seg of c.bioByBook ?? []) {
+      if (seg.book < c.book || seg.book > c.lastBook) {
+        err('bio-segment-out-of-window', at,
+          `bioByBook segment for book ${seg.book} is outside this character's ${c.book}-${c.lastBook}`);
+      }
     }
     // A character marked dead who is still listed through the final book is
     // usually fine (they die in that book), so this is not flagged.
