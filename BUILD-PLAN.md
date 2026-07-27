@@ -100,6 +100,23 @@ Sequential. Each has a **Ship** (the artifact) and a **Domain** (what it teaches
 
 ---
 
+### Phase 1.5 — Spoiler-safe ask box ← **first visible feature**
+**Ship:** a sidebar panel you can actually use, on the live site · **Domain:** 6 (guardrails, in the data layer) · **Effort:** 1 weekend
+
+Added after the original plan was written, because Phases 1–2 are invisible plumbing and there needs to be something clickable early.
+
+**The key realization: the spoiler locker needs no LLM.** The data is already structured — every character carries `book` and `lastBook`. So "who is Xaden bonded to as of book 2?" is a *filter*, not a generation problem. That makes this feature free, instant, offline-capable, and permanently available to every public visitor.
+
+1. Sidebar panel inside each chart page, beside the graph.
+2. **Reading position is the chart's existing book selector** — the ask box and the graph never disagree.
+3. Answers, all by filtering/traversal: who is X bonded to · who is alive as of book *k* · how are X and Y connected (path walk) · list characters by faction or type.
+4. **The spoiler filter must be exactly one shared function.** Phase 6's MCP server reuses that same function. The guardrail gets implemented once, in the data layer — never in a prompt.
+5. Tests: at reading position *k*, no answer may reference any entity whose `book > k`, via any question shape.
+
+Phase 6 later layers optional natural-language handling on top, using local Ollama, for messy questions like *"who's the mean dragon lady again."* The deterministic path stays the default so the public feature never depends on a model being available.
+
+---
+
 ### Phase 2 — Engine extraction
 **Ship:** one engine, three data files, zero duplicated render logic · **Domain:** — (pure engineering) · **Effort:** 1–2 weekends
 
