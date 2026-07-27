@@ -7,13 +7,13 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "npm run typecheck && npm run build:askbox",
+    "build": "npm run typecheck && npm run build:chart",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
     "validate": "tsx scripts/validate.ts",
     "spoiler-audit": "tsx scripts/spoiler-audit.ts",
-    "build:askbox": "vite build --config vite.askbox.config.ts"
+    "build:chart": "vite build --config vite.chart.config.ts"
   },
   "repository": {
     "type": "git",

@@ -29,5 +29,6 @@ coverage/
 pipeline/runs/
 evals/runs/
 
-# Ask box bundle — built by `npm run build:askbox`, and by Vercel on deploy
+# Built bundle — `npm run build:chart`, and by Vercel on deploy
+chart/
 askbox/

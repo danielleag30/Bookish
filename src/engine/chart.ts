@@ -1,0 +1,447 @@
+/**
+ * The chart renderer.
+ *
+ * One implementation for every series, replacing three hand-written ones.
+ * Empyrean and DCC shared twelve identically-named functions by copy-paste
+ * (mk, getRC, getRD, curvePath, renderCtrl, bookBtn, renderRelBar, renderSVG,
+ * renderLegend, applySidebar, renderSidebar, render) and Plated Prisoner was a
+ * separate React implementation of the same idea.
+ *
+ * Rendering is a full rebuild from state on every change — no diffing. At a few
+ * dozen nodes that is fast, and it keeps the drawing code readable: what you see
+ * is a direct function of the state object.
+ */
+import type { Series, Character } from '../schema.ts';
+import { present } from '../spoiler.ts';
+import { nodeShape, edgePath, edgeMidpoint, trimToRim } from './shapes.ts';
+import { buildView, initialState, toggle, type ChartState, type ChartView } from './view.ts';
+
+const SVG_NS = 'http://www.w3.org/2000/svg';
+
+function svg<K extends keyof SVGElementTagNameMap>(
+  tag: K, attrs: Record<string, string | number> = {},
+): SVGElementTagNameMap[K] {
+  const n = document.createElementNS(SVG_NS, tag);
+  for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, String(v));
+  return n;
+}
+
+function el<K extends keyof HTMLElementTagNameMap>(
+  tag: K, cls?: string, text?: string,
+): HTMLElementTagNameMap[K] {
+  const n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (text !== undefined) n.textContent = text;
+  return n;
+}
+
+export interface ChartHandle {
+  /** Current reading position — the ask box binds to this. */
+  getBook: () => number;
+  setBook: (book: number) => void;
+  destroy: () => void;
+}
+
+export interface MountOptions {
+  container: HTMLElement;
+  series: Series;
+  /** Called whenever the reading position changes. */
+  onBookChange?: (book: number) => void;
+}
+
+export function mountChart(opts: MountOptions): ChartHandle {
+  const { container, series } = opts;
+  let state: ChartState = initialState(series);
+
+  container.classList.add('bkc');
+  container.replaceChildren();
+
+  // ── Chrome ───────────────────────────────────────────────────────────────
+  const controls = el('div', 'bkc-controls');
+  const bookRow = el('div', 'bkc-books');
+  const layerRow = el('div', 'bkc-layers');
+  const relRow = el('div', 'bkc-rels');
+  controls.append(bookRow, layerRow, relRow);
+
+  const stage = el('div', 'bkc-stage');
+  const svgEl = svg('svg', { class: 'bkc-svg' });
+  stage.appendChild(svgEl);
+
+  const sidebar = el('aside', 'bkc-sidebar');
+  const legend = el('div', 'bkc-legend');
+
+  container.append(controls, stage, sidebar, legend);
+
+  const relColor = (type: string) =>
+    series.relationshipTypes.find((t) => t.id === type)?.color ?? '#7a7a8a';
+  const relDash = (type: string) =>
+    series.relationshipTypes.find((t) => t.id === type)?.dash ?? null;
+  const affilOf = (c: Character) => series.affiliations[c.affil];
+  const shapeOf = (c: Character) =>
+    (c.type ? series.characterTypes?.[c.type]?.shape : undefined) ?? 'circle';
+
+  // ── Render ───────────────────────────────────────────────────────────────
+  function renderBooks() {
+    bookRow.replaceChildren();
+    for (const b of series.books) {
+      const btn = el('button', 'bkc-book', `Book ${b.id} · ${b.short}`);
+      if (b.id === state.book) btn.classList.add('on');
+      if (b.future) btn.classList.add('future');
+      btn.title = [b.era, b.dominant, b.year].filter(Boolean).join(' · ');
+      btn.onclick = () => setBook(b.id);
+      bookRow.appendChild(btn);
+    }
+  }
+
+  function chip(label: string, on: boolean, onClick: () => void, color?: string) {
+    const b = el('button', 'bkc-chip', label);
+    if (on) b.classList.add('on');
+    if (color) b.style.borderColor = color;
+    b.onclick = onClick;
+    return b;
+  }
+
+  function renderLayers() {
+    layerRow.replaceChildren();
+    const types = Object.entries(series.characterTypes ?? {});
+    for (const [id, t] of types) {
+      layerRow.appendChild(chip(t.label, state.filters.charTypes.has(id), () => {
+        state.filters.charTypes = toggle(state.filters.charTypes, id);
+        render();
+      }));
+    }
+    for (const [id, a] of Object.entries(series.affiliations)) {
+      layerRow.appendChild(chip(
+        `${a.emoji ?? ''} ${a.label}`.trim(),
+        state.filters.affils.has(id),
+        () => { state.filters.affils = toggle(state.filters.affils, id); render(); },
+        a.border ?? a.color,
+      ));
+    }
+    layerRow.appendChild(chip('Regions', state.showRegions, () => {
+      state.showRegions = !state.showRegions; render();
+    }));
+    layerRow.appendChild(chip('Names', state.showLabels, () => {
+      state.showLabels = !state.showLabels; render();
+    }));
+    layerRow.appendChild(chip('Edge labels', state.showEdgeLabels, () => {
+      state.showEdgeLabels = !state.showEdgeLabels; render();
+    }));
+  }
+
+  function renderRelBar() {
+    relRow.replaceChildren();
+    const all = series.relationshipTypes;
+    relRow.appendChild(chip('All', state.filters.relTypes.size === all.length, () => {
+      state.filters.relTypes = new Set(all.map((t) => t.id)); render();
+    }));
+    relRow.appendChild(chip('None', state.filters.relTypes.size === 0, () => {
+      state.filters.relTypes = new Set(); render();
+    }));
+    for (const t of all) {
+      relRow.appendChild(chip(t.label, state.filters.relTypes.has(t.id), () => {
+        state.filters.relTypes = toggle(state.filters.relTypes, t.id); render();
+      }, t.color));
+    }
+  }
+
+  function renderSvg(view: ChartView) {
+    svgEl.replaceChildren();
+    const { w, h } = view.extent;
+    svgEl.setAttribute('viewBox', `0 0 ${w} ${h}`);
+    svgEl.setAttribute('preserveAspectRatio', 'xMidYMin meet');
+
+    const root = svg('g', {
+      transform: `translate(${state.pan.x} ${state.pan.y}) scale(${state.scale})`,
+    });
+    svgEl.appendChild(root);
+
+    // Regions first, so everything draws over them.
+    if (state.showRegions) {
+      for (const r of view.regions) {
+        const g = svg('g', { class: 'bkc-region' });
+        g.appendChild(svg('rect', {
+          x: r.x ?? 0, y: r.y, width: r.w ?? w, height: r.h, rx: 10,
+          fill: r.color ?? 'rgba(255,255,255,.03)',
+          stroke: r.border ?? 'rgba(255,255,255,.08)',
+        }));
+        const t = svg('text', {
+          x: (r.x ?? 0) + 12, y: r.y + 20, class: 'bkc-region-label',
+        });
+        // Fit the label to the box. Plated Prisoner has five narrow kingdoms in
+        // a row, and appending `power` to each made their labels bleed across
+        // one another. Roughly 7px per character at this size and spacing.
+        const boxW = (r.w ?? w) - 24;
+        const fits = Math.max(6, Math.floor(boxW / 7));
+        const full = r.power ? `${r.label} — ${r.power}` : r.label;
+        t.textContent = full.length <= fits
+          ? full
+          : r.label.length <= fits
+            ? r.label
+            : `${r.label.slice(0, Math.max(1, fits - 1))}…`;
+        if (full.length > fits) {
+          const tip = svg('title');
+          tip.textContent = full;
+          t.appendChild(tip);
+        }
+        g.appendChild(t);
+        root.appendChild(g);
+      }
+    }
+
+    // Edges.
+    const edgeLayer = svg('g', { class: 'bkc-edges' });
+    for (const e of view.edges) {
+      const [x1, y1, x2, y2] = trimToRim(
+        e.from.x, e.from.y, e.to.x, e.to.y, e.from.r + 3, e.to.r + 3,
+      );
+      const path = svg('path', {
+        d: edgePath(x1, y1, x2, y2),
+        fill: 'none',
+        stroke: relColor(e.relationship.type),
+        'stroke-width': 2,
+        opacity: 0.75,
+      });
+      const dash = relDash(e.relationship.type);
+      if (dash) path.setAttribute('stroke-dasharray', dash);
+      edgeLayer.appendChild(path);
+
+      if (state.showEdgeLabels && e.relationship.label) {
+        const m = edgeMidpoint(x1, y1, x2, y2);
+        const t = svg('text', { x: m.x, y: m.y, class: 'bkc-edge-label' });
+        t.textContent = e.relationship.label;
+        edgeLayer.appendChild(t);
+      }
+    }
+    root.appendChild(edgeLayer);
+
+    // Nodes.
+    const nodeLayer = svg('g', { class: 'bkc-nodes' });
+    for (const n of view.nodes) {
+      const c = n.character;
+      const shown = present(c, view.gated);
+      const aff = affilOf(c);
+      const g = svg('g', { class: 'bkc-node', 'data-id': c.id });
+
+      // "New this book" ring.
+      if (n.isNew) {
+        g.appendChild(svg('circle', {
+          cx: n.x, cy: n.y, r: n.r + 7, fill: 'none',
+          stroke: aff?.border ?? aff?.color ?? '#fff',
+          'stroke-width': 2, 'stroke-dasharray': '4 3', opacity: 0.85,
+        }));
+      }
+
+      const spec = nodeShape(shapeOf(c), n.x, n.y, n.r);
+      const body = svg(spec.tag, {
+        ...spec.attrs,
+        fill: aff?.color ?? '#5a5a7a',
+        stroke: aff?.border ?? 'rgba(255,255,255,.5)',
+        'stroke-width': c.size === 'main' ? 3 : 2,
+      });
+      if (shown.status !== 'alive') body.setAttribute('opacity', '0.55');
+      g.appendChild(body);
+
+      // Initials inside the node.
+      const initials = c.label.split(/[\s·/]+/).filter(Boolean).slice(0, 2)
+        .map((p) => p[0]).join('');
+      const ini = svg('text', {
+        x: n.x, y: n.y, class: 'bkc-initials',
+        'font-size': c.size === 'main' ? 15 : 11,
+      });
+      ini.textContent = initials;
+      g.appendChild(ini);
+
+      if (state.showLabels) {
+        const t = svg('text', { x: n.x, y: n.y + n.r + 15, class: 'bkc-node-label' });
+        // The presented label, so an alias is shown before its reveal.
+        t.textContent = shown.label;
+        g.appendChild(t);
+
+        if (shown.status !== 'alive') {
+          const s = svg('text', { x: n.x, y: n.y + n.r + 28, class: 'bkc-node-status' });
+          s.textContent = shown.statusIsBelief
+            ? `(${shown.status}?)`
+            : `(${c.statusDetail ?? shown.status})`;
+          g.appendChild(s);
+        }
+      }
+
+      if (c.magic) {
+        const m = svg('text', { x: n.x + n.r - 2, y: n.y - n.r + 6, class: 'bkc-glyph' });
+        m.textContent = '✦';
+        m.appendChild(svg('title')).textContent = c.magic;
+        g.appendChild(m);
+      }
+
+      g.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        state.selected = c.id;
+        render();
+      });
+      nodeLayer.appendChild(g);
+    }
+    root.appendChild(nodeLayer);
+  }
+
+  function renderSidebar(view: ChartView) {
+    sidebar.replaceChildren();
+    const book = series.books.find((b) => b.id === state.book);
+
+    if (state.selected) {
+      const node = view.byId.get(state.selected);
+      if (node) {
+        const shown = present(node.character, view.gated);
+        sidebar.appendChild(el('h3', 'bkc-sb-title', shown.label));
+        if (shown.role) sidebar.appendChild(el('p', 'bkc-sb-role', shown.role));
+
+        const meta = el('p', 'bkc-sb-meta');
+        meta.textContent = [
+          `Status: ${shown.status}${shown.statusIsBelief ? ' — as far as you know' : ''}`,
+          series.affiliations[node.character.affil]?.label,
+          node.character.magic,
+        ].filter(Boolean).join(' · ');
+        sidebar.appendChild(meta);
+
+        const conns = view.edges.filter(
+          (e) => e.relationship.from === state.selected || e.relationship.to === state.selected,
+        );
+        sidebar.appendChild(el('h4', undefined, `Connections (${conns.length})`));
+        const ul = el('ul', 'bkc-sb-list');
+        for (const e of conns) {
+          const otherId = e.relationship.from === state.selected
+            ? e.relationship.to : e.relationship.from;
+          const other = view.byId.get(otherId);
+          if (!other) continue;
+          const li = el('li');
+          li.textContent = `${e.relationship.type} — ${present(other.character, view.gated).label}`
+            + (e.relationship.label ? ` (${e.relationship.label})` : '');
+          ul.appendChild(li);
+        }
+        sidebar.appendChild(ul);
+
+        if (shown.bio) sidebar.appendChild(el('p', 'bkc-sb-bio', shown.bio));
+        else if (shown.bioWithheld) {
+          sidebar.appendChild(el('p', 'bkc-sb-hidden',
+            'Biography hidden — it describes later books.'));
+        }
+
+        const back = el('button', 'bkc-chip', '← Book overview');
+        back.onclick = () => { state.selected = null; render(); };
+        sidebar.appendChild(back);
+        return;
+      }
+    }
+
+    sidebar.appendChild(el('h3', 'bkc-sb-title', book ? `Book ${book.id} · ${book.short}` : ''));
+    if (book?.era) sidebar.appendChild(el('p', 'bkc-sb-role', book.era));
+    if (book?.dominant) {
+      sidebar.appendChild(el('p', 'bkc-sb-meta', `Ascendant: ${book.dominant}`));
+    }
+    sidebar.appendChild(el('p', 'bkc-sb-meta',
+      `${view.nodes.length} characters · ${view.edges.length} relationships shown`));
+
+    const evs = view.gated.events.filter((e) => e.book === state.book);
+    if (evs.length) {
+      sidebar.appendChild(el('h4', undefined, 'Key events'));
+      const ul = el('ul', 'bkc-sb-list');
+      for (const e of evs) ul.appendChild(el('li', undefined, e.text));
+      sidebar.appendChild(ul);
+    }
+  }
+
+  function renderLegend() {
+    legend.replaceChildren();
+    legend.appendChild(el('h4', undefined, 'Relationships'));
+    const wrap = el('div', 'bkc-legend-items');
+    for (const t of series.relationshipTypes) {
+      if (!state.filters.relTypes.has(t.id)) continue;
+      const row = el('span', 'bkc-legend-item');
+      const sw = el('i');
+      sw.style.background = t.color;
+      if (t.dash) sw.style.opacity = '0.7';
+      row.append(sw, el('span', undefined, t.label));
+      wrap.appendChild(row);
+    }
+    legend.appendChild(wrap);
+  }
+
+  function render() {
+    const view = buildView(series, state);
+    renderBooks();
+    renderLayers();
+    renderRelBar();
+    renderSvg(view);
+    renderSidebar(view);
+    renderLegend();
+  }
+
+  // ── Interactions ─────────────────────────────────────────────────────────
+  let dragging: { id: string | null; sx: number; sy: number; ox: number; oy: number } | null = null;
+  let moved = false;
+
+  svgEl.addEventListener('mousedown', (e) => {
+    const target = (e.target as Element).closest('.bkc-node');
+    const id = target?.getAttribute('data-id') ?? null;
+    moved = false;
+    if (id) {
+      const view = buildView(series, state);
+      const n = view.byId.get(id);
+      dragging = { id, sx: e.clientX, sy: e.clientY, ox: n?.x ?? 0, oy: n?.y ?? 0 };
+    } else {
+      dragging = { id: null, sx: e.clientX, sy: e.clientY, ox: state.pan.x, oy: state.pan.y };
+    }
+  });
+
+  window.addEventListener('mousemove', (e) => {
+    if (!dragging) return;
+    const dx = e.clientX - dragging.sx;
+    const dy = e.clientY - dragging.sy;
+    if (Math.abs(dx) + Math.abs(dy) > 3) moved = true;
+    if (dragging.id) {
+      state.moved[dragging.id] = {
+        x: dragging.ox + dx / state.scale,
+        y: dragging.oy + dy / state.scale,
+      };
+    } else {
+      state.pan = { x: dragging.ox + dx, y: dragging.oy + dy };
+    }
+    render();
+  });
+
+  window.addEventListener('mouseup', () => { dragging = null; });
+
+  svgEl.addEventListener('click', (e) => {
+    // Clicking empty canvas clears the selection, but not at the end of a drag.
+    if (moved) return;
+    if (!(e.target as Element).closest('.bkc-node')) {
+      state.selected = null;
+      render();
+    }
+  });
+
+  stage.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    state.scale = Math.min(3, Math.max(0.18, state.scale - e.deltaY * 0.0012));
+    render();
+  }, { passive: false });
+
+  function setBook(book: number) {
+    state.book = book;
+    // A selected character may not exist at the new position.
+    if (state.selected) {
+      const view = buildView(series, state);
+      if (!view.byId.has(state.selected)) state.selected = null;
+    }
+    render();
+    opts.onBookChange?.(book);
+  }
+
+  render();
+
+  return {
+    getBook: () => state.book,
+    setBook,
+    destroy: () => container.replaceChildren(),
+  };
+}
