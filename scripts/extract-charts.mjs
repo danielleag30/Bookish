@@ -23,6 +23,11 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 
+// Canonical relationship vocabulary — the single source of truth for type ids,
+// direction and symmetry. Definitions and rationale live in
+// src/relationships.ts and RELATIONSHIPS.md. Node imports the .ts directly.
+import { TYPE_ALIASES, RELATIONSHIP_BY_ID } from '../src/relationships.ts';
+
 const root = resolve(import.meta.dirname, '..');
 const dataDir = join(root, 'data');
 
@@ -106,14 +111,9 @@ async function loadConsts(file, names) {
 }
 
 // ── Relationship direction semantics ───────────────────────────────────────
-// Derived by reading the labels in the real data. `from` is the actor:
-//   killed    lilith -> fen      "executed him"
-//   mentor    devera -> violet   "trustworthy prof"
-//   betrayer  markham -> violet  "groomed her"
-//   family    violet -> lilith   "mother"   (to IS from's <label>)
-// Storage stays directed; queries search both directions. `symmetric` is used
-// only to flag redundant reversed duplicates and to decide arrowheads later.
-const SYMMETRIC_TYPES = new Set(['mated', 'romantic', 'squad', 'party', 'ally', 'complicated']);
+// Storage stays directed; queries search both directions. Symmetry comes from
+// the canonical registry rather than a second list here, so the two cannot
+// drift apart.
 
 // ── Event kind derivation ──────────────────────────────────────────────────
 const KIND_RULES = [
@@ -296,6 +296,11 @@ const CORRECTIONS = {
       { match: 'wyvern_rep>berwyn:ally', set: { book: 2 },
         why: 'Follows Berwyn moving to book 2' },
     ],
+    retypeRelationships: [
+      { match: 'fen>brennan:killed', set: { type: 'enemy', label: 'struck him down (survived)' },
+        why: 'Brennan survived — his bio says "presumed DEAD before the series. Actually alive". ' +
+             '`killed` means the victim died; a survived attempt is `enemy`' },
+    ],
     dropRelationships: [
       { match: 'quinn>theophanie:killed',
         why: 'Quinn is killed by an unnamed venin in a tower at Draithus, and Violet — not Quinn — ' +
@@ -345,6 +350,7 @@ function normaliseRelationships(edges, seriesId, notes) {
   const corr = CORRECTIONS[seriesId] ?? {};
   const setBy = new Map((corr.relationships ?? []).map((r) => [r.match, r]));
   const dropBy = new Map((corr.dropRelationships ?? []).map((r) => [r.match, r]));
+  const retypeBy = new Map((corr.retypeRelationships ?? []).map((r) => [r.match, r]));
 
   const out = [];
   for (const e of edges) {
@@ -370,6 +376,21 @@ function normaliseRelationships(edges, seriesId, notes) {
         rel[k] = v;
       }
     }
+    if (retypeBy.has(key)) {
+      const { set, why } = retypeBy.get(key);
+      notes.push(`retyped ${key} -> ${set.type} (${why})`);
+      Object.assign(rel, set);
+    }
+
+    // Map any legacy type string onto the canonical vocabulary. DCC's `party`
+    // and Empyrean's `squad` are the same concept; Plated Prisoner's phrase-ids
+    // collapse here too.
+    const alias = TYPE_ALIASES[rel.type.toLowerCase()];
+    if (alias && alias.type !== rel.type) {
+      notes.push(`aliased type "${rel.type}" -> "${alias.type}"`);
+      rel.type = alias.type;
+      if (alias.label && !rel.label) rel.label = alias.label;
+    }
     out.push(rel);
   }
   return out;
@@ -378,6 +399,10 @@ function normaliseRelationships(edges, seriesId, notes) {
 function normaliseRelTypes(relTypes) {
   return relTypes
     .filter((r) => r.id !== 'all') // UI filter pseudo-type, not a relationship
+    .map((r) => {
+      const alias = TYPE_ALIASES[r.id.toLowerCase()];
+      return alias && alias.type !== r.id ? { ...r, id: alias.type } : r;
+    })
     .map((r) => ({
       id: r.id,
       // The legend labelled `killed` as "Killed by", but the data stores
@@ -385,7 +410,7 @@ function normaliseRelTypes(relTypes) {
       label: r.id === 'killed' ? 'Killed' : r.label,
       color: r.color,
       dash: r.dash ?? null,
-      symmetric: SYMMETRIC_TYPES.has(r.id),
+      symmetric: RELATIONSHIP_BY_ID.get(r.id)?.symmetric ?? false,
     }));
 }
 

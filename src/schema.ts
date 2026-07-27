@@ -16,6 +16,13 @@
  * `label` carried no description.
  */
 import { z } from 'zod';
+import {
+  RELATIONSHIP_BY_ID,
+  RELATIONSHIP_IDS,
+  isKinshipLabel,
+  VOCAB_EXCEPTIONS,
+  VOCAB_PENDING_REVIEW,
+} from './relationships.ts';
 
 // ── Primitives ─────────────────────────────────────────────────────────────
 
@@ -288,6 +295,80 @@ export function checkIntegrity(series: Series): Issue[] {
       // (e.g. two people who each betrayed the other), so no issue is raised.
     }
     relSeen.set(fwd, r);
+  }
+
+  // ── Controlled vocabulary ────────────────────────────────────────────────
+  // Definitions live in src/relationships.ts. These checks stop the vocabulary
+  // drifting as new books are added, which is how the three charts ended up
+  // with 38 different type strings for ~14 concepts.
+  for (const t of series.relationshipTypes) {
+    if (!RELATIONSHIP_IDS.has(t.id)) {
+      err(
+        'non-canonical-relationship-type',
+        `relationshipType "${t.id}"`,
+        `not in the canonical vocabulary — add it to RELATIONSHIP_TYPES or map it in TYPE_ALIASES`,
+      );
+      continue;
+    }
+    const canon = RELATIONSHIP_BY_ID.get(t.id)!;
+    if (canon.symmetric !== t.symmetric) {
+      err(
+        'symmetry-mismatch',
+        `relationshipType "${t.id}"`,
+        `series says symmetric=${t.symmetric}, vocabulary says ${canon.symmetric}`,
+      );
+    }
+  }
+
+  for (const r of series.relationships) {
+    const key = `${series.id}:${r.from}>${r.to}:${r.type}`;
+    if (VOCAB_EXCEPTIONS[key] || VOCAB_PENDING_REVIEW[key]) continue;
+
+    const canon = RELATIONSHIP_BY_ID.get(r.type);
+    if (!canon) continue; // already reported above
+    const at = `relationship ${r.from} -> ${r.to} (${r.type})`;
+
+    // `family` means kinship. It was collecting "raised together" and
+    // "died saving him", which are a friendship and an event respectively.
+    if (r.type === 'family' && !isKinshipLabel(r.label)) {
+      warn(
+        'family-label-not-kinship',
+        at,
+        `label "${r.label}" is not a kinship term — see KINSHIP_TERMS, or use friend/ally`,
+      );
+    }
+
+    // `killed` means the victim died. "Struck down" is `enemy`.
+    if (r.type === 'killed') {
+      const victim = charById.get(r.to);
+      if (victim && victim.status === 'alive') {
+        warn(
+          'killed-victim-alive',
+          at,
+          `victim "${victim.id}" has status "alive" — if they survived the attempt ` +
+            `this is \`enemy\`, not \`killed\``,
+        );
+      }
+    }
+
+    // Endpoint constraints, e.g. `bonded` joins a person to a creature.
+    const ep = canon.endpoints;
+    if (ep) {
+      const from = charById.get(r.from);
+      const to = charById.get(r.to);
+      if (ep.fromTypes && from?.type && !ep.fromTypes.includes(from.type)) {
+        warn('endpoint-type-mismatch', at,
+          `from "${from.id}" is type "${from.type}"; ${r.type} expects ${ep.fromTypes.join('/')}`);
+      }
+      if (ep.toTypes && to?.type && !ep.toTypes.includes(to.type)) {
+        warn('endpoint-type-mismatch', at,
+          `to "${to.id}" is type "${to.type}"; ${r.type} expects ${ep.toTypes.join('/')}`);
+      }
+      if (ep.sameType && from?.type && to?.type && from.type !== to.type) {
+        warn('endpoint-type-mismatch', at,
+          `${r.type} requires matching types, got "${from.type}" and "${to.type}"`);
+      }
+    }
   }
 
   // Events
