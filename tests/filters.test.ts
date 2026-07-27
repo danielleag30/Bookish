@@ -116,16 +116,16 @@ describe('every active dimension resolves against the real data', () => {
     const s = load(file);
 
     it(`${file}: tier-1 character dimensions have values`, () => {
-      expect(new Set(s.characters.map((c) => c.band)).size).toBeGreaterThan(1);
+      expect(new Set(s.characters.map((c) => c.region)).size).toBeGreaterThan(1);
       expect(new Set(s.characters.map((c) => c.affil)).size).toBeGreaterThan(1);
       expect(new Set(s.characters.map((c) => c.status)).size).toBeGreaterThan(1);
       expect(new Set(s.characters.map((c) => c.size)).size).toBeGreaterThan(1);
     });
 
     it(`${file}: every character's band and affil are declared by the series`, () => {
-      const bands = new Set(s.bands.map((b) => b.id));
+      const regionIds = new Set(s.regions.map((b: {id:string}) => b.id));
       for (const c of s.characters) {
-        expect(bands.has(c.band), `${c.id} band`).toBe(true);
+        expect(regionIds.has(c.region), `${c.id} band`).toBe(true);
         expect(s.affiliations[c.affil], `${c.id} affil`).toBeTruthy();
       }
     });

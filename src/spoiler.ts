@@ -18,6 +18,10 @@
  *  role            replaced by `perceived.role` — also spoiler-bearing, since
  *                  Brennan's true role names the signet revealed after the
  *                  reveal itself
+ *  attributes      affil, region, role, status, size and magic are resolved from
+ *                  `changes`, so nothing set by a later book is ever reported.
+ *                  This is what fixes the Jack Barlowe leak: he read as a venin
+ *                  prisoner from book 1, two reveals early.
  *  bio             withheld entirely below the final book — the bios are
  *                  whole-series prose and 25 of them name a character who has
  *                  not appeared yet. See scripts/spoiler-audit.ts.
@@ -42,7 +46,7 @@ export interface GatedCharacter {
   /** True when `status` reflects a belief that later turns out to be wrong. */
   statusIsBelief: boolean;
   affil: string;
-  band: string;
+  region: string;
   type?: string;
   firstBook: number;
   /** Present only at the final book; withheld earlier. See module comment. */
@@ -60,12 +64,22 @@ export function gate(series: Series, position: number): GatedSeries {
   const minBook = Math.min(...books);
   const pos = Math.min(Math.max(position, minBook), finalBook);
 
-  const characters = series.characters.filter((c) => c.book <= pos);
+  // Resolve as well as filter. Every consumer reads the gated arrays, so the
+  // temporal fold happens exactly once and cannot be forgotten downstream.
+  const characters = series.characters
+    .filter((c) => c.book <= pos)
+    .map((c) => resolveCharacter(c, pos));
   const visible = new Set(characters.map((c) => c.id));
 
-  const relationships = series.relationships.filter(
-    (r) => r.book <= pos && visible.has(r.from) && visible.has(r.to),
-  );
+  const relationships = series.relationships
+    .filter(
+      (r) =>
+        r.book <= pos &&
+        (r.untilBook === undefined || r.untilBook >= pos) &&
+        visible.has(r.from) &&
+        visible.has(r.to),
+    )
+    .map((r) => resolveRelationship(r, pos));
 
   const events = series.events.filter((e) => e.book <= pos);
 
@@ -80,13 +94,48 @@ export function gate(series: Series, position: number): GatedSeries {
 }
 
 /**
+ * Fold a character's `changes` up to `position` onto their base record.
+ *
+ * State at book k = base record, plus every change entry with `book <= k`,
+ * applied in book order. Entries after the position are never read, so a later
+ * faction, role or status cannot leak.
+ */
+export function resolveCharacter(c: Character, position: number): Character {
+  if (!c.changes?.length) return c;
+  const applicable = c.changes
+    .filter((ch) => ch.book <= position)
+    .sort((a, b) => a.book - b.book);
+  if (applicable.length === 0) return c;
+  let out: Character = { ...c };
+  for (const ch of applicable) out = { ...out, ...ch.set };
+  return out;
+}
+
+/** The same fold for a relationship's type and label. */
+export function resolveRelationship(r: Relationship, position: number): Relationship {
+  if (!r.changes?.length) return r;
+  const applicable = r.changes
+    .filter((ch) => ch.book <= position)
+    .sort((a, b) => a.book - b.book);
+  if (applicable.length === 0) return r;
+  let out: Relationship = { ...r };
+  for (const ch of applicable) out = { ...out, ...ch.set };
+  return out;
+}
+
+/**
  * Present a character as the reader understands them at this position.
  *
  * While `position <= perceived.untilBook`, the perceived status or identity is
  * shown instead of the truth. Brennan reads as dead through book 1 because that
  * is what the reader believes until the final paragraph of Fourth Wing.
  */
-export function present(c: Character, g: GatedSeries): GatedCharacter {
+export function present(input: Character, g: GatedSeries): GatedCharacter {
+  // Resolve defensively. gate() already resolves everything it returns, but a
+  // caller holding a raw record from series.characters would otherwise get the
+  // end-state answer — which is exactly the leak this module exists to prevent.
+  // Resolving is idempotent at a fixed position, so doing it twice is harmless.
+  const c = resolveCharacter(input, g.position);
   const believes = c.perceived !== undefined && g.position <= c.perceived.untilBook;
 
   const status = believes && c.perceived?.status !== undefined ? c.perceived.status : c.status;
@@ -113,7 +162,7 @@ export function present(c: Character, g: GatedSeries): GatedCharacter {
     status,
     statusIsBelief: believes && c.perceived?.status !== undefined,
     affil: c.affil,
-    band: c.band,
+    region: c.region,
     ...(c.type !== undefined ? { type: c.type } : {}),
     firstBook: c.book,
     ...(bio !== undefined ? { bio } : {}),

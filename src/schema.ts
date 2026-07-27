@@ -57,14 +57,38 @@ export const BookSchema = z.object({
   year: z.number().int().optional().describe('Publication year'),
   era: z.string().optional().describe('One-line description of where the story stands'),
   floor: z.string().optional().describe('Dungeon floors covered (Dungeon Crawler Carl only)'),
+  dominant: z
+    .string()
+    .optional()
+    .describe(
+      'Who is ascendant in this book, e.g. "Third Kingdom (Kaila)". Adopted from ' +
+        'the Plated Prisoner chart, which tracked it per book.',
+    ),
   future: z.boolean().optional().describe('True for announced-but-unreleased books'),
 });
 
-export const BandSchema = z.object({
+/**
+ * A place on the chart.
+ *
+ * Formerly a full-width horizontal "band". Plated Prisoner modelled its
+ * kingdoms as 2D boxes instead, which is strictly more expressive — Annwyn
+ * spans the bottom of its chart while the Red Raids occupy a small box in the
+ * middle — so that model won. `x` and `w` are optional and default to a
+ * full-width band, so the Empyrean and DCC data stays valid unchanged.
+ */
+export const RegionSchema = z.object({
   id: z.string().min(1),
-  label: z.string().min(1).describe('Name of this region of the chart'),
-  y: z.number().describe('Vertical position of the band in chart units'),
-  h: z.number().positive().describe('Band height in chart units'),
+  label: z.string().min(1).describe('Name shown on the region'),
+  x: z.number().optional().describe('Left edge in chart units; omitted means full width'),
+  y: z.number().describe('Top edge in chart units'),
+  w: z.number().positive().optional().describe('Width in chart units; omitted means full width'),
+  h: z.number().positive().describe('Height in chart units'),
+  power: z
+    .string()
+    .optional()
+    .describe('What defines this place, e.g. "Rot magic (Slade)". From Plated Prisoner.'),
+  color: z.string().optional(),
+  border: z.string().optional(),
 });
 
 export const AffiliationSchema = z.object({
@@ -94,13 +118,46 @@ export const CharacterTypeSchema = z.object({
   shape: z.string().min(1).describe('Node shape used to render this type'),
 });
 
+/**
+ * A dated change to a record.
+ *
+ * The base record describes the subject at its first appearance; every later
+ * alteration is a change entry. State at book k = base, plus every entry with
+ * `book <= k`, applied in order.
+ *
+ * This exists because single-valued fields could not tell the story. Jack
+ * Barlowe is a first-year rider who is "killed" in book 1, returns as venin in
+ * book 2, and is held prisoner in book 3 — three states in one row. Before
+ * this, the chart reported him as a venin prisoner from book 1, leaking two
+ * later reveals.
+ *
+ * `why` is required, on the same principle as the canon corrections: a change
+ * to the timeline should explain itself.
+ */
+export function changeSchema<T extends z.ZodRawShape>(settable: T) {
+  return z.object({
+    book: z.number().int().positive().describe('The book in which this change takes effect'),
+    set: z.object(settable).describe('Fields to overwrite from this book onward'),
+    why: z.string().min(8).describe('What happened in the story to cause this'),
+  });
+}
+
 export const CharacterSchema = z.object({
   id: z.string().min(1).describe('Stable lowercase slug, e.g. "violet" — never a display name'),
   label: z.string().min(1).describe("The character's name as readers know it, e.g. \"Violet Sorrengail\""),
+  aliases: z
+    .array(z.string().min(1))
+    .optional()
+    .describe(
+      'Other names the same character is known by. Needed for both search and ' +
+        'event linking: an event reading "revealed to be King Slade Ravinger" ' +
+        'matched Elore Ravinger, because the surname was unique among labels ' +
+        'while belonging to someone else entirely.',
+    ),
   role: z.string().describe('Short role or title, e.g. "Goddess of War"'),
   type: z.string().optional().describe('Character type id, controls node shape'),
   affil: z.string().min(1).describe('Affiliation id — must exist in the series affiliations'),
-  band: z.string().min(1).describe('Band id — must exist in the series bands'),
+  region: z.string().min(1).describe('Region id — must exist in the series regions'),
   book: z.number().int().positive().describe('First book this character appears in'),
   lastBook: z.number().int().positive().describe('Last book this character appears in'),
   status: StatusSchema.describe('Normalised status as of the end of the series'),
@@ -110,7 +167,18 @@ export const CharacterSchema = z.object({
     .describe('Original, more specific wording where it differs, e.g. "sacrificed", "executed"'),
   size: z.string().describe('Relative node size, e.g. "main" or "side"'),
   x: z.number().describe('Horizontal position in chart units'),
-  yOffset: z.number().optional().describe('Manual vertical nudge within the band'),
+  y: z
+    .number()
+    .optional()
+    .describe(
+      'Vertical position in chart units. Optional — without it the character is ' +
+        'centred in their region. Explicit y replaces the 50-line Y_OFFSETS table ' +
+        'of hand-tuned pixel nudges the Empyrean chart needed.',
+    ),
+  magic: z
+    .string()
+    .optional()
+    .describe('Their power, e.g. "Lightning Wielder", "Rot magic". From Plated Prisoner.'),
 
   /**
    * What the reader believed before the truth came out.
@@ -167,6 +235,22 @@ export const CharacterSchema = z.object({
     .record(z.string(), z.string())
     .optional()
     .describe('Series-specific extras, e.g. dragon den, signet, Floor 9 allegiance'),
+
+  changes: z
+    .array(
+      changeSchema({
+        affil: z.string().min(1).optional(),
+        region: z.string().min(1).optional(),
+        role: z.string().min(1).optional(),
+        status: StatusSchema.optional(),
+        statusDetail: z.string().optional(),
+        label: z.string().min(1).optional(),
+        magic: z.string().optional(),
+        size: z.string().optional(),
+      }),
+    )
+    .optional()
+    .describe('What actually changed about this character, and in which book'),
 });
 
 export const RelationshipSchema = z.object({
@@ -174,7 +258,26 @@ export const RelationshipSchema = z.object({
   to: z.string().min(1).describe('Character id of the target'),
   type: z.string().min(1).describe('Relationship type id'),
   book: z.number().int().positive().describe('Book in which this relationship is established'),
+  untilBook: z
+    .number()
+    .int()
+    .positive()
+    .optional()
+    .describe('Last book this relationship applies. Omitted means it never ends.'),
   label: z.string().describe('Human-readable gloss, e.g. "mother", "executed him"'),
+  changes: z
+    .array(
+      changeSchema({
+        type: z.string().min(1).optional(),
+        label: z.string().optional(),
+      }),
+    )
+    .optional()
+    .describe(
+      'Type or label changes over time. This retires `complicated` as an escape ' +
+        'hatch: "enemy -> ally" was one unfilterable edge labelled with an arrow, ' +
+        'and becomes `enemy` at book 1 then `ally` at book 2 — two real facts.',
+    ),
 });
 
 export const EventSchema = z.object({
@@ -191,7 +294,7 @@ export const SeriesSchema = z.object({
   title: z.string().min(1),
   author: z.string().min(1),
   books: z.array(BookSchema).min(1),
-  bands: z.array(BandSchema).min(1),
+  regions: z.array(RegionSchema).min(1),
   affiliations: z.record(z.string(), AffiliationSchema),
   relationshipTypes: z.array(RelationshipTypeSchema).min(1),
   characters: z.array(CharacterSchema).min(1),
@@ -210,7 +313,7 @@ export const SeriesSchema = z.object({
 export type Status = z.infer<typeof StatusSchema>;
 export type EventKind = z.infer<typeof EventKindSchema>;
 export type Book = z.infer<typeof BookSchema>;
-export type Band = z.infer<typeof BandSchema>;
+export type Region = z.infer<typeof RegionSchema>;
 export type Affiliation = z.infer<typeof AffiliationSchema>;
 export type RelationshipType = z.infer<typeof RelationshipTypeSchema>;
 export type Character = z.infer<typeof CharacterSchema>;
@@ -253,7 +356,7 @@ export function checkIntegrity(series: Series): Issue[] {
     charById.set(c.id, c);
   }
 
-  const bandIds = new Set(series.bands.map((b) => b.id));
+  const regionIds = new Set(series.regions.map((r) => r.id));
   const affilIds = new Set(Object.keys(series.affiliations));
   const relTypeById = new Map(series.relationshipTypes.map((r) => [r.id, r]));
   const typeIds = new Set(Object.keys(series.characterTypes ?? {}));
@@ -268,17 +371,17 @@ export function checkIntegrity(series: Series): Issue[] {
     seenBooks.add(b.id);
   }
 
-  // Bands
-  const seenBands = new Set<string>();
-  for (const b of series.bands) {
-    if (seenBands.has(b.id)) err('duplicate-band-id', b.id, `Duplicate band id "${b.id}"`);
-    seenBands.add(b.id);
+  // Regions
+  const seenRegions = new Set<string>();
+  for (const r of series.regions) {
+    if (seenRegions.has(r.id)) err('duplicate-region-id', r.id, `Duplicate region id "${r.id}"`);
+    seenRegions.add(r.id);
   }
 
   // Characters
   for (const c of series.characters) {
     const at = `character "${c.id}"`;
-    if (!bandIds.has(c.band)) err('unknown-band', at, `band "${c.band}" is not defined`);
+    if (!regionIds.has(c.region)) err('unknown-region', at, `region "${c.region}" is not defined`);
     if (!affilIds.has(c.affil)) err('unknown-affiliation', at, `affil "${c.affil}" is not defined`);
     if (c.type !== undefined && typeIds.size > 0 && !typeIds.has(c.type)) {
       err('unknown-character-type', at, `type "${c.type}" is not defined`);
@@ -309,6 +412,33 @@ export function checkIntegrity(series: Series): Issue[] {
       if (c.perceived.status !== undefined && c.perceived.status === c.status) {
         warn('perceived-matches-actual', at,
           `perceived.status "${c.perceived.status}" equals the real status, so it records nothing`);
+      }
+    }
+
+    // Change entries must sit inside the character's own window, actually change
+    // something, and not collide on a book.
+    const seenChangeBooks = new Set<number>();
+    for (const ch of c.changes ?? []) {
+      if (ch.book < c.book || ch.book > c.lastBook) {
+        err('change-out-of-window', at,
+          `change for book ${ch.book} is outside this character's ${c.book}-${c.lastBook}`);
+      }
+      if (ch.book === c.book) {
+        err('change-at-first-book', at,
+          `change for book ${ch.book} is the character's first book — put it in the base record`);
+      }
+      if (seenChangeBooks.has(ch.book)) {
+        err('duplicate-change-book', at, `two changes for book ${ch.book}; merge them`);
+      }
+      seenChangeBooks.add(ch.book);
+      if (Object.keys(ch.set).length === 0) {
+        err('empty-change', at, `change for book ${ch.book} sets nothing`);
+      }
+      if (ch.set.region !== undefined && !regionIds.has(ch.set.region)) {
+        err('unknown-region', at, `change sets region "${ch.set.region}" which is not defined`);
+      }
+      if (ch.set.affil !== undefined && !affilIds.has(ch.set.affil)) {
+        err('unknown-affiliation', at, `change sets affil "${ch.set.affil}" which is not defined`);
       }
     }
 
@@ -351,6 +481,34 @@ export function checkIntegrity(series: Series): Issue[] {
           `book ${r.book} precedes first appearance of ` +
             `${from.book > r.book ? `"${from.id}" (book ${from.book})` : `"${to.id}" (book ${to.book})`}`,
         );
+      }
+    }
+
+    // untilBook and change entries must sit inside the edge's own lifetime.
+    if (r.untilBook !== undefined) {
+      if (r.untilBook < r.book) {
+        err('until-before-book', at, `untilBook ${r.untilBook} precedes book ${r.book}`);
+      }
+      if (!bookIds.has(r.untilBook)) {
+        err('book-out-of-range', at, `untilBook ${r.untilBook} is not a series book`);
+      }
+    }
+    const seenRelChangeBooks = new Set<number>();
+    for (const ch of r.changes ?? []) {
+      const last = r.untilBook ?? maxBook;
+      if (ch.book <= r.book || ch.book > last) {
+        err('change-out-of-window', at,
+          `change for book ${ch.book} is outside this relationship's ${r.book}-${last}`);
+      }
+      if (seenRelChangeBooks.has(ch.book)) {
+        err('duplicate-change-book', at, `two changes for book ${ch.book}; merge them`);
+      }
+      seenRelChangeBooks.add(ch.book);
+      if (Object.keys(ch.set).length === 0) {
+        err('empty-change', at, `change for book ${ch.book} sets nothing`);
+      }
+      if (ch.set.type !== undefined && !relTypeById.has(ch.set.type)) {
+        err('unknown-relationship-type', at, `change sets type "${ch.set.type}" which is not defined`);
       }
     }
 

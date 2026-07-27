@@ -222,3 +222,80 @@ describe('generated suggestions round-trip through the parser', () => {
     });
   }
 });
+
+describe('temporal state — the Jack Barlowe class of leak', () => {
+  const jackRaw = emp.characters.find((c) => c.id === 'jack')!;
+
+  it('reports Jack as a living rider in book 1, not a venin prisoner', () => {
+    // The original record held his END state, so book 1 leaked two reveals:
+    // venin (book 2) and prisoner (book 3).
+    const p = present(jackRaw, gate(emp, 1));
+    expect(p.affil).toBe('riders_other');
+    expect(p.status).toBe('alive');
+    expect(p.role.toLowerCase()).not.toContain('venin');
+  });
+
+  it('turns him venin in book 2 and imprisons him in book 3', () => {
+    const b2 = present(jackRaw, gate(emp, 2));
+    expect(b2.affil).toBe('venin');
+    expect(b2.status).toBe('alive');
+
+    const b3 = present(jackRaw, gate(emp, 3));
+    expect(b3.affil).toBe('venin');
+    expect(b3.status).toBe('prisoner');
+  });
+
+  it('resolves even when handed a raw unresolved record', () => {
+    // present() must not depend on the caller having gone through gate(),
+    // or a stray series.characters lookup silently leaks the end state.
+    for (const pos of [1, 2, 3, 4]) {
+      const viaRaw = present(jackRaw, gate(emp, pos));
+      const g = gate(emp, pos);
+      const viaGate = present(g.byId.get('jack')!, g);
+      expect(viaRaw).toEqual(viaGate);
+    }
+  });
+
+  it('changes a relationship type at the right book instead of using `complicated`', () => {
+    const at = (pos: number) =>
+      gate(emp, pos).relationships.find((r) => r.from === 'violet' && r.to === 'imogen');
+    expect(at(1)?.type).toBe('enemy');
+    expect(at(2)?.type).toBe('ally');
+    expect(at(3)?.type).toBe('ally');
+  });
+
+  it('honours untilBook so an ended relationship stops being visible', () => {
+    for (const pos of [1, 2, 3, 4]) {
+      for (const r of gate(emp, pos).relationships) {
+        if (r.untilBook !== undefined) expect(r.untilBook).toBeGreaterThanOrEqual(pos);
+      }
+    }
+  });
+
+  /**
+   * The general form of the Jack bug: at position k, no visible character may
+   * report an attribute that a later change introduces. This is the test whose
+   * absence let the leak survive 129 other tests — they checked WHO was
+   * visible, never WHAT they claimed to be.
+   */
+  it('never reports an attribute introduced by a later book', () => {
+    for (const series of [emp, dcc]) {
+      const books = series.books.map((b) => b.id);
+      for (const pos of books) {
+        const g = gate(series, pos);
+        for (const c of series.characters.filter((x) => x.book <= pos)) {
+          const shown = present(c, g);
+          for (const ch of c.changes ?? []) {
+            if (ch.book <= pos) continue;
+            for (const [field, laterValue] of Object.entries(ch.set)) {
+              expect(
+                (shown as unknown as Record<string, unknown>)[field],
+                `${series.id} book ${pos}: ${c.id}.${field} leaked the book-${ch.book} value`,
+              ).not.toBe(laterValue);
+            }
+          }
+        }
+      }
+    }
+  });
+});

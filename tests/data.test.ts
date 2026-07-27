@@ -17,8 +17,8 @@ const load = (name: string) =>
 describe('every data file', () => {
   const files = readdirSync(dataDir).filter((f) => f.endsWith('.json'));
 
-  it('has at least the two migrated series', () => {
-    expect(files.sort()).toEqual(['dcc.json', 'empyrean.json']);
+  it('has all three migrated series', () => {
+    expect(files.sort()).toEqual(['dcc.json', 'empyrean.json', 'plated-prisoner.json']);
   });
 
   for (const file of files) {
@@ -131,8 +131,11 @@ describe('empyrean', () => {
     const missing = s.characters.filter((c) => c.status === 'missing').map((c) => c.id);
     expect(missing).toEqual(expect.arrayContaining(['garrick', 'bodhi', 'aaric']));
 
+    // Jack's BASE record is now his book-1 state (alive rider); `prisoner`
+    // arrives as a book-3 change. See the temporal model in DATA-DICTIONARY.md.
     const jack = s.characters.find((c) => c.id === 'jack');
-    expect(jack?.status).toBe('prisoner');
+    expect(jack?.status).toBe('alive');
+    expect(jack?.changes?.some((ch) => ch.set.status === 'prisoner')).toBe(true);
   });
 
   it('renamed the killed type so it reads in the stored direction', () => {
@@ -192,8 +195,80 @@ describe('dcc', () => {
     for (const c of s.characters) expect(s.affiliations[c.affil]).toBeTruthy();
   });
 
-  it('kept series-specific fields in attrs rather than dropping them', () => {
+  it('lifted magic to a first-class field and kept the rest in attrs', () => {
     const carl = s.characters.find((c) => c.id === 'carl');
-    expect(carl?.attrs?.['magic']).toBeTruthy();
+    // `magic` was promoted out of attrs, adopting the Plated Prisoner model.
+    expect(carl?.magic).toBeTruthy();
+    expect(carl?.attrs?.['magic']).toBeUndefined();
+    // Genuinely series-specific extras stay in attrs.
+    const f9 = s.characters.filter((c) => c.attrs?.['f9']);
+    expect(f9.length).toBeGreaterThan(0);
+  });
+});
+
+describe('plated-prisoner', () => {
+  const s = load('plated-prisoner.json');
+
+  it('kept all 39 characters and 6 books', () => {
+    expect(s.characters).toHaveLength(39);
+    expect(s.books).toHaveLength(6);
+  });
+
+  it('re-indexed books from 0-based to 1-based', () => {
+    expect(s.books.map((b) => b.id)).toEqual([1, 2, 3, 4, 5, 6]);
+    for (const c of s.characters) expect(c.book).toBeGreaterThanOrEqual(1);
+    for (const r of s.relationships) expect(r.book).toBeGreaterThanOrEqual(1);
+  });
+
+  it('turned bare book strings into objects with a short label', () => {
+    // Source was ["Book 1: Gild", …] — no id, no label to put on a button.
+    expect(s.books[0]?.short).toBe('Gild');
+    expect(s.books[5]?.short).toBe('Goldfinch');
+  });
+
+  it('kept the 2D region geometry that the other charts adopted', () => {
+    const annwyn = s.regions.find((r) => r.id === 'annwyn');
+    expect(annwyn?.w).toBeGreaterThan(0);
+    expect(annwyn?.h).toBeGreaterThan(0);
+    expect(annwyn?.power).toBeTruthy();
+  });
+
+  it('gave every character an explicit y, so no offset table is needed', () => {
+    for (const c of s.characters) expect(typeof c.y).toBe('number');
+  });
+
+  it('mapped all 21 phrase-ids onto the canonical vocabulary', () => {
+    for (const t of s.relationshipTypes) {
+      expect(t.id).toMatch(/^[a-z]+$/);
+    }
+    for (const r of s.relationships) expect(r.type).toMatch(/^[a-z]+$/);
+  });
+
+  it('folded the duplicate romantic edges into one edge that changes', () => {
+    // Source had Slow-burn romance (bk2) AND Love Interest (bk3) between the
+    // same pair; both alias to `romantic`, so they were one relationship.
+    const rom = s.relationships.filter(
+      (r) => r.from === 'auren' && r.to === 'rip' && r.type === 'romantic',
+    );
+    expect(rom).toHaveLength(1);
+    expect(rom[0]?.changes?.some((ch) => ch.book === 3)).toBe(true);
+
+    // Fated Mates is a genuinely different bond, so it stays its own edge.
+    expect(s.relationships.some(
+      (r) => r.from === 'auren' && r.to === 'rip' && r.type === 'mated',
+    )).toBe(true);
+
+    // And the captor relationship is concurrent, not superseded.
+    expect(s.relationships.some(
+      (r) => r.from === 'rip' && r.to === 'auren' && r.type === 'captor',
+    )).toBe(true);
+  });
+
+  it('gave Rip his aliases so a shared surname stops mislinking', () => {
+    const rip = s.characters.find((c) => c.id === 'rip');
+    expect(rip?.aliases).toContain('Slade Ravinger');
+    // The book-3 reveal event must name Rip, not Elore Ravinger.
+    const reveal = s.events.find((e) => e.text.includes('revealed to be King Slade'));
+    expect(reveal?.involves).not.toContain('elore');
   });
 });
