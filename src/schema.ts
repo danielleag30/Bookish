@@ -125,6 +125,14 @@ export const CharacterSchema = z.object({
     .object({
       status: StatusSchema.optional().describe('What the reader believed the status was'),
       identity: z.string().optional().describe('The alias or false identity the reader knew'),
+      role: z
+        .string()
+        .optional()
+        .describe(
+          'The role as the reader understood it. `role` is spoiler-bearing too: ' +
+            "Brennan's real role reads \"Violet's brother · Mender\", but Mender is " +
+            'the signet revealed after he is found alive.',
+        ),
       untilBook: z
         .number()
         .int()
@@ -291,8 +299,12 @@ export function checkIntegrity(series: Series): Issue[] {
       if (!bookIds.has(c.perceived.untilBook)) {
         err('book-out-of-range', at, `perceived.untilBook ${c.perceived.untilBook} is not a series book`);
       }
-      if (c.perceived.status === undefined && c.perceived.identity === undefined) {
-        err('empty-perceived', at, 'perceived must set status, identity, or both');
+      if (
+        c.perceived.status === undefined &&
+        c.perceived.identity === undefined &&
+        c.perceived.role === undefined
+      ) {
+        err('empty-perceived', at, 'perceived must set at least one of status, identity, role');
       }
       if (c.perceived.status !== undefined && c.perceived.status === c.status) {
         warn('perceived-matches-actual', at,

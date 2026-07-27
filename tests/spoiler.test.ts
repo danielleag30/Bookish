@@ -1,0 +1,224 @@
+import { describe, it, expect } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { resolve, join } from 'node:path';
+import { SeriesSchema, type Series } from '../src/schema.ts';
+import { gate, present, ask, findCharacters, connectionsOf, pathBetween, eventsOf } from '../src/spoiler.ts';
+
+const dataDir = resolve(import.meta.dirname, '..', 'data');
+const load = (n: string): Series =>
+  SeriesSchema.parse(JSON.parse(readFileSync(join(dataDir, n), 'utf8')));
+const emp = load('empyrean.json');
+const dcc = load('dcc.json');
+
+describe('the gate', () => {
+  it('hides characters who have not appeared yet', () => {
+    const g = gate(emp, 1);
+    expect(g.byId.has('violet')).toBe(true);
+    expect(g.byId.has('halden')).toBe(false);      // book 3
+    expect(g.byId.has('theophanie')).toBe(false);  // book 3
+  });
+
+  it('reveals them at their own book and not before', () => {
+    expect(gate(emp, 2).byId.has('berwyn')).toBe(true);   // corrected to book 2
+    expect(gate(emp, 1).byId.has('berwyn')).toBe(false);
+  });
+
+  it('hides an edge when either endpoint is hidden', () => {
+    for (const pos of [1, 2, 3, 4]) {
+      const g = gate(emp, pos);
+      for (const r of g.relationships) {
+        expect(g.byId.has(r.from), `pos ${pos}: ${r.from}`).toBe(true);
+        expect(g.byId.has(r.to), `pos ${pos}: ${r.to}`).toBe(true);
+        expect(r.book).toBeLessThanOrEqual(pos);
+      }
+    }
+  });
+
+  it('hides later events', () => {
+    for (const pos of [1, 2, 3]) {
+      for (const e of gate(emp, pos).events) expect(e.book).toBeLessThanOrEqual(pos);
+    }
+  });
+
+  it('clamps an out-of-range position instead of leaking', () => {
+    expect(gate(emp, 99).position).toBe(4);
+    expect(gate(emp, -5).position).toBe(1);
+    expect(gate(emp, 0).position).toBe(1);
+  });
+});
+
+describe('perceived state — the Brennan case', () => {
+  it('reports Brennan as dead at book 1, because that is what the reader believes', () => {
+    const p = present(emp.characters.find((c) => c.id === 'brennan')!, gate(emp, 1));
+    expect(p.status).toBe('dead');
+    expect(p.statusIsBelief).toBe(true);
+  });
+
+  it('reports him alive from book 2 onward', () => {
+    for (const pos of [2, 3, 4]) {
+      const p = present(emp.characters.find((c) => c.id === 'brennan')!, gate(emp, pos));
+      expect(p.status).toBe('alive');
+      expect(p.statusIsBelief).toBe(false);
+    }
+  });
+
+  it("shows Aaric under his alias until the reveal", () => {
+    const c = emp.characters.find((x) => x.id === 'aaric')!;
+    expect(present(c, gate(emp, 2)).label).toBe('Aaric Graycastle');
+    expect(present(c, gate(emp, 3)).label).toBe(c.label);
+  });
+});
+
+describe('bio containment', () => {
+  it('withholds unsegmented bios below the final book', () => {
+    for (const pos of [1, 2, 3]) {
+      const g = gate(emp, pos);
+      for (const c of g.characters) {
+        const p = present(c, g);
+        expect(p.bio, `${c.id} at pos ${pos}`).toBeUndefined();
+        if (c.bio) expect(p.bioWithheld).toBe(true);
+      }
+    }
+  });
+
+  it('releases them at the final book', () => {
+    const g = gate(emp, 4);
+    const p = present(emp.characters.find((c) => c.id === 'brennan')!, g);
+    expect(p.bio).toBeTruthy();
+    expect(p.bioWithheld).toBe(false);
+  });
+
+  it("never leaks Brennan's Onyx Storm spoiler early", () => {
+    for (const pos of [1, 2, 3]) {
+      const g = gate(emp, pos);
+      const p = present(emp.characters.find((c) => c.id === 'brennan')!, g);
+      expect(JSON.stringify(p)).not.toMatch(/Onyx Storm|Theophanie/);
+    }
+  });
+});
+
+describe('adversarial — five routes to a hidden character', () => {
+  const g = gate(emp, 1); // Theophanie and Halden are book 3
+
+  it('1. exact id lookup finds nothing', () => {
+    expect(g.byId.get('theophanie')).toBeUndefined();
+    expect(findCharacters(g, 'theophanie')).toEqual([]);
+  });
+
+  it('2. fuzzy and partial name search finds nothing', () => {
+    for (const q of ['theo', 'Theophanie', 'THEOPH', 'halden', 'prince']) {
+      for (const hit of findCharacters(g, q)) {
+        expect(hit.id).not.toBe('theophanie');
+        expect(hit.id).not.toBe('halden');
+      }
+    }
+  });
+
+  it('3. relationship traversal from a visible character cannot reach them', () => {
+    for (const c of g.characters) {
+      for (const conn of connectionsOf(g, c.id)) {
+        expect(conn.other.book).toBeLessThanOrEqual(1);
+      }
+    }
+  });
+
+  it('4. the event log never names them', () => {
+    for (const e of g.events) {
+      for (const id of e.involves) expect(g.byId.has(id)).toBe(true);
+    }
+    expect(eventsOf(g, 'theophanie')).toEqual([]);
+  });
+
+  it('5. path finding refuses rather than routing through them', () => {
+    expect(pathBetween(g, 'violet', 'theophanie')).toBeNull();
+    const path = pathBetween(g, 'violet', 'xaden');
+    for (const step of path ?? []) {
+      expect(step.from.book).toBeLessThanOrEqual(1);
+      expect(step.to.book).toBeLessThanOrEqual(1);
+    }
+  });
+
+  it('no answer at position 1 mentions any book 2+ character by name', () => {
+    const later = emp.characters.filter((c) => c.book > 1);
+    const questions = [
+      'who is Violet bonded to', 'who is alive', 'who died',
+      'what happened to Violet', 'tell me about Brennan',
+      'how are Violet and Xaden connected', 'Theophanie', 'Prince Halden',
+      'riders', 'venin', 'who is Xaden married to',
+    ];
+    for (const q of questions) {
+      const a = ask(emp, 1, q);
+      const text = [a.headline, ...a.lines, JSON.stringify(a.subject ?? {})].join(' ');
+      for (const c of later) {
+        // Skip labels that are substrings of visible names.
+        if (c.label.length < 5) continue;
+        expect(text, `"${q}" leaked ${c.label}`).not.toContain(c.label);
+      }
+    }
+  });
+});
+
+describe('answers', () => {
+  it('answers a bonded question', () => {
+    const a = ask(emp, 1, 'who is Violet bonded to');
+    expect(a.kind).toBe('connections');
+    expect(a.lines.join(' ')).toMatch(/Tairn/);
+    expect(a.lines.join(' ')).toMatch(/Andarna/);
+  });
+
+  it('answers a status list and marks beliefs', () => {
+    const a = ask(emp, 1, 'who is dead');
+    expect(a.kind).toBe('status-list');
+    expect(a.lines.join('\n')).toMatch(/Brennan[\s\S]*as far as you know/);
+  });
+
+  it('answers a path question', () => {
+    const a = ask(emp, 3, 'how are Violet and Dain connected');
+    expect(a.kind).toBe('path');
+    expect(a.lines.length).toBeGreaterThan(0);
+  });
+
+  it('answers what happened to a character', () => {
+    const a = ask(emp, 1, 'what happened to Liam');
+    expect(a.kind).toBe('events');
+    expect(a.lines.join(' ')).toMatch(/Book 1/);
+  });
+
+  it('notes when the answer was gated', () => {
+    expect(ask(emp, 1, 'who is alive').gatedNote).toMatch(/hidden/);
+    expect(ask(emp, 4, 'who is alive').gatedNote).toBeUndefined();
+  });
+
+  it('fails helpfully on an unmatched question', () => {
+    const a = ask(emp, 1, 'what is the airspeed of a laden swallow');
+    expect(a.kind).toBe('unknown');
+    expect(a.lines.join(' ')).toMatch(/who is/);
+  });
+
+  it('works on DCC too, not just Empyrean', () => {
+    const a = ask(dcc, 1, 'who is Carl allied with');
+    expect(a.subject?.label).toBe('Carl');
+    expect(gate(dcc, 1).byId.has('nekhebit')).toBe(false); // book 6
+  });
+});
+
+describe('generated suggestions round-trip through the parser', () => {
+  // The chip generator builds questions with phrase(); the parser reads them
+  // with REL_WORDS. If the two drift, a chip returns the wrong answer kind —
+  // which is exactly what happened with "allied with" on the DCC chart.
+  const PHRASES: Record<string, string> = {
+    bonded: 'bonded to', family: 'related to', romantic: 'involved with',
+    squad: 'in a squad with', friend: 'friends with', ally: 'allied with',
+    enemy: 'enemies with', mentor: 'mentoring', killed: 'killed by',
+    mated: 'mated to', captor: 'the captor of', commands: 'commanding',
+    betrayer: 'betrayed by',
+  };
+
+  for (const [type, phrase] of Object.entries(PHRASES)) {
+    it(`"${phrase}" resolves to the ${type} type`, () => {
+      const a = ask(emp, 4, `who is Violet ${phrase}`);
+      expect(a.kind, `"${phrase}" fell through to ${a.kind}`).toBe('connections');
+      expect(a.headline.toLowerCase()).toContain(type);
+    });
+  }
+});

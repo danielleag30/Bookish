@@ -779,5 +779,13 @@ canvasEl.addEventListener("wheel",e=>{e.preventDefault();S.scale=Math.min(3,Math
 
 render();
 </script>
+
+<!-- Spoiler-bounded ask box. Reads /data/dcc.json and answers by filtering, with
+     no model involved. `getBook` binds the reading position to this chart's own
+     book selector (S.book). Filtering lives in src/spoiler.ts — see FILTERS.md. -->
+<script type="module">
+  import { mountAskBox } from '/askbox/askbox.js';
+  mountAskBox({ series: 'dcc', getBook: () => S.book });
+</script>
 </body>
 </html>
