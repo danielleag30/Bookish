@@ -296,6 +296,24 @@ const CORRECTIONS = {
       { match: 'wyvern_rep>berwyn:ally', set: { book: 2 },
         why: 'Follows Berwyn moving to book 2' },
     ],
+    // What readers believed before the reveal. `status` records only the end
+    // state, which is not the story as read.
+    perceived: [
+      { id: 'brennan',
+        set: { status: 'dead', untilBook: 1,
+               note: 'Presumed dead before the series. Revealed alive in the final paragraph of ' +
+                     'Fourth Wing, and reveals himself properly in Iron Flame.' } },
+      { id: 'aaric',
+        set: { identity: 'Aaric Graycastle', untilBook: 2,
+               note: "Actually Prince Camlaen Aaric Tauri, King Tauri's youngest son, enlisted " +
+                     'under an alias.' } },
+      // Panchek deliberately omitted: his `book` is 3, so there is no earlier
+      // window in which a reader could perceive him as merely the Commandant.
+      // That looks like the Berwyn pattern — his bio says he was "running
+      // Basgiath itself", so he is likely present from book 1. Recorded in
+      // PENDING_DATA_REVIEW rather than guessed at, because lowering his book
+      // changes what the chart displays.
+    ],
     retypeRelationships: [
       { match: 'fen>brennan:killed', set: { type: 'enemy', label: 'struck him down (survived)' },
         why: 'Brennan survived — his bio says "presumed DEAD before the series. Actually alive". ' +
@@ -314,6 +332,12 @@ const CORRECTIONS = {
 };
 
 function applyCharacterCorrections(characters, seriesId, notes) {
+  for (const p of CORRECTIONS[seriesId]?.perceived ?? []) {
+    const target = characters.find((x) => x.id === p.id);
+    if (!target) { notes.push(`perceived skipped — no character "${p.id}"`); continue; }
+    target.perceived = p.set;
+    notes.push(`recorded perceived state for ${p.id} (until book ${p.set.untilBook})`);
+  }
   for (const c of CORRECTIONS[seriesId]?.characters ?? []) {
     const target = characters.find((x) => x.id === c.id);
     if (!target) {
