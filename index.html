@@ -46,6 +46,18 @@
     /* Divider */
     .divider{width:120px;height:1px;background:linear-gradient(90deg,transparent,var(--accent-gold),transparent);margin:30px auto}
 
+    /* Site nav — the architecture page was only linked from the footer, where
+       it was 0.72rem at 60% opacity and effectively unfindable. */
+    .site-nav{margin-top:22px}
+    .site-nav a{display:inline-block;padding:9px 20px;border-radius:22px;
+      border:1px solid rgba(212,175,55,.35);color:var(--accent-gold);
+      font-size:.78rem;font-weight:600;letter-spacing:.4px;text-decoration:none;
+      background:linear-gradient(135deg,rgba(212,175,55,.12),rgba(155,89,208,.12));
+      transition:background .2s,border-color .2s,transform .2s}
+    .site-nav a:hover,.site-nav a:focus-visible{
+      background:linear-gradient(135deg,rgba(212,175,55,.24),rgba(155,89,208,.22));
+      border-color:rgba(212,175,55,.65);transform:translateY(-2px)}
+
     /* Grid */
     .series-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:28px;padding-bottom:60px}
 
@@ -107,6 +119,9 @@
     <p class="tagline">Your companion to fantasy worlds</p>
     <div class="divider"></div>
     <p class="subtitle">Interactive guides, character charts, and resources for your favorite romantasy series</p>
+    <nav class="site-nav">
+      <a href="./how-it-works/">How it works →</a>
+    </nav>
   </header>
 
   <div class="series-grid">
