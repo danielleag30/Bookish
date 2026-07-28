@@ -75,13 +75,18 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -o pipefail
-          BRANCH="agent/changelog-$(date +%Y%m%d-%H%M%S)"
+          # One stable branch, force-pushed. A timestamped branch per run left
+          # litter behind: the agent fires on every merge to main, and when it
+          # cannot open a pull request nothing ever closes the loop, so the
+          # branches accumulated. Reusing the name means there is at most one
+          # open draft, and re-running updates it in place.
+          BRANCH="agent/changelog"
           git config user.name  "bookish-changelog-agent"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git checkout -b "$BRANCH"
+          git checkout -B "$BRANCH"
           git add CHANGELOG.md
           git commit -m "Draft changelog from merged pull requests"
-          git push origin "$BRANCH"
+          git push --force-with-lease origin "$BRANCH"
 
           BODY=$(cat <<'EOF'
           Drafted by the changelog agent from merged pull requests.
@@ -99,7 +104,12 @@ jobs:
           # approve pull requests"). That is a legitimate way to run this: the
           # agent's work is already pushed, so the job reports the branch and a
           # one-click link instead of failing. The draft still exists either way.
-          if gh pr create --title "Changelog draft" --body "$BODY" \
+          # An open pull request from this branch already reflects the new push,
+          # so only create one when none exists.
+          if gh pr list --head "$BRANCH" --state open --json number \
+               --jq 'length' | grep -qv '^0$'; then
+            echo "Updated the existing changelog pull request." >> "$GITHUB_STEP_SUMMARY"
+          elif gh pr create --title "Changelog draft" --body "$BODY" \
                --head "$BRANCH" --base main 2>/tmp/pr-err; then
             echo "Opened a pull request from \`$BRANCH\`." >> "$GITHUB_STEP_SUMMARY"
           else
