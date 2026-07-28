@@ -14,7 +14,8 @@
     "validate": "tsx scripts/validate.ts",
     "spoiler-audit": "tsx scripts/spoiler-audit.ts",
     "build:chart": "vite build --config vite.chart.config.ts",
-    "eval": "tsx evals/run.ts"
+    "eval": "tsx evals/run.ts",
+    "mcp": "tsx mcp/server.ts"
   },
   "repository": {
     "type": "git",
@@ -36,5 +37,8 @@
     "vite": "^8.1.5",
     "vitest": "^4.1.10",
     "zod": "^4.4.3"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0"
   }
 }
