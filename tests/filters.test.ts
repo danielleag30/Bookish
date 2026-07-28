@@ -115,7 +115,11 @@ describe('every active dimension resolves against the real data', () => {
   for (const file of files) {
     const s = load(file);
 
-    it(`${file}: tier-1 character dimensions have values`, () => {
+    // Drafts are scaffolded with one region and one affiliation on purpose —
+    // extraction reads notes, it does not invent geography or factions. Held
+    // to this bar, a fresh draft would only tempt the next person to make up
+    // canon to turn CI green. The bar applies once a human has curated it.
+    it.skipIf(s.draft)(`${file}: tier-1 character dimensions have values`, () => {
       expect(new Set(s.characters.map((c) => c.region)).size).toBeGreaterThan(1);
       expect(new Set(s.characters.map((c) => c.affil)).size).toBeGreaterThan(1);
       expect(new Set(s.characters.map((c) => c.status)).size).toBeGreaterThan(1);

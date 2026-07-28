@@ -217,6 +217,37 @@ export function checkPlan(plan: Plan, chunk: string): string[] {
  * `role` and can move a status away from `unknown`, but never overwrites a
  * definite value with a vaguer one.
  */
+/**
+ * Force an extracted id into a usable slug.
+ *
+ * The prompt asks for lowercase slugs, and the model returned "saeris fane".
+ * Asking is not enforcing: an id is a key, and a space in one breaks every
+ * relationship pointing at it. Normalising here means every consumer — merge,
+ * validation, the chart — sees the same shape.
+ */
+export function slugifyId(id: string): string {
+  return id
+    .trim()
+    .toLowerCase()
+    .replace(/['’]/g, '')
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '')
+    || 'unknown';
+}
+
+/** Apply slugifyId across a graph, keeping relationships pointing at the right ids. */
+export function normaliseIds(g: ExtractedGraph): ExtractedGraph {
+  const map = new Map(g.characters.map((c) => [c.id, slugifyId(c.id)]));
+  return {
+    characters: g.characters.map((c) => ({ ...c, id: map.get(c.id) ?? slugifyId(c.id) })),
+    relationships: g.relationships.map((r) => ({
+      ...r,
+      from: map.get(r.from) ?? slugifyId(r.from),
+      to: map.get(r.to) ?? slugifyId(r.to),
+    })),
+  };
+}
+
 export function mergeGraphs(parts: ExtractedGraph[]): ExtractedGraph {
   const chars = new Map<string, ExtractedCharacter>();
   for (const g of parts) {
@@ -233,7 +264,7 @@ export function mergeGraphs(parts: ExtractedGraph[]): ExtractedGraph {
       rels.set(`${r.from}>${r.to}:${r.type}`, r);
     }
   }
-  return { characters: [...chars.values()], relationships: [...rels.values()] };
+  return normaliseIds({ characters: [...chars.values()], relationships: [...rels.values()] });
 }
 
 // ── Run ────────────────────────────────────────────────────────────────────

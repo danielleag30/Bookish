@@ -29,7 +29,8 @@ import type { Series } from '../src/schema.ts';
 import { RELATIONSHIP_BY_ID } from '../src/relationships.ts';
 import { call, DEFAULT_MODEL, OllamaError } from './ollama.ts';
 import {
-  checkGraph, checkPlan, type ExtractedGraph, type ExtractedCharacter, type Plan,
+  checkGraph, checkPlan, normaliseIds,
+  type ExtractedGraph, type ExtractedCharacter, type Plan,
 } from './extract.ts';
 
 const RUNS_DIR = resolve(import.meta.dirname, 'runs');
@@ -441,10 +442,10 @@ export function runResolver(
              `settled, ${duplicates} duplicate edge(s) collapsed`;
   audit.agents.push(rec);
 
-  return {
+  return normaliseIds({
     characters: [...chars.values()].map(({ from: _from, ...c }) => c),
     relationships: [...rels.values()],
-  };
+  });
 }
 
 // ── Orchestration ──────────────────────────────────────────────────────────

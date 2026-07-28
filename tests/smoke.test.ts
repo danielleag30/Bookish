@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { readdirSync, existsSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { join, resolve } from 'node:path';
 
 /**
  * Phase 0 smoke tests.
@@ -24,17 +24,24 @@ describe('toolchain', () => {
 });
 
 describe('repo layout', () => {
+  // Derived from data/, not hardcoded: the invariant is "no series without a
+  // page to render it on", which is what the test name has always claimed.
+  // Case-insensitive because DCC-Chart is an acronym, not title case.
   it('has a chart directory for every series', () => {
-    const chartDirs = readdirSync(root, { withFileTypes: true })
-      .filter((e) => e.isDirectory() && e.name.endsWith('-Chart'))
-      .map((e) => e.name)
-      .sort();
+    const charted = new Set(
+      readdirSync(root, { withFileTypes: true })
+        .filter((e) => e.isDirectory() && e.name.endsWith('-Chart'))
+        .map((e) => e.name.replace(/-Chart$/, '').toLowerCase()),
+    );
 
-    expect(chartDirs).toEqual([
-      'DCC-Chart',
-      'Empyrean-Chart',
-      'Plated-Prisoner-Chart',
-    ]);
+    const slugs = readdirSync(join(root, 'data'))
+      .filter((f) => f.endsWith('.json'))
+      .map((f) => f.replace(/\.json$/, ''));
+
+    expect(slugs.length).toBeGreaterThan(0);
+    for (const slug of slugs) {
+      expect(charted, `data/${slug}.json has no chart directory`).toContain(slug);
+    }
   });
 
   it('every chart directory has an index.html entry point', () => {

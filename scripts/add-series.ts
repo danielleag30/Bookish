@@ -26,7 +26,7 @@ import { resolve, join } from 'node:path';
 import { SeriesSchema, checkIntegrity, type Series } from '../src/schema.ts';
 import { RELATIONSHIP_TYPES } from '../src/relationships.ts';
 import { extractSeries } from '../pipeline/extract.ts';
-import { orchestrate } from '../pipeline/multiagent.ts';
+import { orchestrate, writeAudit } from '../pipeline/multiagent.ts';
 import { available, DEFAULT_MODEL } from '../pipeline/ollama.ts';
 
 const root = resolve(import.meta.dirname, '..');
@@ -105,6 +105,15 @@ const result = has('single')
   : await orchestrate(shell, chunks, { model, onProgress: (m) => process.stdout.write(`  ${m}\r`) });
 const graph = result.graph;
 
+// Write the audit for a multi-agent run. Without this there is no record of what
+// the verifier rejected, and reaching for "the most recent run file" picks up a
+// different series' audit — which is worse than having none.
+if ('audit' in result) {
+  const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+  const file = writeAudit(result.audit, slug, stamp);
+  console.log(`  audit ${file.replace(root + '/', '')}`);
+}
+
 // ── Assemble ───────────────────────────────────────────────────────────────
 // Everything lands in book 1 unless a later chunk introduced it, which is the
 // most conservative reading: a character shown earlier than they appear is a
@@ -122,14 +131,20 @@ const lastBook = Math.max(...books.map((b) => b.id));
 
 const draft: Series = {
   ...shell,
+  // Cleared by hand once regions and factions are real. See SeriesSchema.
+  draft: true,
   characters: graph.characters.map((c, i) => ({
     id: c.id, label: c.label, role: c.role,
     affil: 'unsorted', region: 'main',
     book: firstSeen.get(c.id) ?? 1,
     lastBook,
     status: c.status, size: i < 4 ? 'main' : 'side',
-    x: 120 + (i % 6) * 150,
-    y: 90 + Math.floor(i / 6) * 130,
+    // A flat row puts every edge on the same horizontal line, so edge labels
+    // land on top of the name labels and the draft reads as broken rather than
+    // unfinished. Alternating rows costs nothing and keeps edges legible until
+    // a human places the nodes properly.
+    x: 120 + (i % 5) * 170,
+    y: 110 + (i % 2) * 120 + Math.floor(i / 5) * 260,
   })),
   relationships: graph.relationships.map((r) => ({
     from: r.from, to: r.to, type: r.type,

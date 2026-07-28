@@ -14,7 +14,7 @@
 // Type-only import: the data is validated by `npm run validate` in CI, so
 // re-running Zod in every visitor's browser would ship ~90 kB for nothing.
 import type { Series } from './schema.ts';
-import { ask, gate, mostConnected, findCharacters, type Answer } from './spoiler.ts';
+import { ask, gate, mostConnected, findCharacters, phrase, type Answer } from './spoiler.ts';
 
 export interface AskBoxHandle {
   /** Discard the current answer and collapse. */
@@ -66,26 +66,6 @@ const CSS = `
 .bk-ask-belief{color:#f0b86a}
 .bk-ask-empty{color:#8b839c;font-style:italic}
 `;
-
-/** Turn a relationship type id into something that reads as a question. */
-function phrase(type: string): string {
-  switch (type) {
-    case 'bonded': return 'bonded to';
-    case 'family': return 'related to';
-    case 'romantic': return 'involved with';
-    case 'squad': return 'in a squad with';
-    case 'friend': return 'friends with';
-    case 'ally': return 'allied with';
-    case 'enemy': return 'enemies with';
-    case 'mentor': return 'mentoring';
-    case 'killed': return 'killed by';
-    case 'mated': return 'mated to';
-    case 'captor': return 'the captor of';  // "captive" collides with the status word
-    case 'commands': return 'commanding';
-    case 'betrayer': return 'betrayed by';
-    default: return `${type} with`;
-  }
-}
 
 function el<K extends keyof HTMLElementTagNameMap>(
   tag: K, cls?: string, text?: string,
@@ -157,7 +137,10 @@ export async function mountAskBox(opts: AskBoxOptions): Promise<AskBoxHandle | n
   const form = el('form', 'bk-ask-form');
   const input = el('input');
   input.type = 'text';
-  input.placeholder = 'e.g. who is Violet bonded to';
+  // Neutral until buildChips() derives one from this series. The old default
+  // named Violet, an Empyrean character, on every chart — a reader on the Fae
+  // & Alchemy page was being shown a name from a series they may not read.
+  input.placeholder = 'ask about a character';
   input.autocomplete = 'off';
   const go = el('button', undefined, 'Ask');
   go.type = 'submit';
@@ -239,6 +222,10 @@ export async function mountAskBox(opts: AskBoxOptions): Promise<AskBoxHandle | n
       qs.push(`what happened to ${firstName}`);
     }
     qs.push(...GENERIC_SUGGESTIONS);
+
+    // Same derivation as the chips, so the placeholder can never name a
+    // character from another series — or one this reader has not met yet.
+    if (qs[0]) input.placeholder = `e.g. ${qs[0]}`;
 
     for (const q of qs.slice(0, 4)) {
       const b = el('button', undefined, q);

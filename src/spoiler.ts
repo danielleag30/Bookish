@@ -365,6 +365,30 @@ const STATUS_WORDS: Record<string, string> = {
  * as of book 2" is a filter, not a generation problem. That keeps the feature
  * free, instant, and available to every visitor.
  */
+/**
+ * Reads a relationship type as it would appear in a question. Lives here, not
+ * in askbox, because the unknown-question fallback below needs it too and
+ * askbox already imports from this file.
+ */
+export function phrase(type: string): string {
+  switch (type) {
+    case 'bonded': return 'bonded to';
+    case 'family': return 'related to';
+    case 'romantic': return 'involved with';
+    case 'squad': return 'in a squad with';
+    case 'friend': return 'friends with';
+    case 'ally': return 'allied with';
+    case 'enemy': return 'enemies with';
+    case 'mentor': return 'mentoring';
+    case 'killed': return 'killed by';
+    case 'mated': return 'mated to';
+    case 'captor': return 'the captor of';  // "captive" collides with the status word
+    case 'commands': return 'commanding';
+    case 'betrayer': return 'betrayed by';
+    default: return `${type} with`;
+  }
+}
+
 export function ask(series: Series, position: number, question: string): Answer {
   const g = gate(series, position);
   const q = question.trim();
@@ -493,16 +517,24 @@ export function ask(series: Series, position: number, question: string): Answer 
     }
   }
 
+  // Examples come from the reader's own series, gated to their position. The
+  // hardcoded set named Xaden, Violet, Dain and Liam, so failing a question on
+  // the Fae & Alchemy chart suggested four Empyrean characters — and on any
+  // chart it could name someone the reader had not met yet.
+  const lead = mostConnected(g);
+  const other = g.characters.find((c) => c.id !== lead?.id);
+  const examples = ['  who is alive'];
+  if (lead) {
+    const type = g.relationships.find((r) => r.from === lead.id || r.to === lead.id)?.type;
+    if (type) examples.unshift(`  who is ${lead.label} ${phrase(type)}`);
+    examples.push(`  what happened to ${lead.label}`);
+    if (other) examples.push(`  how are ${lead.label} and ${other.label} connected`);
+  }
+
   return {
     kind: 'unknown', gatedNote,
     headline: "I couldn't match that to anyone on the chart.",
-    lines: [
-      'Try a name, or:',
-      '  who is Xaden bonded to',
-      '  who is alive',
-      '  how are Violet and Dain connected',
-      '  what happened to Liam',
-    ],
+    lines: ['Try a name, or:', ...examples],
   };
 }
 
