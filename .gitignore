@@ -32,3 +32,4 @@ evals/runs/
 # Built bundle — `npm run build:chart`, and by Vercel on deploy
 chart/
 askbox/
+pipeline/runs/
