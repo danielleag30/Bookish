@@ -12,6 +12,7 @@ import { resolve, join } from 'node:path';
 import { SeriesSchema } from '../src/schema.ts';
 import { gate } from '../src/spoiler.ts';
 import { extractSeries, writeTrace } from '../pipeline/extract.ts';
+import { orchestrate, writeAudit } from '../pipeline/multiagent.ts';
 import { available, DEFAULT_MODEL } from '../pipeline/ollama.ts';
 import { evaluate, temporalLeaks } from './compare.ts';
 import { classify } from './taxonomy.ts';
@@ -27,6 +28,8 @@ function arg(name: string, fallback?: string): string | undefined {
 const seriesId = arg('series', 'empyrean')!;
 const model = arg('model', DEFAULT_MODEL)!;
 const note = arg('note', '') ?? '';
+/** --mode multi runs the extractor/verifier/resolver pipeline instead. */
+const mode = arg('mode', 'single')!;
 
 const series = SeriesSchema.parse(
   JSON.parse(readFileSync(join(root, 'data', `${seriesId}.json`), 'utf8')),
@@ -52,19 +55,37 @@ for (const b of series.books.filter((b) => b.id <= position)) {
   chunks.push(`Book ${b.id}: ${b.short}\n${evs.join('\n')}`);
 }
 
-console.log(`${seriesId} · through book ${position} · ${chunks.length} chunks · model ${model}`);
-
-const run = await extractSeries(series, chunks, {
-  model,
-  onProgress: (m) => process.stdout.write(`  ${m}\r`),
-});
+console.log(`${seriesId} · through book ${position} · ${chunks.length} chunks · model ${model} · mode ${mode}`);
 
 const stamp = new Date().toISOString().replace(/[:.]/g, '-');
-const traceFile = writeTrace(run, stamp);
+let graph;
+let totals;
+let traceFile;
+let multi;
+
+if (mode === 'multi') {
+  multi = await orchestrate(series, chunks, {
+    model, onProgress: (m) => process.stdout.write(`  ${m}\r`),
+  });
+  graph = multi.graph;
+  totals = { ...multi.audit.totals };
+  traceFile = writeAudit(multi.audit, seriesId, stamp);
+} else {
+  const run = await extractSeries(series, chunks, {
+    model, onProgress: (m) => process.stdout.write(`  ${m}\r`),
+  });
+  graph = run.graph;
+  totals = run.totals;
+  traceFile = writeTrace(run, stamp);
+}
+
+// The failure taxonomy reads per-chunk traces, which only the single-agent run
+// produces; the multi-agent equivalent is its own audit log.
+const run = { series: seriesId, model, chunks: [], graph, totals } as Parameters<typeof classify>[1];
 
 const corpus = chunks.join('\n');
-const report = evaluate(run.graph, series, g.characters, corpus);
-const leaks = temporalLeaks(run.graph, series, position);
+const report = evaluate(graph, series, g.characters, corpus);
+const leaks = temporalLeaks(graph, series, position);
 const failures = classify(report, run, leaks.length);
 
 // ── Report ─────────────────────────────────────────────────────────────────
@@ -81,7 +102,21 @@ console.log(`\ntemporal leaks: ${leaks.length}${leaks.length ? ` — ${leaks.joi
 console.log(`reversed: ${report.reversed.length} · wrong type: ${report.wrongType.length} · spurious: ${report.spuriousEdges.length}`);
 console.log(`\nfailure classes:`);
 for (const f of failures) console.log(`  ${f.cls.padEnd(24)} ${f.count.toString().padStart(3)}  ${f.note}`);
-console.log(`\n${(run.totals.ms / 1000).toFixed(0)}s · ${run.totals.calls} calls · ${run.totals.responseTokens} response tokens · $0`);
+if (multi) {
+  const a = multi.audit;
+  const failedAgents = a.agents.filter((x) => x.status === 'failed').length;
+  const partial = a.agents.filter((x) => x.status === 'partial').length;
+  console.log(`\nagents: ${a.agents.length} (${failedAgents} failed, ${partial} partial) · ` +
+              `concurrency ${a.concurrency}`);
+  console.log(`verifier rejected ${multi.rejected.length} of ${a.verdicts.length} claim(s)`);
+  for (const r of multi.rejected.slice(0, 6)) console.log(`   ✗ ${r.edge} — ${r.reason}`);
+  console.log(`conflicts settled: ${a.conflicts.length}`);
+  for (const c of a.conflicts.slice(0, 4)) {
+    console.log(`   ${c.character}.${c.field}: ${c.values.map((v) => v.value).join(' vs ')} -> ${c.resolution}`);
+  }
+  console.log(`recoveries: ${a.recoveries.length}`);
+}
+console.log(`\n${(totals.ms / 1000).toFixed(0)}s · ${totals.calls} calls · ${totals.responseTokens} response tokens · $0`);
 console.log(`trace: ${traceFile.replace(root + '/', '')}`);
 
 // ── Append to the score history ────────────────────────────────────────────
@@ -103,6 +138,6 @@ appendFileSync(
   `| ${stamp.slice(0, 16)} | ${seriesId} | ${position} | ${model} | ${pct(report.nodes.f1)} | ${pct(report.nodesInCorpus.f1)} | ` +
   `${pct(report.edges.f1)} | ${leaks.length} | ${report.reversed.length} | ` +
   `${report.wrongType.length} | ${report.spuriousEdges.length} | ` +
-  `${(run.totals.ms / 1000).toFixed(0)} | ${note} |\n`,
+  `${(totals.ms / 1000).toFixed(0)} | ${mode} · ${note} |\n`,
 );
 console.log(`appended to evals/results.md`);
