@@ -370,10 +370,12 @@ export function ask(series: Series, position: number, question: string): Answer 
   // Include the number: DCC's book-1 short title is "DCC", so a bare short
   // title produced "Answered as of DCC", which reads as the series name.
   const posLabel = posBook ? `Book ${posBook.id} · ${posBook.short}` : `book ${g.position}`;
+  // The panel header already states the reading position, so the note only
+  // appears when something is genuinely being withheld, and the headlines below
+  // do not repeat it either. Three mentions of the same book per answer read as
+  // noise.
   const gatedNote =
-    g.position < g.finalBook
-      ? `Answered as of ${posLabel}. Later books are hidden.`
-      : undefined;
+    g.position < g.finalBook ? 'Later books are hidden.' : undefined;
 
   // "how are X and Y connected"
   const between = /(?:between|connect\w*)\s+(.+?)\s+(?:and|to|with)\s+(.+?)[?.]?$/i.exec(q)
@@ -386,7 +388,7 @@ export function ask(series: Series, position: number, question: string): Answer 
       if (!path) {
         return {
           kind: 'path', gatedNote,
-          headline: `No connection between ${a.label} and ${b.label} as of ${posLabel}.`,
+          headline: `No connection between ${a.label} and ${b.label}.`,
           lines: ['They may be linked in a later book.'],
         };
       }
@@ -409,7 +411,7 @@ export function ask(series: Series, position: number, question: string): Answer 
       .filter((c) => c.status === statusWord);
     return {
       kind: 'status-list', gatedNote,
-      headline: `${hits.length} character${hits.length === 1 ? '' : 's'} ${statusWord} as of ${posLabel}`,
+      headline: `${hits.length} character${hits.length === 1 ? '' : 's'} ${statusWord}`,
       lines: hits.map(
         (c) => `${c.label}${c.role ? ` — ${c.role}` : ''}${c.statusIsBelief ? '  (as far as you know)' : ''}`,
       ),
@@ -429,8 +431,8 @@ export function ask(series: Series, position: number, question: string): Answer 
       return {
         kind: 'connections', gatedNote, subject: p,
         headline: conns.length
-          ? `${p.label} — ${relWord} (${conns.length}) as of ${posLabel}`
-          : `${p.label} has no ${relWord} relationships as of ${posLabel}.`,
+          ? `${p.label} — ${relWord} (${conns.length})`
+          : `${p.label} has no ${relWord} relationships yet.`,
         lines: conns.map((c) => `${c.other.label}${c.label ? ` — ${c.label}` : ''}`),
       };
     }
@@ -441,8 +443,8 @@ export function ask(series: Series, position: number, question: string): Answer 
       return {
         kind: 'events', gatedNote, subject: p,
         headline: evs.length
-          ? `${p.label} — ${evs.length} event${evs.length === 1 ? '' : 's'} through ${posLabel}`
-          : `Nothing recorded for ${p.label} through ${posLabel}.`,
+          ? `${p.label} — ${evs.length} event${evs.length === 1 ? '' : 's'}`
+          : `Nothing recorded for ${p.label} yet.`,
         lines: evs.map((e) => `Book ${e.book} · ${e.text}`),
       };
     }
@@ -480,7 +482,7 @@ export function ask(series: Series, position: number, question: string): Answer 
       const hits = g.characters.filter((c) => c.affil === id).map((c) => present(c, g));
       return {
         kind: 'group', gatedNote,
-        headline: `${aff.label} — ${hits.length} character${hits.length === 1 ? '' : 's'} as of ${posLabel}`,
+        headline: `${aff.label} — ${hits.length} character${hits.length === 1 ? '' : 's'}`,
         lines: hits.map((c) => `${c.label}${c.role ? ` — ${c.role}` : ''}`),
       };
     }
