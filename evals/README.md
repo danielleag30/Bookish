@@ -113,3 +113,46 @@ Per-type breakdown is where the diagnosis lives. From the baseline run:
 - `family`, `enemy`, `mentor`, `killed`, `ally` all 0 — the event log states almost no kinship or antagonism directly
 
 That last line is the useful one. It says the next improvement is corpus coverage, not prompt wording — and that is a conclusion, not a hunch.
+
+---
+
+## Single agent vs three: the honest comparison
+
+Empyrean, books 1–3, `gemma4` local, identical corpus.
+
+| | single | multi | |
+|---|---|---|---|
+| node precision | 75.9 | **84.6** | ↑ |
+| node F1 (in corpus) | 83.0 | **85.7** | ↑ |
+| **edge precision** | 52.4 | **69.2** | ↑↑ |
+| edge recall | 10.0 | 8.2 | ↓ |
+| **edge F1** | **16.8** | 14.6 | ↓ |
+| spurious edges | 4 | **0** | ↓↓ |
+| wrong type | 6 | **4** | ↓ |
+| temporal leaks | 0 | 0 | — |
+| wall clock | 356s | 524s | ↑ |
+| calls | 6 | 9 | ↑ |
+
+**The verifier did exactly what it was built to do, and edge F1 still went down.**
+
+Spurious edges went to zero and edge precision rose by 17 points. But recall fell, because rejecting a claim costs a true positive when the verifier is wrong — and F1 punishes that more than it rewards the precision gain.
+
+Both rejections are worth reading:
+
+> ✗ `Cordella — friend — Trager` — *"The passage states that Cordella 'forms relationship' with Trager. This does not explicitly state they are friends."*
+
+Correct. The truth type is `romantic`, so the verifier caught a wrong-type error the extractor made.
+
+> ✗ `Imogen — betrayer — Violet` — *"The passage only states that Imogen erased Violet's memory. It does not state or imply that this action constitutes betrayal."*
+
+Also defensible on the text alone, though the series does treat it as a betrayal.
+
+### Which number to believe
+
+For a chart people read to avoid being misled, **precision is worth more than recall.** A missing edge is a gap; a wrong edge is a false statement presented as fact. The verifier buys the first kind of error to avoid the second, at 1.5× the wall clock and 50% more calls.
+
+F1 weights them equally, which is the wrong weighting for this product. That is a limitation of the metric, not of the pipeline — worth saying out loud rather than quietly reporting whichever number looks better.
+
+### What the audit log captured
+
+Every run writes `pipeline/runs/<series>-multiagent-<stamp>.json`: each agent's status and cost, every handoff, every verifier verdict with its reason, every conflict the resolver settled and why, and every recovery. On this run: 7 agents, 0 failed, 0 partial, 1 conflict settled, 0 recoveries needed.
