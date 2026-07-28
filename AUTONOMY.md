@@ -71,6 +71,28 @@ on/off switch.
 
 ---
 
+## Verified in CI, 2026-07-28
+
+The changelog agent ran on the merge of its own pull request. It:
+
+- read 19 merged pull requests
+- summarised them with **GitHub Models** — the model calls work from a runner,
+  using only the workflow's own token
+- wrote `CHANGELOG.md`, committed, and pushed `agent/changelog-20260728-122820`
+- was **blocked from opening the pull request**, by
+  *Settings → Actions → General → Allow GitHub Actions to create and approve
+  pull requests*
+
+That block is a legitimate way to run this, so the workflow no longer treats it
+as a failure. The draft is pushed either way; the job summary reports the branch
+and a one-click compare link, and explains the setting for anyone who wants the
+agent to open the pull request itself.
+
+It is worth noticing which part failed. The agent reached a model, produced a
+reviewable artifact, and pushed it. What it could not do was the one step that
+puts something in front of a human for a decision — and the platform stopped it
+by default. That is the boundary working, not breaking.
+
 ## Where this is enforced
 
 - Job-level `permissions:` — the default is `contents: read`, raised only where
