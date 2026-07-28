@@ -1,8 +1,16 @@
 /**
- * One-time migration: lift the inline chart data out of each chart's
- * index.html and write it to data/<series>.json in the shared schema.
+ * One-time migration: lift the inline chart data out of the ORIGINAL hand-built
+ * charts and write it to data/<series>.json in the shared schema.
  *
  *   node scripts/extract-charts.mjs
+ *
+ * Reads from sources/, which holds the three original chart files as they stood
+ * before the engine extraction. The live pages under *-Chart/ are now thin
+ * shells that load data/*.json, so they no longer contain the inline arrays this
+ * script parses — keeping the originals here is what makes the migration
+ * re-runnable and auditable. data/*.json is the source of truth going forward;
+ * this script exists so every transformation applied to it can be re-derived
+ * and reviewed.
  *
  * Rather than regex-parsing values (which mangles nested quotes, unicode and
  * apostrophes in the bios), this pulls each `const NAME = <literal>` out by
@@ -640,6 +648,22 @@ function normaliseRelationships(edges, seriesId, notes) {
  * newly introduced type looks consistent across series.
  */
 function ensureDeclaredTypes(relationshipTypes, relationships, notes) {
+  // Aliasing collapses many legacy phrase-types onto one canonical id, so the
+  // registry can end up holding duplicates — Plated Prisoner's 21 entries mapped
+  // to 11 ids, which would have drawn a legend with repeats. Keep the first of
+  // each id, preferring the canonical label so the legend reads consistently.
+  const byId = new Map();
+  for (const t of relationshipTypes) {
+    if (byId.has(t.id)) continue;
+    const canon = RELATIONSHIP_BY_ID.get(t.id);
+    byId.set(t.id, canon ? { ...t, label: canon.label, symmetric: canon.symmetric } : t);
+  }
+  const dropped = relationshipTypes.length - byId.size;
+  if (dropped > 0) {
+    notes.push(`deduplicated ${dropped} relationship type entr(ies) that aliased onto an existing id`);
+  }
+  relationshipTypes = [...byId.values()];
+
   const declared = new Set(relationshipTypes.map((t) => t.id));
   const used = new Set();
   for (const r of relationships) {
@@ -702,7 +726,7 @@ const SERIES = [
     id: 'empyrean',
     title: 'The Empyrean',
     author: 'Rebecca Yarros',
-    file: 'Empyrean-Chart/index.html',
+    file: 'sources/Empyrean-Chart.html',
     consts: ['BH', 'BOOKS', 'BANDS', 'AFFIL', 'DRAGON_DEN', 'TYPE_SHAPES', 'SIGNET_GLYPHS',
              'BOOK_TRANSITIONS', 'REL_TYPES', 'KEY_EVENTS', 'NODES', 'EDGES', 'Y_OFFSETS'],
     build(v) {
@@ -721,7 +745,7 @@ const SERIES = [
     id: 'dcc',
     title: 'Dungeon Crawler Carl',
     author: 'Matt Dinniman',
-    file: 'DCC-Chart/index.html',
+    file: 'sources/DCC-Chart.html',
     consts: ['BH', 'BOOKS', 'BANDS', 'FC', 'FL', 'FEMOJI', 'REL_TYPES', 'KEY_EVENTS', 'NODES', 'EDGES'],
     build(v) {
       // Fold the three parallel faction maps into one affiliations map.
@@ -740,7 +764,7 @@ const SERIES = [
     id: 'plated-prisoner',
     title: 'The Plated Prisoner',
     author: 'Raven Kennedy',
-    file: 'Plated-Prisoner-Chart/index.html',
+    file: 'sources/Plated-Prisoner-Chart.html',
     consts: ['BOOKS', 'BOOK_EVENTS', 'KINGDOMS', 'MAGIC_ICONS', 'RELATION_STYLES',
              'ALL_NODES', 'ALL_EDGES'],
     build(v) {

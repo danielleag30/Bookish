@@ -146,7 +146,7 @@
   "relationshipTypes": [
     {
       "id": "squad",
-      "label": "Party",
+      "label": "Squad",
       "color": "#e87840",
       "dash": null,
       "symmetric": true
@@ -160,7 +160,7 @@
     },
     {
       "id": "family",
-      "label": "Family/Bond",
+      "label": "Family",
       "color": "#e8a060",
       "dash": null,
       "symmetric": false

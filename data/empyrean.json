@@ -142,21 +142,21 @@
   "relationshipTypes": [
     {
       "id": "bonded",
-      "label": "Bonded (rider/dragon)",
+      "label": "Bonded",
       "color": "#a78bfa",
       "dash": null,
       "symmetric": false
     },
     {
       "id": "mated",
-      "label": "Mated dragons",
+      "label": "Mated",
       "color": "#f472b6",
       "dash": null,
       "symmetric": true
     },
     {
       "id": "romantic",
-      "label": "Romantic / Married",
+      "label": "Romantic",
       "color": "#ec4899",
       "dash": "6 2",
       "symmetric": true
@@ -170,7 +170,7 @@
     },
     {
       "id": "squad",
-      "label": "Squad / Friend",
+      "label": "Squad",
       "color": "#34d399",
       "dash": null,
       "symmetric": true

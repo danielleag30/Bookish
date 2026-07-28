@@ -196,36 +196,22 @@
   "relationshipTypes": [
     {
       "id": "captor",
-      "label": "Captor/Captive",
+      "label": "Captor",
       "color": "#c0392b",
       "dash": "6,3",
       "symmetric": false
     },
     {
       "id": "romantic",
-      "label": "Slow-burn",
+      "label": "Romantic",
       "color": "#ad1457",
       "dash": "4,2",
       "symmetric": true
     },
     {
-      "id": "romantic",
-      "label": "Love Interest",
-      "color": "#e91e8c",
-      "dash": null,
-      "symmetric": true
-    },
-    {
       "id": "mated",
-      "label": "Fated Mates",
+      "label": "Mated",
       "color": "#ff1744",
-      "dash": null,
-      "symmetric": true
-    },
-    {
-      "id": "romantic",
-      "label": "Married",
-      "color": "#8e44ad",
       "dash": null,
       "symmetric": true
     },
@@ -244,13 +230,6 @@
       "symmetric": false
     },
     {
-      "id": "ally",
-      "label": "Guard",
-      "color": "#2980b9",
-      "dash": null,
-      "symmetric": true
-    },
-    {
       "id": "friend",
       "label": "Friend",
       "color": "#16a085",
@@ -259,58 +238,23 @@
     },
     {
       "id": "commands",
-      "label": "Commander",
+      "label": "Commands",
       "color": "#34495e",
       "dash": "3,3",
       "symmetric": false
     },
     {
       "id": "squad",
-      "label": "Wrath",
+      "label": "Squad",
       "color": "#546e7a",
       "dash": "2,2",
       "symmetric": true
     },
     {
-      "id": "enemy",
-      "label": "Hostile",
-      "color": "#f39c12",
-      "dash": "5,3",
-      "symmetric": false
-    },
-    {
-      "id": "ally",
-      "label": "Political",
-      "color": "#795548",
-      "dash": "8,2,2,2",
-      "symmetric": true
-    },
-    {
-      "id": "family",
-      "label": "Sibling",
-      "color": "#ec407a",
-      "dash": null,
-      "symmetric": false
-    },
-    {
-      "id": "family",
-      "label": "Parent/Child",
-      "color": "#d81b60",
-      "dash": null,
-      "symmetric": false
-    },
-    {
       "id": "family",
       "label": "Family",
-      "color": "#c2185b",
+      "color": "#ec407a",
       "dash": null,
-      "symmetric": false
-    },
-    {
-      "id": "family",
-      "label": "Ancestor",
-      "color": "#6a1b9a",
-      "dash": "1,3",
       "symmetric": false
     },
     {
@@ -321,22 +265,8 @@
       "symmetric": false
     },
     {
-      "id": "ally",
-      "label": "Sacrifice",
-      "color": "#ffc107",
-      "dash": null,
-      "symmetric": true
-    },
-    {
-      "id": "ally",
-      "label": "Rebel ally",
-      "color": "#1e88e5",
-      "dash": "5,2",
-      "symmetric": true
-    },
-    {
       "id": "mentor",
-      "label": "Loyalist",
+      "label": "Mentor",
       "color": "#00838f",
       "dash": null,
       "symmetric": false
