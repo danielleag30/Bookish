@@ -16,6 +16,7 @@
  * `label` carried no description.
  */
 import { z } from 'zod';
+import { contrastRatio, MIN_ACCENT_CONTRAST } from './contrast.ts';
 import {
   RELATIONSHIP_BY_ID,
   RELATIONSHIP_IDS,
@@ -663,6 +664,30 @@ export function checkIntegrity(series: Series): Issue[] {
         warn('endpoint-type-mismatch', at,
           `${r.type} requires matching types, got "${from.type}" and "${to.type}"`);
       }
+    }
+  }
+
+  // Theme. A palette can be proposed by an agent reading the cover, so it is
+  // checked like any other input: colours must parse, and the accent must be
+  // legible on the ground. An unreadable chart is worse than an unstyled one.
+  if (series.theme) {
+    const t = series.theme;
+    for (const [k, v] of Object.entries(t)) {
+      if (k === 'mood' || k === 'display' || v === undefined) continue;
+      if (contrastRatio(v, '#ffffff') === null) {
+        err('theme-colour-unparseable', `theme.${k}`, `"${v}" is not a colour`);
+      }
+    }
+    if (t.accent && t.ground) {
+      const ratio = contrastRatio(t.accent, t.ground);
+      if (ratio !== null && ratio < MIN_ACCENT_CONTRAST) {
+        err('theme-contrast-too-low', 'theme',
+          `accent on ground is ${ratio.toFixed(2)}:1, below the ${MIN_ACCENT_CONTRAST}:1 floor`);
+      }
+    }
+    if (t.mood !== undefined && t.mood.trim().length < 30) {
+      warn('theme-mood-too-short', 'theme',
+        'a palette with no stated reason is unreviewable — say what it is for');
     }
   }
 

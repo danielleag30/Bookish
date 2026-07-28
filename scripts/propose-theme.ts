@@ -1,0 +1,145 @@
+/**
+ * Propose a series' palette from its cover.
+ *
+ *   npm run theme -- --slug dcc --image images/dcc.png
+ *   npm run theme -- --slug dcc --image images/dcc.png --write
+ *
+ * WHY THE COVER
+ * The cover is the series' existing visual identity — someone already decided
+ * what it looks like, and a chart that clashes with it feels like a different
+ * product. Reading the cover means the agent is matching a decision rather than
+ * inventing one.
+ *
+ * WHY THIS IS SAFE TO LET RUN
+ * A model asked for colours will happily return something nobody can read. Every
+ * proposal is checked for WCAG contrast before it is shown, and a palette that
+ * fails is rejected with the numbers rather than quietly shipped. The agent can
+ * propose anything; only legible proposals survive.
+ *
+ * `mood` is required, and it is the point. A palette with no stated intent is
+ * unreviewable — you cannot argue with #e87840, but you can argue with "warning
+ * -label orange, a dungeon lit by emergency lighting".
+ */
+import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { resolve, join } from 'node:path';
+import { SeriesSchema, type Theme } from '../src/schema.ts';
+import { contrastRatio, MIN_ACCENT_CONTRAST } from '../src/contrast.ts';
+import { call, available, DEFAULT_MODEL } from '../pipeline/ollama.ts';
+
+const root = resolve(import.meta.dirname, '..');
+const arg = (n: string, d?: string) => {
+  const i = process.argv.indexOf(`--${n}`);
+  return i >= 0 ? process.argv[i + 1] : d;
+};
+const has = (f: string) => process.argv.includes(`--${f}`);
+
+const slug = arg('slug');
+if (!slug) {
+  console.error('usage: npm run theme -- --slug <series> [--image <path>] [--write]');
+  process.exit(1);
+}
+const model = arg('model', DEFAULT_MODEL)!;
+
+const dataPath = join(root, 'data', `${slug}.json`);
+const hasData = existsSync(dataPath);
+const series = hasData
+  ? SeriesSchema.parse(JSON.parse(readFileSync(dataPath, 'utf8')))
+  : null;
+
+// Find the cover: given, or guessed from the slug.
+const guesses = [
+  arg('image'),
+  `images/${slug}.png`,
+  `images/${slug.replace(/-/g, '_')}.png`,
+  `images/${slug.split('-').map((w) => w[0]!.toUpperCase() + w.slice(1)).join('')}.png`,
+].filter(Boolean) as string[];
+const imagePath = guesses.map((g) => join(root, g)).find((p) => existsSync(p));
+if (!imagePath) {
+  console.error(`No cover image found. Tried:\n${guesses.map((g) => `  ${g}`).join('\n')}`);
+  process.exit(1);
+}
+
+if (!(await available())) {
+  console.error('No local Ollama on :11434. Start it with `ollama serve`.');
+  process.exit(1);
+}
+
+const title = series?.title ?? slug;
+console.log(`${title}\ncover ${imagePath.replace(root + '/', '')}\nmodel ${model}\n`);
+
+const THEME_SCHEMA = {
+  type: 'object',
+  properties: {
+    accent: { type: 'string', description: 'Hex like #d4af37. Headings and highlights. Must read clearly on the ground.' },
+    ground: { type: 'string', description: 'Hex. Page background. Dark — these charts are dark.' },
+    panel: { type: 'string', description: 'Hex. Slightly lighter than the ground, for side panels.' },
+    line: { type: 'string', description: 'Hex. Borders. Close to the accent but much dimmer.' },
+    mood: { type: 'string', description: 'One sentence on why these colours suit this series. Concrete, not marketing.' },
+  },
+  required: ['accent', 'ground', 'panel', 'line', 'mood'],
+};
+
+const prompt = `This is the cover of "${title}", a fantasy series.
+
+Choose a dark colour palette for an interactive character chart of this series,
+drawn from the cover so the chart and the book feel like the same thing.
+
+Requirements:
+- ground must be very dark, near-black, but tinted toward the cover's own hues
+- accent must be clearly readable against ground — aim for high contrast
+- panel is a little lighter than ground
+- line is close to accent but much dimmer
+- mood: one concrete sentence about why this palette suits THIS series
+
+Return hex codes.`;
+
+const image = readFileSync(imagePath).toString('base64');
+const started = Date.now();
+const res = await call<Theme & { accent: string; ground: string; panel: string; line: string; mood: string }>(
+  prompt, { model, format: THEME_SCHEMA, images: [image], timeoutMs: 420_000 },
+);
+const t = res.value;
+
+// ── Check it before showing it ─────────────────────────────────────────────
+const problems: string[] = [];
+for (const [k, v] of Object.entries({ accent: t.accent, ground: t.ground, panel: t.panel, line: t.line })) {
+  if (contrastRatio(v, '#ffffff') === null) problems.push(`${k} is not a colour: ${JSON.stringify(v)}`);
+}
+const accentOnGround = contrastRatio(t.accent, t.ground);
+if (accentOnGround !== null && accentOnGround < MIN_ACCENT_CONTRAST) {
+  problems.push(
+    `accent on ground is ${accentOnGround.toFixed(2)}:1, below the ${MIN_ACCENT_CONTRAST}:1 floor — unreadable`,
+  );
+}
+if ((t.mood ?? '').trim().length < 30) {
+  problems.push('mood is too short to be a reason');
+}
+
+console.log(`  accent  ${t.accent}`);
+console.log(`  ground  ${t.ground}`);
+console.log(`  panel   ${t.panel}`);
+console.log(`  line    ${t.line}`);
+console.log(`  mood    ${t.mood}`);
+console.log(`\n  contrast accent-on-ground: ${accentOnGround?.toFixed(2) ?? '?'}:1  (floor ${MIN_ACCENT_CONTRAST}:1)`);
+console.log(`  ${((Date.now() - started) / 1000).toFixed(0)}s · $0`);
+
+if (problems.length) {
+  console.error(`\nRejected:`);
+  for (const p of problems) console.error(`  - ${p}`);
+  console.error(`\nNothing written. Re-run to get another proposal.`);
+  process.exit(1);
+}
+
+if (!has('write')) {
+  console.log(`\nProposal only. Re-run with --write to put it in data/${slug}.json.`);
+  process.exit(0);
+}
+if (!series) {
+  console.error(`\nNo data/${slug}.json yet — build the series first, then --write.`);
+  process.exit(1);
+}
+
+const updated = { ...series, theme: { ...t, display: series.theme?.display ?? "'Cinzel', serif" } };
+SeriesSchema.parse(updated);
+writeFileSync(dataPath, JSON.stringify(updated, null, 2) + '\n');
+console.log(`\nwrote the theme into data/${slug}.json`);
