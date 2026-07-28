@@ -56,8 +56,10 @@ describe('empyrean', () => {
     expect(s.books).toHaveLength(4);
   });
 
-  it('kept 111 relationships — 115 source edges, minus 2 merged duplicates and 2 incorrect', () => {
-    expect(s.relationships).toHaveLength(111);
+  it('kept 110 relationships from 115 source edges', () => {
+    // 115 source - 2 merged reversed duplicates - 2 factually wrong `killed`
+    // edges - 1 redundant imogen>violet (violet>imogen already carries the arc).
+    expect(s.relationships).toHaveLength(110);
   });
 
   it('applied the canon corrections', () => {

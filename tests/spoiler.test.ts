@@ -384,3 +384,35 @@ describe('suggested questions resolve to the character they name', () => {
     });
   }
 });
+
+describe('perceived allegiance — the planted-spy case', () => {
+  const panchek = emp.characters.find((c) => c.id === 'panchek')!;
+
+  it('shows Panchek as faculty until the book that exposes him', () => {
+    for (const pos of [1, 2]) {
+      const p = present(panchek, gate(emp, pos));
+      expect(p.affil).toBe('faculty');
+      expect(p.role).not.toMatch(/venin/i);
+    }
+  });
+
+  it('shows his true allegiance from book 3', () => {
+    const p = present(panchek, gate(emp, 3));
+    expect(p.affil).toBe('venin');
+    expect(p.role).toMatch(/Venin Spy/);
+  });
+
+  it('never lists him among the venin before the reveal', () => {
+    for (const pos of [1, 2]) {
+      const a = ask(emp, pos, 'venin');
+      expect(a.lines.join(' ')).not.toMatch(/Panchek/);
+    }
+  });
+
+  it('keeps his place on the chart while hiding his side', () => {
+    // He sits in leadership throughout — a spy is physically where they work.
+    for (const pos of [1, 2, 3]) {
+      expect(present(panchek, gate(emp, pos)).region).toBe('leadership');
+    }
+  });
+});

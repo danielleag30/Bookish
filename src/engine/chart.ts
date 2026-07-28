@@ -222,6 +222,27 @@ export function mountChart(opts: MountOptions): ChartHandle {
     }
     root.appendChild(edgeLayer);
 
+    // Work out which labels would collide, and push them onto lower tiers.
+    // Two labels clash when their nodes sit at nearly the same height and their
+    // estimated text widths overlap.
+    const labelTier = new Map<string, number>();
+    if (state.showLabels) {
+      const sorted = [...view.nodes].sort((a, b) => a.y - b.y || a.x - b.x);
+      const placed: { x: number; y: number; halfW: number; tier: number }[] = [];
+      for (const n of sorted) {
+        const halfW = Math.max(24, present(n.character, view.gated).label.length * 3.1);
+        let tier = 0;
+        // Try successively lower tiers until nothing already there overlaps.
+        while (tier < 3 && placed.some(
+          (p) => p.tier === tier
+            && Math.abs(p.y - n.y) < 26
+            && Math.abs(p.x - n.x) < p.halfW + halfW,
+        )) tier++;
+        labelTier.set(n.character.id, tier);
+        placed.push({ x: n.x, y: n.y, halfW, tier });
+      }
+    }
+
     // Nodes.
     const nodeLayer = svg('g', { class: 'bkc-nodes' });
     for (const n of view.nodes) {
@@ -260,13 +281,22 @@ export function mountChart(opts: MountOptions): ChartHandle {
       g.appendChild(ini);
 
       if (state.showLabels) {
-        const t = svg('text', { x: n.x, y: n.y + n.r + 15, class: 'bkc-node-label' });
+        // Stagger labels for horizontally-crowded nodes. Empyrean's riders row
+        // packs a dozen characters at similar y, and their names ran into one
+        // another — "Xaden RiorsGarrick Tavisnogen Cardulo".
+        const t = svg('text', {
+          x: n.x, y: n.y + n.r + 15 + (labelTier.get(c.id) ?? 0) * 13,
+          class: 'bkc-node-label',
+        });
         // The presented label, so an alias is shown before its reveal.
         t.textContent = shown.label;
         g.appendChild(t);
 
         if (shown.status !== 'alive') {
-          const s = svg('text', { x: n.x, y: n.y + n.r + 28, class: 'bkc-node-status' });
+          const s = svg('text', {
+            x: n.x, y: n.y + n.r + 28 + (labelTier.get(c.id) ?? 0) * 13,
+            class: 'bkc-node-status',
+          });
           s.textContent = shown.statusIsBelief
             ? `(${shown.status}?)`
             : `(${c.statusDetail ?? shown.status})`;

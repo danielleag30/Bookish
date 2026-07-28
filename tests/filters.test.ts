@@ -154,16 +154,19 @@ describe('perceived state', () => {
     expect(aaric.perceived?.untilBook).toBe(2);
   });
 
-  it('leaves Panchek without a perceived state while his first book is 3', () => {
-    // His bio says he was "running Basgiath itself" as Commandant, so he is
-    // probably present from book 1 — the same pattern as Berwyn. But with
-    // book 3 there is no earlier window in which a reader could perceive him
-    // as merely the Commandant, so a perceived block would be incoherent.
-    // Lowering his book changes what the chart displays, so it is the author's
-    // call. If his book is corrected, give him a perceived state.
+  it('records Panchek as a planted spy, not a defector', () => {
+    // Canon has him present across Fourth Wing and Iron Flame, so book 1 is
+    // right. He is venin from the start and never switches sides, so this is a
+    // false belief rather than a change — his true `affil` is venin while his
+    // `region` stays leadership, which is why the two are separate fields.
     const panchek = s.characters.find((c) => c.id === 'panchek')!;
-    expect(panchek.book).toBe(3);
-    expect(panchek.perceived).toBeUndefined();
+    expect(panchek.book).toBe(1);
+    expect(panchek.affil).toBe('venin');
+    expect(panchek.region).toBe('leadership');
+    expect(panchek.perceived?.affil).toBe('faculty');
+    expect(panchek.perceived?.untilBook).toBe(2);
+    // Not modelled as a change: he did not become venin.
+    expect(panchek.changes?.some((ch) => ch.set.affil)).toBeFalsy();
   });
 
   it('never records a perceived state identical to the real one', () => {

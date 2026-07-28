@@ -329,18 +329,45 @@ const CORRECTIONS = {
         why: 'Dies at the Battle of Basgiath in Iron Flame (book 2); lastBook 1 hid her from the book she dies in' },
       { id: 'aimsir', set: { lastBook: 2 },
         why: "Lilith's dragon — her lifeforce is siphoned into the wardstone in the same book-2 scene" },
+      { id: 'panchek',
+        set: { book: 1, affil: 'venin', region: 'leadership', role: 'Commandant · Venin Spy' },
+        why: 'Appears across Fourth Wing and Iron Flame at Threshing, squad battles and ' +
+             'promotions — the venin reveal in book 3 is a reveal, not a first appearance' },
       { id: 'berwyn', set: { book: 2 },
         why: 'The venin general who turns Xaden venin at the end of Iron Flame (book 2), not book 3' },
     ],
     relationships: [
+      { match: 'xaden>liam:family', set: { type: 'friend', label: 'raised together' },
+        why: 'Both are Marked Ones raised together in Tyrrendor after their fathers were ' +
+             'executed. Not related, so this is friendship, not kinship' },
+      { match: 'naolin>brennan:family', set: { type: 'ally', label: 'died saving him' },
+        why: "Naolin used his siphon to bring Brennan back at the cost of his own life. " +
+             'A sacrifice between allies, not a kinship tie' },
+      { match: 'leothan>andarna:family', set: { type: 'mentor', label: 'calls her home to learn Irid ways' },
+        why: 'Leothan draws Andarna to the Irids to be taught; she severs her bond and ' +
+             'leaves with him in Onyx Storm. That is mentorship' },
+      { match: 'varrish>jack:ally', set: { type: 'commands', label: 'wields him as a weapon' },
+        why: 'Varrish is Vice Commandant and Jack a cadet, so the control runs through the ' +
+             'hierarchy. "Wields him" is direction, not cooperation between equals' },
+      { match: 'varrish>nolon:ally', set: { type: 'commands', label: 'orders him to mend Jack' },
+        why: 'Varrish orders Nolon, a healer under his authority. Same hierarchy as above' },
       { match: 'king_tauri>halden:family', set: { book: 3 },
         why: 'Halden is referenced in book 1 but first appears on-page in Onyx Storm (book 3)' },
       { match: 'halden>aaric:family', set: { book: 3 },
         why: 'Same — the edge cannot render before Halden appears' },
-      { match: 'wyvern_rep>theophanie:ally', set: { book: 3 },
-        why: 'Theophanie first appears in Onyx Storm (book 3)' },
-      { match: 'wyvern_rep>berwyn:ally', set: { book: 2 },
-        why: 'Follows Berwyn moving to book 2' },
+      // Wyverns are created by venin and ridden as mounts, so the venin is the
+      // actor. `bonded` would be wrong twice over: its endpoint rule requires a
+      // human bonded to a dragon/irid/gryphon, and an Empyrean bond is mutual
+      // and unbreakable, which a manufactured steed is not.
+      { match: 'wyvern_rep>theophanie:ally',
+        set: { from: 'theophanie', to: 'wyvern_rep', type: 'commands',
+               label: 'creates and rides them', book: 3 },
+        why: 'Theophanie directs wyverns rather than allying with them; she also first ' +
+             'appears in Onyx Storm, so the edge moves to book 3' },
+      { match: 'wyvern_rep>berwyn:ally',
+        set: { from: 'berwyn', to: 'wyvern_rep', type: 'commands',
+               label: 'creates and rides them', book: 2 },
+        why: 'Same, and follows Berwyn moving to book 2' },
     ],
     // What readers believed before the reveal. `status` records only the end
     // state, which is not the story as read.
@@ -353,12 +380,19 @@ const CORRECTIONS = {
         set: { identity: 'Aaric Graycastle', untilBook: 2,
                note: "Actually Prince Camlaen Aaric Tauri, King Tauri's youngest son, enlisted " +
                      'under an alias.' } },
-      // Panchek deliberately omitted: his `book` is 3, so there is no earlier
-      // window in which a reader could perceive him as merely the Commandant.
-      // That looks like the Berwyn pattern — his bio says he was "running
-      // Basgiath itself", so he is likely present from book 1. Recorded in
-      // PENDING_DATA_REVIEW rather than guessed at, because lowering his book
-      // changes what the chart displays.
+      // Resolved 2026-07-27. Canon confirms Panchek appears across Fourth Wing
+      // and Iron Flame at Threshing, squad battles and promotions, so book 1 is
+      // right and the old book 3 was the Berwyn pattern again.
+      //
+      // This is `perceived`, not `changes`: he is a venin spy from the start and
+      // never switches sides. The reader simply believes he is the Commandant
+      // until Onyx Storm exposes him. His true `affil` is therefore venin from
+      // book 1 while his `region` stays leadership — which is exactly why the
+      // schema keeps allegiance and place separate.
+      { id: 'panchek',
+        set: { affil: 'faculty', role: 'Commandant · Riders Quadrant', untilBook: 2,
+               note: 'Exposed in Onyx Storm as a venin spy bonded to Berwyn. He was one all ' +
+                     'along; the reader is simply not told until book 3.' } },
     ],
     // ── Temporal backfill ────────────────────────────────────────────────
     // The base record is state at first appearance; these are what changed
@@ -418,6 +452,10 @@ const CORRECTIONS = {
              '`killed` means the victim died; a survived attempt is `enemy`' },
     ],
     dropRelationships: [
+      { match: 'imogen>violet:ally',
+        why: 'Redundant. violet>imogen already carries this pair as `enemy` becoming ' +
+             '`ally` in book 2, and `ally` is symmetric so the reverse direction adds ' +
+             'nothing. The memory erasure it was labelled with is a book-3 event' },
       { match: 'quinn>theophanie:killed',
         why: 'Quinn is killed by an unnamed venin in a tower at Draithus, and Violet — not Quinn — ' +
              'kills Theophanie. The edge is wrong in both directions; her death is already carried by ' +
@@ -443,6 +481,10 @@ const CORRECTIONS = {
     relationships: [
       { match: 'nenet>thursil:family', set: { label: 'grandson' },
         why: "Thursil's own role reads \"Nenet's grandson\"" },
+      { match: 'cull>elore:family', set: { label: 'co-parents of Slade' },
+        why: 'Lord Cull is Slade\'s father and Elore his mother. Recording them as ' +
+             'co-parents states what the data supports without asserting a marriage that ' +
+             'the chart never claims' },
       { match: 'wick>saira:family', set: { label: 'Turley ancestor' },
         why: 'Saira Turley is an ancestor of the Turley line, which Wick belongs to' },
     ],
@@ -464,6 +506,14 @@ const CORRECTIONS = {
           { book: 5, set: { type: 'enemy', label: 'Katia hunts and kills her' },
             why: 'Katia leaves the party to hunt Eva on Floor 7 and kills her' },
         ]},
+    ],
+    relationships: [
+      { match: 'donut>kiwi:family', set: { type: 'squad', label: 'Royal Court' },
+        why: 'Kiwi is a Royal Court pet bird who joined on Floor 7, not a relative. The ' +
+             'Royal Court is a named unit, which is what `squad` means' },
+      { match: 'donut>rend:family', set: { type: 'squad', label: 'Royal Court' },
+        why: 'Rend was gifted to Carl by Tserendelgor, not to Donut. Carl already has his ' +
+             'own edge to Rend, so what remains here is shared Royal Court membership' },
     ],
     dropRelationships: [
       { match: 'katia>eva:enemy',
