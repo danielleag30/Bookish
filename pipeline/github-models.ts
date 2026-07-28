@@ -7,6 +7,14 @@
  * hosted one. GitHub Models is the exam-relevant choice and free at low volume,
  * and it authenticates with the workflow's own token — nothing extra to store.
  *
+ * RETIREMENT
+ * GitHub Models is fully retired on 2026-07-30 and has been closed to new
+ * customers since 2026-06-16. This client is kept because the shape is the
+ * reusable part — a CI model client that degrades instead of failing — but the
+ * changelog agent now defaults to its deterministic path, which needs no hosted
+ * model at all. To revive the model path later, repoint ENDPOINT at whatever
+ * replaces it and supply a token; nothing else changes.
+ *
  * Everything here degrades rather than throws: if the token is missing or the
  * endpoint refuses, callers fall back to deterministic behaviour instead of
  * failing the workflow. An agent that cannot reach a model should still produce

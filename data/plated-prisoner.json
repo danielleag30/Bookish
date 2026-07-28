@@ -1792,5 +1792,13 @@
       ],
       "kind": "other"
     }
-  ]
+  ],
+  "theme": {
+    "accent": "#e0a63c",
+    "ground": "#100a12",
+    "panel": "rgba(28,16,30,.92)",
+    "line": "rgba(224,166,60,.26)",
+    "display": "'Cinzel', serif",
+    "mood": "Gilt on bruised plum — a gold cage that is beautiful and still a cage, which is the whole premise."
+  }
 }

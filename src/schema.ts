@@ -302,6 +302,39 @@ export const EventSchema = z.object({
   kind: EventKindSchema,
 });
 
+/**
+ * How a series looks.
+ *
+ * This exists so a series' visual identity is *data*, not hand-written CSS in
+ * its page. Before this, each chart shell carried its own colours, which meant
+ * the only way to theme a new series was to write CSS — nowhere for anything
+ * else to make the decision.
+ *
+ * With it, a theme is a proposable artifact: an agent reading the books can
+ * suggest a palette in a pull request, and a human can look at the diff and
+ * argue with it. `mood` carries the reasoning so the choice is reviewable
+ * rather than arbitrary — a palette with no stated intent is just noise.
+ *
+ * Everything is optional; a series with no theme falls back to the site default.
+ */
+export const ThemeSchema = z.object({
+  accent: z.string().optional().describe('Headings, active states, glyphs'),
+  ground: z.string().optional().describe('Page background'),
+  panel: z.string().optional().describe('Sidebar and panel background'),
+  line: z.string().optional().describe('Borders and rules'),
+  display: z
+    .string()
+    .optional()
+    .describe("Display typeface for headings, e.g. 'Cinzel', serif"),
+  mood: z
+    .string()
+    .optional()
+    .describe(
+      'One line on why these choices suit the series. Required reading for a ' +
+        'reviewer deciding whether a proposed palette is right.',
+    ),
+});
+
 export const SeriesSchema = z.object({
   id: z.string().min(1),
   title: z.string().min(1),
@@ -313,6 +346,8 @@ export const SeriesSchema = z.object({
   characters: z.array(CharacterSchema).min(1),
   relationships: z.array(RelationshipSchema),
   events: z.array(EventSchema),
+
+  theme: ThemeSchema.optional(),
 
   // Optional, series-specific presentation data.
   characterTypes: z.record(z.string(), CharacterTypeSchema).optional(),
@@ -327,6 +362,7 @@ export type Status = z.infer<typeof StatusSchema>;
 export type EventKind = z.infer<typeof EventKindSchema>;
 export type Book = z.infer<typeof BookSchema>;
 export type Region = z.infer<typeof RegionSchema>;
+export type Theme = z.infer<typeof ThemeSchema>;
 export type Affiliation = z.infer<typeof AffiliationSchema>;
 export type RelationshipType = z.infer<typeof RelationshipTypeSchema>;
 export type Character = z.infer<typeof CharacterSchema>;
