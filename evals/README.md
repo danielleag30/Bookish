@@ -156,3 +156,51 @@ F1 weights them equally, which is the wrong weighting for this product. That is 
 ### What the audit log captured
 
 Every run writes `pipeline/runs/<series>-multiagent-<stamp>.json`: each agent's status and cost, every handoff, every verifier verdict with its reason, every conflict the resolver settled and why, and every recovery. On this run: 7 agents, 0 failed, 0 partial, 1 conflict settled, 0 recoveries needed.
+
+---
+
+## Choosing a local model
+
+Run the harness rather than trusting a single call — the two disagreed here, and
+the harness was right.
+
+Empyrean book 1, multi-agent, identical corpus, temperature 0:
+
+| | gemma4 (9.6 GB) | qwen3:8b (5.2 GB) |
+|---|---|---|
+| node F1, in corpus | 94.7 | 94.7 |
+| edge precision | **75.0** | 66.7 |
+| edge F1 | **16.9** | 16.7 |
+| invented edges | **0** | 1 |
+| wrong type | 2 | 2 |
+| wall clock | **53s** | 80s |
+
+**Stay on gemma4.** It is faster end to end and invents nothing.
+
+### Turn reasoning off
+
+The finding that matters more than the model choice. qwen3 is a reasoning model,
+and on a schema-constrained extraction call it spent 204 seconds thinking. With
+`think: false` the same call took **34 seconds** — and answered *better*, finding
+both of Violet's dragon bonds where the reasoning run missed them.
+
+The thinking tokens are discarded by a constrained decode. You wait for them and
+throw them away. `pipeline/ollama.ts` therefore sends `think: false` by default;
+models without a thinking mode ignore it.
+
+### Two ways this measurement went wrong first
+
+Worth recording, because both are easy to repeat:
+
+1. **A cold model looks catastrophic.** gemma4's first timed call was 252s
+   against qwen3's 31s — almost entirely model load from disk. Warm, they were
+   25s and 19s. Always warm both before comparing.
+2. **A contended machine reports failure as quality.** The first qwen3 eval
+   scored 0.0 with three agents failing, while a model pull and a benchmark were
+   running alongside it on 24 GB. The audit log said "operation was aborted",
+   not "bad answer" — which is the difference between a slow model and a wrong
+   one, and only visible because every agent's failure reason is recorded.
+
+Single runs at temperature 0 on a one-chunk corpus: deterministic, but n=1. The
+edge-F1 gap here (16.9 versus 16.7) is noise. The speed gap and the invented edge
+are not.
