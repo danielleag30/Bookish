@@ -274,3 +274,23 @@ describe('plated-prisoner', () => {
     expect(reveal?.involves).not.toContain('elore');
   });
 });
+
+describe('series themes', () => {
+  const seriesFiles = readdirSync(dataDir).filter((f) => f.endsWith('.json'));
+
+  it('gives every series a theme with a stated intent', () => {
+    for (const file of seriesFiles) {
+      const s = load(file);
+      // A palette with no reasoning is unreviewable — a human looking at a
+      // proposed theme needs to know what it was aiming for.
+      expect(s.theme, `${file} has no theme`).toBeDefined();
+      expect(s.theme?.mood?.length ?? 0, `${file} theme has no mood`).toBeGreaterThan(30);
+      expect(s.theme?.accent).toMatch(/^#[0-9a-f]{3,8}$/i);
+    }
+  });
+
+  it('gives each series a distinct accent', () => {
+    const accents = seriesFiles.map((f: string) => load(f).theme?.accent);
+    expect(new Set(accents).size).toBe(accents.length);
+  });
+});

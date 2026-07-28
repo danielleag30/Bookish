@@ -10,17 +10,22 @@ on:
   workflow_dispatch:
     inputs:
       use_model:
-        description: 'Summarise entries with GitHub Models (off = PR titles verbatim)'
+        description: 'Summarise with a hosted model. Off by default — see the note below.'
         type: boolean
-        default: true
+        default: false
   pull_request:
     types: [closed]
     branches: [main]
 
+# GitHub Models is fully retired on 2026-07-30, so the model path is opt-in and
+# off by default. The deterministic path — PR titles verbatim, grouped and linked
+# — costs nothing, cannot break when an endpoint disappears, and cannot describe
+# a change more confidently than it deserves. `models: read` stays declared only
+# because the opt-in path still needs it while any endpoint remains.
 permissions:
   contents: write        # to push the agent's branch
   pull-requests: write   # to open the PR
-  models: read           # GitHub Models, for the one-line summaries
+  models: read           # only used when use_model is explicitly true
 
 jobs:
   draft:
@@ -47,8 +52,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          FLAGS=""
-          if [ "${{ inputs.use_model }}" = "false" ]; then FLAGS="--no-model"; fi
+          # Default off: only the explicit opt-in turns the model on.
+          FLAGS="--no-model"
+          if [ "${{ inputs.use_model }}" = "true" ]; then FLAGS=""; fi
           # The script prints "changed" or "unchanged" on stdout; its progress
           # goes to stderr so this stays parseable.
           RESULT=$(npm run --silent changelog -- $FLAGS)

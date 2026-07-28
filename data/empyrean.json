@@ -2578,6 +2578,14 @@
       "kind": "other"
     }
   ],
+  "theme": {
+    "accent": "#d4af37",
+    "ground": "#0a0a14",
+    "panel": "rgba(16,12,28,.92)",
+    "line": "rgba(212,175,55,.25)",
+    "display": "'Cinzel', serif",
+    "mood": "Gold on deep violet-black — war college heraldry and dragon-fire, formal enough for an academy and dark enough for the Barrens."
+  },
   "characterTypes": {
     "human": {
       "label": "Human",

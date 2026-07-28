@@ -34,8 +34,10 @@ jobs:
       github.event.label.name == 'add-series'
     runs-on: ubuntu-latest
     permissions:
+      # No model is called in this job — it writes the notes to a file and
+      # validates the existing data. Declaring `models: read` here would grant a
+      # capability nothing uses.
       contents: read
-      models: read
     outputs:
       series: ${{ steps.plan.outputs.series }}
     steps:
@@ -49,7 +51,6 @@ jobs:
       - name: Plan
         id: plan
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE_BODY: ${{ github.event.issue.body }}
           INPUT_NOTES: ${{ inputs.notes }}
           INPUT_ID: ${{ inputs.series_id }}

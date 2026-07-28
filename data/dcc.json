@@ -1519,5 +1519,13 @@
       "involves": [],
       "kind": "other"
     }
-  ]
+  ],
+  "theme": {
+    "accent": "#e87840",
+    "ground": "#0d0806",
+    "panel": "rgba(26,12,8,.92)",
+    "line": "rgba(232,120,64,.28)",
+    "display": "'Cinzel', serif",
+    "mood": "Warning-label orange on near-black — a dungeon lit by emergency lighting and a livestream overlay, garish on purpose."
+  }
 }

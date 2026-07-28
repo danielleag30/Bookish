@@ -8,7 +8,7 @@
  */
 export const CHART_CSS = `
 .bkc{--bkc-fg:#e8e6f0;--bkc-dim:#a49bba;--bkc-accent:#d4af37;--bkc-panel:rgba(16,12,28,.92);
-  --bkc-line:rgba(212,175,55,.25);
+  --bkc-line:rgba(212,175,55,.25);--bkc-display:'Cinzel',serif;
   display:grid;grid-template-columns:1fr 300px;grid-template-rows:auto 1fr;
   gap:10px;height:100%;min-height:620px;color:var(--bkc-fg);
   font-family:'DM Sans',system-ui,sans-serif}
@@ -44,7 +44,7 @@ export const CHART_CSS = `
 .bkc-sidebar{overflow-y:auto;padding:14px;border:1px solid var(--bkc-line);border-radius:12px;
   background:var(--bkc-panel)}
 .bkc-sb-title{margin:0 0 4px;font-size:1rem;color:var(--bkc-accent);
-  font-family:'Cinzel',serif}
+  font-family:var(--bkc-display)}
 .bkc-sb-role{margin:0 0 8px;font-size:.78rem;color:var(--bkc-fg);opacity:.9}
 .bkc-sb-meta{margin:0 0 10px;font-size:.72rem;color:var(--bkc-dim);line-height:1.5}
 .bkc-sidebar h4{margin:12px 0 5px;font-size:.7rem;letter-spacing:.09em;

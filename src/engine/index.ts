@@ -46,6 +46,18 @@ export async function boot(opts: BootOptions): Promise<ChartHandle | null> {
 
   let askBox: Awaited<ReturnType<typeof mountAskBox>> = null;
 
+  // A series theme, when present, wins over whatever the page's CSS set. This is
+  // what makes a palette a reviewable data change rather than a CSS edit.
+  if (series.theme) {
+    const t = series.theme;
+    const set = (prop: string, v?: string) => { if (v) container.style.setProperty(prop, v); };
+    set('--bkc-accent', t.accent);
+    set('--bkc-panel', t.panel);
+    set('--bkc-line', t.line);
+    if (t.ground) document.body.style.background = t.ground;
+    if (t.display) container.style.setProperty('--bkc-display', t.display);
+  }
+
   const handle = mountChart({
     container,
     series,

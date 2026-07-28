@@ -770,6 +770,35 @@ function normaliseEvents(keyEvents, characters) {
   return out;
 }
 
+/**
+ * Visual identity per series, as data.
+ *
+ * These reproduce what was previously hand-written in each chart page's CSS.
+ * Moving them here is what lets a theme be proposed in a pull request and argued
+ * with, rather than requiring someone to write CSS. `mood` states the intent so
+ * a reviewer can judge whether the palette actually matches the books.
+ */
+const THEMES = {
+  empyrean: {
+    accent: '#d4af37', ground: '#0a0a14', panel: 'rgba(16,12,28,.92)',
+    line: 'rgba(212,175,55,.25)', display: "'Cinzel', serif",
+    mood: 'Gold on deep violet-black — war college heraldry and dragon-fire, ' +
+          'formal enough for an academy and dark enough for the Barrens.',
+  },
+  dcc: {
+    accent: '#e87840', ground: '#0d0806', panel: 'rgba(26,12,8,.92)',
+    line: 'rgba(232,120,64,.28)', display: "'Cinzel', serif",
+    mood: 'Warning-label orange on near-black — a dungeon lit by emergency ' +
+          'lighting and a livestream overlay, garish on purpose.',
+  },
+  'plated-prisoner': {
+    accent: '#e0a63c', ground: '#100a12', panel: 'rgba(28,16,30,.92)',
+    line: 'rgba(224,166,60,.26)', display: "'Cinzel', serif",
+    mood: 'Gilt on bruised plum — a gold cage that is beautiful and still a ' +
+          'cage, which is the whole premise.',
+  },
+};
+
 // ── Series definitions ─────────────────────────────────────────────────────
 const SERIES = [
   {
@@ -910,6 +939,7 @@ for (const s of SERIES) {
     relationships,
     events,
   };
+  if (THEMES[s.id]) series.theme = THEMES[s.id];
   if (extra.characterTypes) series.characterTypes = extra.characterTypes;
   if (extra.subgroups) series.subgroups = extra.subgroups;
   if (extra.glyphs) series.glyphs = extra.glyphs;
