@@ -15,6 +15,9 @@
  *  events          hidden when `book` > position
  *  status          replaced by `perceived.status` while position <= untilBook
  *  identity        replaced by `perceived.identity` on the same rule
+ *  affil/region    replaced by `perceived.*` — a planted spy is venin from book 1
+ *                  but reads as faculty until exposed, which is a false belief
+ *                  rather than a change of sides
  *  role            replaced by `perceived.role` — also spoiler-bearing, since
  *                  Brennan's true role names the signet revealed after the
  *                  reveal itself
@@ -141,6 +144,8 @@ export function present(input: Character, g: GatedSeries): GatedCharacter {
   const status = believes && c.perceived?.status !== undefined ? c.perceived.status : c.status;
   const label = believes && c.perceived?.identity !== undefined ? c.perceived.identity : c.label;
   const role = believes && c.perceived?.role !== undefined ? c.perceived.role : c.role;
+  const affil = believes && c.perceived?.affil !== undefined ? c.perceived.affil : c.affil;
+  const region = believes && c.perceived?.region !== undefined ? c.perceived.region : c.region;
 
   // Segmented bios are safe to serve up to the reading position. Unsegmented
   // ones are whole-series prose, so they are withheld until the final book.
@@ -161,8 +166,8 @@ export function present(input: Character, g: GatedSeries): GatedCharacter {
     role,
     status,
     statusIsBelief: believes && c.perceived?.status !== undefined,
-    affil: c.affil,
-    region: c.region,
+    affil,
+    region,
     ...(c.type !== undefined ? { type: c.type } : {}),
     firstBook: c.book,
     ...(bio !== undefined ? { bio } : {}),

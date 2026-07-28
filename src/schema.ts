@@ -193,6 +193,19 @@ export const CharacterSchema = z.object({
     .object({
       status: StatusSchema.optional().describe('What the reader believed the status was'),
       identity: z.string().optional().describe('The alias or false identity the reader knew'),
+      affil: z
+        .string()
+        .optional()
+        .describe(
+          'The allegiance the reader believed. A planted spy needs this: Panchek ' +
+            'is venin from book 1, but reads as faculty until Onyx Storm exposes ' +
+            'him. That is a false belief, not a change of sides — he never ' +
+            'switched.',
+        ),
+      region: z
+        .string()
+        .optional()
+        .describe('The place the reader believed they belonged to.'),
       role: z
         .string()
         .optional()
@@ -405,9 +418,19 @@ export function checkIntegrity(series: Series): Issue[] {
       if (
         c.perceived.status === undefined &&
         c.perceived.identity === undefined &&
-        c.perceived.role === undefined
+        c.perceived.role === undefined &&
+        c.perceived.affil === undefined &&
+        c.perceived.region === undefined
       ) {
-        err('empty-perceived', at, 'perceived must set at least one of status, identity, role');
+        err('empty-perceived', at,
+          'perceived must set at least one of status, identity, role, affil, region');
+      }
+      if (c.perceived.affil !== undefined && !affilIds.has(c.perceived.affil)) {
+        err('unknown-affiliation', at,
+          `perceived.affil "${c.perceived.affil}" is not defined`);
+      }
+      if (c.perceived.region !== undefined && !regionIds.has(c.perceived.region)) {
+        err('unknown-region', at, `perceived.region "${c.perceived.region}" is not defined`);
       }
       if (c.perceived.status !== undefined && c.perceived.status === c.status) {
         warn('perceived-matches-actual', at,

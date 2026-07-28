@@ -740,16 +740,16 @@
     {
       "from": "donut",
       "to": "kiwi",
-      "type": "family",
+      "type": "squad",
       "book": 5,
-      "label": "family"
+      "label": "Royal Court"
     },
     {
       "from": "donut",
       "to": "rend",
-      "type": "family",
+      "type": "squad",
       "book": 5,
-      "label": "family"
+      "label": "Royal Court"
     },
     {
       "from": "carl",

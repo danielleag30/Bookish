@@ -216,6 +216,20 @@
       "color": "#c084fc",
       "dash": "5 3",
       "symmetric": true
+    },
+    {
+      "id": "friend",
+      "label": "Friend",
+      "color": "#8a8a8a",
+      "dash": null,
+      "symmetric": true
+    },
+    {
+      "id": "commands",
+      "label": "Commands",
+      "color": "#8a8a8a",
+      "dash": null,
+      "symmetric": false
     }
   ],
   "characters": [
@@ -1036,15 +1050,21 @@
       "label": "Col. Panchek",
       "role": "Commandant · Venin Spy",
       "affil": "venin",
-      "region": "venin",
-      "book": 3,
+      "region": "leadership",
+      "book": 1,
       "lastBook": 3,
       "size": "side",
       "x": 638,
       "status": "alive",
       "type": "venin",
       "bio": "Commandant of the Riders Quadrant. Revealed in Onyx Storm to be a VENIN SPY — bonded to Berwyn. The infiltration is deep: he was running Basgiath itself. Xaden cannot kill him because of the venin bond between them.",
-      "y": 1179.5
+      "y": 1179.5,
+      "perceived": {
+        "affil": "faculty",
+        "role": "Commandant · Riders Quadrant",
+        "untilBook": 2,
+        "note": "Exposed in Onyx Storm as a venin spy bonded to Berwyn. He was one all along; the reader is simply not told until book 3."
+      }
     },
     {
       "id": "varrish",
@@ -1879,7 +1899,7 @@
     {
       "from": "xaden",
       "to": "liam",
-      "type": "family",
+      "type": "friend",
       "book": 1,
       "label": "raised together"
     },
@@ -2005,7 +2025,7 @@
     {
       "from": "naolin",
       "to": "brennan",
-      "type": "family",
+      "type": "ally",
       "book": 2,
       "label": "died saving him"
     },
@@ -2040,16 +2060,16 @@
     {
       "from": "varrish",
       "to": "jack",
-      "type": "ally",
+      "type": "commands",
       "book": 2,
-      "label": "wields him"
+      "label": "wields him as a weapon"
     },
     {
       "from": "varrish",
       "to": "nolon",
-      "type": "ally",
+      "type": "commands",
       "book": 2,
-      "label": "controls him"
+      "label": "orders him to mend Jack"
     },
     {
       "from": "violet",
@@ -2185,13 +2205,6 @@
       "label": "quest squad"
     },
     {
-      "from": "imogen",
-      "to": "violet",
-      "type": "ally",
-      "book": 3,
-      "label": "erased her memory"
-    },
-    {
       "from": "tecarus",
       "to": "xaden",
       "type": "ally",
@@ -2222,9 +2235,9 @@
     {
       "from": "leothan",
       "to": "andarna",
-      "type": "family",
+      "type": "mentor",
       "book": 3,
-      "label": "calls her home"
+      "label": "calls her home to learn Irid ways"
     },
     {
       "from": "andarna",
@@ -2234,18 +2247,18 @@
       "label": "severs Violet's bond"
     },
     {
-      "from": "wyvern_rep",
-      "to": "theophanie",
-      "type": "ally",
+      "from": "theophanie",
+      "to": "wyvern_rep",
+      "type": "commands",
       "book": 3,
-      "label": "venin steeds"
+      "label": "creates and rides them"
     },
     {
-      "from": "wyvern_rep",
-      "to": "berwyn",
-      "type": "ally",
+      "from": "berwyn",
+      "to": "wyvern_rep",
+      "type": "commands",
       "book": 2,
-      "label": "venin steeds"
+      "label": "creates and rides them"
     },
     {
       "from": "violet",

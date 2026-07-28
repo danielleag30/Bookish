@@ -391,6 +391,7 @@ export const KINSHIP_TERMS = [
   'grandfather', 'grandparent', 'grandchild', 'grandson', 'granddaughter',
   'ancestor', 'descendant', 'great-grandmother', 'great-grandfather',
   'in-law', 'stepmother', 'stepfather', 'stepsister', 'stepbrother',
+  'spouse', 'husband', 'wife', 'co-parent', 'co-parents',
   'adopted', 'guardian', 'ward', 'heir', 'twin', 'parent/child',
 ];
 
@@ -415,55 +416,16 @@ export const VOCAB_EXCEPTIONS: Record<string, string> = {
  * Edges whose type looks wrong but where the correct replacement is a judgment
  * call for the author. Listed so they are visible without failing the build.
  */
-export const VOCAB_PENDING_REVIEW: Record<string, { recommend: string; why: string }> = {
-  'empyrean:xaden>liam:family': {
-    recommend: 'friend',
-    why: '"raised together" is not kinship — Xaden and Liam are not related.',
-  },
-  'empyrean:naolin>brennan:family': {
-    recommend: 'ally',
-    why: '"died saving him" describes an event, not a kinship tie.',
-  },
-  'empyrean:leothan>andarna:family': {
-    recommend: 'mentor or ally',
-    why: '"calls her home" is not kinship; Leothan draws Andarna to the Irids.',
-  },
-  'empyrean:varrish>jack:ally': {
-    recommend: 'enemy or captor',
-    why: '"wields him" is coercive use, not cooperation between equals.',
-  },
-  'empyrean:varrish>nolon:ally': {
-    recommend: 'enemy or captor',
-    why: '"controls him" is coercion, not alliance.',
-  },
-  'empyrean:imogen>violet:ally': {
-    recommend: 'keep ally, relabel',
-    why: '"erased her memory" names a single incident; the ongoing tie is alliance. ' +
-      'The incident is already recorded as a book-3 event.',
-  },
-  'empyrean:wyvern_rep>theophanie:ally': {
-    recommend: 'bonded or keep ally',
-    why: '"venin steeds" describes wyverns as mounts, which is closer to a pact than an alliance.',
-  },
-  'empyrean:wyvern_rep>berwyn:ally': {
-    recommend: 'bonded or keep ally',
-    why: '"venin steeds" again describes wyverns as mounts rather than as partners ' +
-      'cooperating toward a shared goal.',
-  },
-  'plated-prisoner:cull>elore:family': {
-    recommend: 'romantic "married", or family "co-parents"',
-    why: 'Lord Cull is Slade\'s father and Elore is his mother, so they are ' +
-      'co-parents rather than blood kin. Whether they were married — and whether ' +
-      'they still are, given Cull turns out to be the villain — is a canon call.',
-  },
-  'dcc:donut>kiwi:family': {
-    recommend: 'squad',
-    why: 'Kiwi is a Royal Court pet bird who joined on Floor 7, not a relative. ' +
-      'The Royal Court is a named unit, so `squad` fits.',
-  },
-  'dcc:donut>rend:family': {
-    recommend: 'squad, and possibly re-point to carl',
-    why: 'Rend was gifted to Carl by Tserendelgor, not to Donut. Both the type ' +
-      'and the endpoint look wrong.',
-  },
-};
+/**
+ * Edges whose type looked wrong and needed a judgment call.
+ *
+ * Empty as of 2026-07-27: all eleven were resolved against canon and applied in
+ * the CORRECTIONS block of scripts/extract-charts.mjs, each with its reasoning.
+ * See DATA-REVIEW.md for the table.
+ *
+ * Keep the mechanism. When a new book or series lands and a vocabulary rule
+ * fires on data that needs an author decision, record it here with a
+ * recommendation and a reason rather than loosening the rule.
+ */
+export const VOCAB_PENDING_REVIEW: Record<string, { recommend: string; why: string }> = {};
+

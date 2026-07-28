@@ -272,28 +272,27 @@ This is exactly the drift a definition prevents: `killed` had quietly come to me
 
 ---
 
-## Open — needs an author decision
+## Resolved — all eleven pending edges
 
-Recorded in `VOCAB_PENDING_REVIEW` so they are visible without failing the build.
+Closed 2026-07-27. Each was researched rather than guessed, and applied in the `CORRECTIONS` block of `scripts/extract-charts.mjs` with its reasoning. `VOCAB_PENDING_REVIEW` is now empty; the mechanism stays for the next series.
 
-| Edge | Currently | Recommend | Why |
+| Edge | Was | Now | Why |
 |---|---|---|---|
-| `xaden → liam` | `family` "raised together" | `friend` | Not related |
-| `naolin → brennan` | `family` "died saving him" | `ally` | Describes an event, not kinship |
-| `leothan → andarna` | `family` "calls her home" | `mentor` / `ally` | Not kinship |
-| `varrish → jack` | `ally` "wields him" | `enemy` / `captor` | Coercive use, not cooperation |
-| `varrish → nolon` | `ally` "controls him" | `enemy` / `captor` | Coercion, not alliance |
-| `imogen → violet` | `ally` "erased her memory" | keep `ally`, relabel | Names one incident; already a book-3 event |
-| `wyvern_rep → theophanie` | `ally` "venin steeds" | `bonded` / keep | Wyverns as mounts is closer to a pact |
-| `wyvern_rep → berwyn` | `ally` "venin steeds" | `bonded` / keep | Same |
-| `donut → kiwi` (DCC) | `family` "family" | `squad` | Royal Court pet bird, not a relative |
-| `donut → rend` (DCC) | `family` "family" | `squad`, maybe re-point to `carl` | Rend was gifted to **Carl**, not Donut |
+| `xaden → liam` | `family` "raised together" | **`friend`** | Both Marked Ones raised together in Tyrrendor after their fathers were executed. Not related. |
+| `naolin → brennan` | `family` "died saving him" | **`ally`** | Naolin spent his own life siphoning Brennan back. A sacrifice, not kinship. |
+| `leothan → andarna` | `family` "calls her home" | **`mentor`** | He draws her to the Irids to be taught; she severs her bond and leaves with him. |
+| `varrish → jack` | `ally` "wields him" | **`commands`** | Vice Commandant over a cadet — direction through the hierarchy, not cooperation. |
+| `varrish → nolon` | `ally` "controls him" | **`commands`** | He orders Nolon, a healer under his authority, to mend Jack. |
+| `imogen → violet` | `ally` "erased her memory" | **dropped** | `violet → imogen` already carries the pair as `enemy` becoming `ally`; `ally` is symmetric so the reverse adds nothing. The erasure is a book-3 event. |
+| `wyvern_rep → theophanie` | `ally` "venin steeds" | **`theophanie → wyvern_rep` `commands`** | Venin *create and ride* wyverns, so the venin is the actor. `bonded` fails twice: its endpoint rule wants a human bonded to a dragon/irid/gryphon, and an Empyrean bond is mutual and unbreakable — a manufactured steed is neither. |
+| `wyvern_rep → berwyn` | `ally` "venin steeds" | **`berwyn → wyvern_rep` `commands`** | Same. |
+| `donut → kiwi` (DCC) | `family` "family" | **`squad`** "Royal Court" | A Royal Court pet bird, not a relative. |
+| `donut → rend` (DCC) | `family` "family" | **`squad`** "Royal Court" | Rend was gifted to **Carl**, who already has his own edge. What remains is shared Royal Court membership. |
+| `cull → elore` (PP) | `family` "" | **`family`** "co-parents of Slade" | Slade's father and mother. States what the data supports without asserting a marriage the chart never claims. |
 
-### One documented exception
+`KINSHIP_TERMS` gained `spouse`, `husband`, `wife`, `co-parent`, `grandson`, `granddaughter` and the great-grand forms, which it had been missing.
 
-`violet → jack` typed `killed` while Jack's status is `prisoner`. **Correct as written** — Violet does kill him in book 1, Nolon mends him, and he returns. The death was real but not permanent.
-
----
+Empyrean: 115 source edges → **110** (2 merged duplicates, 2 factually wrong, 1 redundant).
 
 ## Adding a new book or series
 
