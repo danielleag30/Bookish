@@ -9,15 +9,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
-    body{background:#1A0B15;color:#e8e6f0;font-family:'DM Sans',system-ui,sans-serif;
+    body{background:#1A1A2E;color:#e8e6f0;font-family:'DM Sans',system-ui,sans-serif;
       min-height:100vh;display:flex;flex-direction:column;padding:14px 16px 16px}
     header{text-align:center;padding:4px 0 12px;flex:0 0 auto}
-    header h1{font-family:'Cinzel',serif;font-size:clamp(1.5rem,4vw,2.4rem);letter-spacing:.04em;
-      color:#D4AF37}
+    /* The hexes here are only what shows for the instant before the engine
+       applies data/fae-and-alchemy.json. After that the theme wins, so the
+       palette stays a data change rather than an edit in two places. */
+    header h1{font-family:var(--bkc-display,'Cinzel',serif);
+      font-size:clamp(1.5rem,4vw,2.4rem);letter-spacing:.04em;
+      color:var(--bkc-accent,#B0C4DE)}
     header p{font-size:.76rem;color:#a49bba;margin-top:4px}
     header a{color:#a49bba}
-    /* Colours come from data/fae-and-alchemy.json — the theme agent proposed
-       them from the cover, and the engine applies them over anything set here. */
     #chart{flex:1 1 auto}
   </style>
 </head>

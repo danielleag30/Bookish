@@ -328,6 +328,14 @@ export const EventSchema = z.object({
  */
 export const ThemeSchema = z.object({
   accent: z.string().optional().describe('Headings, active states, glyphs'),
+  accent2: z
+    .string()
+    .optional()
+    .describe(
+      'Counterpoint accent, for series built on an opposition — Fae & Alchemy ' +
+        'is quicksilver against brimstone, ice against fire, and one hue ' +
+        'cannot carry that. Optional: most series do not need it.',
+    ),
   ground: z.string().optional().describe('Page background'),
   panel: z.string().optional().describe('Sidebar and panel background'),
   line: z.string().optional().describe('Borders and rules'),

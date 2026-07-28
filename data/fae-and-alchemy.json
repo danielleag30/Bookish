@@ -9,7 +9,6 @@
       "short": "Quicksilver"
     }
   ],
-  "draft": true,
   "regions": [
     {
       "id": "main",
@@ -213,6 +212,20 @@
       "type": "family",
       "book": 1,
       "label": "Brother/Sister relationship (Ren is Saeris Fane's brother)."
+    },
+    {
+      "from": "saeris_fane",
+      "to": "kingfisher",
+      "type": "ally",
+      "book": 1,
+      "label": "Open hostility → reluctant alliance. Slow burn."
+    },
+    {
+      "from": "saeris_fane",
+      "to": "carrion_swift",
+      "type": "complicated",
+      "book": 1,
+      "label": "A rogue from her past in Zilvaren, pulled through the portal with her."
     }
   ],
   "events": [
@@ -313,11 +326,13 @@
     }
   ],
   "theme": {
-    "accent": "#D4AF37",
-    "ground": "#1A0B15",
-    "panel": "#281621",
-    "line": "#4A303C",
-    "mood": "The deep, mysterious tones of the cover evoke a sense of ancient magic and hidden danger, making this dark palette perfect for charting characters whose true natures are obscured by shadow.",
+    "accent": "#B0C4DE",
+    "ground": "#1A1A2E",
+    "panel": "#25253D",
+    "line": "#3A3A50",
+    "accent2": "#FF6347",
+    "mood": "The contrast between icy silver and burning orange/red perfectly mirrors the duality of Yvelia's cold magic against Zilvaren's fiery danger.",
     "display": "'Cinzel', serif"
-  }
+  },
+  "draft": true
 }

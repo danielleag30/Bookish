@@ -35,7 +35,7 @@ const has = (f: string) => process.argv.includes(`--${f}`);
 
 const slug = arg('slug');
 if (!slug) {
-  console.error('usage: npm run theme -- --slug <series> [--image <path>] [--write]');
+  console.error('usage: npm run theme -- --slug <series> [--image <path>] [--steer "<direction>"] [--write]');
   process.exit(1);
 }
 const model = arg('model', DEFAULT_MODEL)!;
@@ -67,6 +67,11 @@ if (!(await available())) {
 const title = series?.title ?? slug;
 console.log(`${title}\ncover ${imagePath.replace(root + '/', '')}\nmodel ${model}\n`);
 
+// A human steer. The agent still chooses the hexes and still has to clear the
+// contrast floor — the steer only says what the palette is *about*. A reader who
+// knows the series knows things the cover does not show.
+const steer = arg('steer');
+
 const THEME_SCHEMA = {
   type: 'object',
   properties: {
@@ -74,9 +79,16 @@ const THEME_SCHEMA = {
     ground: { type: 'string', description: 'Hex. Page background. Dark — these charts are dark.' },
     panel: { type: 'string', description: 'Hex. Slightly lighter than the ground, for side panels.' },
     line: { type: 'string', description: 'Hex. Borders. Close to the accent but much dimmer.' },
+    accent2: { type: 'string', description: 'Hex. A counterpoint accent, only when the series is built on an opposition (ice vs fire). Must also read on the ground.' },
     mood: { type: 'string', description: 'One sentence on why these colours suit this series. Concrete, not marketing.' },
   },
-  required: ['accent', 'ground', 'panel', 'line', 'mood'],
+  // Constrained decoding is the only reliable lever here: asked politely for a
+  // counterpoint accent the model simply omitted it, because optional fields in
+  // a JSON schema are genuinely optional. A steer means a human asked for
+  // something specific, so accent2 becomes required and the decoder must fill it.
+  required: steer
+    ? ['accent', 'accent2', 'ground', 'panel', 'line', 'mood']
+    : ['accent', 'ground', 'panel', 'line', 'mood'],
 };
 
 const prompt = `This is the cover of "${title}", a fantasy series.
@@ -90,7 +102,13 @@ Requirements:
 - panel is a little lighter than ground
 - line is close to accent but much dimmer
 - mood: one concrete sentence about why this palette suits THIS series
-
+${steer ? `
+The person who has read this series asks for this specifically:
+  "${steer}"
+Follow it. Where it conflicts with the cover, the steer wins — they have read
+the books and the cover only shows book one. If the steer describes an
+opposition of two things, set accent to the first and accent2 to the second.
+` : '- omit accent2 unless the series is genuinely built on an opposition'}
 Return hex codes.`;
 
 const image = readFileSync(imagePath).toString('base64');
@@ -106,6 +124,17 @@ for (const [k, v] of Object.entries({ accent: t.accent, ground: t.ground, panel:
   if (contrastRatio(v, '#ffffff') === null) problems.push(`${k} is not a colour: ${JSON.stringify(v)}`);
 }
 const accentOnGround = contrastRatio(t.accent, t.ground);
+// accent2 is decoration only if it is legible; an unreadable counterpoint is
+// worse than none, so it clears the same floor or it is dropped.
+const accent2OnGround = t.accent2 ? contrastRatio(t.accent2, t.ground) : null;
+if (t.accent2 && (accent2OnGround === null || accent2OnGround < MIN_ACCENT_CONTRAST)) {
+  console.warn(
+    `  accent2 ${t.accent2} is ${accent2OnGround?.toFixed(2) ?? '?'}:1 on the ground — below the ` +
+      `${MIN_ACCENT_CONTRAST}:1 floor, dropping it.`,
+  );
+  delete (t as { accent2?: string }).accent2;
+}
+
 if (accentOnGround !== null && accentOnGround < MIN_ACCENT_CONTRAST) {
   problems.push(
     `accent on ground is ${accentOnGround.toFixed(2)}:1, below the ${MIN_ACCENT_CONTRAST}:1 floor — unreadable`,
@@ -116,11 +145,13 @@ if ((t.mood ?? '').trim().length < 30) {
 }
 
 console.log(`  accent  ${t.accent}`);
+if (t.accent2) console.log(`  accent2 ${t.accent2}`);
 console.log(`  ground  ${t.ground}`);
 console.log(`  panel   ${t.panel}`);
 console.log(`  line    ${t.line}`);
 console.log(`  mood    ${t.mood}`);
 console.log(`\n  contrast accent-on-ground: ${accentOnGround?.toFixed(2) ?? '?'}:1  (floor ${MIN_ACCENT_CONTRAST}:1)`);
+if (t.accent2) console.log(`  contrast accent2-on-ground: ${accent2OnGround?.toFixed(2) ?? '?'}:1`);
 console.log(`  ${((Date.now() - started) / 1000).toFixed(0)}s · $0`);
 
 if (problems.length) {

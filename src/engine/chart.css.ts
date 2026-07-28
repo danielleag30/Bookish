@@ -7,7 +7,7 @@
  * gilded rose.
  */
 export const CHART_CSS = `
-.bkc{--bkc-fg:#e8e6f0;--bkc-dim:#a49bba;--bkc-accent:#d4af37;--bkc-panel:rgba(16,12,28,.92);
+.bkc{--bkc-fg:#e8e6f0;--bkc-dim:#a49bba;--bkc-accent:#d4af37;--bkc-accent2:#9b59d0;--bkc-panel:rgba(16,12,28,.92);
   --bkc-line:rgba(212,175,55,.25);--bkc-display:'Cinzel',serif;
   display:grid;grid-template-columns:1fr 300px;grid-template-rows:auto 1fr;
   gap:10px;height:100%;min-height:620px;color:var(--bkc-fg);
@@ -17,13 +17,15 @@ export const CHART_CSS = `
 .bkc-book{background:rgba(0,0,0,.3);color:var(--bkc-dim);border:1px solid var(--bkc-line);
   border-radius:8px;padding:7px 13px;font:inherit;font-size:.8rem;cursor:pointer}
 .bkc-book:hover{color:var(--bkc-fg)}
-.bkc-book.on{background:linear-gradient(135deg,rgba(212,175,55,.28),rgba(155,89,208,.22));
+.bkc-book.on{background:linear-gradient(135deg,
+    color-mix(in srgb,var(--bkc-accent) 28%,transparent),
+    color-mix(in srgb,var(--bkc-accent2) 24%,transparent));
   color:var(--bkc-fg);border-color:var(--bkc-accent)}
 .bkc-book.future{opacity:.5;font-style:italic}
 .bkc-chip{background:rgba(0,0,0,.25);color:var(--bkc-dim);border:1px solid rgba(255,255,255,.13);
   border-radius:16px;padding:3px 10px;font:inherit;font-size:.68rem;cursor:pointer}
 .bkc-chip:hover{color:var(--bkc-fg)}
-.bkc-chip.on{background:rgba(212,175,55,.16);color:var(--bkc-fg)}
+.bkc-chip.on{background:color-mix(in srgb,var(--bkc-accent) 16%,transparent);color:var(--bkc-fg)}
 .bkc-stage{position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.07);
   border-radius:12px;background:rgba(0,0,0,.22);cursor:grab}
 .bkc-stage:active{cursor:grabbing}
