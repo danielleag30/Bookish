@@ -204,3 +204,46 @@ Worth recording, because both are easy to repeat:
 Single runs at temperature 0 on a one-chunk corpus: deterministic, but n=1. The
 edge-F1 gap here (16.9 versus 16.7) is noise. The speed gap and the invented edge
 are not.
+
+
+---
+
+## The theme agent
+
+`npm run theme -- --slug dcc` reads a series' cover and proposes a palette. It is
+the one agent here whose job is taste, so it is worth saying how it is kept
+honest.
+
+**Why the cover.** Someone already decided what this series looks like. A chart
+that clashes with its own book feels like a different product, so the agent
+matches an existing decision rather than inventing one.
+
+**Contrast is validated, not trusted.** A model asked for colours will return
+something unreadable without noticing. Every proposal is checked for WCAG
+contrast, and one below 3.5:1 is rejected with the number rather than shipped.
+The same check runs in `checkIntegrity`, so an unreadable palette cannot reach
+`data/` by any route.
+
+**`mood` is required.** You cannot argue with `#e87840`. You can argue with
+"warning-label orange, a dungeon lit by emergency lighting". The reason is what
+makes the proposal reviewable.
+
+### What it produced
+
+Given each cover, gemma4, four seconds per series, $0:
+
+| series | proposed | hand-written | contrast |
+|---|---|---|---|
+| Empyrean | `#D4AF37` | `#d4af37` | 9.07:1 |
+| Plated Prisoner | `#B89A6D` | `#e0a63c` | 7.25:1 |
+| DCC | `#FFD700` | `#e87840` | 13.59:1 |
+
+The Empyrean proposal is the hand-written accent exactly, arrived at
+independently from the cover.
+
+Plated Prisoner landed in the same family and described it as *"the aged iron
+bars and tarnished gold of captivity"* — which is the premise of the series.
+
+DCC is the interesting miss. It went gold, reading the cover's lettering; the
+hand-written orange was chasing the livestream-and-emergency-lighting feel
+instead. Both defensible, which is exactly why this proposes rather than decides.

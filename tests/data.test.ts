@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync, readdirSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 import { SeriesSchema, checkIntegrity } from '../src/schema.ts';
+import { contrastRatio, MIN_ACCENT_CONTRAST } from '../src/contrast.ts';
 
 /**
  * Guards the extracted data itself. `npm run validate` does the same checks in
@@ -292,5 +293,32 @@ describe('series themes', () => {
   it('gives each series a distinct accent', () => {
     const accents = seriesFiles.map((f: string) => load(f).theme?.accent);
     expect(new Set(accents).size).toBe(accents.length);
+  });
+});
+
+describe('theme contrast', () => {
+  it('keeps every accent legible on its own ground', () => {
+    for (const file of readdirSync(dataDir).filter((f) => f.endsWith('.json'))) {
+      const t = load(file).theme;
+      if (!t?.accent || !t.ground) continue;
+      const ratio = contrastRatio(t.accent, t.ground);
+      expect(ratio, `${file}: ${t.accent} on ${t.ground}`).not.toBeNull();
+      expect(ratio!, `${file}`).toBeGreaterThanOrEqual(MIN_ACCENT_CONTRAST);
+    }
+  });
+
+  it('rejects a palette nobody could read', () => {
+    // The agent proposes colours; this is what stops an unreadable one landing.
+    const s = load('dcc.json');
+    const bad = { ...s, theme: { ...s.theme, accent: '#333333', ground: '#0a0a14' } };
+    const errs = checkIntegrity(bad).filter((i) => i.severity === 'error');
+    expect(errs.some((e) => e.rule === 'theme-contrast-too-low')).toBe(true);
+  });
+
+  it('rejects a colour that is not a colour', () => {
+    const s = load('dcc.json');
+    const bad = { ...s, theme: { ...s.theme, accent: 'burnt orange, roughly' } };
+    const errs = checkIntegrity(bad).filter((i) => i.severity === 'error');
+    expect(errs.some((e) => e.rule === 'theme-colour-unparseable')).toBe(true);
   });
 });

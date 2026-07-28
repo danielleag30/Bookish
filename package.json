@@ -17,7 +17,8 @@
     "eval": "tsx evals/run.ts",
     "mcp": "tsx mcp/server.ts",
     "changelog": "tsx scripts/draft-changelog.ts",
-    "add-series": "tsx scripts/add-series.ts"
+    "add-series": "tsx scripts/add-series.ts",
+    "theme": "tsx scripts/propose-theme.ts"
   },
   "repository": {
     "type": "git",

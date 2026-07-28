@@ -34,6 +34,7 @@ environment gate.
 | Action | Who | Why |
 |---|---|---|
 | Read the repo, run tests | agent, unattended | No side effects. |
+| Propose a theme from a cover | agent, unattended | Output is a palette printed to a terminal. It only reaches `data/` with an explicit `--write`, and an unreadable one is rejected before it gets that far. |
 | Draft `CHANGELOG.md` | agent, unattended | Output is a file on a branch. Wrong output costs a closed PR. |
 | Open a pull request | agent, unattended | A PR is a proposal. It changes nothing until merged. |
 | Add a new series' data | agent, **after approval** | Touches `data/`, which every chart and the MCP server read. The `agent-writes` environment holds the job until a reviewer approves. |

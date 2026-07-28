@@ -32,6 +32,8 @@ export interface CallOptions {
   temperature?: number;
   /** Abort after this many milliseconds. */
   timeoutMs?: number;
+  /** Base64 images for a vision-capable model. gemma4 accepts these. */
+  images?: string[];
 }
 
 export interface CallResult<T> {
@@ -66,7 +68,11 @@ export async function call<T>(
         options: { temperature: opts.temperature ?? 0 },
         think: opts.think ?? false,
         ...(opts.format ? { format: opts.format } : {}),
-        messages: [{ role: 'user', content: prompt }],
+        messages: [{
+          role: 'user',
+          content: prompt,
+          ...(opts.images?.length ? { images: opts.images } : {}),
+        }],
       }),
     });
   } catch (err) {
