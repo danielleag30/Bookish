@@ -16,6 +16,17 @@ const ENDPOINT = 'http://localhost:11434/api/chat';
 
 export interface CallOptions {
   model?: string;
+  /**
+   * Let a reasoning model emit its thinking. Off by default.
+   *
+   * Reasoning models are a poor fit for schema-constrained extraction: the
+   * thinking tokens are discarded, but you wait for them. qwen3:8b took 204s on
+   * an extraction call with reasoning on and 34s with it off — and answered
+   * *better* without it, finding both of Violet's dragon bonds where the
+   * reasoning run missed them entirely. Models without a thinking mode ignore
+   * this field.
+   */
+  think?: boolean;
   /** JSON Schema constraining the response. */
   format?: unknown;
   temperature?: number;
@@ -53,6 +64,7 @@ export async function call<T>(
         model: opts.model ?? DEFAULT_MODEL,
         stream: false,
         options: { temperature: opts.temperature ?? 0 },
+        think: opts.think ?? false,
         ...(opts.format ? { format: opts.format } : {}),
         messages: [{ role: 'user', content: prompt }],
       }),

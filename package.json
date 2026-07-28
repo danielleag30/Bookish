@@ -16,7 +16,8 @@
     "build:chart": "vite build --config vite.chart.config.ts",
     "eval": "tsx evals/run.ts",
     "mcp": "tsx mcp/server.ts",
-    "changelog": "tsx scripts/draft-changelog.ts"
+    "changelog": "tsx scripts/draft-changelog.ts",
+    "add-series": "tsx scripts/add-series.ts"
   },
   "repository": {
     "type": "git",
