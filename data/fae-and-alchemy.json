@@ -1,0 +1,323 @@
+{
+  "id": "fae-and-alchemy",
+  "title": "Fae & Alchemy",
+  "author": "Callie Hart",
+  "books": [
+    {
+      "id": 1,
+      "title": "Quicksilver",
+      "short": "Quicksilver"
+    }
+  ],
+  "draft": true,
+  "regions": [
+    {
+      "id": "main",
+      "label": "Fae & Alchemy",
+      "y": 0,
+      "h": 600
+    }
+  ],
+  "affiliations": {
+    "unsorted": {
+      "label": "Unsorted",
+      "color": "#8a7eaa",
+      "border": "#5a4a7a"
+    }
+  },
+  "relationshipTypes": [
+    {
+      "id": "family",
+      "label": "Family",
+      "color": "#7a7a8a",
+      "dash": null,
+      "symmetric": false
+    },
+    {
+      "id": "bonded",
+      "label": "Bonded",
+      "color": "#7a7a8a",
+      "dash": null,
+      "symmetric": false
+    },
+    {
+      "id": "mated",
+      "label": "Mated",
+      "color": "#7a7a8a",
+      "dash": null,
+      "symmetric": true
+    },
+    {
+      "id": "romantic",
+      "label": "Romantic",
+      "color": "#7a7a8a",
+      "dash": null,
+      "symmetric": true
+    },
+    {
+      "id": "squad",
+      "label": "Squad",
+      "color": "#7a7a8a",
+      "dash": null,
+      "symmetric": true
+    },
+    {
+      "id": "friend",
+      "label": "Friend",
+      "color": "#7a7a8a",
+      "dash": null,
+      "symmetric": true
+    },
+    {
+      "id": "ally",
+      "label": "Ally",
+      "color": "#7a7a8a",
+      "dash": null,
+      "symmetric": true
+    },
+    {
+      "id": "commands",
+      "label": "Commands",
+      "color": "#7a7a8a",
+      "dash": null,
+      "symmetric": false
+    },
+    {
+      "id": "mentor",
+      "label": "Mentor",
+      "color": "#7a7a8a",
+      "dash": null,
+      "symmetric": false
+    },
+    {
+      "id": "enemy",
+      "label": "Enemy",
+      "color": "#7a7a8a",
+      "dash": null,
+      "symmetric": false
+    },
+    {
+      "id": "betrayer",
+      "label": "Betrayer",
+      "color": "#7a7a8a",
+      "dash": null,
+      "symmetric": false
+    },
+    {
+      "id": "captor",
+      "label": "Captor",
+      "color": "#7a7a8a",
+      "dash": null,
+      "symmetric": false
+    },
+    {
+      "id": "killed",
+      "label": "Killed",
+      "color": "#7a7a8a",
+      "dash": null,
+      "symmetric": false
+    },
+    {
+      "id": "complicated",
+      "label": "Complicated",
+      "color": "#7a7a8a",
+      "dash": null,
+      "symmetric": true
+    }
+  ],
+  "characters": [
+    {
+      "id": "saeris_fane",
+      "label": "Saeris Fane",
+      "role": "main character/thief/alchemist in Zilvaren, later in Yvelia's court. Has a brother named Ren and is bonded to Kingfisher.",
+      "affil": "unsorted",
+      "region": "main",
+      "book": 1,
+      "lastBook": 1,
+      "status": "alive",
+      "size": "main",
+      "x": 120,
+      "y": 110
+    },
+    {
+      "id": "kingfisher",
+      "label": "Kingfisher",
+      "role": "Fae warrior who wields shadow; sister of Everlayne. Forms a bond with Saeris Fane.",
+      "affil": "unsorted",
+      "region": "main",
+      "book": 1,
+      "lastBook": 1,
+      "status": "alive",
+      "size": "main",
+      "x": 290,
+      "y": 230
+    },
+    {
+      "id": "carrion_swift",
+      "label": "Carrion Swift",
+      "role": "Rogue from Saeris's past in Zilvaren.",
+      "affil": "unsorted",
+      "region": "main",
+      "book": 1,
+      "lastBook": 1,
+      "status": "alive",
+      "size": "main",
+      "x": 460,
+      "y": 110
+    },
+    {
+      "id": "everlayne",
+      "label": "Everlayne",
+      "role": "Kingfisher's sister; welcomes Saeris to the court at Cahlish.",
+      "affil": "unsorted",
+      "region": "main",
+      "book": 1,
+      "lastBook": 1,
+      "status": "alive",
+      "size": "main",
+      "x": 630,
+      "y": 230
+    },
+    {
+      "id": "ren",
+      "label": "Ren",
+      "role": "Saeris Fane's brother, who remains in Zilvaren.",
+      "affil": "unsorted",
+      "region": "main",
+      "book": 1,
+      "lastBook": 1,
+      "status": "alive",
+      "size": "side",
+      "x": 800,
+      "y": 110
+    }
+  ],
+  "relationships": [
+    {
+      "from": "saeris_fane",
+      "to": "kingfisher",
+      "type": "bonded",
+      "book": 1,
+      "label": "Bound by a quicksilver bond neither of them chose."
+    },
+    {
+      "from": "everlayne",
+      "to": "kingfisher",
+      "type": "family",
+      "book": 1,
+      "label": "Sister relationship (Everlayne is Kingfisher's sister)."
+    },
+    {
+      "from": "saeris_fane",
+      "to": "ren",
+      "type": "family",
+      "book": 1,
+      "label": "Brother/Sister relationship (Ren is Saeris Fane's brother)."
+    }
+  ],
+  "events": [
+    {
+      "book": 1,
+      "text": "Saeris Fane, a thief in the desert city of Zilvaren, hides that she is an alchemist",
+      "involves": [
+        "saeris_fane"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Saeris scavenges the Undercroft for water and finds an enchanted gauntlet",
+      "involves": [
+        "saeris_fane"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "The gauntlet opens a portal and pulls Saeris into Yvelia, the Fae realm",
+      "involves": [
+        "saeris_fane"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Saeris meets Kingfisher, a Fae warrior who wields shadow and carries shifting tattoos",
+      "involves": [
+        "saeris_fane",
+        "kingfisher"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Carrion Swift, a rogue from Saeris's past in Zilvaren, is pulled through with her",
+      "involves": [
+        "saeris_fane",
+        "carrion_swift"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Saeris is revealed to be a quicksilver alchemist, the first in generations",
+      "involves": [
+        "saeris_fane"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Kingfisher needs an alchemist to reforge the Fae army's weapons against the Sanasroth threat",
+      "involves": [
+        "kingfisher"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Everlayne, Kingfisher's sister, welcomes Saeris to the court at Cahlish",
+      "involves": [
+        "saeris_fane",
+        "kingfisher",
+        "everlayne"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Saeris and Kingfisher move from open hostility to a reluctant alliance",
+      "involves": [
+        "saeris_fane",
+        "kingfisher"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Ren, Saeris's brother, remains behind in Zilvaren — her reason to want to return",
+      "involves": [
+        "saeris_fane",
+        "ren"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Saeris and Kingfisher are bound by a quicksilver bond neither of them chose",
+      "involves": [
+        "saeris_fane",
+        "kingfisher"
+      ],
+      "kind": "other"
+    }
+  ],
+  "theme": {
+    "accent": "#D4AF37",
+    "ground": "#1A0B15",
+    "panel": "#281621",
+    "line": "#4A303C",
+    "mood": "The deep, mysterious tones of the cover evoke a sense of ancient magic and hidden danger, making this dark palette perfect for charting characters whose true natures are obscured by shadow.",
+    "display": "'Cinzel', serif"
+  }
+}
