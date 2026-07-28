@@ -55,10 +55,29 @@ jobs:
           INPUT_NOTES: ${{ inputs.notes }}
           INPUT_ID: ${{ inputs.series_id }}
         run: |
-          SERIES="${INPUT_ID:-$(echo "${{ github.event.issue.title }}" | sed 's/.*: *//' | tr 'A-Z ' 'a-z-')}"
+          NOTES="${INPUT_NOTES:-$ISSUE_BODY}"
+
+          # Prefer an explicit "**Slug:** foo" line in the notes. Deriving from
+          # the title turned "Fae & Alchemy" into "fae-&-alchemy", which is not a
+          # usable filename or branch name.
+          SERIES="$INPUT_ID"
+          if [ -z "$SERIES" ]; then
+            SERIES=$(printf '%s' "$NOTES" | grep -iom1 '\*\*Slug:\*\*[[:space:]]*[A-Za-z0-9_-]*' | sed 's/.*\*\*[[:space:]]*//')
+          fi
+          if [ -z "$SERIES" ]; then
+            SERIES=$(echo "${{ github.event.issue.title }}" | sed 's/.*: *//')
+          fi
+          # Whatever the source, force it into a safe slug.
+          SERIES=$(printf '%s' "$SERIES" \
+            | tr '[:upper:]' '[:lower:]' \
+            | sed -E -e 's/&/and/g' -e 's/[^a-z0-9]+/-/g' -e 's/^-+//' -e 's/-+$//')
+          if [ -z "$SERIES" ]; then
+            echo "::error::could not derive a series slug from the issue" && exit 1
+          fi
+
           echo "series=$SERIES" >> "$GITHUB_OUTPUT"
           mkdir -p pipeline/input
-          printf '%s' "${INPUT_NOTES:-$ISSUE_BODY}" > "pipeline/input/$SERIES.md"
+          printf '%s' "$NOTES" > "pipeline/input/$SERIES.md"
           echo "### Plan" >> "$GITHUB_STEP_SUMMARY"
           echo "Series: \`$SERIES\`" >> "$GITHUB_STEP_SUMMARY"
           wc -l < "pipeline/input/$SERIES.md" | xargs -I{} echo "Source lines: {}" >> "$GITHUB_STEP_SUMMARY"
@@ -104,13 +123,30 @@ jobs:
           still needs review against the schema and the relationship vocabulary
           before it becomes a chart."
           git push origin "$BRANCH"
-          gh pr create \
-            --title "Add series: $SERIES" \
-            --body "Opened by the add-series agent from an issue.
 
-          **Not ready to merge as-is.** Check against
-          [RELATIONSHIPS.md](../blob/main/RELATIONSHIPS.md) and
-          [DATA-DICTIONARY.md](../blob/main/DATA-DICTIONARY.md):
-          relationship types must be canonical, book numbers start at 1, and
-          \`npm run validate\` must pass." \
-            --head "$BRANCH" --base main
+          BODY=$(cat <<'EOF'
+          Opened by the add-series agent from an issue.
+
+          **Not ready to merge as-is.** Check against RELATIONSHIPS.md and
+          DATA-DICTIONARY.md: relationship types must be canonical, book numbers
+          start at 1, and `npm run validate` must pass.
+          EOF
+          )
+
+          # Same fallback as the changelog agent: opening the pull request can be
+          # blocked by a repository setting, and that is a legitimate way to run
+          # this. The branch is already pushed either way.
+          if gh pr create --title "Add series: $SERIES" --body "$BODY" \
+               --head "$BRANCH" --base main 2>/tmp/pr-err; then
+            echo "Opened a pull request from \`$BRANCH\`." >> "$GITHUB_STEP_SUMMARY"
+          else
+            {
+              echo "### Branch pushed, pull request not opened"
+              echo
+              echo '```'
+              cat /tmp/pr-err
+              echo '```'
+              echo
+              echo "**[Open it here](https://github.com/${{ github.repository }}/compare/main...$BRANCH?expand=1)**"
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
