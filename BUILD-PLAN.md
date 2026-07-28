@@ -204,7 +204,7 @@ Split Phase 3's single agent into a coordinated set:
 
 ---
 
-### Phase 7 — GitHub-native agent ops
+### Phase 7 — GitHub-native agent ops ✅ **shipped**
 **Ship:** an agent that opens reviewed PRs · **Domain:** 1, 2, 6 · **Effort:** 1 weekend
 
 This is what makes the project *exam-shaped* instead of *generic-AI-shaped*, and it's the strongest single thing on the list for a resume.

@@ -15,7 +15,8 @@
     "spoiler-audit": "tsx scripts/spoiler-audit.ts",
     "build:chart": "vite build --config vite.chart.config.ts",
     "eval": "tsx evals/run.ts",
-    "mcp": "tsx mcp/server.ts"
+    "mcp": "tsx mcp/server.ts",
+    "changelog": "tsx scripts/draft-changelog.ts"
   },
   "repository": {
     "type": "git",

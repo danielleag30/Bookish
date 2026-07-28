@@ -246,3 +246,48 @@ describe('failure taxonomy', () => {
     expect(ctx?.count).toBeGreaterThan(0);
   });
 });
+
+describe('changelog agent', () => {
+  it('buckets a pull request by what it did', async () => {
+    const { sectionFor, cleanBody } = await import('../scripts/draft-changelog.ts');
+    const pr = (title: string) => ({ number: 1, title, body: '', mergedAt: '', labels: [] });
+
+    expect(sectionFor(pr('Resolve every pending data question against canon'))).toBe('Fixed');
+    expect(sectionFor(pr('Refresh the ask box when its answer stops being true'))).toBe('Fixed');
+    expect(sectionFor(pr('Per-book data model, and Plated Prisoner migrated into it'))).toBe('Data');
+    expect(sectionFor(pr('Define a controlled relationship vocabulary'))).toBe('Data');
+    expect(sectionFor(pr('Add a "how it works" page explaining the data flow'))).toBe('Docs');
+    expect(sectionFor(pr('Phase 6: spoiler-bounded MCP server'))).toBe('Added');
+    expect(sectionFor(pr('Surface the how-it-works page on the landing page'))).toBe('Changed');
+
+    // Bucketing is keyword-based on purpose: which section a change belongs in
+    // is a fact about the change, so it must be stable across runs rather than
+    // re-decided by a model each time.
+    const title = 'Phase 6: spoiler-bounded MCP server';
+    expect(sectionFor(pr(title))).toBe(sectionFor(pr(title)));
+  });
+
+  it('strips PR boilerplate before anything reaches the model', async () => {
+    const { cleanBody } = await import('../scripts/draft-changelog.ts');
+    const body = [
+      '## Heading',
+      '```ts',
+      'const secret = "should not survive";',
+      '```',
+      '| a | b |',
+      'Real prose that should survive.',
+      '🤖 Generated with [Claude Code](https://claude.com/claude-code)',
+    ].join('\n');
+    const out = cleanBody(body);
+    expect(out).toContain('Real prose that should survive.');
+    expect(out).not.toContain('should not survive');
+    expect(out).not.toContain('🤖');
+    expect(out).not.toContain('|');
+    expect(out).not.toContain('##');
+  });
+
+  it('caps what it sends, so a huge PR body cannot blow the request', async () => {
+    const { cleanBody } = await import('../scripts/draft-changelog.ts');
+    expect(cleanBody('x '.repeat(5000)).length).toBeLessThanOrEqual(1200);
+  });
+});

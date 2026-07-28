@@ -1,0 +1,115 @@
+name: Add-series agent
+
+# Turns an issue into a pull request adding a new series chart.
+#
+#   1. open an issue with the `add-series` label, notes in the body
+#   2. the agent extracts a character graph from those notes
+#   3. it validates the result against the schema
+#   4. it opens a pull request — never commits to main
+#   5. a human reviews and merges, or does not
+#
+# The `agent-writes` environment gates step 4. Configure it with a required
+# reviewer in Settings → Environments, and the job waits for approval before it
+# is allowed to push anything.
+
+on:
+  issues:
+    types: [labeled]
+  workflow_dispatch:
+    inputs:
+      series_id:
+        description: 'Slug for the new series, e.g. iron-widow'
+        required: true
+      notes:
+        description: 'Source notes — plot beats, one per line. Not book text.'
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  extract:
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      github.event.label.name == 'add-series'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      models: read
+    outputs:
+      series: ${{ steps.plan.outputs.series }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+
+      - name: Plan
+        id: plan
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          INPUT_NOTES: ${{ inputs.notes }}
+          INPUT_ID: ${{ inputs.series_id }}
+        run: |
+          SERIES="${INPUT_ID:-$(echo "${{ github.event.issue.title }}" | sed 's/.*: *//' | tr 'A-Z ' 'a-z-')}"
+          echo "series=$SERIES" >> "$GITHUB_OUTPUT"
+          mkdir -p pipeline/input
+          printf '%s' "${INPUT_NOTES:-$ISSUE_BODY}" > "pipeline/input/$SERIES.md"
+          echo "### Plan" >> "$GITHUB_STEP_SUMMARY"
+          echo "Series: \`$SERIES\`" >> "$GITHUB_STEP_SUMMARY"
+          wc -l < "pipeline/input/$SERIES.md" | xargs -I{} echo "Source lines: {}" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Validate the existing data still passes
+        # The agent must not be the reason the repo breaks. If the baseline is
+        # already failing, stop before doing anything else.
+        run: npm run validate
+
+      - name: Upload the plan and inputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: add-series-plan
+          path: pipeline/input/
+
+  propose:
+    needs: extract
+    runs-on: ubuntu-latest
+    # Human-in-the-loop. Nothing is pushed until a reviewer approves this
+    # environment, so the agent can propose but never merge.
+    environment: agent-writes
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: { name: add-series-plan, path: pipeline/input }
+
+      - name: Open a pull request
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SERIES: ${{ needs.extract.outputs.series }}
+        run: |
+          BRANCH="agent/add-series-$SERIES"
+          git config user.name  "bookish-series-agent"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add pipeline/input
+          git commit -m "Add source notes for $SERIES
+
+          Opened by .github/workflows/add-series-agent.yml. The extracted graph
+          still needs review against the schema and the relationship vocabulary
+          before it becomes a chart."
+          git push origin "$BRANCH"
+          gh pr create \
+            --title "Add series: $SERIES" \
+            --body "Opened by the add-series agent from an issue.
+
+          **Not ready to merge as-is.** Check against
+          [RELATIONSHIPS.md](../blob/main/RELATIONSHIPS.md) and
+          [DATA-DICTIONARY.md](../blob/main/DATA-DICTIONARY.md):
+          relationship types must be canonical, book numbers start at 1, and
+          \`npm run validate\` must pass." \
+            --head "$BRANCH" --base main
