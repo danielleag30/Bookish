@@ -86,8 +86,8 @@ const chunks = bookHeadings.length
 console.log(`${title} by ${author} · ${books.length} book(s) · ${chunks.length} chunk(s)`);
 console.log(`model ${model} · ${has('single') ? 'single agent' : 'extractor + verifier + resolver'}\n`);
 
-// A minimal shell the extraction fills in. One region and one affiliation, so
-// the result validates; a human splits them properly.
+// The shell handed to the extractor. Regions and affiliations are filled in
+// afterwards from what it finds, so this only needs to be a valid starting point.
 const shell: Series = {
   id: slug, title, author, books,
   regions: [{ id: 'main', label: title, y: 0, h: 600 }],
@@ -129,13 +129,56 @@ if (!has('single') || true) {
 }
 const lastBook = Math.max(...books.map((b) => b.id));
 
+// ── Regions and factions, from the extraction ──────────────────────────────
+// These used to be a single "main" region and a single "Unsorted" affiliation,
+// on the reasoning that a model must not invent geography. That was the wrong
+// guardrail: the model reads Zilvaren and Yvelia straight off the notes, and
+// with nowhere to put them it filed both as characters. Reading a place the
+// notes name is extraction, not invention. Colour and coordinates stay
+// placeholders, because those genuinely are authorial.
+const FACTION_COLORS = [
+  ['#8a7eaa', '#5a4a7a'], ['#7e9aaa', '#4a6a7a'], ['#aa8a7e', '#7a5a4a'],
+  ['#7eaa8a', '#4a7a5a'], ['#aa7e9a', '#7a4a6a'], ['#a9aa7e', '#7a7a4a'],
+];
+
+const places = graph.places ?? [];
+const factions = graph.factions ?? [];
+
+// `main` and `unsorted` always survive as the home for anyone the notes do not
+// place. A character must always have somewhere to sit, or the file will not
+// validate.
+const regions = [
+  { id: 'main', label: 'Unplaced', x: 0, y: 0, w: 400, h: 300 },
+  ...places.map((p, i) => ({
+    id: p.id, label: p.label,
+    x: ((i + 1) % 3) * 420, y: Math.floor((i + 1) / 3) * 320, w: 400, h: 300,
+  })),
+];
+const regionIds = new Set(regions.map((r) => r.id));
+
+const affiliations: Series['affiliations'] = {
+  unsorted: { label: 'Unsorted', color: '#8a7eaa', border: '#5a4a7a' },
+};
+for (const [i, f] of factions.entries()) {
+  affiliations[f.id] = {
+    label: f.label,
+    color: FACTION_COLORS[i % FACTION_COLORS.length]?.[0] ?? '#8a7eaa',
+    border: FACTION_COLORS[i % FACTION_COLORS.length]?.[1] ?? '#5a4a7a',
+  };
+}
+
 const draft: Series = {
   ...shell,
+  regions,
+  affiliations,
   // Cleared by hand once regions and factions are real. See SeriesSchema.
   draft: true,
   characters: graph.characters.map((c, i) => ({
     id: c.id, label: c.label, role: c.role,
-    affil: 'unsorted', region: 'main',
+    // Fall back rather than trust: a model naming a faction that is not in the
+    // factions list would otherwise produce an unresolvable id and fail validation.
+    affil: c.faction && affiliations[c.faction] ? c.faction : 'unsorted',
+    region: c.place && regionIds.has(c.place) ? c.place : 'main',
     book: firstSeen.get(c.id) ?? 1,
     lastBook,
     status: c.status, size: i < 4 ? 'main' : 'side',

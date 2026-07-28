@@ -7,14 +7,61 @@
       "id": 1,
       "title": "Quicksilver",
       "short": "Quicksilver"
+    },
+    {
+      "id": 2,
+      "title": "Brimstone",
+      "short": "Brimstone"
     }
   ],
   "regions": [
     {
       "id": "main",
-      "label": "Fae & Alchemy",
+      "label": "Unplaced",
+      "x": 0,
       "y": 0,
-      "h": 600
+      "w": 400,
+      "h": 300
+    },
+    {
+      "id": "zilvaren",
+      "label": "Zilvaren",
+      "x": 420,
+      "y": 0,
+      "w": 400,
+      "h": 300
+    },
+    {
+      "id": "yvelia",
+      "label": "Yvelia",
+      "x": 840,
+      "y": 0,
+      "w": 400,
+      "h": 300
+    },
+    {
+      "id": "sanasroth",
+      "label": "Sanasroth",
+      "x": 0,
+      "y": 320,
+      "w": 400,
+      "h": 300
+    },
+    {
+      "id": "silver_city",
+      "label": "Silver City",
+      "x": 420,
+      "y": 320,
+      "w": 400,
+      "h": 300
+    },
+    {
+      "id": "ammontraieth",
+      "label": "Ammontraíeth",
+      "x": 840,
+      "y": 320,
+      "w": 400,
+      "h": 300
     }
   ],
   "affiliations": {
@@ -22,6 +69,16 @@
       "label": "Unsorted",
       "color": "#8a7eaa",
       "border": "#5a4a7a"
+    },
+    "rebellion": {
+      "label": "Rebellion",
+      "color": "#8a7eaa",
+      "border": "#5a4a7a"
+    },
+    "blood_court": {
+      "label": "Blood Court",
+      "color": "#7e9aaa",
+      "border": "#4a6a7a"
     }
   },
   "relationshipTypes": [
@@ -126,112 +183,511 @@
   ],
   "characters": [
     {
-      "id": "saeris_fane",
-      "label": "Saeris Fane",
-      "role": "main character/thief/alchemist in Zilvaren, later in Yvelia's court. Has a brother named Ren and is bonded to Kingfisher.",
+      "id": "madra",
+      "label": "Madra",
+      "role": "character",
       "affil": "unsorted",
-      "region": "main",
+      "region": "zilvaren",
       "book": 1,
-      "lastBook": 1,
+      "lastBook": 2,
       "status": "alive",
       "size": "main",
       "x": 120,
       "y": 110
     },
     {
-      "id": "kingfisher",
-      "label": "Kingfisher",
-      "role": "Fae warrior who wields shadow; sister of Everlayne. Forms a bond with Saeris Fane.",
+      "id": "saeris_fane",
+      "label": "Saeris Fane",
+      "role": "character",
       "affil": "unsorted",
       "region": "main",
       "book": 1,
-      "lastBook": 1,
+      "lastBook": 2,
       "status": "alive",
       "size": "main",
       "x": 290,
       "y": 230
     },
     {
-      "id": "carrion_swift",
-      "label": "Carrion Swift",
-      "role": "Rogue from Saeris's past in Zilvaren.",
+      "id": "hayden_fane",
+      "label": "Hayden Fane",
+      "role": "character",
       "affil": "unsorted",
       "region": "main",
       "book": 1,
-      "lastBook": 1,
+      "lastBook": 2,
       "status": "alive",
       "size": "main",
       "x": 460,
       "y": 110
     },
     {
-      "id": "everlayne",
-      "label": "Everlayne",
-      "role": "Kingfisher's sister; welcomes Saeris to the court at Cahlish.",
+      "id": "iris_fane",
+      "label": "Iris Fane",
+      "role": "character",
       "affil": "unsorted",
       "region": "main",
       "book": 1,
-      "lastBook": 1,
-      "status": "alive",
+      "lastBook": 2,
+      "status": "dead",
       "size": "main",
       "x": 630,
       "y": 230
     },
     {
-      "id": "ren",
-      "label": "Ren",
-      "role": "Saeris Fane's brother, who remains in Zilvaren.",
+      "id": "carrion_swift",
+      "label": "Carrion Swift",
+      "role": "Smuggler and gambler out of Zilvaren; revealed as heir to the Yvelian throne",
       "affil": "unsorted",
       "region": "main",
       "book": 1,
-      "lastBook": 1,
+      "lastBook": 2,
       "status": "alive",
       "size": "side",
       "x": 800,
-      "y": 110
+      "y": 110,
+      "aliases": [
+        "Carrion Daianthus"
+      ]
+    },
+    {
+      "id": "kingfisher",
+      "label": "Kingfisher",
+      "role": "character",
+      "affil": "unsorted",
+      "region": "main",
+      "book": 1,
+      "lastBook": 2,
+      "status": "alive",
+      "size": "side",
+      "x": 120,
+      "y": 490
+    },
+    {
+      "id": "everlayne",
+      "label": "Everlayne",
+      "role": "character",
+      "affil": "unsorted",
+      "region": "main",
+      "book": 1,
+      "lastBook": 2,
+      "status": "alive",
+      "size": "side",
+      "x": 290,
+      "y": 370
+    },
+    {
+      "id": "te_lena",
+      "label": "Te Léna",
+      "role": "character",
+      "affil": "unsorted",
+      "region": "main",
+      "book": 1,
+      "lastBook": 2,
+      "status": "alive",
+      "size": "side",
+      "x": 460,
+      "y": 490
+    },
+    {
+      "id": "renfis_orithian",
+      "label": "Renfis Orithian",
+      "role": "character",
+      "affil": "unsorted",
+      "region": "main",
+      "book": 1,
+      "lastBook": 2,
+      "status": "alive",
+      "size": "side",
+      "x": 630,
+      "y": 370
+    },
+    {
+      "id": "lorreth",
+      "label": "Lorreth",
+      "role": "character",
+      "affil": "unsorted",
+      "region": "main",
+      "book": 1,
+      "lastBook": 2,
+      "status": "alive",
+      "size": "side",
+      "x": 800,
+      "y": 490
+    },
+    {
+      "id": "belikon_de_barra",
+      "label": "Belikon De Barra",
+      "role": "character",
+      "affil": "unsorted",
+      "region": "main",
+      "book": 1,
+      "lastBook": 2,
+      "status": "alive",
+      "size": "side",
+      "x": 120,
+      "y": 630
+    },
+    {
+      "id": "malcolm",
+      "label": "Malcolm",
+      "role": "character",
+      "affil": "unsorted",
+      "region": "main",
+      "book": 1,
+      "lastBook": 2,
+      "status": "dead",
+      "size": "side",
+      "x": 290,
+      "y": 750
+    },
+    {
+      "id": "lupo_proelia",
+      "label": "Lupo Proelia",
+      "role": "character",
+      "affil": "unsorted",
+      "region": "main",
+      "book": 1,
+      "lastBook": 2,
+      "status": "alive",
+      "size": "side",
+      "x": 460,
+      "y": 630
+    },
+    {
+      "id": "danya",
+      "label": "Danya",
+      "role": "character",
+      "affil": "unsorted",
+      "region": "main",
+      "book": 1,
+      "lastBook": 2,
+      "status": "alive",
+      "size": "side",
+      "x": 630,
+      "y": 750
+    },
+    {
+      "id": "korrix",
+      "label": "Korrix",
+      "role": "character",
+      "affil": "unsorted",
+      "region": "main",
+      "book": 1,
+      "lastBook": 2,
+      "status": "alive",
+      "size": "side",
+      "x": 800,
+      "y": 630
+    },
+    {
+      "id": "foley",
+      "label": "Foley",
+      "role": "character",
+      "affil": "unsorted",
+      "region": "main",
+      "book": 1,
+      "lastBook": 2,
+      "status": "alive",
+      "size": "side",
+      "x": 120,
+      "y": 1010
+    },
+    {
+      "id": "merelle",
+      "label": "Merelle",
+      "role": "character",
+      "affil": "unsorted",
+      "region": "main",
+      "book": 1,
+      "lastBook": 2,
+      "status": "alive",
+      "size": "side",
+      "x": 290,
+      "y": 890
+    },
+    {
+      "id": "vashgidyan",
+      "label": "Vashgidyan",
+      "role": "character",
+      "affil": "unsorted",
+      "region": "main",
+      "book": 1,
+      "lastBook": 2,
+      "status": "alive",
+      "size": "side",
+      "x": 460,
+      "y": 1010
+    },
+    {
+      "id": "finran",
+      "label": "Finran",
+      "role": "character",
+      "affil": "unsorted",
+      "region": "main",
+      "book": 1,
+      "lastBook": 2,
+      "status": "alive",
+      "size": "side",
+      "x": 800,
+      "y": 1010
+    },
+    {
+      "id": "rurik_daianthus",
+      "label": "Rurik Daianthus",
+      "role": "character",
+      "affil": "unsorted",
+      "region": "main",
+      "book": 1,
+      "lastBook": 2,
+      "status": "alive",
+      "size": "side",
+      "x": 120,
+      "y": 1150
+    },
+    {
+      "id": "amelia_daianthus",
+      "label": "Amelia Daianthus",
+      "role": "character",
+      "affil": "unsorted",
+      "region": "main",
+      "book": 1,
+      "lastBook": 2,
+      "status": "alive",
+      "size": "side",
+      "x": 290,
+      "y": 1270
+    },
+    {
+      "id": "onyx",
+      "label": "Onyx",
+      "role": "character",
+      "affil": "unsorted",
+      "region": "main",
+      "book": 1,
+      "lastBook": 2,
+      "status": "alive",
+      "size": "side",
+      "x": 460,
+      "y": 1150
+    },
+    {
+      "id": "archer",
+      "label": "Archer",
+      "role": "character",
+      "affil": "unsorted",
+      "region": "main",
+      "book": 1,
+      "lastBook": 2,
+      "status": "alive",
+      "size": "side",
+      "x": 630,
+      "y": 1270
+    },
+    {
+      "id": "edina",
+      "label": "Edina",
+      "role": "character",
+      "affil": "unsorted",
+      "region": "main",
+      "book": 1,
+      "lastBook": 2,
+      "status": "alive",
+      "size": "side",
+      "x": 800,
+      "y": 1150
+    },
+    {
+      "id": "harron",
+      "label": "Harron",
+      "role": "character",
+      "affil": "unsorted",
+      "region": "main",
+      "book": 1,
+      "lastBook": 2,
+      "status": "dead",
+      "size": "side",
+      "x": 120,
+      "y": 1530
+    },
+    {
+      "id": "taladius",
+      "label": "Taladius",
+      "role": "character",
+      "affil": "unsorted",
+      "region": "main",
+      "book": 1,
+      "lastBook": 2,
+      "status": "alive",
+      "size": "side",
+      "x": 290,
+      "y": 1410
+    },
+    {
+      "id": "eric",
+      "label": "Eric",
+      "role": "",
+      "affil": "unsorted",
+      "region": "zilvaren",
+      "book": 2,
+      "lastBook": 2,
+      "status": "alive",
+      "size": "side",
+      "x": 460,
+      "y": 1530
+    },
+    {
+      "id": "vorath_shah",
+      "label": "Vorath Shah",
+      "role": "",
+      "affil": "unsorted",
+      "region": "main",
+      "book": 2,
+      "lastBook": 2,
+      "status": "alive",
+      "size": "side",
+      "x": 630,
+      "y": 1410
+    },
+    {
+      "id": "ereth",
+      "label": "Ereth",
+      "role": "",
+      "affil": "unsorted",
+      "region": "main",
+      "book": 2,
+      "lastBook": 2,
+      "status": "dead",
+      "size": "side",
+      "x": 800,
+      "y": 1530
+    },
+    {
+      "id": "orious",
+      "label": "Orious",
+      "role": "",
+      "affil": "unsorted",
+      "region": "main",
+      "book": 2,
+      "lastBook": 2,
+      "status": "alive",
+      "size": "side",
+      "x": 120,
+      "y": 1670
     }
   ],
   "relationships": [
+    {
+      "from": "hayden_fane",
+      "to": "saeris_fane",
+      "type": "family",
+      "book": 1,
+      "label": "sibling"
+    },
+    {
+      "from": "te_lena",
+      "to": "saeris_fane",
+      "type": "mentor",
+      "book": 1,
+      "label": "explained_customs_to"
+    },
+    {
+      "from": "renfis_orithian",
+      "to": "kingfisher",
+      "type": "friend",
+      "book": 1,
+      "label": "friend"
+    },
+    {
+      "from": "lorreth",
+      "to": "kingfisher",
+      "type": "ally",
+      "book": 1,
+      "label": "fights_with"
+    },
+    {
+      "from": "rurik_daianthus",
+      "to": "amelia_daianthus",
+      "type": "mated",
+      "book": 1,
+      "label": "Former king and queen of Yvelia"
+    },
+    {
+      "from": "saeris_fane",
+      "to": "malcolm",
+      "type": "enemy",
+      "book": 1,
+      "label": "mortally_wounded_by"
+    },
+    {
+      "from": "taladius",
+      "to": "saeris_fane",
+      "type": "mentor",
+      "book": 1,
+      "label": "made_her_what_she_is"
+    },
     {
       "from": "saeris_fane",
       "to": "kingfisher",
       "type": "bonded",
       "book": 1,
-      "label": "Bound by a quicksilver bond neither of them chose."
-    },
-    {
-      "from": "everlayne",
-      "to": "kingfisher",
-      "type": "family",
-      "book": 1,
-      "label": "Sister relationship (Everlayne is Kingfisher's sister)."
+      "label": "quicksilver_bond"
     },
     {
       "from": "saeris_fane",
-      "to": "ren",
-      "type": "family",
+      "to": "malcolm",
+      "type": "killed",
       "book": 1,
-      "label": "Brother/Sister relationship (Ren is Saeris Fane's brother)."
+      "label": "Saeris killed Malcolm"
     },
     {
-      "from": "saeris_fane",
-      "to": "kingfisher",
+      "from": "taladius",
+      "to": "saeris_fane",
       "type": "ally",
       "book": 1,
-      "label": "Open hostility → reluctant alliance. Slow burn."
+      "label": "Taladius is Saeris's representative in the court"
     },
     {
-      "from": "saeris_fane",
-      "to": "carrion_swift",
-      "type": "complicated",
+      "from": "carrion_swift",
+      "to": "eric",
+      "type": "friend",
+      "book": 2,
+      "label": "Carrion co-owns a vault with Eric"
+    },
+    {
+      "from": "edina",
+      "to": "kingfisher",
+      "type": "family",
       "book": 1,
-      "label": "A rogue from her past in Zilvaren, pulled through the portal with her."
+      "label": "Edina is Kingfisher's mother"
+    },
+    {
+      "from": "kingfisher",
+      "to": "ereth",
+      "type": "killed",
+      "book": 2,
+      "label": "Kingfisher killed Ereth"
+    },
+    {
+      "from": "kingfisher",
+      "to": "saeris_fane",
+      "type": "romantic",
+      "book": 1,
+      "label": "Kingfisher told Saeris he loves her and wants to marry her, and she said it back"
     }
   ],
   "events": [
     {
       "book": 1,
-      "text": "Saeris Fane, a thief in the desert city of Zilvaren, hides that she is an alchemist",
+      "text": "Zilvaren is a harsh desert city on a human world, ruled by Madra, an immortal queen",
+      "involves": [
+        "madra"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Saeris Fane is a thief in Zilvaren who hides that she can manipulate metal — an alchemist",
       "involves": [
         "saeris_fane"
       ],
@@ -239,7 +695,24 @@
     },
     {
       "book": 1,
-      "text": "Saeris scavenges the Undercroft for water and finds an enchanted gauntlet",
+      "text": "Hayden Fane, Saeris's younger brother, works as a store clerk in the seventh ward",
+      "involves": [
+        "saeris_fane",
+        "hayden_fane"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Iris Fane, their mother, is dead before the story opens",
+      "involves": [
+        "iris_fane"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Saeris scavenges the Undercroft for water and finds an enchanted Fae gauntlet",
       "involves": [
         "saeris_fane"
       ],
@@ -247,7 +720,7 @@
     },
     {
       "book": 1,
-      "text": "The gauntlet opens a portal and pulls Saeris into Yvelia, the Fae realm",
+      "text": "The gauntlet opens a portal and pulls Saeris into Yvelia, the frozen Fae realm",
       "involves": [
         "saeris_fane"
       ],
@@ -255,7 +728,15 @@
     },
     {
       "book": 1,
-      "text": "Saeris meets Kingfisher, a Fae warrior who wields shadow and carries shifting tattoos",
+      "text": "Carrion Swift, a smuggler and gambler from Zilvaren, is pulled through with her",
+      "involves": [
+        "carrion_swift"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Saeris meets Kingfisher, a Fae warrior over 1,700 years old, Lord of Cahlish",
       "involves": [
         "saeris_fane",
         "kingfisher"
@@ -264,10 +745,64 @@
     },
     {
       "book": 1,
-      "text": "Carrion Swift, a rogue from Saeris's past in Zilvaren, is pulled through with her",
+      "text": "Kingfisher has been corrupted by long exposure to quicksilver",
+      "involves": [
+        "kingfisher"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Everlayne is Kingfisher's half-sister and a daughter of King Belikon",
+      "involves": [
+        "kingfisher",
+        "everlayne",
+        "belikon_de_barra"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Everlayne welcomes Saeris to the court at Cahlish, a fiefdom warded against Belikon",
       "involves": [
         "saeris_fane",
-        "carrion_swift"
+        "everlayne",
+        "belikon_de_barra"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Te Léna is a healer at Cahlish who explains Fae customs and mating bonds to Saeris",
+      "involves": [
+        "saeris_fane",
+        "te_lena"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Renfis Orithian commands the Yvelian army and is a friend to Kingfisher",
+      "involves": [
+        "kingfisher",
+        "renfis_orithian"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Lorreth is a Fae warrior and bard who fights alongside Kingfisher",
+      "involves": [
+        "kingfisher",
+        "lorreth"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Belikon De Barra rules Yvelia as king from the Winter Palace",
+      "involves": [
+        "belikon_de_barra"
       ],
       "kind": "other"
     },
@@ -281,7 +816,7 @@
     },
     {
       "book": 1,
-      "text": "Kingfisher needs an alchemist to reforge the Fae army's weapons against the Sanasroth threat",
+      "text": "Kingfisher needs an alchemist to reforge Fae weapons against the vampires of Sanasroth",
       "involves": [
         "kingfisher"
       ],
@@ -289,11 +824,32 @@
     },
     {
       "book": 1,
-      "text": "Everlayne, Kingfisher's sister, welcomes Saeris to the court at Cahlish",
+      "text": "Malcolm is the vampire king of Sanasroth, a former Fae who took on the blood curse",
       "involves": [
-        "saeris_fane",
-        "kingfisher",
-        "everlayne"
+        "malcolm"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Belikon is revealed to have secretly allied with Malcolm for millennia, feeding his horde",
+      "involves": [
+        "belikon_de_barra",
+        "malcolm"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Lupo Proelia is the rebellion opposing Belikon; Danya, Korrix, Foley, Merelle and Vashgidyan fight in it",
+      "involves": [
+        "belikon_de_barra",
+        "lupo_proelia",
+        "danya",
+        "korrix",
+        "foley",
+        "merelle",
+        "vashgidyan"
       ],
       "kind": "other"
     },
@@ -308,10 +864,99 @@
     },
     {
       "book": 1,
-      "text": "Ren, Saeris's brother, remains behind in Zilvaren — her reason to want to return",
+      "text": "Carrion Swift is revealed to be Carrion Daianthus, heir to the Yvelian throne",
+      "involves": [
+        "carrion_swift"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Finran, Kingfisher's father, carried the infant Carrion to Zilvaren a thousand years ago to hide him from the usurper Belikon, glamouring his ears and canines so he would pass as human",
+      "involves": [
+        "carrion_swift",
+        "kingfisher",
+        "belikon_de_barra",
+        "finran"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Rurik and Amelia Daianthus were the former king and queen of Yvelia, of Carrion's line",
+      "involves": [
+        "carrion_swift",
+        "rurik_daianthus",
+        "amelia_daianthus"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Carrion's bloodline created the curse that made Malcolm a vampire, so no vampire can drink from him or enthrall him",
+      "involves": [
+        "carrion_swift",
+        "malcolm"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Onyx is a fox who attaches himself to the group",
+      "involves": [
+        "onyx"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Archer, a fire sprite, is head caretaker at Cahlish",
+      "involves": [
+        "archer"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Edina, an oracle at Cahlish, dies",
+      "involves": [
+        "edina"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Harron, commander of Madra's guard in Zilvaren, dies",
+      "involves": [
+        "madra",
+        "harron"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Malcolm mortally wounds Saeris, and she survives as half Fae, half vampire",
       "involves": [
         "saeris_fane",
-        "ren"
+        "malcolm"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Saeris kills Malcolm and by that inherits his throne, becoming vampire queen of Sanasroth",
+      "involves": [
+        "saeris_fane",
+        "malcolm"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Taladius is a vampire lord of Sanasroth and the one who made Saeris what she is",
+      "involves": [
+        "saeris_fane",
+        "taladius"
       ],
       "kind": "other"
     },
@@ -323,16 +968,216 @@
         "kingfisher"
       ],
       "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Kingfisher had promised to bring Hayden back to Saeris, and fails to",
+      "involves": [
+        "saeris_fane",
+        "hayden_fane",
+        "kingfisher"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 2,
+      "text": "Saeris rules Sanasroth as queen of the Blood Court, having killed Malcolm",
+      "involves": [
+        "saeris_fane",
+        "malcolm"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 2,
+      "text": "She proves her claim before the Lords of Midnight by feeding on Kingfisher's blood",
+      "involves": [
+        "kingfisher"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 2,
+      "text": "Saeris establishes new laws protecting those the court previously fed on",
+      "involves": [
+        "saeris_fane"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 2,
+      "text": "Taladius becomes Saeris's representative in the court",
+      "involves": [
+        "saeris_fane",
+        "taladius"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 2,
+      "text": "Kingfisher returns to Zilvaren with Carrion rather than with Hayden, having kept his oath only in part",
+      "involves": [
+        "hayden_fane",
+        "carrion_swift",
+        "kingfisher"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 2,
+      "text": "Carrion learns that his last living relative in Zilvaren has died",
+      "involves": [
+        "carrion_swift"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 2,
+      "text": "Carrion co-owns an underground vault in Zilvaren's Silver City, the Brigand's Bank, with a partner named Eric",
+      "involves": [
+        "carrion_swift",
+        "eric"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 2,
+      "text": "Vorath Shah is a vault breaker who is visibly afraid of Kingfisher",
+      "involves": [
+        "kingfisher",
+        "vorath_shah"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 2,
+      "text": "Madra sends infected feeders out of Zilvaren",
+      "involves": [
+        "madra"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 2,
+      "text": "Edina, Kingfisher's mother, is revealed to be a spirit trapped in the quicksilver, able to speak through it",
+      "involves": [
+        "kingfisher",
+        "edina"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 2,
+      "text": "A rot spreads across the realms and costs the Fae a thousand warriors",
+      "involves": [],
+      "kind": "other"
+    },
+    {
+      "book": 2,
+      "text": "Ereth, a vampire lord, attempts an assassination and is killed by Kingfisher",
+      "involves": [
+        "kingfisher",
+        "ereth"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 2,
+      "text": "Kingfisher permanently gives up his healing magic to save Onyx",
+      "involves": [
+        "kingfisher",
+        "onyx"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 2,
+      "text": "Kingfisher tells Saeris he loves her and wants to marry her, and she says it back",
+      "involves": [
+        "saeris_fane",
+        "kingfisher"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 2,
+      "text": "Their bond is held to supersede the traditional Fae wedding requirements",
+      "involves": [],
+      "kind": "other"
+    },
+    {
+      "book": 2,
+      "text": "Saeris searches Ammontraíeth for a forge",
+      "involves": [
+        "saeris_fane"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 2,
+      "text": "Saeris is pulled into the quicksilver and confronted by Orious, King Belikon's right hand",
+      "involves": [
+        "saeris_fane",
+        "belikon_de_barra",
+        "orious"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 2,
+      "text": "Hayden Fane remains in Zilvaren",
+      "involves": [
+        "hayden_fane"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 2,
+      "text": "Fae & Alchemy series order — Hachette, BookScouter",
+      "involves": [],
+      "kind": "other"
+    },
+    {
+      "book": 2,
+      "text": "Quicksilver and Brimstone — Wikipedia",
+      "involves": [],
+      "kind": "other"
+    },
+    {
+      "book": 2,
+      "text": "Quicksilver comprehensive guide — Fantasy Fangirls",
+      "involves": [],
+      "kind": "other"
+    },
+    {
+      "book": 2,
+      "text": "Quicksilver full recap and ending explained — Claudia Carlucci",
+      "involves": [],
+      "kind": "other"
+    },
+    {
+      "book": 2,
+      "text": "Carrion Swift — Quicksilver (Fae & Alchemy) Fandom wiki",
+      "involves": [
+        "carrion_swift"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 2,
+      "text": "Brimstone summary and ending explained — The Proficient Reviewer, Bookish Goblin",
+      "involves": [],
+      "kind": "other"
     }
   ],
+  "draft": true,
   "theme": {
     "accent": "#B0C4DE",
     "ground": "#1A1A2E",
     "panel": "#25253D",
     "line": "#3A3A50",
     "accent2": "#FF6347",
-    "mood": "The contrast between icy silver and burning orange/red perfectly mirrors the duality of Yvelia's cold magic against Zilvaren's fiery danger.",
+    "mood": "The contrast between icy silver and burning orange/red perfectly embodies the core conflict of opposing elemental forces within the series.",
     "display": "'Cinzel', serif"
-  },
-  "draft": true
+  }
 }

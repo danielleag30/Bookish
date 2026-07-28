@@ -25,6 +25,10 @@ const RUNS_DIR = resolve(import.meta.dirname, 'runs');
 // ── What we ask the model to produce ───────────────────────────────────────
 
 export interface ExtractedCharacter {
+  /** id of a place from `places`, or '' when the notes do not say. */
+  place?: string;
+  /** id of a faction from `factions`, or '' when the notes do not say. */
+  faction?: string;
   id: string;
   label: string;
   role: string;
@@ -38,9 +42,25 @@ export interface ExtractedRelationship {
   label: string;
 }
 
+/** A realm, city or location the notes name. */
+export interface ExtractedPlace {
+  id: string;
+  label: string;
+  note: string;
+}
+
+/** A group, court, army or allegiance the notes name. */
+export interface ExtractedFaction {
+  id: string;
+  label: string;
+  note: string;
+}
+
 export interface ExtractedGraph {
   characters: ExtractedCharacter[];
   relationships: ExtractedRelationship[];
+  places?: ExtractedPlace[];
+  factions?: ExtractedFaction[];
 }
 
 export interface Plan {
@@ -54,18 +74,34 @@ export interface Plan {
  * JSON Schema for the graph.
  *
  * Written by hand rather than derived from the Zod series schema, because the
- * extraction target is deliberately narrower: no coordinates, no regions, no
- * book numbers. Those are layout and timeline concerns the model has no basis
- * for. Field descriptions are load-bearing — an early trial filled `label` with
- * "Dragon Companion" because `label` carried no description.
+ * extraction target is deliberately narrower: no coordinates, no book numbers.
+ * Those are layout and timeline concerns the model has no basis for. Field
+ * descriptions are load-bearing — an early trial filled `label` with "Dragon
+ * Companion" because `label` carried no description.
+ *
+ * `places` and `factions` were originally excluded on the reasoning that a model
+ * must not invent geography. Running this on real notes showed the rule backfired:
+ * the model identified Zilvaren, Yvelia and Lupo Proelia perfectly well and, given
+ * only a `characters` array to put them in, filed all three as characters. The
+ * guardrail never prevented the extraction, it just misdirected it. Reading a place
+ * that the notes name is not inventing one — so they get their own slots, and the
+ * verifier holds them to the same standard as every other claim.
  */
-function graphSchema(relTypeIds: string[]): unknown {
+/**
+ * Exported because multiagent.ts had grown its own copy of this schema. The two
+ * drifted: adding `places` and `factions` here changed nothing at all, because
+ * the multi-agent path — the default — was still sending the older shape. One
+ * definition, one place to change it.
+ */
+export function graphSchema(relTypeIds: string[]): unknown {
   return {
     type: 'object',
     properties: {
       characters: {
         type: 'array',
-        description: 'Every character named in the passage.',
+        description:
+          'Every *person* named in the passage. People only — a realm, city or ' +
+          'court is not a character; those belong in places and factions.',
         items: {
           type: 'object',
           properties: {
@@ -88,8 +124,50 @@ function graphSchema(relTypeIds: string[]): unknown {
               enum: ['alive', 'dead', 'missing', 'prisoner', 'unknown'],
               description: 'Their state by the end of this passage. Use unknown if unstated.',
             },
+            place: {
+              type: 'string',
+              description:
+                'id of the place from `places` this person belongs to, if the ' +
+                'passage says. Empty string if it does not say — do not guess.',
+            },
+            faction: {
+              type: 'string',
+              description:
+                'id of the group from `factions` this person belongs to, if the ' +
+                'passage says. Empty string if it does not say — do not guess.',
+            },
           },
-          required: ['id', 'label', 'role', 'status'],
+          required: ['id', 'label', 'role', 'status', 'place', 'faction'],
+        },
+      },
+      places: {
+        type: 'array',
+        description:
+          'Realms, cities and locations the passage names. Places only — never a ' +
+          'person, never a group of people.',
+        items: {
+          type: 'object',
+          properties: {
+            id: { type: 'string', description: 'Lowercase slug, e.g. "zilvaren".' },
+            label: { type: 'string', description: 'The name as written, e.g. "Zilvaren".' },
+            note: { type: 'string', description: 'What the passage says about it, or "".' },
+          },
+          required: ['id', 'label', 'note'],
+        },
+      },
+      factions: {
+        type: 'array',
+        description:
+          'Groups, courts, armies and allegiances the passage names — a side that ' +
+          'characters belong to. Never a single person, never a place.',
+        items: {
+          type: 'object',
+          properties: {
+            id: { type: 'string', description: 'Lowercase slug, e.g. "lupo_proelia".' },
+            label: { type: 'string', description: 'The name as written, e.g. "Lupo Proelia".' },
+            note: { type: 'string', description: 'What the passage says about it, or "".' },
+          },
+          required: ['id', 'label', 'note'],
         },
       },
       relationships: {
@@ -109,7 +187,7 @@ function graphSchema(relTypeIds: string[]): unknown {
         },
       },
     },
-    required: ['characters', 'relationships'],
+    required: ['characters', 'places', 'factions', 'relationships'],
   };
 }
 
@@ -230,21 +308,134 @@ export function slugifyId(id: string): string {
     .trim()
     .toLowerCase()
     .replace(/['’]/g, '')
+    // Strip diacritics rather than dropping the letter: "Te Léna" was becoming
+    // te_l_na, which is not a name and does not resolve back to the character.
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
     .replace(/[^a-z0-9]+/g, '_')
     .replace(/^_+|_+$/g, '')
     || 'unknown';
 }
 
 /** Apply slugifyId across a graph, keeping relationships pointing at the right ids. */
+/**
+ * Collapse short-form duplicates of the same character.
+ *
+ * A two-book run produced `saeris` and `saeris_fane`, `hayden` and `hayden_fane`,
+ * `carrion` and `carrion_swift`, `belikon` and `belikon_de_barra` — the notes
+ * name people in full once and by first name after, and the extractor took each
+ * form as a separate person. Half the relationships then pointed at the stub.
+ *
+ * The rule is deliberately narrow: merge only when one id's underscore-separated
+ * tokens are a leading run of the other's, and keep the longer id as canonical.
+ * That catches first-name stubs and nothing else.
+ *
+ * It will NOT merge `carrion_swift` with `carrion_daianthus`, and that is the
+ * point — those are one person under two names, but which name a reader knows
+ * depends on how far they have read. Collapsing them here would silently destroy
+ * a reveal. It belongs in `perceived`, decided by a human.
+ */
+/**
+ * Drop "characters" that the same run also identified as a place or a faction.
+ *
+ * Given both a characters list and a places list, the model puts Zilvaren in
+ * both — it is not confused about what Zilvaren is, it is hedging. Since the
+ * places entry is the one that carries a note and feeds the regions, that is
+ * the copy worth keeping, and the character copy is deleted along with any
+ * relationship that pointed at it.
+ *
+ * Deterministic on purpose. Asking a second model call "is Zilvaren a person?"
+ * would be slower, cost more and be less reliable than an id comparison.
+ */
+export function dropNonPeople(g: ExtractedGraph): ExtractedGraph {
+  const notPeople = new Set([
+    ...(g.places ?? []).map((p) => p.id),
+    ...(g.factions ?? []).map((f) => f.id),
+  ]);
+  if (notPeople.size === 0) return g;
+
+  const characters = g.characters.filter((c) => !notPeople.has(c.id));
+  const kept = new Set(characters.map((c) => c.id));
+  return {
+    ...g,
+    characters,
+    relationships: g.relationships.filter((r) => kept.has(r.from) && kept.has(r.to)),
+  };
+}
+
+export function collapseAliases(g: ExtractedGraph): ExtractedGraph {
+  const ids = g.characters.map((c) => c.id).sort((a, b) => b.length - a.length);
+  const canonical = new Map<string, string>();
+
+  for (const short of ids) {
+    if (canonical.has(short)) continue;
+    const shortTokens = short.split('_');
+    for (const long of ids) {
+      if (long === short || long.length <= short.length) continue;
+      const longTokens = long.split('_');
+      const isPrefix = shortTokens.every((t, i) => longTokens[i] === t);
+      if (isPrefix) {
+        canonical.set(short, canonical.get(long) ?? long);
+        break;
+      }
+    }
+  }
+  if (canonical.size === 0) return g;
+
+  const at = (id: string) => canonical.get(id) ?? id;
+  const chars = new Map<string, ExtractedCharacter>();
+  for (const c of g.characters) {
+    const id = at(c.id);
+    const prev = chars.get(id);
+    if (!prev) {
+      chars.set(id, { ...c, id });
+      continue;
+    }
+    // Keep whichever record actually says something.
+    chars.set(id, {
+      ...prev,
+      label: prev.label.length >= c.label.length ? prev.label : c.label,
+      role: prev.role || c.role,
+      status: prev.status !== 'unknown' ? prev.status : c.status,
+    });
+  }
+
+  const rels = new Map<string, ExtractedRelationship>();
+  for (const r of g.relationships) {
+    const from = at(r.from);
+    const to = at(r.to);
+    if (from === to) continue; // the stub and the full name were the same person
+    rels.set(`${from}|${to}|${r.type}`, { ...r, from, to });
+  }
+
+  return {
+    ...g,
+    characters: [...chars.values()],
+    relationships: [...rels.values()],
+  };
+}
+
 export function normaliseIds(g: ExtractedGraph): ExtractedGraph {
   const map = new Map(g.characters.map((c) => [c.id, slugifyId(c.id)]));
+  // Place and faction ids are keys too, and a character's `place`/`faction`
+  // points at one — so all three have to be slugified with the same rule or the
+  // reference stops resolving.
+  const placeMap = new Map((g.places ?? []).map((p) => [p.id, slugifyId(p.id)]));
+  const factionMap = new Map((g.factions ?? []).map((f) => [f.id, slugifyId(f.id)]));
   return {
-    characters: g.characters.map((c) => ({ ...c, id: map.get(c.id) ?? slugifyId(c.id) })),
+    characters: g.characters.map((c) => ({
+      ...c,
+      id: map.get(c.id) ?? slugifyId(c.id),
+      ...(c.place ? { place: placeMap.get(c.place) ?? slugifyId(c.place) } : {}),
+      ...(c.faction ? { faction: factionMap.get(c.faction) ?? slugifyId(c.faction) } : {}),
+    })),
     relationships: g.relationships.map((r) => ({
       ...r,
       from: map.get(r.from) ?? slugifyId(r.from),
       to: map.get(r.to) ?? slugifyId(r.to),
     })),
+    ...(g.places ? { places: g.places.map((p) => ({ ...p, id: placeMap.get(p.id) ?? slugifyId(p.id) })) } : {}),
+    ...(g.factions ? { factions: g.factions.map((f) => ({ ...f, id: factionMap.get(f.id) ?? slugifyId(f.id) })) } : {}),
   };
 }
 
@@ -264,7 +455,21 @@ export function mergeGraphs(parts: ExtractedGraph[]): ExtractedGraph {
       rels.set(`${r.from}>${r.to}:${r.type}`, r);
     }
   }
-  return normaliseIds({ characters: [...chars.values()], relationships: [...rels.values()] });
+  // Places and factions are unioned by id across chunks: book two names Yvelia
+  // again, and that is the same realm, not a second one.
+  const places = new Map<string, ExtractedPlace>();
+  const factions = new Map<string, ExtractedFaction>();
+  for (const g of parts) {
+    for (const p of g.places ?? []) if (!places.has(p.id)) places.set(p.id, p);
+    for (const f of g.factions ?? []) if (!factions.has(f.id)) factions.set(f.id, f);
+  }
+
+  return normaliseIds({
+    characters: [...chars.values()],
+    relationships: [...rels.values()],
+    places: [...places.values()],
+    factions: [...factions.values()],
+  });
 }
 
 // ── Run ────────────────────────────────────────────────────────────────────
