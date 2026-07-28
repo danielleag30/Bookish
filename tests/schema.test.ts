@@ -17,16 +17,16 @@ function validSeries(): Series {
       { id: 1, title: 'Book One', short: 'One' },
       { id: 2, title: 'Book Two', short: 'Two' },
     ],
-    bands: [{ id: 'main', label: 'Main', y: 0, h: 100 }],
+    regions: [{ id: 'main', label: 'Main', y: 0, h: 100 }],
     affiliations: { good: { label: 'Good', color: '#fff' } },
     relationshipTypes: [
       { id: 'family', label: 'Family', color: '#f00', dash: null, symmetric: false },
       { id: 'romantic', label: 'Romantic', color: '#0f0', dash: null, symmetric: true },
     ],
     characters: [
-      { id: 'alice', label: 'Alice', role: 'Hero', affil: 'good', band: 'main',
+      { id: 'alice', label: 'Alice', role: 'Hero', affil: 'good', region: 'main',
         book: 1, lastBook: 2, status: 'alive', size: 'main', x: 0 },
-      { id: 'bob', label: 'Bob', role: 'Sidekick', affil: 'good', band: 'main',
+      { id: 'bob', label: 'Bob', role: 'Sidekick', affil: 'good', region: 'main',
         book: 1, lastBook: 2, status: 'alive', size: 'side', x: 100 },
     ],
     relationships: [
@@ -86,8 +86,8 @@ describe('referential integrity', () => {
 
   it('catches an unknown band', () => {
     const s = validSeries();
-    s.characters[0]!.band = 'nowhere';
-    expect(rules(s)).toContain('unknown-band');
+    s.characters[0]!.region = 'nowhere';
+    expect(rules(s)).toContain('unknown-region');
   });
 
   it('catches an unknown affiliation', () => {

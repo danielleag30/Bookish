@@ -1,0 +1,1866 @@
+{
+  "id": "plated-prisoner",
+  "title": "The Plated Prisoner",
+  "author": "Raven Kennedy",
+  "books": [
+    {
+      "id": 1,
+      "title": "Gild",
+      "short": "Gild",
+      "dominant": "Sixth Kingdom"
+    },
+    {
+      "id": 2,
+      "title": "Glint",
+      "short": "Glint",
+      "dominant": "Fourth Kingdom"
+    },
+    {
+      "id": 3,
+      "title": "Gleam",
+      "short": "Gleam",
+      "dominant": "Third Kingdom (rising)"
+    },
+    {
+      "id": 4,
+      "title": "Glow",
+      "short": "Glow",
+      "dominant": "Third Kingdom (Kaila)"
+    },
+    {
+      "id": 5,
+      "title": "Gold",
+      "short": "Gold",
+      "dominant": "Annwyn (Carrick/Cull)"
+    },
+    {
+      "id": 6,
+      "title": "Goldfinch",
+      "short": "Goldfinch",
+      "dominant": "Annwyn (Turley restored)"
+    }
+  ],
+  "regions": [
+    {
+      "id": "sixth",
+      "label": "Sixth Kingdom (Highbell)",
+      "x": 30,
+      "y": 115,
+      "w": 320,
+      "h": 375,
+      "power": "Gold magic (Midas)",
+      "color": "#d4af3722",
+      "border": "#d4af37"
+    },
+    {
+      "id": "fourth",
+      "label": "Fourth Kingdom (Brackhill)",
+      "x": 660,
+      "y": 115,
+      "w": 330,
+      "h": 375,
+      "power": "Rot magic (Slade)",
+      "color": "#4a4a8a22",
+      "border": "#4a4a8a"
+    },
+    {
+      "id": "fifth",
+      "label": "Fifth Kingdom (Ranhold)",
+      "x": 30,
+      "y": 35,
+      "w": 200,
+      "h": 72,
+      "power": "Pleasure / scheming",
+      "color": "#8b1a1a22",
+      "border": "#8b1a1a"
+    },
+    {
+      "id": "third",
+      "label": "Third Kingdom",
+      "x": 250,
+      "y": 35,
+      "w": 200,
+      "h": 72,
+      "power": "Word-stealing (Kaila)",
+      "color": "#9c27b022",
+      "border": "#9c27b0"
+    },
+    {
+      "id": "first",
+      "label": "First Kingdom",
+      "x": 470,
+      "y": 35,
+      "w": 180,
+      "h": 72,
+      "power": "Political / pragmatic",
+      "color": "#00897b22",
+      "border": "#00897b"
+    },
+    {
+      "id": "second",
+      "label": "Second Kingdom",
+      "x": 660,
+      "y": 35,
+      "w": 155,
+      "h": 72,
+      "power": "Fanatical cleansing",
+      "color": "#5d402022",
+      "border": "#5d4020"
+    },
+    {
+      "id": "seventh",
+      "label": "Seventh Kingdom (destroyed)",
+      "x": 825,
+      "y": 35,
+      "w": 165,
+      "h": 72,
+      "power": "Destroyed — bridge fell",
+      "color": "#37474f33",
+      "border": "#607d8b"
+    },
+    {
+      "id": "pirates",
+      "label": "Red Raids (Pirates)",
+      "x": 360,
+      "y": 115,
+      "w": 130,
+      "h": 100,
+      "power": "Raiding / kidnapping",
+      "color": "#e7650022",
+      "border": "#e76500"
+    },
+    {
+      "id": "neutral",
+      "label": "Neutral / Traveling",
+      "x": 360,
+      "y": 223,
+      "w": 130,
+      "h": 85,
+      "color": "#27ae6022",
+      "border": "#27ae60"
+    },
+    {
+      "id": "annwyn",
+      "label": "ANNWYN — Fae Realm",
+      "x": 30,
+      "y": 505,
+      "w": 960,
+      "h": 225,
+      "power": "Ancient fae magic",
+      "color": "#7e57c233",
+      "border": "#9575cd"
+    }
+  ],
+  "affiliations": {
+    "sixth": {
+      "label": "Sixth Kingdom (Highbell)",
+      "color": "#d4af37"
+    },
+    "fourth": {
+      "label": "Fourth Kingdom (Brackhill)",
+      "color": "#4a4a8a"
+    },
+    "fifth": {
+      "label": "Fifth Kingdom (Ranhold)",
+      "color": "#8b1a1a"
+    },
+    "third": {
+      "label": "Third Kingdom",
+      "color": "#9c27b0"
+    },
+    "first": {
+      "label": "First Kingdom",
+      "color": "#00897b"
+    },
+    "second": {
+      "label": "Second Kingdom",
+      "color": "#5d4020"
+    },
+    "seventh": {
+      "label": "Seventh Kingdom (destroyed)",
+      "color": "#607d8b"
+    },
+    "pirates": {
+      "label": "Red Raids (Pirates)",
+      "color": "#e76500"
+    },
+    "neutral": {
+      "label": "Neutral / Traveling",
+      "color": "#27ae60"
+    },
+    "annwyn": {
+      "label": "ANNWYN — Fae Realm",
+      "color": "#9575cd"
+    }
+  },
+  "relationshipTypes": [
+    {
+      "id": "captor",
+      "label": "Captor/Captive",
+      "color": "#c0392b",
+      "dash": "6,3",
+      "symmetric": false
+    },
+    {
+      "id": "romantic",
+      "label": "Slow-burn",
+      "color": "#ad1457",
+      "dash": "4,2",
+      "symmetric": true
+    },
+    {
+      "id": "romantic",
+      "label": "Love Interest",
+      "color": "#e91e8c",
+      "dash": null,
+      "symmetric": true
+    },
+    {
+      "id": "mated",
+      "label": "Fated Mates",
+      "color": "#ff1744",
+      "dash": null,
+      "symmetric": true
+    },
+    {
+      "id": "romantic",
+      "label": "Married",
+      "color": "#8e44ad",
+      "dash": null,
+      "symmetric": true
+    },
+    {
+      "id": "ally",
+      "label": "Ally",
+      "color": "#27ae60",
+      "dash": null,
+      "symmetric": true
+    },
+    {
+      "id": "enemy",
+      "label": "Enemy",
+      "color": "#e74c3c",
+      "dash": "4,2",
+      "symmetric": false
+    },
+    {
+      "id": "ally",
+      "label": "Guard",
+      "color": "#2980b9",
+      "dash": null,
+      "symmetric": true
+    },
+    {
+      "id": "friend",
+      "label": "Friend",
+      "color": "#16a085",
+      "dash": null,
+      "symmetric": true
+    },
+    {
+      "id": "commands",
+      "label": "Commander",
+      "color": "#34495e",
+      "dash": "3,3",
+      "symmetric": false
+    },
+    {
+      "id": "squad",
+      "label": "Wrath",
+      "color": "#546e7a",
+      "dash": "2,2",
+      "symmetric": true
+    },
+    {
+      "id": "enemy",
+      "label": "Hostile",
+      "color": "#f39c12",
+      "dash": "5,3",
+      "symmetric": false
+    },
+    {
+      "id": "ally",
+      "label": "Political",
+      "color": "#795548",
+      "dash": "8,2,2,2",
+      "symmetric": true
+    },
+    {
+      "id": "family",
+      "label": "Sibling",
+      "color": "#ec407a",
+      "dash": null,
+      "symmetric": false
+    },
+    {
+      "id": "family",
+      "label": "Parent/Child",
+      "color": "#d81b60",
+      "dash": null,
+      "symmetric": false
+    },
+    {
+      "id": "family",
+      "label": "Family",
+      "color": "#c2185b",
+      "dash": null,
+      "symmetric": false
+    },
+    {
+      "id": "family",
+      "label": "Ancestor",
+      "color": "#6a1b9a",
+      "dash": "1,3",
+      "symmetric": false
+    },
+    {
+      "id": "killed",
+      "label": "Killed",
+      "color": "#212121",
+      "dash": "1,2",
+      "symmetric": false
+    },
+    {
+      "id": "ally",
+      "label": "Sacrifice",
+      "color": "#ffc107",
+      "dash": null,
+      "symmetric": true
+    },
+    {
+      "id": "ally",
+      "label": "Rebel ally",
+      "color": "#1e88e5",
+      "dash": "5,2",
+      "symmetric": true
+    },
+    {
+      "id": "mentor",
+      "label": "Loyalist",
+      "color": "#00838f",
+      "dash": null,
+      "symmetric": false
+    }
+  ],
+  "characters": [
+    {
+      "id": "midas",
+      "label": "King Midas",
+      "role": "King of Sixth Kingdom",
+      "affil": "sixth",
+      "region": "sixth",
+      "book": 1,
+      "lastBook": 3,
+      "size": "main",
+      "x": 200,
+      "status": "dead",
+      "statusDetail": "killed",
+      "bio": "Born 'Barden East', a flesh trader. Has no real power — uses Auren's gold touch as his own. Manipulates Auren for a decade before she kills him by melting the castle around him in Book 3.",
+      "magic": "gold",
+      "y": 205,
+      "attrs": {
+        "king": "midas"
+      }
+    },
+    {
+      "id": "malina",
+      "label": "Queen Malina",
+      "role": "Queen of Sixth Kingdom · Ice magic",
+      "affil": "sixth",
+      "region": "sixth",
+      "book": 1,
+      "lastBook": 6,
+      "size": "main",
+      "x": 95,
+      "status": "dead",
+      "statusDetail": "sacrifices",
+      "bio": "Midas's wife. Cold and arrogant initially. Gradually becomes the series' most surprising redemption arc — eventually sacrificing herself to protect her kingdom from the Fae invasion.",
+      "magic": "ice",
+      "y": 205,
+      "attrs": {
+        "king": "malina"
+      }
+    },
+    {
+      "id": "auren",
+      "label": "Auren",
+      "role": "Protagonist · Lyäri Ulvêre",
+      "affil": "sixth",
+      "region": "sixth",
+      "book": 1,
+      "lastBook": 6,
+      "size": "main",
+      "x": 285,
+      "status": "alive",
+      "bio": "Gold-skinned Fae woman raised in Annwyn, kidnapped as a child. Spent 10 years in Midas's gilded cage. Discovers the gold touch is her own power. Kills Midas in Book 3. Falls into Annwyn in Book 4. Discovered to be the Turley heir — rightful ruler of Annwyn. Fated mate to Slade.",
+      "magic": "gold",
+      "y": 315
+    },
+    {
+      "id": "digby",
+      "label": "Digby",
+      "role": "Auren's personal guard",
+      "affil": "sixth",
+      "region": "sixth",
+      "book": 1,
+      "lastBook": 6,
+      "size": "side",
+      "x": 140,
+      "status": "alive",
+      "bio": "Auren's most loyal guard. One of the few people who genuinely cares for her wellbeing. Thought dead after Gleam but survives.",
+      "magic": "none",
+      "y": 330
+    },
+    {
+      "id": "rissa",
+      "label": "Rissa",
+      "role": "Royal Saddle → free woman",
+      "affil": "sixth",
+      "region": "sixth",
+      "book": 1,
+      "lastBook": 6,
+      "size": "side",
+      "x": 225,
+      "status": "alive",
+      "bio": "One of Midas's royal saddles. Eventually becomes a true ally and friend to Auren. Develops a slow-burn romance with Commander Osrik.",
+      "magic": "none",
+      "y": 420
+    },
+    {
+      "id": "polly",
+      "label": "Polly",
+      "role": "Royal Saddle · rose addict",
+      "affil": "sixth",
+      "region": "sixth",
+      "book": 1,
+      "lastBook": 4,
+      "size": "side",
+      "x": 320,
+      "status": "alive",
+      "bio": "One of Midas's saddles. Addicted to the rose drug Midas uses to control his court.",
+      "magic": "none",
+      "y": 455
+    },
+    {
+      "id": "mist",
+      "label": "Mist",
+      "role": "Royal Saddle · pregnant",
+      "affil": "sixth",
+      "region": "sixth",
+      "book": 1,
+      "lastBook": 3,
+      "size": "side",
+      "x": 80,
+      "status": "dead",
+      "statusDetail": "killed",
+      "bio": "One of Midas's saddles who becomes pregnant with his child. Killed by Kaila in Book 3.",
+      "magic": "none",
+      "y": 380
+    },
+    {
+      "id": "dommik",
+      "label": "Dommik",
+      "role": "Assassin · Malina's love",
+      "affil": "sixth",
+      "region": "sixth",
+      "book": 4,
+      "lastBook": 6,
+      "size": "side",
+      "x": 58,
+      "status": "alive",
+      "bio": "A shadow-traveling assassin hired to deal with Malina. Develops a protective bond and love for her instead.",
+      "magic": "shadow",
+      "y": 280
+    },
+    {
+      "id": "jeo",
+      "label": "Jeo",
+      "role": "Malina's saddle (deceased)",
+      "affil": "sixth",
+      "region": "sixth",
+      "book": 3,
+      "lastBook": 3,
+      "size": "side",
+      "x": 60,
+      "status": "dead",
+      "statusDetail": "killed",
+      "bio": "A saddle loyal to Malina. Killed during the events of Book 3.",
+      "magic": "none",
+      "y": 455
+    },
+    {
+      "id": "fulke",
+      "label": "King Fulke",
+      "role": "King of Fifth Kingdom",
+      "affil": "fifth",
+      "region": "fifth",
+      "book": 1,
+      "lastBook": 1,
+      "size": "side",
+      "x": 80,
+      "status": "dead",
+      "statusDetail": "killed",
+      "bio": "King of the Fifth Kingdom. Killed by Digby after threatening Auren in Book 1.",
+      "magic": "none",
+      "y": 68,
+      "attrs": {
+        "king": "fulke"
+      }
+    },
+    {
+      "id": "niven",
+      "label": "Prince Niven",
+      "role": "Fulke's heir · killed Bk4",
+      "affil": "fifth",
+      "region": "fifth",
+      "book": 3,
+      "lastBook": 4,
+      "size": "side",
+      "x": 185,
+      "status": "dead",
+      "statusDetail": "killed",
+      "bio": "Son of King Fulke. Killed by Kaila to justify crowning puppet king Hagan.",
+      "magic": "none",
+      "y": 68,
+      "attrs": {
+        "king": "niven"
+      }
+    },
+    {
+      "id": "hagan",
+      "label": "King Hagan",
+      "role": "Puppet king of Fifth",
+      "affil": "fifth",
+      "region": "fifth",
+      "book": 4,
+      "lastBook": 5,
+      "size": "side",
+      "x": 80,
+      "status": "alive",
+      "bio": "Installed as puppet king of the Fifth Kingdom by Kaila after Niven's death.",
+      "magic": "none",
+      "y": 95,
+      "attrs": {
+        "king": "hagan"
+      }
+    },
+    {
+      "id": "kaila",
+      "label": "Queen Kaila",
+      "role": "Queen of Third Kingdom",
+      "affil": "third",
+      "region": "third",
+      "book": 3,
+      "lastBook": 6,
+      "size": "main",
+      "x": 295,
+      "status": "alive",
+      "bio": "Queen of the Third Kingdom with the ability to 'pull' words and replay them. Frames Auren as a magic thief, turning all of Orea against her.",
+      "magic": "word",
+      "y": 68,
+      "attrs": {
+        "king": "kaila"
+      }
+    },
+    {
+      "id": "manu",
+      "label": "Manu",
+      "role": "Kaila's brother · betrays Auren",
+      "affil": "third",
+      "region": "third",
+      "book": 4,
+      "lastBook": 5,
+      "size": "side",
+      "x": 415,
+      "status": "alive",
+      "bio": "Kaila's brother and enforcer. Kidnaps Auren and forces her to stand trial at the Conflux.",
+      "magic": "none",
+      "y": 68
+    },
+    {
+      "id": "thold",
+      "label": "King Thold",
+      "role": "King of First Kingdom",
+      "affil": "first",
+      "region": "first",
+      "book": 5,
+      "lastBook": 6,
+      "size": "side",
+      "x": 560,
+      "status": "alive",
+      "bio": "King of the First Kingdom. A pragmatic ruler who eventually allies with Slade against the Fae threat.",
+      "magic": "none",
+      "y": 68,
+      "attrs": {
+        "king": "thold"
+      }
+    },
+    {
+      "id": "second_temple",
+      "label": "Cleansing Temple",
+      "role": "Auren's 'Clearing' — Bk4",
+      "affil": "second",
+      "region": "second",
+      "book": 4,
+      "lastBook": 4,
+      "size": "side",
+      "x": 738,
+      "status": "unknown",
+      "statusDetail": "null",
+      "bio": "A fanatical religious institution. Auren is subjected to a 'Clearing' here — a ritual that drains her magic.",
+      "magic": "none",
+      "y": 68
+    },
+    {
+      "id": "seventh_ruins",
+      "label": "Seventh Kingdom",
+      "role": "Destroyed — bridge fell",
+      "affil": "seventh",
+      "region": "seventh",
+      "book": 4,
+      "lastBook": 5,
+      "size": "side",
+      "x": 907,
+      "status": "unknown",
+      "statusDetail": "null",
+      "bio": "Destroyed 300 years ago when the bridge between Orea and Annwyn fell. Malina is tricked into reopening the bridge here in Book 4.",
+      "magic": "none",
+      "y": 68
+    },
+    {
+      "id": "fane",
+      "label": "Capt. Fane",
+      "role": "Red Raid pirate captain",
+      "affil": "pirates",
+      "region": "pirates",
+      "book": 1,
+      "lastBook": 5,
+      "size": "side",
+      "x": 425,
+      "status": "dead",
+      "statusDetail": "killed",
+      "bio": "Captain of the Red Raids. Kills Sail in Book 1. Abuses Rissa. Hunted down by Slade in Book 5.",
+      "magic": "none",
+      "y": 153
+    },
+    {
+      "id": "sail",
+      "label": "Sail",
+      "role": "Friend · caravan guard",
+      "affil": "neutral",
+      "region": "neutral",
+      "book": 1,
+      "lastBook": 1,
+      "size": "side",
+      "x": 425,
+      "status": "dead",
+      "statusDetail": "killed",
+      "bio": "A kind caravan guard who befriends Auren. Killed by the Red Raids in Book 1.",
+      "magic": "none",
+      "y": 252
+    },
+    {
+      "id": "rip",
+      "label": "Slade / Rip",
+      "role": "King of Fourth · Fae · Auren's mate",
+      "affil": "fourth",
+      "region": "fourth",
+      "book": 1,
+      "lastBook": 6,
+      "size": "main",
+      "x": 800,
+      "status": "alive",
+      "bio": "King of the Fourth Kingdom, also known as Commander Rip. Has rot and shape-shifting powers. The first person who truly sees Auren. Confirmed fated mate (Päyur) to Auren in Book 5.",
+      "magic": "rot",
+      "y": 220,
+      "attrs": {
+        "king": "rip"
+      },
+      "aliases": [
+        "Slade Ravinger",
+        "King Slade Ravinger",
+        "Commander Rip"
+      ]
+    },
+    {
+      "id": "ryatt",
+      "label": "Ryatt",
+      "role": "Slade's brother · Commander",
+      "affil": "fourth",
+      "region": "fourth",
+      "book": 2,
+      "lastBook": 6,
+      "size": "side",
+      "x": 700,
+      "status": "alive",
+      "bio": "Slade's half-brother. Secretly played 'Fake Rip' as Commander. Kills King Carrick in the finale.",
+      "magic": "none",
+      "y": 200
+    },
+    {
+      "id": "osrik",
+      "label": "Osrik",
+      "role": "Wrath Commander · Rissa's love",
+      "affil": "fourth",
+      "region": "fourth",
+      "book": 2,
+      "lastBook": 6,
+      "size": "side",
+      "x": 920,
+      "status": "alive",
+      "bio": "Slade's most trusted Wrath commander. Develops a slow-burn romance with Rissa.",
+      "magic": "none",
+      "y": 230
+    },
+    {
+      "id": "lu",
+      "label": "Lu",
+      "role": "Wrath Commander",
+      "affil": "fourth",
+      "region": "fourth",
+      "book": 2,
+      "lastBook": 6,
+      "size": "side",
+      "x": 945,
+      "status": "alive",
+      "bio": "One of the Wrath. Quick-witted and fierce. One of the first to befriend Auren.",
+      "magic": "none",
+      "y": 320
+    },
+    {
+      "id": "judd",
+      "label": "Judd",
+      "role": "Wrath · KILLED Bk6",
+      "affil": "fourth",
+      "region": "fourth",
+      "book": 2,
+      "lastBook": 6,
+      "size": "side",
+      "x": 920,
+      "status": "dead",
+      "statusDetail": "killed",
+      "bio": "Wrath commander known for humor. Killed in the final battle — one of the series' most devastating losses.",
+      "magic": "none",
+      "y": 415
+    },
+    {
+      "id": "hojat",
+      "label": "Hojat",
+      "role": "Army medic",
+      "affil": "fourth",
+      "region": "fourth",
+      "book": 2,
+      "lastBook": 6,
+      "size": "side",
+      "x": 800,
+      "status": "alive",
+      "bio": "The Fourth Kingdom's army medic. Gentle and caring. Befriends Auren during her time with the army.",
+      "magic": "none",
+      "y": 380
+    },
+    {
+      "id": "keg",
+      "label": "Keg",
+      "role": "Fourth Kingdom soldier",
+      "affil": "fourth",
+      "region": "fourth",
+      "book": 2,
+      "lastBook": 4,
+      "size": "side",
+      "x": 715,
+      "status": "alive",
+      "bio": "A soldier in the Fourth Kingdom's army. Part of the found-family around Auren.",
+      "magic": "none",
+      "y": 450
+    },
+    {
+      "id": "elore",
+      "label": "Elore Ravinger",
+      "role": "Slade & Ryatt's mother · diviner",
+      "affil": "fourth",
+      "region": "fourth",
+      "book": 4,
+      "lastBook": 6,
+      "size": "side",
+      "x": 700,
+      "status": "dead",
+      "statusDetail": "killed",
+      "bio": "Slade and Ryatt's mother. An Orean woman with divination powers. Stabbed by Lord Cull in Book 6.",
+      "magic": "divination",
+      "y": 295
+    },
+    {
+      "id": "carrick",
+      "label": "King Carrick",
+      "role": "Fae tyrant · main villain Bk5–6",
+      "affil": "annwyn",
+      "region": "annwyn",
+      "book": 5,
+      "lastBook": 6,
+      "size": "main",
+      "x": 695,
+      "status": "dead",
+      "statusDetail": "killed",
+      "bio": "The tyrannical Fae king of Annwyn. Has Auren's memories stolen to brainwash her. Killed by Ryatt in the finale.",
+      "magic": "none",
+      "y": 605,
+      "attrs": {
+        "king": "carrick"
+      }
+    },
+    {
+      "id": "cull",
+      "label": "Lord Cull",
+      "role": "Slade's father · Breaking magic",
+      "affil": "annwyn",
+      "region": "annwyn",
+      "book": 5,
+      "lastBook": 6,
+      "size": "main",
+      "x": 855,
+      "status": "dead",
+      "statusDetail": "killed",
+      "bio": "Slade's biological Fae father. Broke the bridge between worlds, destroying the Seventh Kingdom. Killed by Slade in the finale.",
+      "magic": "breaking",
+      "y": 605
+    },
+    {
+      "id": "isolte",
+      "label": "Queen Isolte",
+      "role": "Fae queen · ally of Carrick",
+      "affil": "annwyn",
+      "region": "annwyn",
+      "book": 5,
+      "lastBook": 6,
+      "size": "side",
+      "x": 575,
+      "status": "alive",
+      "bio": "A Fae queen allied with King Carrick. Has a 'pinch' magic used for pain and submission.",
+      "magic": "none",
+      "y": 605
+    },
+    {
+      "id": "una",
+      "label": "Una",
+      "role": "Memory thief · brainwashes Auren",
+      "affil": "annwyn",
+      "region": "annwyn",
+      "book": 6,
+      "lastBook": 6,
+      "size": "side",
+      "x": 780,
+      "status": "alive",
+      "bio": "A fae with memory-stealing abilities. Works for King Carrick. Strips Auren of her memories in Book 6.",
+      "magic": "memory",
+      "y": 665
+    },
+    {
+      "id": "brennur",
+      "label": "Brennur",
+      "role": "Fae traitor · betrays Vulmin",
+      "affil": "annwyn",
+      "region": "annwyn",
+      "book": 6,
+      "lastBook": 6,
+      "size": "side",
+      "x": 635,
+      "status": "alive",
+      "bio": "Appears to be part of the Vulmin rebels but secretly betrays them, leading Auren's group into a trap.",
+      "magic": "none",
+      "y": 668
+    },
+    {
+      "id": "wick",
+      "label": "Wick",
+      "role": "Vulmin rebel leader · Turley",
+      "affil": "annwyn",
+      "region": "annwyn",
+      "book": 5,
+      "lastBook": 6,
+      "size": "side",
+      "x": 98,
+      "status": "alive",
+      "bio": "Leader of the Vulmin Dyrunia rebel resistance. Bleeds gold — secretly a Turley, related to Auren's bloodline.",
+      "magic": "gold",
+      "y": 605
+    },
+    {
+      "id": "emonie",
+      "label": "Emonie",
+      "role": "Vulmin fighter · glamour magic",
+      "affil": "annwyn",
+      "region": "annwyn",
+      "book": 5,
+      "lastBook": 6,
+      "size": "side",
+      "x": 220,
+      "status": "alive",
+      "bio": "The only other female fae in the Vulmin. Has glamour magic. Becomes one of Auren's closest friends in Annwyn.",
+      "magic": "glamour",
+      "y": 605
+    },
+    {
+      "id": "nenet",
+      "label": "Nenet",
+      "role": "Turley loyalist · stabbed Bk6",
+      "affil": "annwyn",
+      "region": "annwyn",
+      "book": 5,
+      "lastBook": 6,
+      "size": "side",
+      "x": 98,
+      "status": "alive",
+      "bio": "An elderly Turley loyalist who first recognizes Auren as the Lyäri Ulvêre. Stabbed in Book 6.",
+      "magic": "none",
+      "y": 685
+    },
+    {
+      "id": "estelia",
+      "label": "Estelia",
+      "role": "Healer · Turley loyalist",
+      "affil": "annwyn",
+      "region": "annwyn",
+      "book": 5,
+      "lastBook": 6,
+      "size": "side",
+      "x": 220,
+      "status": "alive",
+      "bio": "A fae healer and Turley loyalist. In a relationship with Thursil. Heals Rissa in Book 5.",
+      "magic": "none",
+      "y": 685
+    },
+    {
+      "id": "thursil",
+      "label": "Thursil",
+      "role": "Nenet's grandson · Estelia's love",
+      "affil": "annwyn",
+      "region": "annwyn",
+      "book": 5,
+      "lastBook": 6,
+      "size": "side",
+      "x": 340,
+      "status": "alive",
+      "bio": "Nenet's grandson and Estelia's lover. Part of the Turley loyalist network in Annwyn.",
+      "magic": "none",
+      "y": 660
+    },
+    {
+      "id": "saira",
+      "label": "Saira Turley",
+      "role": "Auren's ancestor · 'the Ocean'",
+      "affil": "annwyn",
+      "region": "annwyn",
+      "book": 5,
+      "lastBook": 6,
+      "size": "side",
+      "x": 468,
+      "status": "dead",
+      "statusDetail": "killed",
+      "bio": "Auren's distant ancestor. The Turley line descends from Saira. Her family once ruled Annwyn before being displaced by the Carricks.",
+      "magic": "gold",
+      "y": 605
+    },
+    {
+      "id": "auren_parents",
+      "label": "Auren's Parents",
+      "role": "Fae · killed in raid · from Byrol",
+      "affil": "annwyn",
+      "region": "annwyn",
+      "book": 5,
+      "lastBook": 5,
+      "size": "side",
+      "x": 468,
+      "status": "dead",
+      "statusDetail": "killed",
+      "bio": "Auren's Fae parents. Both killed or lost during the Fae war. Auren was taken from them as a child and transported to Orea.",
+      "magic": "none",
+      "y": 685
+    }
+  ],
+  "relationships": [
+    {
+      "from": "midas",
+      "to": "auren",
+      "type": "captor",
+      "book": 1,
+      "label": "captor/captive"
+    },
+    {
+      "from": "midas",
+      "to": "malina",
+      "type": "romantic",
+      "book": 1,
+      "label": "married"
+    },
+    {
+      "from": "midas",
+      "to": "fulke",
+      "type": "ally",
+      "book": 1,
+      "label": "political deal"
+    },
+    {
+      "from": "malina",
+      "to": "midas",
+      "type": "enemy",
+      "book": 1,
+      "label": ""
+    },
+    {
+      "from": "malina",
+      "to": "auren",
+      "type": "enemy",
+      "book": 1,
+      "label": "hostile"
+    },
+    {
+      "from": "midas",
+      "to": "rip",
+      "type": "enemy",
+      "book": 1,
+      "label": ""
+    },
+    {
+      "from": "midas",
+      "to": "rissa",
+      "type": "captor",
+      "book": 1,
+      "label": "captor/captive"
+    },
+    {
+      "from": "midas",
+      "to": "mist",
+      "type": "captor",
+      "book": 1,
+      "label": "captor/captive"
+    },
+    {
+      "from": "midas",
+      "to": "polly",
+      "type": "captor",
+      "book": 1,
+      "label": "captor/captive"
+    },
+    {
+      "from": "auren",
+      "to": "digby",
+      "type": "ally",
+      "book": 1,
+      "label": "trusted guard"
+    },
+    {
+      "from": "auren",
+      "to": "sail",
+      "type": "friend",
+      "book": 1,
+      "label": ""
+    },
+    {
+      "from": "auren",
+      "to": "fane",
+      "type": "enemy",
+      "book": 1,
+      "label": ""
+    },
+    {
+      "from": "fane",
+      "to": "sail",
+      "type": "killed",
+      "book": 1,
+      "label": ""
+    },
+    {
+      "from": "fulke",
+      "to": "auren",
+      "type": "enemy",
+      "book": 1,
+      "label": "hostile"
+    },
+    {
+      "from": "digby",
+      "to": "fulke",
+      "type": "killed",
+      "book": 1,
+      "label": ""
+    },
+    {
+      "from": "rip",
+      "to": "auren",
+      "type": "captor",
+      "book": 2,
+      "label": "captor/captive"
+    },
+    {
+      "from": "auren",
+      "to": "rip",
+      "type": "romantic",
+      "book": 2,
+      "label": "slow burn",
+      "changes": [
+        {
+          "book": 3,
+          "set": {
+            "label": "love interest"
+          },
+          "why": "Legacy type collapsed onto \"romantic\"; kept as a dated label change"
+        }
+      ]
+    },
+    {
+      "from": "rip",
+      "to": "osrik",
+      "type": "commands",
+      "book": 2,
+      "label": "commander"
+    },
+    {
+      "from": "rip",
+      "to": "lu",
+      "type": "commands",
+      "book": 2,
+      "label": "commander"
+    },
+    {
+      "from": "rip",
+      "to": "judd",
+      "type": "commands",
+      "book": 2,
+      "label": "commander"
+    },
+    {
+      "from": "rip",
+      "to": "hojat",
+      "type": "ally",
+      "book": 2,
+      "label": ""
+    },
+    {
+      "from": "rip",
+      "to": "ryatt",
+      "type": "family",
+      "book": 2,
+      "label": "sibling"
+    },
+    {
+      "from": "osrik",
+      "to": "lu",
+      "type": "squad",
+      "book": 2,
+      "label": "Wrath squad"
+    },
+    {
+      "from": "osrik",
+      "to": "judd",
+      "type": "squad",
+      "book": 2,
+      "label": "Wrath squad"
+    },
+    {
+      "from": "lu",
+      "to": "judd",
+      "type": "squad",
+      "book": 2,
+      "label": "Wrath squad"
+    },
+    {
+      "from": "auren",
+      "to": "rissa",
+      "type": "ally",
+      "book": 2,
+      "label": ""
+    },
+    {
+      "from": "auren",
+      "to": "hojat",
+      "type": "friend",
+      "book": 2,
+      "label": ""
+    },
+    {
+      "from": "auren",
+      "to": "lu",
+      "type": "friend",
+      "book": 2,
+      "label": ""
+    },
+    {
+      "from": "auren",
+      "to": "judd",
+      "type": "friend",
+      "book": 2,
+      "label": ""
+    },
+    {
+      "from": "auren",
+      "to": "osrik",
+      "type": "ally",
+      "book": 2,
+      "label": ""
+    },
+    {
+      "from": "rissa",
+      "to": "polly",
+      "type": "friend",
+      "book": 2,
+      "label": ""
+    },
+    {
+      "from": "fane",
+      "to": "rissa",
+      "type": "enemy",
+      "book": 2,
+      "label": "hostile"
+    },
+    {
+      "from": "kaila",
+      "to": "midas",
+      "type": "ally",
+      "book": 3,
+      "label": "political deal"
+    },
+    {
+      "from": "kaila",
+      "to": "auren",
+      "type": "enemy",
+      "book": 3,
+      "label": ""
+    },
+    {
+      "from": "auren",
+      "to": "midas",
+      "type": "killed",
+      "book": 3,
+      "label": ""
+    },
+    {
+      "from": "kaila",
+      "to": "mist",
+      "type": "killed",
+      "book": 3,
+      "label": ""
+    },
+    {
+      "from": "ryatt",
+      "to": "rip",
+      "type": "ally",
+      "book": 3,
+      "label": ""
+    },
+    {
+      "from": "malina",
+      "to": "jeo",
+      "type": "friend",
+      "book": 3,
+      "label": ""
+    },
+    {
+      "from": "kaila",
+      "to": "jeo",
+      "type": "killed",
+      "book": 3,
+      "label": ""
+    },
+    {
+      "from": "fulke",
+      "to": "niven",
+      "type": "family",
+      "book": 3,
+      "label": "parent/child"
+    },
+    {
+      "from": "rissa",
+      "to": "osrik",
+      "type": "romantic",
+      "book": 4,
+      "label": "slow burn"
+    },
+    {
+      "from": "polly",
+      "to": "rissa",
+      "type": "enemy",
+      "book": 4,
+      "label": ""
+    },
+    {
+      "from": "kaila",
+      "to": "niven",
+      "type": "killed",
+      "book": 4,
+      "label": ""
+    },
+    {
+      "from": "kaila",
+      "to": "hagan",
+      "type": "ally",
+      "book": 4,
+      "label": "political deal"
+    },
+    {
+      "from": "manu",
+      "to": "kaila",
+      "type": "family",
+      "book": 4,
+      "label": "sibling"
+    },
+    {
+      "from": "manu",
+      "to": "auren",
+      "type": "enemy",
+      "book": 4,
+      "label": ""
+    },
+    {
+      "from": "manu",
+      "to": "rissa",
+      "type": "enemy",
+      "book": 4,
+      "label": "hostile"
+    },
+    {
+      "from": "rip",
+      "to": "elore",
+      "type": "family",
+      "book": 4,
+      "label": "parent/child"
+    },
+    {
+      "from": "ryatt",
+      "to": "elore",
+      "type": "family",
+      "book": 4,
+      "label": "parent/child"
+    },
+    {
+      "from": "malina",
+      "to": "dommik",
+      "type": "romantic",
+      "book": 4,
+      "label": "love interest"
+    },
+    {
+      "from": "malina",
+      "to": "kaila",
+      "type": "enemy",
+      "book": 4,
+      "label": ""
+    },
+    {
+      "from": "auren",
+      "to": "second_temple",
+      "type": "captor",
+      "book": 4,
+      "label": "captor/captive"
+    },
+    {
+      "from": "auren",
+      "to": "rip",
+      "type": "mated",
+      "book": 5,
+      "label": "fated mates (Päyur)"
+    },
+    {
+      "from": "carrick",
+      "to": "auren",
+      "type": "enemy",
+      "book": 5,
+      "label": ""
+    },
+    {
+      "from": "cull",
+      "to": "auren",
+      "type": "enemy",
+      "book": 5,
+      "label": ""
+    },
+    {
+      "from": "carrick",
+      "to": "cull",
+      "type": "ally",
+      "book": 5,
+      "label": ""
+    },
+    {
+      "from": "wick",
+      "to": "auren",
+      "type": "ally",
+      "book": 5,
+      "label": "rebellion"
+    },
+    {
+      "from": "emonie",
+      "to": "auren",
+      "type": "friend",
+      "book": 5,
+      "label": ""
+    },
+    {
+      "from": "wick",
+      "to": "emonie",
+      "type": "ally",
+      "book": 5,
+      "label": "rebellion"
+    },
+    {
+      "from": "nenet",
+      "to": "auren",
+      "type": "mentor",
+      "book": 5,
+      "label": "loyalist"
+    },
+    {
+      "from": "estelia",
+      "to": "auren",
+      "type": "mentor",
+      "book": 5,
+      "label": "loyalist"
+    },
+    {
+      "from": "estelia",
+      "to": "thursil",
+      "type": "romantic",
+      "book": 5,
+      "label": "love interest"
+    },
+    {
+      "from": "nenet",
+      "to": "thursil",
+      "type": "family",
+      "book": 5,
+      "label": "grandson"
+    },
+    {
+      "from": "saira",
+      "to": "auren",
+      "type": "family",
+      "book": 5,
+      "label": "ancestor"
+    },
+    {
+      "from": "auren_parents",
+      "to": "auren",
+      "type": "family",
+      "book": 5,
+      "label": "parent/child"
+    },
+    {
+      "from": "saira",
+      "to": "auren_parents",
+      "type": "family",
+      "book": 5,
+      "label": "ancestor"
+    },
+    {
+      "from": "thold",
+      "to": "rip",
+      "type": "ally",
+      "book": 5,
+      "label": ""
+    },
+    {
+      "from": "thold",
+      "to": "kaila",
+      "type": "enemy",
+      "book": 5,
+      "label": "hostile"
+    },
+    {
+      "from": "isolte",
+      "to": "carrick",
+      "type": "ally",
+      "book": 5,
+      "label": ""
+    },
+    {
+      "from": "cull",
+      "to": "elore",
+      "type": "family",
+      "book": 5,
+      "label": ""
+    },
+    {
+      "from": "rip",
+      "to": "cull",
+      "type": "family",
+      "book": 5,
+      "label": "parent/child"
+    },
+    {
+      "from": "una",
+      "to": "auren",
+      "type": "captor",
+      "book": 6,
+      "label": "captor/captive"
+    },
+    {
+      "from": "carrick",
+      "to": "una",
+      "type": "commands",
+      "book": 6,
+      "label": "commander"
+    },
+    {
+      "from": "brennur",
+      "to": "wick",
+      "type": "enemy",
+      "book": 6,
+      "label": ""
+    },
+    {
+      "from": "wick",
+      "to": "saira",
+      "type": "family",
+      "book": 6,
+      "label": "Turley ancestor"
+    },
+    {
+      "from": "ryatt",
+      "to": "carrick",
+      "type": "killed",
+      "book": 6,
+      "label": ""
+    },
+    {
+      "from": "auren",
+      "to": "cull",
+      "type": "killed",
+      "book": 6,
+      "label": ""
+    },
+    {
+      "from": "rip",
+      "to": "cull",
+      "type": "killed",
+      "book": 6,
+      "label": ""
+    },
+    {
+      "from": "malina",
+      "to": "auren",
+      "type": "ally",
+      "book": 6,
+      "label": "sacrificed for them"
+    },
+    {
+      "from": "dommik",
+      "to": "malina",
+      "type": "ally",
+      "book": 6,
+      "label": "sacrificed for them"
+    },
+    {
+      "from": "carrick",
+      "to": "judd",
+      "type": "killed",
+      "book": 6,
+      "label": ""
+    },
+    {
+      "from": "carrick",
+      "to": "elore",
+      "type": "enemy",
+      "book": 6,
+      "label": "hostile"
+    },
+    {
+      "from": "rip",
+      "to": "malina",
+      "type": "ally",
+      "book": 6,
+      "label": ""
+    }
+  ],
+  "events": [
+    {
+      "book": 1,
+      "text": "Auren lives in Midas's gilded cage in Highbell",
+      "involves": [
+        "midas",
+        "auren"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "King Fulke demands a night with Auren — Midas agrees",
+      "involves": [
+        "fulke",
+        "midas",
+        "auren"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Fulke is killed by Digby saving Auren",
+      "involves": [
+        "auren",
+        "digby",
+        "fulke"
+      ],
+      "kind": "death"
+    },
+    {
+      "book": 1,
+      "text": "Sail is killed by the Red Raids",
+      "involves": [
+        "sail"
+      ],
+      "kind": "death"
+    },
+    {
+      "book": 1,
+      "text": "The caravan is attacked — Auren captured by Commander Rip",
+      "involves": [
+        "rip",
+        "auren"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 2,
+      "text": "Auren is prisoner of the Fourth Kingdom's army",
+      "involves": [
+        "auren"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 2,
+      "text": "She meets the Wrath: Osrik, Lu, Judd, and Hojat",
+      "involves": [
+        "osrik",
+        "hojat",
+        "judd",
+        "lu"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 2,
+      "text": "Slow-burn tension builds between Auren and Rip",
+      "involves": [
+        "auren",
+        "rip"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 2,
+      "text": "Rip reveals the gold touch is Auren's power — not Midas's",
+      "involves": [
+        "midas",
+        "auren",
+        "rip"
+      ],
+      "kind": "reveal"
+    },
+    {
+      "book": 2,
+      "text": "Malina begins secretly rebelling against Midas",
+      "involves": [
+        "malina",
+        "midas"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 3,
+      "text": "Auren is back with Midas at Ranhold (Fifth Kingdom)",
+      "involves": [
+        "midas",
+        "auren"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 3,
+      "text": "Queen Kaila of Third Kingdom allies with Midas",
+      "involves": [
+        "kaila",
+        "midas"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 3,
+      "text": "Auren kills Midas — traps him in gold",
+      "involves": [
+        "midas",
+        "auren"
+      ],
+      "kind": "death"
+    },
+    {
+      "book": 3,
+      "text": "Mist is killed by Kaila",
+      "involves": [
+        "kaila",
+        "mist"
+      ],
+      "kind": "death"
+    },
+    {
+      "book": 3,
+      "text": "Rip is revealed to be King Slade Ravinger",
+      "involves": [
+        "rip"
+      ],
+      "kind": "reveal"
+    },
+    {
+      "book": 3,
+      "text": "Ryatt was 'Fake Rip' the whole time",
+      "involves": [
+        "ryatt",
+        "rip"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 4,
+      "text": "Slade hides Auren in Deadwell to recover",
+      "involves": [
+        "auren",
+        "rip"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 4,
+      "text": "Kaila frames Auren — all kingdoms turn against her",
+      "involves": [
+        "auren",
+        "kaila"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 4,
+      "text": "Malina unintentionally reopens the bridge to Annwyn",
+      "involves": [
+        "malina"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 4,
+      "text": "Prince Niven killed by Kaila — puppet king Hagan installed",
+      "involves": [
+        "niven",
+        "hagan",
+        "kaila"
+      ],
+      "kind": "death"
+    },
+    {
+      "book": 4,
+      "text": "Auren falls through a portal into Annwyn",
+      "involves": [
+        "auren"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 5,
+      "text": "Auren wakes in Annwyn — her ancestral home",
+      "involves": [
+        "auren"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 5,
+      "text": "She joins the Vulmin rebels led by Wick",
+      "involves": [
+        "wick"
+      ],
+      "kind": "bond"
+    },
+    {
+      "book": 5,
+      "text": "Slade's heart is rotting without Auren",
+      "involves": [
+        "auren",
+        "rip"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 5,
+      "text": "Auren and Slade confirmed as Päyur — fated mates",
+      "involves": [
+        "auren",
+        "rip"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 5,
+      "text": "Lord Cull (Slade's father) revealed as villain",
+      "involves": [
+        "cull",
+        "rip"
+      ],
+      "kind": "reveal"
+    },
+    {
+      "book": 6,
+      "text": "Auren's memories stolen by Una on Carrick's orders",
+      "involves": [
+        "carrick",
+        "auren",
+        "una"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 6,
+      "text": "War breaks out between Annwyn and Orea",
+      "involves": [],
+      "kind": "battle"
+    },
+    {
+      "book": 6,
+      "text": "Malina sacrifices herself to protect her kingdom",
+      "involves": [
+        "malina"
+      ],
+      "kind": "death"
+    },
+    {
+      "book": 6,
+      "text": "Judd is killed in battle",
+      "involves": [
+        "judd"
+      ],
+      "kind": "death"
+    },
+    {
+      "book": 6,
+      "text": "Ryatt kills King Carrick",
+      "involves": [
+        "carrick",
+        "ryatt"
+      ],
+      "kind": "death"
+    },
+    {
+      "book": 6,
+      "text": "Slade kills Lord Cull — his own father",
+      "involves": [
+        "cull",
+        "rip"
+      ],
+      "kind": "death"
+    },
+    {
+      "book": 6,
+      "text": "Auren and Slade reunite in Annwyn",
+      "involves": [
+        "auren",
+        "rip"
+      ],
+      "kind": "other"
+    }
+  ]
+}

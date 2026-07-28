@@ -145,16 +145,32 @@ const TITLE_TOKENS = new Set([
  * from Scribes" linked all five Sorrengails, and "Falls for Xaden Riorson"
  * dragged in Fen and Talia Riorson.
  */
+/**
+ * Nodes that represent a place or a group rather than a person. Plated Prisoner
+ * uses a few, and their names collide with event text — "Seventh Kingdom" in an
+ * event linked the `seventh_ruins` node and then tripped the temporal checks.
+ */
+const NON_PERSON_NODES = new Set(['seventh_ruins', 'second_temple', 'auren_parents']);
+
 function buildCandidates(characters) {
   const tokenOwners = new Map(); // token -> Set<characterId>
   const tokensFor = new Map();  // characterId -> string[]
 
   for (const c of characters) {
+    if (NON_PERSON_NODES.has(c.id)) continue;
     const toks = new Set();
 
     // Quoted nicknames, e.g. Catriona 'Cat' Cordella -> Cat
     for (const m of c.label.matchAll(/['"“”‘’]([^'"“”‘’]{2,})['"“”‘’]/g)) {
       toks.add(m[1].trim());
+    }
+    // Aliases count as names too, so a surname shared with another character
+    // becomes ambiguous and is correctly rejected.
+    for (const a of c.aliases ?? []) {
+      for (const raw of a.split(/[\s·/,]+/)) {
+        const t = raw.replace(/['"“”‘’]/g, '').trim();
+        if (t.length >= 3 && !TITLE_TOKENS.has(t.toLowerCase())) toks.add(t);
+      }
     }
     // Plain word tokens
     for (const raw of c.label.split(/[\s·/,]+/)) {
@@ -171,8 +187,9 @@ function buildCandidates(characters) {
 
   const candidates = [];
   for (const c of characters) {
+    if (NON_PERSON_NODES.has(c.id)) continue;
     candidates.push({ id: c.id, needle: c.label });
-    for (const t of tokensFor.get(c.id)) {
+    for (const t of tokensFor.get(c.id) ?? []) {
       if (t === c.label) continue;
       if (tokenOwners.get(t).size !== 1) continue; // ambiguous -> unusable
       candidates.push({ id: c.id, needle: t });
@@ -202,8 +219,8 @@ function deriveInvolves(text, candidates) {
 
 // ── Character normalisation ────────────────────────────────────────────────
 const CORE_CHAR_FIELDS = new Set([
-  'id', 'label', 'role', 'type', 'affil', 'faction', 'band',
-  'book', 'lastBook', 'status', 'size', 'x', 'bio',
+  'id', 'label', 'role', 'type', 'affil', 'faction', 'kingdom', 'band',
+  'book', 'lastBook', 'status', 'size', 'x', 'y', 'bio', 'magic', 'signet',
 ]);
 
 /**
@@ -222,6 +239,9 @@ const STATUS_MAP = {
   missing: 'missing',
   prisoner: 'prisoner',
   unknown: 'unknown',
+  // Plated Prisoner's own vocabulary
+  sacrifices: 'dead',
+  sacrificed: 'dead',
 };
 
 function normaliseStatus(raw, id, notes) {
@@ -234,7 +254,13 @@ function normaliseStatus(raw, id, notes) {
   return { status: mapped, statusDetail: mapped === key ? undefined : key };
 }
 
-function normaliseCharacter(n, yOffsets, notes) {
+/** Vertical centre of a region, used to turn a Y_OFFSETS nudge into absolute y. */
+function regionCentreY(regions, regionId) {
+  const r = (regions ?? []).find((x) => x.id === regionId);
+  return r ? r.y + r.h / 2 : 0;
+}
+
+function normaliseCharacter(n, yOffsets, notes, regions) {
   const attrs = {};
   for (const [k, v] of Object.entries(n)) {
     if (CORE_CHAR_FIELDS.has(k)) continue;
@@ -246,8 +272,10 @@ function normaliseCharacter(n, yOffsets, notes) {
     id: n.id,
     label: n.label,
     role: n.role ?? '',
-    affil: n.affil ?? n.faction,
-    band: n.band,
+    // DCC used `faction`, Plated Prisoner used `kingdom`, Empyrean used `affil`.
+    affil: n.affil ?? n.faction ?? n.kingdom,
+    // Bands became 2D regions, adopting the Plated Prisoner model.
+    region: n.band ?? n.kingdom,
     book: n.book,
     lastBook: n.lastBook,
     size: n.size ?? 'side',
@@ -258,7 +286,17 @@ function normaliseCharacter(n, yOffsets, notes) {
   if (statusDetail) out.statusDetail = statusDetail;
   if (n.type) out.type = n.type;
   if (n.bio) out.bio = n.bio;
-  if (yOffsets && yOffsets[n.id] !== undefined) out.yOffset = yOffsets[n.id];
+  // `magic` becomes first-class, also from Plated Prisoner. Empyrean's sparse
+  // `signet` field is the same idea under another name.
+  const magic = n.magic ?? n.signet;
+  if (magic) out.magic = typeof magic === 'string' ? magic : magic.sym;
+  // Fold the hand-tuned Y_OFFSETS nudges into an absolute y, which is what
+  // Plated Prisoner already stored. This is what lets that table be deleted.
+  if (n.y !== undefined) {
+    out.y = n.y;
+  } else if (yOffsets && yOffsets[n.id] !== undefined) {
+    out.y = regionCentreY(regions, out.region) + yOffsets[n.id];
+  }
   if (Object.keys(attrs).length) out.attrs = attrs;
   return out;
 }
@@ -314,6 +352,58 @@ const CORRECTIONS = {
       // PENDING_DATA_REVIEW rather than guessed at, because lowering his book
       // changes what the chart displays.
     ],
+    // ── Temporal backfill ────────────────────────────────────────────────
+    // The base record is state at first appearance; these are what changed
+    // later. Before this, single-valued fields reported end-state from book 1 —
+    // Jack read as a venin prisoner in Fourth Wing, two reveals early.
+    characterChanges: [
+      // The source record held Jack's END state, so the base is rewritten to
+      // his book-1 state and the reveals become dated changes. The old role
+      // even carried an arrow — "Antagonist · Pain · -> Venin" — spelling out
+      // the book-2 turn to any reader on book 1.
+      { id: 'jack',
+        base: { affil: 'riders_other', status: 'alive', role: 'First-year · First Wing · Pain' },
+        entries: [
+          { book: 2, set: { affil: 'venin', role: 'Returned · VENIN' },
+            why: 'Mended by Nolon under Varrish\'s orders and returns as venin in Iron Flame' },
+          { book: 3, set: { status: 'prisoner', role: 'Venin prisoner · intel source' },
+            why: 'Caught in Onyx Storm and held prisoner; Imogen erases his memory' },
+        ]},
+      { id: 'xaden',
+        base: { role: 'Wingleader · Shadow Wielder · Lt' },
+        entries: [
+        { book: 3, set: { role: 'Duke of Tyrrendor · turned venin' },
+          why: 'Turns venin at the end of Iron Flame to save Violet; carried into Onyx Storm' },
+      ]},
+      { id: 'devera', entries: [
+        { book: 2, set: { affil: 'marked', region: 'aretia' },
+          why: 'Defects with the rebels to Aretia when the truth about the venin comes out' },
+      ]},
+      { id: 'rhiannon',
+        base: { role: 'Best Friend · Summoner' },
+        entries: [
+          { book: 3, set: { role: 'Squad Leader · Summoner' },
+            why: 'Becomes Squad Leader in Onyx Storm' },
+        ]},
+      { id: 'dain',
+        base: { role: 'Wingleader · Retrocognition' },
+        entries: [
+        { book: 2, set: { role: 'Wingleader → turns on Varrish' },
+          why: 'Turns on Varrish in Iron Flame, beginning his shift toward Violet\'s side' },
+      ]},
+    ],
+    // Relationships that changed category. Each of these was previously a single
+    // `complicated` edge whose label held an arrow, which was unfilterable and
+    // ungated. Splitting them into a base type plus a dated change makes both
+    // halves real, filterable facts.
+    relationshipChanges: [
+      { match: 'violet>imogen:complicated',
+        set: { type: 'enemy', label: 'tormentor' },
+        entries: [
+          { book: 2, set: { type: 'ally', label: 'ally — later erases her memory' },
+            why: 'Imogen shifts from tormentor to ally after Resson' },
+        ]},
+    ],
     retypeRelationships: [
       { match: 'fen>brennan:killed', set: { type: 'enemy', label: 'struck him down (survived)' },
         why: 'Brennan survived — his bio says "presumed DEAD before the series. Actually alive". ' +
@@ -329,7 +419,73 @@ const CORRECTIONS = {
              'A `bonded` edge between them already exists, and the shared death is in both statuses' },
     ],
   },
+  'plated-prisoner': {
+    // Auren and Rip had FOUR source edges describing one evolving relationship:
+    // Captor/Captive (bk1), Slow-burn romance (bk1), Love Interest (bk2) and
+    // Fated Mates (bk4). Collapsing the phrase-types onto the canonical
+    // vocabulary made two of them exact duplicates — which is the schema saying
+    // they were never separate relationships, just one relationship over time.
+    // The captor edge stays: early on they are genuinely captor and captive AND
+    // slow-burning at the same time.
+    characters: [
+      { id: 'rip', set: { aliases: ['Slade Ravinger', 'King Slade Ravinger', 'Commander Rip'] },
+        why: 'His label is "Slade / Rip", so the surname Ravinger was unowned and ' +
+             'event text naming him linked Elore Ravinger instead' },
+    ],
+    relationships: [
+      { match: 'nenet>thursil:family', set: { label: 'grandson' },
+        why: "Thursil's own role reads \"Nenet's grandson\"" },
+      { match: 'wick>saira:family', set: { label: 'Turley ancestor' },
+        why: 'Saira Turley is an ancestor of the Turley line, which Wick belongs to' },
+    ],
+    // No hand-written entries needed: the generic duplicate-fold turns
+    // "Slow-burn romance" (bk2) + "Love Interest" (bk3) into one `romantic` edge
+    // with a dated label change, and "Fated Mates" aliases to `mated`, which is
+    // a genuinely different bond and stays its own edge. Hand-authoring the
+    // books here was also wrong — the 0-to-1 re-indexing shifts them.
+  },
+  dcc: {
+    // katia|eva was the only pair in either series using TWO edges at different
+    // books to express one changing relationship — complicated@bk2 followed by
+    // enemy@bk5. That is precisely what `changes` replaces, so the pair becomes
+    // one edge with a dated transition and the second edge is dropped.
+    relationshipChanges: [
+      { match: 'katia>eva:complicated',
+        set: { type: 'friend', label: 'friends' },
+        entries: [
+          { book: 5, set: { type: 'enemy', label: 'Katia hunts and kills her' },
+            why: 'Katia leaves the party to hunt Eva on Floor 7 and kills her' },
+        ]},
+    ],
+    dropRelationships: [
+      { match: 'katia>eva:enemy',
+        why: 'Folded into the katia>eva edge as a book-5 change; keeping both would ' +
+             'draw two lines between the same pair' },
+    ],
+  },
 };
+
+function applyCharacterChanges(characters, seriesId, notes) {
+  for (const c of CORRECTIONS[seriesId]?.characterChanges ?? []) {
+    const target = characters.find((x) => x.id === c.id);
+    if (!target) { notes.push(`changes skipped — no character "${c.id}"`); continue; }
+    if (c.base) {
+      for (const [k, v] of Object.entries(c.base)) {
+        if (target[k] === v) continue;
+        notes.push(`rebased ${c.id}.${k}: ${JSON.stringify(target[k])} -> ${JSON.stringify(v)} (first-appearance state)`);
+        target[k] = v;
+      }
+    }
+    const valid = c.entries.filter((e) => e.book > target.book && e.book <= target.lastBook);
+    const dropped = c.entries.length - valid.length;
+    if (dropped) notes.push(`dropped ${dropped} out-of-window change(s) for ${c.id}`);
+    if (valid.length) {
+      target.changes = valid;
+      notes.push(`recorded ${valid.length} change(s) for ${c.id}: books ${valid.map((e) => e.book).join(', ')}`);
+    }
+  }
+  return characters;
+}
 
 function applyCharacterCorrections(characters, seriesId, notes) {
   for (const p of CORRECTIONS[seriesId]?.perceived ?? []) {
@@ -366,6 +522,8 @@ const EDGE_MERGES = {
   ],
 };
 
+const canonKeyOf = (r) => `${r.from}>${r.to}:${r.type}`;
+
 function normaliseRelationships(edges, seriesId, notes) {
   const merges = EDGE_MERGES[seriesId] ?? [];
   const dropKeys = new Set(merges.map((m) => m.drop));
@@ -375,6 +533,7 @@ function normaliseRelationships(edges, seriesId, notes) {
   const setBy = new Map((corr.relationships ?? []).map((r) => [r.match, r]));
   const dropBy = new Map((corr.dropRelationships ?? []).map((r) => [r.match, r]));
   const retypeBy = new Map((corr.retypeRelationships ?? []).map((r) => [r.match, r]));
+  const changeBy = new Map((corr.relationshipChanges ?? []).map((r) => [r.match, r]));
 
   const out = [];
   for (const e of edges) {
@@ -406,6 +565,16 @@ function normaliseRelationships(edges, seriesId, notes) {
       Object.assign(rel, set);
     }
 
+    if (changeBy.has(key)) {
+      const spec = changeBy.get(key);
+      Object.assign(rel, spec.set);
+      rel.changes = spec.entries;
+      notes.push(
+        `split ${key} into base ${spec.set.type} + ${spec.entries.length} dated change(s) ` +
+        `(was a single \`complicated\` edge with an arrow in its label)`,
+      );
+    }
+
     // Map any legacy type string onto the canonical vocabulary. DCC's `party`
     // and Empyrean's `squad` are the same concept; Plated Prisoner's phrase-ids
     // collapse here too.
@@ -415,9 +584,82 @@ function normaliseRelationships(edges, seriesId, notes) {
       rel.type = alias.type;
       if (alias.label && !rel.label) rel.label = alias.label;
     }
+    // Corrections may also be keyed on the canonical type rather than the legacy
+    // phrase, so re-check those too.
+    if (canonKeyOf(rel) !== key && setBy.has(canonKeyOf(rel))) {
+      const { set, why } = setBy.get(canonKeyOf(rel));
+      for (const [k, v] of Object.entries(set)) {
+        if (rel[k] === v) continue;
+        notes.push(`corrected ${canonKeyOf(rel)}.${k}: ${JSON.stringify(rel[k])} -> ${JSON.stringify(v)} (${why})`);
+        rel[k] = v;
+      }
+    }
+
+    // Re-check for a change spec keyed on the CANONICAL type: the loop key uses
+    // the pre-alias type, so a spec written against `romantic` would never match
+    // a legacy "Slow-burn romance" edge.
+    const canonKey = `${rel.from}>${rel.to}:${rel.type}`;
+    if (canonKey !== key && changeBy.has(canonKey) && !rel.changes) {
+      const spec = changeBy.get(canonKey);
+      Object.assign(rel, spec.set);
+      rel.changes = spec.entries;
+      notes.push(`split ${canonKey} into base ${rel.type} + ${spec.entries.length} dated change(s)`);
+    }
+
+    // Aliasing can make two legacy types collapse onto one, producing an exact
+    // duplicate. Keep the earliest and record the later ones as label changes
+    // rather than dropping information on the floor.
+    const dupIndex = out.findIndex(
+      (x) => x.from === rel.from && x.to === rel.to && x.type === rel.type,
+    );
+    if (dupIndex >= 0) {
+      const keep = out[dupIndex];
+      if (rel.book > keep.book) {
+        keep.changes = [
+          ...(keep.changes ?? []),
+          { book: rel.book, set: { label: rel.label }, why:
+            `Legacy type collapsed onto "${rel.type}"; kept as a dated label change` },
+        ].sort((a, b) => a.book - b.book);
+        notes.push(`folded duplicate ${key} into a book-${rel.book} change on the earlier edge`);
+      } else {
+        notes.push(`dropped duplicate ${key} (same pair and type, not later)`);
+      }
+      continue;
+    }
     out.push(rel);
   }
   return out;
+}
+
+/**
+ * Ensure every type actually used by an edge is declared in the series registry.
+ *
+ * A dated change can introduce a type the original chart never had a legend
+ * entry for — splitting DCC's katia|eva pair gave it a `friend` base, which DCC
+ * had never declared. Colour and dash come from the canonical vocabulary so a
+ * newly introduced type looks consistent across series.
+ */
+function ensureDeclaredTypes(relationshipTypes, relationships, notes) {
+  const declared = new Set(relationshipTypes.map((t) => t.id));
+  const used = new Set();
+  for (const r of relationships) {
+    used.add(r.type);
+    for (const ch of r.changes ?? []) if (ch.set.type) used.add(ch.set.type);
+  }
+  for (const id of used) {
+    if (declared.has(id)) continue;
+    const canon = RELATIONSHIP_BY_ID.get(id);
+    if (!canon) { notes.push(`cannot declare unknown type "${id}"`); continue; }
+    relationshipTypes.push({
+      id: canon.id,
+      label: canon.label,
+      color: canon.color ?? '#8a8a8a',
+      dash: null,
+      symmetric: canon.symmetric,
+    });
+    notes.push(`declared type "${id}" — used by an edge but missing from the series legend`);
+  }
+  return relationshipTypes;
 }
 
 function normaliseRelTypes(relTypes) {
@@ -465,6 +707,7 @@ const SERIES = [
              'BOOK_TRANSITIONS', 'REL_TYPES', 'KEY_EVENTS', 'NODES', 'EDGES', 'Y_OFFSETS'],
     build(v) {
       return {
+        regions: v.BANDS,
         affiliations: v.AFFIL,
         characterTypes: v.TYPE_SHAPES,
         subgroups: { dens: v.DRAGON_DEN },
@@ -490,7 +733,56 @@ const SERIES = [
           emoji: v.FEMOJI?.[id],
         };
       }
-      return { affiliations, yOffsets: null };
+      return { regions: v.BANDS, affiliations, yOffsets: null };
+    },
+  },
+  {
+    id: 'plated-prisoner',
+    title: 'The Plated Prisoner',
+    author: 'Raven Kennedy',
+    file: 'Plated-Prisoner-Chart/index.html',
+    consts: ['BOOKS', 'BOOK_EVENTS', 'KINGDOMS', 'MAGIC_ICONS', 'RELATION_STYLES',
+             'ALL_NODES', 'ALL_EDGES'],
+    build(v) {
+      // Books were bare strings ("Book 1: Gild") and zero-indexed. Rebuild them
+      // as objects, 1-indexed, and lift `dominant` off BOOK_EVENTS.
+      const books = v.BOOKS.map((raw, i) => {
+        const m = /^Book\s*\d+\s*:\s*(.+)$/.exec(raw);
+        const short = m ? m[1].trim() : raw;
+        const ev = v.BOOK_EVENTS?.[i];
+        const b = { id: i + 1, title: short, short };
+        if (ev?.dominant && ev.dominant !== '—') b.dominant = ev.dominant;
+        return b;
+      });
+
+      // Kingdoms are already 2D boxes — the model the other two adopted.
+      const regions = Object.entries(v.KINGDOMS).map(([id, k]) => ({
+        id, label: k.label, x: k.x, y: k.y, w: k.w, h: k.h,
+        ...(k.power && k.power !== '—' ? { power: k.power } : {}),
+        color: k.color, border: k.border,
+      }));
+
+      // Kingdom doubles as the affiliation. They are separate concepts — Auren
+      // belongs to the Sixth while held prisoner in the Fourth — so the split is
+      // seeded from the same value and can diverge per character via `changes`.
+      const affiliations = {};
+      for (const [id, k] of Object.entries(v.KINGDOMS)) {
+        affiliations[id] = { label: k.label, color: k.border ?? '#888888' };
+      }
+
+      // Events were grouped per book with no character links; deriveInvolves
+      // fills those in the same way as the other two series.
+      const keyEvents = {};
+      (v.BOOK_EVENTS ?? []).forEach((be, i) => { keyEvents[i + 1] = be.events; });
+
+      // RELATION_STYLES is keyed by English phrase; TYPE_ALIASES maps them.
+      const relTypes = Object.entries(v.RELATION_STYLES).map(([id, st]) => ({
+        id, label: st.label.replace(/^[^\w]+/, '').trim(), color: st.color,
+        dash: st.dash && st.dash !== '0' ? st.dash : null,
+      }));
+
+      return { books, regions, affiliations, keyEvents, relTypes, yOffsets: null,
+               zeroIndexed: true };
     },
   },
 ];
@@ -502,27 +794,44 @@ const summary = [];
 
 for (const s of SERIES) {
   const notes = [];
-  const { values, found } = await loadConsts(join(root, s.file), s.consts);
+  const { values: rawValues, found } = await loadConsts(join(root, s.file), s.consts);
+  // Plated Prisoner names its arrays differently and counts books from zero.
+  const values = {
+    ...rawValues,
+    NODES: rawValues.NODES ?? rawValues.ALL_NODES,
+    EDGES: rawValues.EDGES ?? rawValues.ALL_EDGES,
+  };
   const missing = s.consts.filter((c) => !found.includes(c));
   if (missing.length) notes.push(`consts not present in source: ${missing.join(', ')}`);
 
   const extra = s.build(values);
-  const characters = applyCharacterCorrections(
-    values.NODES.map((n) => normaliseCharacter(n, extra.yOffsets, notes)),
+  const regions = extra.regions;
+
+  // Shift zero-indexed books to 1-indexed before anything reads them, so every
+  // downstream check and every reader sees the same convention.
+  if (extra.zeroIndexed) {
+    for (const n of values.NODES) { n.book += 1; n.lastBook += 1; }
+    for (const e of values.EDGES) { e.book += 1; }
+    notes.push(`re-indexed books from 0-based to 1-based (${values.NODES.length} characters, ${values.EDGES.length} edges)`);
+  }
+  const characters = applyCharacterChanges(applyCharacterCorrections(
+    values.NODES.map((n) => normaliseCharacter(n, extra.yOffsets, notes, regions)),
     s.id,
     notes,
-  );
+  ), s.id, notes);
   const relationships = normaliseRelationships(values.EDGES, s.id, notes);
-  const events = normaliseEvents(values.KEY_EVENTS, characters);
+  const events = normaliseEvents(extra.keyEvents ?? values.KEY_EVENTS, characters);
 
   const series = {
     id: s.id,
     title: s.title,
     author: s.author,
-    books: values.BOOKS,
-    bands: values.BANDS,
+    books: extra.books ?? values.BOOKS,
+    regions,
     affiliations: extra.affiliations,
-    relationshipTypes: normaliseRelTypes(values.REL_TYPES),
+    relationshipTypes: ensureDeclaredTypes(
+      normaliseRelTypes(extra.relTypes ?? values.REL_TYPES), relationships, notes,
+    ),
     characters,
     relationships,
     events,

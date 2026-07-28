@@ -388,7 +388,8 @@ export const TYPE_ALIASES: Record<string, { type: string; label?: string }> = {
 export const KINSHIP_TERMS = [
   'mother', 'father', 'parent', 'sister', 'brother', 'sibling', 'son', 'daughter',
   'child', 'cousin', 'uncle', 'aunt', 'niece', 'nephew', 'grandmother',
-  'grandfather', 'grandparent', 'grandchild', 'ancestor', 'descendant',
+  'grandfather', 'grandparent', 'grandchild', 'grandson', 'granddaughter',
+  'ancestor', 'descendant', 'great-grandmother', 'great-grandfather',
   'in-law', 'stepmother', 'stepfather', 'stepsister', 'stepbrother',
   'adopted', 'guardian', 'ward', 'heir', 'twin', 'parent/child',
 ];
@@ -448,6 +449,12 @@ export const VOCAB_PENDING_REVIEW: Record<string, { recommend: string; why: stri
     recommend: 'bonded or keep ally',
     why: '"venin steeds" again describes wyverns as mounts rather than as partners ' +
       'cooperating toward a shared goal.',
+  },
+  'plated-prisoner:cull>elore:family': {
+    recommend: 'romantic "married", or family "co-parents"',
+    why: 'Lord Cull is Slade\'s father and Elore is his mother, so they are ' +
+      'co-parents rather than blood kin. Whether they were married — and whether ' +
+      'they still are, given Cull turns out to be the villain — is a canon call.',
   },
   'dcc:donut>kiwi:family': {
     recommend: 'squad',
