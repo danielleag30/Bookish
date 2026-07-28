@@ -2,13 +2,14 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 import { SeriesSchema, type Series } from '../src/schema.ts';
-import { gate, present, ask, findCharacters, connectionsOf, pathBetween, eventsOf } from '../src/spoiler.ts';
+import { gate, present, ask, findCharacters, connectionsOf, pathBetween, eventsOf, mostConnected } from '../src/spoiler.ts';
 
 const dataDir = resolve(import.meta.dirname, '..', 'data');
 const load = (n: string): Series =>
   SeriesSchema.parse(JSON.parse(readFileSync(join(dataDir, n), 'utf8')));
 const emp = load('empyrean.json');
 const dcc = load('dcc.json');
+const pp = load('plated-prisoner.json');
 
 describe('the gate', () => {
   it('hides characters who have not appeared yet', () => {
@@ -298,4 +299,88 @@ describe('temporal state — the Jack Barlowe class of leak', () => {
       }
     }
   });
+});
+
+describe('answers name the reading position once, not three times', () => {
+  // The panel header already states the position. Repeating it in the headline
+  // AND the note meant every answer mentioned the same book three times.
+  const POSITION_RE = /as of Book|Book \d+ ·/;
+
+  it('keeps the book out of every headline', () => {
+    const questions = [
+      'who is alive', 'who died', 'who is Violet bonded to',
+      'what happened to Liam', 'how are Violet and Dain connected',
+      'tell me about Xaden', 'riders',
+    ];
+    for (const q of questions) {
+      for (const pos of [1, 2, 3, 4]) {
+        const a = ask(emp, pos, q);
+        expect(a.headline, `"${q}" @ ${pos}`).not.toMatch(POSITION_RE);
+      }
+    }
+  });
+
+  it('keeps the book out of the gated note as well', () => {
+    const a = ask(emp, 1, 'who is alive');
+    expect(a.gatedNote).toBe('Later books are hidden.');
+  });
+
+  it('drops the note entirely at the final book, since nothing is withheld', () => {
+    expect(ask(emp, 4, 'who is alive').gatedNote).toBeUndefined();
+  });
+
+  it('still reports the right counts per position', () => {
+    // Dropping the label must not change what is actually answered.
+    const b1 = ask(emp, 1, 'who died');
+    const b2 = ask(emp, 2, 'who died');
+    expect(b1.lines.length).toBeLessThan(b2.lines.length);
+    expect(b1.headline).toMatch(/^\d+ characters dead$/);
+  });
+});
+
+describe('suggested questions resolve to the character they name', () => {
+  /**
+   * A chip has to round-trip: whatever short name it writes must parse back to
+   * the character it was written about. Taking the first word of the label gave
+   * "who is King the captor of" on Plated Prisoner — a title, ambiguous between
+   * King Fulke and King Midas, so the answer came back about the wrong person.
+   */
+  const TITLES = new Set(['king', 'queen', 'prince', 'princess', 'lord', 'lady',
+    'major', 'colonel', 'general', 'professor', 'captain', 'commander', 'the']);
+
+  for (const [name, series] of [['empyrean', emp], ['dcc', dcc], ['plated-prisoner', pp]] as const) {
+    it(`${name}: the most-connected character has an unambiguous short name`, () => {
+      for (const book of series.books.map((b) => b.id)) {
+        const g = gate(series, book);
+        const lead = mostConnected(g);
+        if (!lead) continue;
+
+        const parts = lead.label.split(/[\s·/,]+/).filter(Boolean);
+        const short = parts.find(
+          (p) => !TITLES.has(p.toLowerCase()) && findCharacters(g, p)[0]?.id === lead.id,
+        ) ?? lead.label;
+
+        expect(TITLES.has(short.toLowerCase()), `${name} bk${book}: "${short}" is a title`).toBe(false);
+        expect(findCharacters(g, short)[0]?.id, `${name} bk${book}: "${short}"`).toBe(lead.id);
+      }
+    });
+
+    it(`${name}: a question about the lead's commonest relationship returns results`, () => {
+      for (const book of series.books.map((b) => b.id)) {
+        const g = gate(series, book);
+        const lead = mostConnected(g);
+        if (!lead) continue;
+        const conns = connectionsOf(g, lead.id);
+        if (conns.length === 0) continue;
+
+        const counts = new Map<string, number>();
+        for (const c of conns) counts.set(c.type, (counts.get(c.type) ?? 0) + 1);
+        const topType = [...counts].sort((a, b) => b[1] - a[1])[0]![0];
+
+        // Asking about that type must find the same edges, not an empty answer.
+        expect(connectionsOf(g, lead.id, topType).length,
+          `${name} bk${book}: ${lead.id} / ${topType}`).toBeGreaterThan(0);
+      }
+    });
+  }
 });

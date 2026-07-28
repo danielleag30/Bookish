@@ -14,7 +14,12 @@
 // Type-only import: the data is validated by `npm run validate` in CI, so
 // re-running Zod in every visitor's browser would ship ~90 kB for nothing.
 import type { Series } from './schema.ts';
-import { ask, gate, mostConnected, type Answer } from './spoiler.ts';
+import { ask, gate, mostConnected, findCharacters, type Answer } from './spoiler.ts';
+
+export interface AskBoxHandle {
+  /** Discard the current answer and collapse. */
+  reset: () => void;
+}
 
 export interface AskBoxOptions {
   /** Series id — loads /data/<id>.json */
@@ -93,7 +98,36 @@ function el<K extends keyof HTMLElementTagNameMap>(
 
 const GENERIC_SUGGESTIONS = ['who is alive', 'who died'];
 
-export async function mountAskBox(opts: AskBoxOptions): Promise<void> {
+/** Titles are not names: "King Fulke" and "King Midas" both start with "King". */
+const TITLE_WORDS = new Set([
+  'king', 'queen', 'prince', 'princess', 'lord', 'lady', 'major', 'colonel',
+  'general', 'gen', 'professor', 'prof', 'captain', 'capt', 'commandant',
+  'commander', 'vice', 'sir', 'dame', 'the',
+]);
+
+/**
+ * Shortest form of a name that still resolves back to this character.
+ *
+ * A chip has to round-trip: the question it writes must be parsed back to the
+ * character it was written about. Taking the first word gave "who is King the
+ * captor of", which is both a title and ambiguous between two kings, so the
+ * answer came back about the wrong person.
+ */
+function shortName(
+  label: string,
+  id: string,
+  resolve: (q: string) => { id: string }[],
+): string {
+  const parts = label.split(/[\s·/,]+/).filter(Boolean);
+  for (const p of parts) {
+    if (TITLE_WORDS.has(p.toLowerCase())) continue;
+    const hits = resolve(p);
+    if (hits.length > 0 && hits[0]?.id === id) return p;
+  }
+  return label;
+}
+
+export async function mountAskBox(opts: AskBoxOptions): Promise<AskBoxHandle | null> {
   let series: Series;
   try {
     const res = await fetch(`/data/${opts.series}.json`);
@@ -102,7 +136,7 @@ export async function mountAskBox(opts: AskBoxOptions): Promise<void> {
   } catch (err) {
     // A broken panel must not take the chart down with it.
     console.error('[askbox] could not load series data:', err);
-    return;
+    return null;
   }
 
   if (!document.getElementById('bk-ask-css')) {
@@ -159,6 +193,22 @@ export async function mountAskBox(opts: AskBoxOptions): Promise<void> {
     if (a.gatedNote) out.appendChild(el('div', 'bk-ask-note', `🔒 ${a.gatedNote}`));
   };
 
+  /**
+   * Discard the answer.
+   *
+   * An answer is only true at the position it was computed for, so leaving one
+   * on screen after the reader moves the timeline — or after they click a
+   * character — is actively misleading. Clearing is safer than silently
+   * recomputing, because the reader asked the question in a context that no
+   * longer holds.
+   */
+  const reset = () => {
+    out.replaceChildren();
+    input.value = '';
+    root.classList.add('bk-collapsed');
+    tog.textContent = '▸';
+  };
+
   const run = (q: string) => {
     if (!q.trim()) return;
     refreshPos();
@@ -174,7 +224,7 @@ export async function mountAskBox(opts: AskBoxOptions): Promise<void> {
     const qs: string[] = [];
 
     if (lead) {
-      const firstName = lead.label.split(' ')[0];
+      const firstName = shortName(lead.label, lead.id, (q) => findCharacters(g, q));
       // Suggest the type this character actually has the most of. A hardcoded
       // "bonded" chip returned an empty answer on the DCC chart, which has no
       // `bonded` type at all.
@@ -228,14 +278,31 @@ export async function mountAskBox(opts: AskBoxOptions): Promise<void> {
   buildChips();
   avoidSidebar();
 
-  // Keep the header label and position honest as the chart changes around us.
+  // Keep the header honest as the chart changes around us, and drop any answer
+  // that was computed for a different reading position.
   let last = opts.getBook();
   setInterval(() => {
     const now = opts.getBook();
-    if (now !== last) { last = now; refreshPos(); buildChips(); }
+    if (now !== last) {
+      last = now;
+      refreshPos();
+      buildChips();
+      out.replaceChildren();
+    }
     avoidSidebar();
-  }, 400);
+  }, 250);
   window.addEventListener('resize', avoidSidebar);
+
+  // Any click outside the panel means the reader has moved on — a book button, a
+  // filter chip, a character node. Fold the panel away rather than leaving a
+  // stale answer open over the chart.
+  document.addEventListener('click', (e) => {
+    if (root.classList.contains('bk-collapsed')) return;
+    if (root.contains(e.target as Node)) return;
+    reset();
+  });
+
+  return { reset };
 }
 
 declare global {

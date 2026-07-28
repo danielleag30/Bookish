@@ -216,6 +216,13 @@ This is what makes the project *exam-shaped* instead of *generic-AI-shaped*, and
 5. Every run uploads its plan, trace, and eval scores as workflow artifacts.
 6. **Autonomy-level table in the README:** classify each agent action by risk, and state which run unattended vs. which require approval.
 
+6. **Draft the changelog.** Decided 2026-07-27: rather than hand-writing one, the
+   repo has no CHANGELOG until this agent generates it from merged pull requests.
+   The commit messages are detailed enough to summarise, and it turns a chore into
+   Domain 1 practice (*produce inspectable artifacts within standard tooling*).
+   The findings themselves stay where they already read well — DATA-REVIEW.md,
+   RELATIONSHIPS.md, DATA-MODEL.md, DATA-DICTIONARY.md.
+
 **Exam bullets hit:** *Configure an agent to be invoked in a CI workflow* · *Configure an agent's scope to a specific repository* · *Configure an agent to use branch-based scope* · *Enable an agent to perform autonomous actions, including creating branches and pull requests* · *Define autonomy levels* · *Classify agent actions by operational, security, and compliance risk* · *Require explicit authorization for irreversible changes* · *Configure human intervention without slowing delivery*
 
 ---

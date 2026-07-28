@@ -44,12 +44,23 @@ export async function boot(opts: BootOptions): Promise<ChartHandle | null> {
     return null;
   }
 
-  const handle = mountChart({ container, series });
+  let askBox: Awaited<ReturnType<typeof mountAskBox>> = null;
+
+  const handle = mountChart({
+    container,
+    series,
+    // Moving the timeline invalidates any answer on screen immediately, rather
+    // than waiting for the panel's own poll to notice.
+    onBookChange: () => askBox?.reset(),
+    // Selecting a character is the reader moving on, so an answer about someone
+    // else should not stay open over the chart.
+    onSelectionChange: () => askBox?.reset(),
+  });
 
   if (opts.askBox !== false) {
     // The ask box reads the chart's own reading position, so the panel and the
     // graph can never disagree about how far the reader has read.
-    await mountAskBox({ series: opts.series, getBook: handle.getBook });
+    askBox = await mountAskBox({ series: opts.series, getBook: handle.getBook });
   }
 
   return handle;

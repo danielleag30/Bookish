@@ -47,6 +47,13 @@ export interface MountOptions {
   series: Series;
   /** Called whenever the reading position changes. */
   onBookChange?: (book: number) => void;
+  /**
+   * Called whenever the selection changes, including when it is cleared.
+   * Node clicks stopPropagation so the canvas handler does not immediately
+   * deselect, which means they never reach a document-level listener — so
+   * anything that needs to know is told directly.
+   */
+  onSelectionChange?: (id: string | null) => void;
 }
 
 export function mountChart(opts: MountOptions): ChartHandle {
@@ -277,6 +284,7 @@ export function mountChart(opts: MountOptions): ChartHandle {
       g.addEventListener('click', (ev) => {
         ev.stopPropagation();
         state.selected = c.id;
+        opts.onSelectionChange?.(c.id);
         render();
       });
       nodeLayer.appendChild(g);
@@ -416,6 +424,7 @@ export function mountChart(opts: MountOptions): ChartHandle {
     if (moved) return;
     if (!(e.target as Element).closest('.bkc-node')) {
       state.selected = null;
+      opts.onSelectionChange?.(null);
       render();
     }
   });
