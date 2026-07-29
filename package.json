@@ -18,7 +18,8 @@
     "mcp": "tsx mcp/server.ts",
     "changelog": "tsx scripts/draft-changelog.ts",
     "add-series": "tsx scripts/add-series.ts",
-    "theme": "tsx scripts/propose-theme.ts"
+    "theme": "tsx scripts/propose-theme.ts",
+    "build:site": "npm run build:chart && tsx scripts/build-site.ts"
   },
   "repository": {
     "type": "git",

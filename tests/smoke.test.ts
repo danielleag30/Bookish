@@ -65,47 +65,46 @@ describe('repo layout', () => {
 /**
  * Deploy hygiene.
  *
- * `vercel.json` publishes the repository root, so anything not excluded ships.
- * `sources/` holds the three original charts with every reveal inline and no
- * spoiler gate — they were live at /sources/Empyrean-Chart.html while the whole
- * project existed to withhold exactly that. A missing line in a config file
- * undid the feature.
+ * `vercel.json` used to publish the repository root, so anything not excluded
+ * shipped. `sources/` holds the three original charts with every reveal inline
+ * and no spoiler gate — they were live at /sources/Empyrean-Chart.html while the
+ * whole project existed to withhold exactly that.
+ *
+ * The first attempt at a fix was a `.vercelignore`, which broke the deploy
+ * outright: it withholds files from the build too, and the build needs `src/`,
+ * the vite config and `package.json`. Hence a real output directory, with an
+ * allowlist — the default is that nothing is published.
  */
 describe('what gets deployed', () => {
-  const ignorePath = join(root, '.vercelignore');
+  const cfg = JSON.parse(readFileSync(join(root, 'vercel.json'), 'utf8')) as {
+    outputDirectory?: string;
+    buildCommand?: string;
+  };
 
-  it('has a .vercelignore, because the deploy root is the repo root', () => {
-    const cfg = JSON.parse(readFileSync(join(root, 'vercel.json'), 'utf8')) as {
-      outputDirectory?: string;
-    };
-    if (cfg.outputDirectory && cfg.outputDirectory !== '.') return; // scoped output, no need
-    expect(existsSync(ignorePath), 'vercel.json publishes "." with nothing excluded').toBe(true);
+  it('publishes a build directory, not the repository root', () => {
+    expect(cfg.outputDirectory, 'publishing "." serves sources/, src/, tests/ …').toBeTruthy();
+    expect(cfg.outputDirectory).not.toBe('.');
   });
 
-  it('excludes every directory that must never be public', () => {
-    const ignored = readFileSync(ignorePath, 'utf8')
-      .split('\n')
-      .map((l) => l.trim())
-      .filter((l) => l && !l.startsWith('#'));
+  it('the site builder allowlists what ships, rather than excluding what does not', () => {
+    const builder = readFileSync(join(root, 'scripts', 'build-site.ts'), 'utf8');
+    const allow = /const ALLOW = \[([\s\S]*?)\]/.exec(builder)?.[1] ?? '';
+    const entries = [...allow.matchAll(/'([^']+)'/g)].map((m) => m[1]);
 
-    // sources/ is the spoiler one. The rest are source, tooling and tests that
-    // have no business being served.
-    for (const dir of ['sources', 'src', 'tests', 'scripts', 'pipeline', 'evals', 'mcp']) {
-      expect(ignored, `${dir} would be published`).toContain(dir);
+    // The site cannot work without these.
+    for (const needed of ['index.html', 'images', 'chart', 'data']) {
+      expect(entries, `${needed} is required by the site`).toContain(needed);
+    }
+    // And these must never be in the list.
+    for (const secret of ['sources', 'src', 'tests', 'scripts', 'pipeline', 'evals', 'mcp']) {
+      expect(entries, `${secret} would be published`).not.toContain(secret);
     }
   });
 
-  it('still ships everything the site needs', () => {
-    const ignored = new Set(
-      readFileSync(ignorePath, 'utf8')
-        .split('\n')
-        .map((l) => l.trim())
-        .filter((l) => l && !l.startsWith('#')),
-    );
-    // data/ is fetched by the chart at runtime, and is safe to ship because
-    // gate() withholds at read time rather than at build time.
-    for (const needed of ['data', 'images', 'chart', 'index.html', 'how-it-works']) {
-      expect(ignored.has(needed), `${needed} is required by the site`).toBe(false);
-    }
+  it('builds every chart directory rather than a hardcoded list', () => {
+    // A series added without editing the builder would leave the landing page
+    // linking at a 404.
+    const builder = readFileSync(join(root, 'scripts', 'build-site.ts'), 'utf8');
+    expect(builder).toMatch(/endsWith\('-Chart'\)/);
   });
 });
