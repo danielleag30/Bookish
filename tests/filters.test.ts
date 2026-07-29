@@ -196,23 +196,66 @@ describe('perceived state', () => {
 describe('bio spoiler containment', () => {
   it('has no bioByBook segment outside its character window', () => {
     for (const file of files) {
-      for (const c of load(file).characters) {
+      const series = load(file);
+      // Upper bound is the series, not lastBook: `gate()` filters on
+      // `book <= position` only, so a character stays on the chart after the
+      // book they die in. Liam dies in book one and his bio names someone from
+      // book two — that segment belongs at book two.
+      const finalBook = Math.max(...series.books.map((b: { id: number }) => b.id));
+      for (const c of series.characters) {
         for (const seg of c.bioByBook ?? []) {
           expect(seg.book, `${c.id}`).toBeGreaterThanOrEqual(c.book);
-          expect(seg.book, `${c.id}`).toBeLessThanOrEqual(c.lastBook);
+          expect(seg.book, `${c.id}`).toBeLessThanOrEqual(finalBook);
         }
       }
     }
   });
 
-  it("documents that bios are not yet segmented, so they cannot be served early", () => {
-    // Guards the assumption Phase 1.5 and Phase 6 are built on. When bios do get
-    // segmented this test should be replaced with one asserting coverage.
-    const segmented = files.flatMap((f) => load(f).characters).filter((c) => c.bioByBook?.length);
-    expect(
-      segmented.length,
-      'bios are now segmented — update the ask box and MCP server to serve bioByBook, ' +
-        'and replace this test',
-    ).toBe(0);
+  // Replaces the old placeholder, which asserted bios were NOT segmented and
+  // said in its own comment to swap it for a coverage test once they were.
+  it('every bio is segmented, so readers get one at their position', () => {
+    for (const file of files) {
+      for (const c of load(file).characters) {
+        if (!c.bio) continue;
+        expect(c.bioByBook?.length, `${file}:${c.id} has a bio but no segments`).toBeTruthy();
+      }
+    }
+  });
+
+  it('no bio segment names a character the reader has not met', () => {
+    for (const file of files) {
+      const series = load(file);
+      const firstBook = new Map(series.characters.map((c) => [c.id, c.book]));
+      for (const c of series.characters) {
+        for (const seg of c.bioByBook ?? []) {
+          for (const other of series.characters) {
+            if (other.id === c.id || (firstBook.get(other.id) ?? 1) <= seg.book) continue;
+            // "Auren's Parents" is a group named after someone already on the
+            // chart. Its only distinctive token is the possessive of a visible
+            // character, so matching on it flags every bio that mentions Auren.
+            if (/['’]s\b/.test(other.label)) continue;
+            // Only distinctive names. Some "characters" are groups or places
+            // whose labels are common nouns — "Auren's Parents", "Seventh
+            // Ruins" — and matching on `parents` flags any bio that mentions
+            // somebody's parents.
+            const COMMON = new Set([
+              'parents', 'temple', 'ruins', 'kingdom', 'council', 'guard',
+              'army', 'court', 'house', 'family', 'people', 'system',
+            ]);
+            const token = other.label
+              .split(/[\s·/,]+/)
+              .find((t) => t.length >= 5 && !COMMON.has(t.toLowerCase().replace(/[^a-z]/g, '')));
+            if (!token) continue;
+            const unique =
+              series.characters.filter((x) => x.label.includes(token)).length === 1;
+            if (!unique) continue;
+            expect(
+              new RegExp(`(?<!\\w)${token}(?!\\w)`).test(seg.text),
+              `${file}:${c.id} book-${seg.book} segment names ${other.label} (book ${other.book})`,
+            ).toBe(false);
+          }
+        }
+      }
+    }
   });
 });

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { readdirSync, existsSync } from 'node:fs';
+import { readdirSync, existsSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
 /**
@@ -59,5 +59,52 @@ describe('repo layout', () => {
 
   it('is licensed', () => {
     expect(existsSync(resolve(root, 'LICENSE'))).toBe(true);
+  });
+});
+
+/**
+ * Deploy hygiene.
+ *
+ * `vercel.json` used to publish the repository root, so anything not excluded
+ * shipped. `sources/` holds the three original charts with every reveal inline
+ * and no spoiler gate — they were live at /sources/Empyrean-Chart.html while the
+ * whole project existed to withhold exactly that.
+ *
+ * The first attempt at a fix was a `.vercelignore`, which broke the deploy
+ * outright: it withholds files from the build too, and the build needs `src/`,
+ * the vite config and `package.json`. Hence a real output directory, with an
+ * allowlist — the default is that nothing is published.
+ */
+describe('what gets deployed', () => {
+  const cfg = JSON.parse(readFileSync(join(root, 'vercel.json'), 'utf8')) as {
+    outputDirectory?: string;
+    buildCommand?: string;
+  };
+
+  it('publishes a build directory, not the repository root', () => {
+    expect(cfg.outputDirectory, 'publishing "." serves sources/, src/, tests/ …').toBeTruthy();
+    expect(cfg.outputDirectory).not.toBe('.');
+  });
+
+  it('the site builder allowlists what ships, rather than excluding what does not', () => {
+    const builder = readFileSync(join(root, 'scripts', 'build-site.ts'), 'utf8');
+    const allow = /const ALLOW = \[([\s\S]*?)\]/.exec(builder)?.[1] ?? '';
+    const entries = [...allow.matchAll(/'([^']+)'/g)].map((m) => m[1]);
+
+    // The site cannot work without these.
+    for (const needed of ['index.html', 'images', 'chart', 'data']) {
+      expect(entries, `${needed} is required by the site`).toContain(needed);
+    }
+    // And these must never be in the list.
+    for (const secret of ['sources', 'src', 'tests', 'scripts', 'pipeline', 'evals', 'mcp']) {
+      expect(entries, `${secret} would be published`).not.toContain(secret);
+    }
+  });
+
+  it('builds every chart directory rather than a hardcoded list', () => {
+    // A series added without editing the builder would leave the landing page
+    // linking at a 404.
+    const builder = readFileSync(join(root, 'scripts', 'build-site.ts'), 'utf8');
+    expect(builder).toMatch(/endsWith\('-Chart'\)/);
   });
 });

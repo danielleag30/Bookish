@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 import { SeriesSchema, type Series } from '../src/schema.ts';
 import { gate, present, ask, findCharacters, connectionsOf, pathBetween, eventsOf, mostConnected } from '../src/spoiler.ts';
@@ -71,13 +71,23 @@ describe('perceived state — the Brennan case', () => {
 });
 
 describe('bio containment', () => {
-  it('withholds unsegmented bios below the final book', () => {
+  // Bios are segmented now, so the rule is no longer "withhold everything below
+  // the final book" — it is "serve only the segments the reader has reached",
+  // and flag that there is more. The blanket rule was safe but gave a reader on
+  // book two nothing at all.
+  it('serves only the segments at or below the reading position', () => {
     for (const pos of [1, 2, 3]) {
       const g = gate(emp, pos);
       for (const c of g.characters) {
         const p = present(c, g);
-        expect(p.bio, `${c.id} at pos ${pos}`).toBeUndefined();
-        if (c.bio) expect(p.bioWithheld).toBe(true);
+        const truth = emp.characters.find((x) => x.id === c.id)!;
+        const reached = (truth.bioByBook ?? []).filter((sg) => sg.book <= pos);
+        const later = (truth.bioByBook ?? []).filter((sg) => sg.book > pos);
+        for (const sg of later) {
+          expect(p.bio ?? '', `${c.id} at pos ${pos}`).not.toContain(sg.text);
+        }
+        if (later.length) expect(p.bioWithheld, `${c.id} at pos ${pos}`).toBe(true);
+        if (reached.length === 0) expect(p.bio, `${c.id} at pos ${pos}`).toBeUndefined();
       }
     }
   });
@@ -89,8 +99,11 @@ describe('bio containment', () => {
     expect(p.bioWithheld).toBe(false);
   });
 
+  // Positions 1 and 2 only: Onyx Storm IS book three, and Theophanie appears in
+  // it, so a reader at position 3 has met both. Testing position 3 here was
+  // asserting the old blanket rule, not the spoiler rule.
   it("never leaks Brennan's Onyx Storm spoiler early", () => {
-    for (const pos of [1, 2, 3]) {
+    for (const pos of [1, 2]) {
       const g = gate(emp, pos);
       const p = present(emp.characters.find((c) => c.id === 'brennan')!, g);
       expect(JSON.stringify(p)).not.toMatch(/Onyx Storm|Theophanie/);
@@ -415,4 +428,112 @@ describe('perceived allegiance — the planted-spy case', () => {
       expect(present(panchek, gate(emp, pos)).region).toBe('leadership');
     }
   });
+});
+
+/**
+ * Renderer-level spoiler tests.
+ *
+ * Every test above this point calls `gate()` or `ask()` and checks the result.
+ * That is the same mistake the code made: it verified the paths that remembered
+ * to resolve, and the chart renderer — which reads `gate().characters` and draws
+ * them straight — was never covered. Aaric was drawn as "Aaric / Cam Tauri",
+ * role "Hidden Prince", two books before the reveal, with 152 tests passing.
+ *
+ * These assert on what a consumer that does NOT opt in would render.
+ */
+describe('what an unprepared consumer renders', () => {
+  const files = readdirSync(dataDir).filter((f) => f.endsWith('.json'));
+
+  for (const file of files) {
+    const series = load(file);
+    const books = series.books.map((b) => b.id);
+
+    it(`${file}: never renders a concealed identity, role or affiliation early`, () => {
+      for (const pos of books) {
+        for (const c of gate(series, pos).characters) {
+          const truth = series.characters.find((x) => x.id === c.id)!;
+          if (!truth.perceived || pos > truth.perceived.untilBook) continue;
+          const p = truth.perceived;
+          // Whatever the reader is meant to believe is what must be on the record.
+          if (p.identity !== undefined) expect(c.label, `${c.id} @${pos}`).toBe(p.identity);
+          if (p.role !== undefined) expect(c.role, `${c.id} @${pos}`).toBe(p.role);
+          if (p.status !== undefined) expect(c.status, `${c.id} @${pos}`).toBe(p.status);
+          if (p.affil !== undefined) expect(c.affil, `${c.id} @${pos}`).toBe(p.affil);
+        }
+      }
+    });
+
+    /**
+     * The adversarial one. A character on the chart must not carry a status they
+     * only acquire later — `status` is the end-state value, so without a
+     * `changes` entry moving them there, a character who dies in book 5 reads
+     * as dead from book 1.
+     */
+    it(`${file}: no visible character shows a death or loss before it happens`, () => {
+      const offenders: string[] = [];
+      for (const pos of books) {
+        for (const c of gate(series, pos).characters) {
+          if (c.status === 'alive' || c.status === 'unknown') continue;
+          const truth = series.characters.find((x) => x.id === c.id)!;
+
+          // Evidence that the status is true BY this position: either a
+          // `changes` entry at or before it, a `perceived` belief that says so,
+          // or the character simply not existing past this book.
+          const changed = (truth.changes ?? []).some(
+            (ch) => ch.set.status !== undefined && ch.book <= pos,
+          );
+          const believed = truth.perceived?.status === c.status && pos <= truth.perceived.untilBook;
+          const leavesHere = truth.lastBook <= pos;
+          if (!changed && !believed && !leavesHere) {
+            offenders.push(`${c.id} reads "${c.status}" at book ${pos} but is present through ${truth.lastBook}`);
+          }
+        }
+      }
+      expect(offenders, offenders.join('\n')).toEqual([]);
+    });
+  }
+});
+
+/**
+ * A concealed identity is only concealed if everything about it is.
+ *
+ * Aaric had `perceived.identity` set and passed every spoiler test, while his
+ * `role` read "Hidden Prince · Precog" from his first appearance and a `family`
+ * edge to King Tauri was drawn two books before the reveal. The alias was
+ * covered; nothing else was.
+ */
+describe('a concealed identity leaks nothing around the edges', () => {
+  const REVEALING = /\b(hidden|secret|secretly|actually|revealed|in truth|traitor|真)\b/i;
+
+  for (const file of readdirSync(dataDir).filter((f) => f.endsWith('.json'))) {
+    const series = load(file);
+
+    it(`${file}: a character with a perceived identity has no telltale role`, () => {
+      for (const pos of series.books.map((b) => b.id)) {
+        for (const c of gate(series, pos).characters) {
+          const truth = series.characters.find((x) => x.id === c.id)!;
+          if (!truth.perceived?.identity || pos > truth.perceived.untilBook) continue;
+          expect(REVEALING.test(c.role), `${c.id} @${pos} role: "${c.role}"`).toBe(false);
+          expect(c.label, `${c.id} @${pos}`).toBe(truth.perceived.identity);
+        }
+      }
+    });
+
+    it(`${file}: no edge to a concealed character is drawn before the reveal`, () => {
+      for (const c of series.characters) {
+        if (!c.perceived?.identity) continue;
+        const reveal = c.perceived.untilBook;
+        for (const r of series.relationships) {
+          if (r.to !== c.id && r.from !== c.id) continue;
+          // A `family` edge is the giveaway: naming a parent names the house.
+          if (r.type !== 'family') continue;
+          expect(
+            r.book,
+            `${r.from}->${r.to} (${r.type}) is drawn at book ${r.book}, but ${c.id} ` +
+              `is concealed through book ${reveal}`,
+          ).toBeGreaterThan(reveal);
+        }
+      }
+    });
+  }
 });

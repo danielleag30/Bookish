@@ -281,16 +281,35 @@
       "region": "sixth",
       "book": 1,
       "lastBook": 3,
+      "status": "alive",
       "size": "main",
       "x": 200,
-      "status": "dead",
-      "statusDetail": "killed",
-      "bio": "Born 'Barden East', a flesh trader. Has no real power — uses Auren's gold touch as his own. Manipulates Auren for a decade before she kills him by melting the castle around him in Book 3.",
-      "magic": "gold",
       "y": 205,
+      "magic": "gold",
+      "bio": "Born 'Barden East', a flesh trader. Has no real power — uses Auren's gold touch as his own. Manipulates Auren for a decade before she kills him by melting the castle around him in Book 3.",
       "attrs": {
         "king": "midas"
-      }
+      },
+      "changes": [
+        {
+          "book": 3,
+          "set": {
+            "status": "dead",
+            "statusDetail": "killed"
+          },
+          "why": "King Midas dies (killed) in book 3; before that the chart must show them as they were."
+        }
+      ],
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "Born 'Barden East', a flesh trader. Manipulates Auren for a decade before she kills him by melting the castle around him in Book 3."
+        },
+        {
+          "book": 5,
+          "text": "Has no real power — uses Auren's gold touch as his own."
+        }
+      ]
     },
     {
       "id": "malina",
@@ -300,16 +319,31 @@
       "region": "sixth",
       "book": 1,
       "lastBook": 6,
+      "status": "alive",
       "size": "main",
       "x": 95,
-      "status": "dead",
-      "statusDetail": "sacrifices",
-      "bio": "Midas's wife. Cold and arrogant initially. Gradually becomes the series' most surprising redemption arc — eventually sacrificing herself to protect her kingdom from the Fae invasion.",
-      "magic": "ice",
       "y": 205,
+      "magic": "ice",
+      "bio": "Midas's wife. Cold and arrogant initially. Gradually becomes the series' most surprising redemption arc — eventually sacrificing herself to protect her kingdom from the Fae invasion.",
       "attrs": {
         "king": "malina"
-      }
+      },
+      "changes": [
+        {
+          "book": 6,
+          "set": {
+            "status": "dead",
+            "statusDetail": "sacrifices"
+          },
+          "why": "Queen Malina dies (sacrifices) in book 6; before that the chart must show them as they were."
+        }
+      ],
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "Midas's wife. Cold and arrogant initially. Gradually becomes the series' most surprising redemption arc — eventually sacrificing herself to protect her kingdom from the Fae invasion."
+        }
+      ]
     },
     {
       "id": "auren",
@@ -319,12 +353,22 @@
       "region": "sixth",
       "book": 1,
       "lastBook": 6,
+      "status": "alive",
       "size": "main",
       "x": 285,
-      "status": "alive",
-      "bio": "Gold-skinned Fae woman raised in Annwyn, kidnapped as a child. Spent 10 years in Midas's gilded cage. Discovers the gold touch is her own power. Kills Midas in Book 3. Falls into Annwyn in Book 4. Discovered to be the Turley heir — rightful ruler of Annwyn. Fated mate to Slade.",
+      "y": 315,
       "magic": "gold",
-      "y": 315
+      "bio": "Gold-skinned Fae woman raised in Annwyn, kidnapped as a child. Spent 10 years in Midas's gilded cage. Discovers the gold touch is her own power. Kills Midas in Book 3. Falls into Annwyn in Book 4. Discovered to be the Turley heir — rightful ruler of Annwyn. Fated mate to Slade.",
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "Spent 10 years in Midas's gilded cage. Kills Midas in Book 3. Falls into Annwyn in Book 4. Fated mate to Slade."
+        },
+        {
+          "book": 5,
+          "text": "Gold-skinned Fae woman raised in Annwyn, kidnapped as a child. Discovers the gold touch is her own power. Discovered to be the Turley heir — rightful ruler of Annwyn."
+        }
+      ]
     },
     {
       "id": "digby",
@@ -334,12 +378,22 @@
       "region": "sixth",
       "book": 1,
       "lastBook": 6,
+      "status": "alive",
       "size": "side",
       "x": 140,
-      "status": "alive",
-      "bio": "Auren's most loyal guard. One of the few people who genuinely cares for her wellbeing. Thought dead after Gleam but survives.",
+      "y": 330,
       "magic": "none",
-      "y": 330
+      "bio": "Auren's most loyal guard. One of the few people who genuinely cares for her wellbeing. Thought dead after Gleam but survives.",
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "Auren's most loyal guard. One of the few people who genuinely cares for her wellbeing."
+        },
+        {
+          "book": 3,
+          "text": "Thought dead after Gleam but survives."
+        }
+      ]
     },
     {
       "id": "rissa",
@@ -349,12 +403,22 @@
       "region": "sixth",
       "book": 1,
       "lastBook": 6,
+      "status": "alive",
       "size": "side",
       "x": 225,
-      "status": "alive",
-      "bio": "One of Midas's royal saddles. Eventually becomes a true ally and friend to Auren. Develops a slow-burn romance with Commander Osrik.",
+      "y": 420,
       "magic": "none",
-      "y": 420
+      "bio": "One of Midas's royal saddles. Eventually becomes a true ally and friend to Auren. Develops a slow-burn romance with Commander Osrik.",
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "One of Midas's royal saddles. Eventually becomes a true ally and friend to Auren."
+        },
+        {
+          "book": 2,
+          "text": "Develops a slow-burn romance with Commander Osrik."
+        }
+      ]
     },
     {
       "id": "polly",
@@ -364,12 +428,18 @@
       "region": "sixth",
       "book": 1,
       "lastBook": 4,
+      "status": "alive",
       "size": "side",
       "x": 320,
-      "status": "alive",
-      "bio": "One of Midas's saddles. Addicted to the rose drug Midas uses to control his court.",
+      "y": 455,
       "magic": "none",
-      "y": 455
+      "bio": "One of Midas's saddles. Addicted to the rose drug Midas uses to control his court.",
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "One of Midas's saddles. Addicted to the rose drug Midas uses to control his court."
+        }
+      ]
     },
     {
       "id": "mist",
@@ -379,13 +449,32 @@
       "region": "sixth",
       "book": 1,
       "lastBook": 3,
+      "status": "alive",
       "size": "side",
       "x": 80,
-      "status": "dead",
-      "statusDetail": "killed",
-      "bio": "One of Midas's saddles who becomes pregnant with his child. Killed by Kaila in Book 3.",
+      "y": 380,
       "magic": "none",
-      "y": 380
+      "bio": "One of Midas's saddles who becomes pregnant with his child. Killed by Kaila in Book 3.",
+      "changes": [
+        {
+          "book": 3,
+          "set": {
+            "status": "dead",
+            "statusDetail": "killed"
+          },
+          "why": "Mist dies (killed) in book 3; before that the chart must show them as they were."
+        }
+      ],
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "One of Midas's saddles who becomes pregnant with his child."
+        },
+        {
+          "book": 3,
+          "text": "Killed by Kaila in Book 3."
+        }
+      ]
     },
     {
       "id": "dommik",
@@ -395,12 +484,18 @@
       "region": "sixth",
       "book": 4,
       "lastBook": 6,
+      "status": "alive",
       "size": "side",
       "x": 58,
-      "status": "alive",
-      "bio": "A shadow-traveling assassin hired to deal with Malina. Develops a protective bond and love for her instead.",
+      "y": 280,
       "magic": "shadow",
-      "y": 280
+      "bio": "A shadow-traveling assassin hired to deal with Malina. Develops a protective bond and love for her instead.",
+      "bioByBook": [
+        {
+          "book": 4,
+          "text": "A shadow-traveling assassin hired to deal with Malina. Develops a protective bond and love for her instead."
+        }
+      ]
     },
     {
       "id": "jeo",
@@ -410,13 +505,19 @@
       "region": "sixth",
       "book": 3,
       "lastBook": 3,
-      "size": "side",
-      "x": 60,
       "status": "dead",
       "statusDetail": "killed",
-      "bio": "A saddle loyal to Malina. Killed during the events of Book 3.",
+      "size": "side",
+      "x": 60,
+      "y": 455,
       "magic": "none",
-      "y": 455
+      "bio": "A saddle loyal to Malina. Killed during the events of Book 3.",
+      "bioByBook": [
+        {
+          "book": 3,
+          "text": "A saddle loyal to Malina. Killed during the events of Book 3."
+        }
+      ]
     },
     {
       "id": "fulke",
@@ -426,16 +527,26 @@
       "region": "fifth",
       "book": 1,
       "lastBook": 1,
-      "size": "side",
-      "x": 80,
       "status": "dead",
       "statusDetail": "killed",
-      "bio": "King of the Fifth Kingdom. Killed by Digby after threatening Auren in Book 1.",
-      "magic": "none",
+      "size": "side",
+      "x": 80,
       "y": 68,
+      "magic": "none",
+      "bio": "King of the Fifth Kingdom. Killed by Digby after threatening Auren in Book 1.",
       "attrs": {
         "king": "fulke"
-      }
+      },
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "Killed by Digby after threatening Auren in Book 1."
+        },
+        {
+          "book": 4,
+          "text": "King of the Fifth Kingdom."
+        }
+      ]
     },
     {
       "id": "niven",
@@ -445,16 +556,35 @@
       "region": "fifth",
       "book": 3,
       "lastBook": 4,
+      "status": "alive",
       "size": "side",
       "x": 185,
-      "status": "dead",
-      "statusDetail": "killed",
-      "bio": "Son of King Fulke. Killed by Kaila to justify crowning puppet king Hagan.",
-      "magic": "none",
       "y": 68,
+      "magic": "none",
+      "bio": "Son of King Fulke. Killed by Kaila to justify crowning puppet king Hagan.",
       "attrs": {
         "king": "niven"
-      }
+      },
+      "changes": [
+        {
+          "book": 4,
+          "set": {
+            "status": "dead",
+            "statusDetail": "killed"
+          },
+          "why": "Prince Niven dies (killed) in book 4; before that the chart must show them as they were."
+        }
+      ],
+      "bioByBook": [
+        {
+          "book": 3,
+          "text": "Son of King Fulke."
+        },
+        {
+          "book": 4,
+          "text": "Killed by Kaila to justify crowning puppet king Hagan."
+        }
+      ]
     },
     {
       "id": "hagan",
@@ -464,15 +594,21 @@
       "region": "fifth",
       "book": 4,
       "lastBook": 5,
+      "status": "alive",
       "size": "side",
       "x": 80,
-      "status": "alive",
-      "bio": "Installed as puppet king of the Fifth Kingdom by Kaila after Niven's death.",
-      "magic": "none",
       "y": 95,
+      "magic": "none",
+      "bio": "Installed as puppet king of the Fifth Kingdom by Kaila after Niven's death.",
       "attrs": {
         "king": "hagan"
-      }
+      },
+      "bioByBook": [
+        {
+          "book": 4,
+          "text": "Installed as puppet king of the Fifth Kingdom by Kaila after Niven's death."
+        }
+      ]
     },
     {
       "id": "kaila",
@@ -482,15 +618,25 @@
       "region": "third",
       "book": 3,
       "lastBook": 6,
+      "status": "alive",
       "size": "main",
       "x": 295,
-      "status": "alive",
-      "bio": "Queen of the Third Kingdom with the ability to 'pull' words and replay them. Frames Auren as a magic thief, turning all of Orea against her.",
-      "magic": "word",
       "y": 68,
+      "magic": "word",
+      "bio": "Queen of the Third Kingdom with the ability to 'pull' words and replay them. Frames Auren as a magic thief, turning all of Orea against her.",
       "attrs": {
         "king": "kaila"
-      }
+      },
+      "bioByBook": [
+        {
+          "book": 3,
+          "text": "Frames Auren as a magic thief, turning all of Orea against her."
+        },
+        {
+          "book": 4,
+          "text": "Queen of the Third Kingdom with the ability to 'pull' words and replay them."
+        }
+      ]
     },
     {
       "id": "manu",
@@ -500,12 +646,18 @@
       "region": "third",
       "book": 4,
       "lastBook": 5,
+      "status": "alive",
       "size": "side",
       "x": 415,
-      "status": "alive",
-      "bio": "Kaila's brother and enforcer. Kidnaps Auren and forces her to stand trial at the Conflux.",
+      "y": 68,
       "magic": "none",
-      "y": 68
+      "bio": "Kaila's brother and enforcer. Kidnaps Auren and forces her to stand trial at the Conflux.",
+      "bioByBook": [
+        {
+          "book": 4,
+          "text": "Kaila's brother and enforcer. Kidnaps Auren and forces her to stand trial at the Conflux."
+        }
+      ]
     },
     {
       "id": "thold",
@@ -515,15 +667,21 @@
       "region": "first",
       "book": 5,
       "lastBook": 6,
+      "status": "alive",
       "size": "side",
       "x": 560,
-      "status": "alive",
-      "bio": "King of the First Kingdom. A pragmatic ruler who eventually allies with Slade against the Fae threat.",
-      "magic": "none",
       "y": 68,
+      "magic": "none",
+      "bio": "King of the First Kingdom. A pragmatic ruler who eventually allies with Slade against the Fae threat.",
       "attrs": {
         "king": "thold"
-      }
+      },
+      "bioByBook": [
+        {
+          "book": 5,
+          "text": "King of the First Kingdom. A pragmatic ruler who eventually allies with Slade against the Fae threat."
+        }
+      ]
     },
     {
       "id": "second_temple",
@@ -533,13 +691,19 @@
       "region": "second",
       "book": 4,
       "lastBook": 4,
-      "size": "side",
-      "x": 738,
       "status": "unknown",
       "statusDetail": "null",
-      "bio": "A fanatical religious institution. Auren is subjected to a 'Clearing' here — a ritual that drains her magic.",
+      "size": "side",
+      "x": 738,
+      "y": 68,
       "magic": "none",
-      "y": 68
+      "bio": "A fanatical religious institution. Auren is subjected to a 'Clearing' here — a ritual that drains her magic.",
+      "bioByBook": [
+        {
+          "book": 4,
+          "text": "A fanatical religious institution. Auren is subjected to a 'Clearing' here — a ritual that drains her magic."
+        }
+      ]
     },
     {
       "id": "seventh_ruins",
@@ -549,13 +713,19 @@
       "region": "seventh",
       "book": 4,
       "lastBook": 5,
-      "size": "side",
-      "x": 907,
       "status": "unknown",
       "statusDetail": "null",
-      "bio": "Destroyed 300 years ago when the bridge between Orea and Annwyn fell. Malina is tricked into reopening the bridge here in Book 4.",
+      "size": "side",
+      "x": 907,
+      "y": 68,
       "magic": "none",
-      "y": 68
+      "bio": "Destroyed 300 years ago when the bridge between Orea and Annwyn fell. Malina is tricked into reopening the bridge here in Book 4.",
+      "bioByBook": [
+        {
+          "book": 4,
+          "text": "Destroyed 300 years ago when the bridge between Orea and Annwyn fell. Malina is tricked into reopening the bridge here in Book 4."
+        }
+      ]
     },
     {
       "id": "fane",
@@ -565,13 +735,28 @@
       "region": "pirates",
       "book": 1,
       "lastBook": 5,
+      "status": "alive",
       "size": "side",
       "x": 425,
-      "status": "dead",
-      "statusDetail": "killed",
-      "bio": "Captain of the Red Raids. Kills Sail in Book 1. Abuses Rissa. Hunted down by Slade in Book 5.",
+      "y": 153,
       "magic": "none",
-      "y": 153
+      "bio": "Captain of the Red Raids. Kills Sail in Book 1. Abuses Rissa. Hunted down by Slade in Book 5.",
+      "changes": [
+        {
+          "book": 5,
+          "set": {
+            "status": "dead",
+            "statusDetail": "killed"
+          },
+          "why": "Capt. Fane dies (killed) in book 5; before that the chart must show them as they were."
+        }
+      ],
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "Captain of the Red Raids. Kills Sail in Book 1. Abuses Rissa. Hunted down by Slade in Book 5."
+        }
+      ]
     },
     {
       "id": "sail",
@@ -581,35 +766,51 @@
       "region": "neutral",
       "book": 1,
       "lastBook": 1,
-      "size": "side",
-      "x": 425,
       "status": "dead",
       "statusDetail": "killed",
-      "bio": "A kind caravan guard who befriends Auren. Killed by the Red Raids in Book 1.",
+      "size": "side",
+      "x": 425,
+      "y": 252,
       "magic": "none",
-      "y": 252
+      "bio": "A kind caravan guard who befriends Auren. Killed by the Red Raids in Book 1.",
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "A kind caravan guard who befriends Auren. Killed by the Red Raids in Book 1."
+        }
+      ]
     },
     {
       "id": "rip",
       "label": "Slade / Rip",
+      "aliases": [
+        "Slade Ravinger",
+        "King Slade Ravinger",
+        "Commander Rip"
+      ],
       "role": "King of Fourth · Fae · Auren's mate",
       "affil": "fourth",
       "region": "fourth",
       "book": 1,
       "lastBook": 6,
+      "status": "alive",
       "size": "main",
       "x": 800,
-      "status": "alive",
-      "bio": "King of the Fourth Kingdom, also known as Commander Rip. Has rot and shape-shifting powers. The first person who truly sees Auren. Confirmed fated mate (Päyur) to Auren in Book 5.",
-      "magic": "rot",
       "y": 220,
+      "magic": "rot",
+      "bio": "King of the Fourth Kingdom, also known as Commander Rip. Has rot and shape-shifting powers. The first person who truly sees Auren. Confirmed fated mate (Päyur) to Auren in Book 5.",
       "attrs": {
         "king": "rip"
       },
-      "aliases": [
-        "Slade Ravinger",
-        "King Slade Ravinger",
-        "Commander Rip"
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "Has rot and shape-shifting powers. The first person who truly sees Auren. Confirmed fated mate (Päyur) to Auren in Book 5."
+        },
+        {
+          "book": 4,
+          "text": "King of the Fourth Kingdom, also known as Commander Rip."
+        }
       ]
     },
     {
@@ -620,12 +821,22 @@
       "region": "fourth",
       "book": 2,
       "lastBook": 6,
+      "status": "alive",
       "size": "side",
       "x": 700,
-      "status": "alive",
-      "bio": "Slade's half-brother. Secretly played 'Fake Rip' as Commander. Kills King Carrick in the finale.",
+      "y": 200,
       "magic": "none",
-      "y": 200
+      "bio": "Slade's half-brother. Secretly played 'Fake Rip' as Commander. Kills King Carrick in the finale.",
+      "bioByBook": [
+        {
+          "book": 2,
+          "text": "Slade's half-brother. Secretly played 'Fake Rip' as Commander."
+        },
+        {
+          "book": 5,
+          "text": "Kills King Carrick in the finale."
+        }
+      ]
     },
     {
       "id": "osrik",
@@ -635,12 +846,18 @@
       "region": "fourth",
       "book": 2,
       "lastBook": 6,
+      "status": "alive",
       "size": "side",
       "x": 920,
-      "status": "alive",
-      "bio": "Slade's most trusted Wrath commander. Develops a slow-burn romance with Rissa.",
+      "y": 230,
       "magic": "none",
-      "y": 230
+      "bio": "Slade's most trusted Wrath commander. Develops a slow-burn romance with Rissa.",
+      "bioByBook": [
+        {
+          "book": 2,
+          "text": "Slade's most trusted Wrath commander. Develops a slow-burn romance with Rissa."
+        }
+      ]
     },
     {
       "id": "lu",
@@ -650,12 +867,18 @@
       "region": "fourth",
       "book": 2,
       "lastBook": 6,
+      "status": "alive",
       "size": "side",
       "x": 945,
-      "status": "alive",
-      "bio": "One of the Wrath. Quick-witted and fierce. One of the first to befriend Auren.",
+      "y": 320,
       "magic": "none",
-      "y": 320
+      "bio": "One of the Wrath. Quick-witted and fierce. One of the first to befriend Auren.",
+      "bioByBook": [
+        {
+          "book": 2,
+          "text": "One of the Wrath. Quick-witted and fierce. One of the first to befriend Auren."
+        }
+      ]
     },
     {
       "id": "judd",
@@ -665,13 +888,28 @@
       "region": "fourth",
       "book": 2,
       "lastBook": 6,
+      "status": "alive",
       "size": "side",
       "x": 920,
-      "status": "dead",
-      "statusDetail": "killed",
-      "bio": "Wrath commander known for humor. Killed in the final battle — one of the series' most devastating losses.",
+      "y": 415,
       "magic": "none",
-      "y": 415
+      "bio": "Wrath commander known for humor. Killed in the final battle — one of the series' most devastating losses.",
+      "changes": [
+        {
+          "book": 6,
+          "set": {
+            "status": "dead",
+            "statusDetail": "killed"
+          },
+          "why": "Judd dies (killed) in book 6; before that the chart must show them as they were."
+        }
+      ],
+      "bioByBook": [
+        {
+          "book": 2,
+          "text": "Wrath commander known for humor. Killed in the final battle — one of the series' most devastating losses."
+        }
+      ]
     },
     {
       "id": "hojat",
@@ -681,12 +919,22 @@
       "region": "fourth",
       "book": 2,
       "lastBook": 6,
+      "status": "alive",
       "size": "side",
       "x": 800,
-      "status": "alive",
-      "bio": "The Fourth Kingdom's army medic. Gentle and caring. Befriends Auren during her time with the army.",
+      "y": 380,
       "magic": "none",
-      "y": 380
+      "bio": "The Fourth Kingdom's army medic. Gentle and caring. Befriends Auren during her time with the army.",
+      "bioByBook": [
+        {
+          "book": 2,
+          "text": "Gentle and caring. Befriends Auren during her time with the army."
+        },
+        {
+          "book": 4,
+          "text": "The Fourth Kingdom's army medic."
+        }
+      ]
     },
     {
       "id": "keg",
@@ -696,12 +944,22 @@
       "region": "fourth",
       "book": 2,
       "lastBook": 4,
+      "status": "alive",
       "size": "side",
       "x": 715,
-      "status": "alive",
-      "bio": "A soldier in the Fourth Kingdom's army. Part of the found-family around Auren.",
+      "y": 450,
       "magic": "none",
-      "y": 450
+      "bio": "A soldier in the Fourth Kingdom's army. Part of the found-family around Auren.",
+      "bioByBook": [
+        {
+          "book": 2,
+          "text": "Part of the found-family around Auren."
+        },
+        {
+          "book": 4,
+          "text": "A soldier in the Fourth Kingdom's army."
+        }
+      ]
     },
     {
       "id": "elore",
@@ -711,13 +969,32 @@
       "region": "fourth",
       "book": 4,
       "lastBook": 6,
+      "status": "alive",
       "size": "side",
       "x": 700,
-      "status": "dead",
-      "statusDetail": "killed",
-      "bio": "Slade and Ryatt's mother. An Orean woman with divination powers. Stabbed by Lord Cull in Book 6.",
+      "y": 295,
       "magic": "divination",
-      "y": 295
+      "bio": "Slade and Ryatt's mother. An Orean woman with divination powers. Stabbed by Lord Cull in Book 6.",
+      "changes": [
+        {
+          "book": 6,
+          "set": {
+            "status": "dead",
+            "statusDetail": "killed"
+          },
+          "why": "Elore Ravinger dies (killed) in book 6; before that the chart must show them as they were."
+        }
+      ],
+      "bioByBook": [
+        {
+          "book": 4,
+          "text": "Slade and Ryatt's mother. An Orean woman with divination powers."
+        },
+        {
+          "book": 5,
+          "text": "Stabbed by Lord Cull in Book 6."
+        }
+      ]
     },
     {
       "id": "carrick",
@@ -727,16 +1004,31 @@
       "region": "annwyn",
       "book": 5,
       "lastBook": 6,
+      "status": "alive",
       "size": "main",
       "x": 695,
-      "status": "dead",
-      "statusDetail": "killed",
-      "bio": "The tyrannical Fae king of Annwyn. Has Auren's memories stolen to brainwash her. Killed by Ryatt in the finale.",
-      "magic": "none",
       "y": 605,
+      "magic": "none",
+      "bio": "The tyrannical Fae king of Annwyn. Has Auren's memories stolen to brainwash her. Killed by Ryatt in the finale.",
       "attrs": {
         "king": "carrick"
-      }
+      },
+      "changes": [
+        {
+          "book": 6,
+          "set": {
+            "status": "dead",
+            "statusDetail": "killed"
+          },
+          "why": "King Carrick dies (killed) in book 6; before that the chart must show them as they were."
+        }
+      ],
+      "bioByBook": [
+        {
+          "book": 5,
+          "text": "The tyrannical Fae king of Annwyn. Has Auren's memories stolen to brainwash her. Killed by Ryatt in the finale."
+        }
+      ]
     },
     {
       "id": "cull",
@@ -746,13 +1038,28 @@
       "region": "annwyn",
       "book": 5,
       "lastBook": 6,
+      "status": "alive",
       "size": "main",
       "x": 855,
-      "status": "dead",
-      "statusDetail": "killed",
-      "bio": "Slade's biological Fae father. Broke the bridge between worlds, destroying the Seventh Kingdom. Killed by Slade in the finale.",
+      "y": 605,
       "magic": "breaking",
-      "y": 605
+      "bio": "Slade's biological Fae father. Broke the bridge between worlds, destroying the Seventh Kingdom. Killed by Slade in the finale.",
+      "changes": [
+        {
+          "book": 6,
+          "set": {
+            "status": "dead",
+            "statusDetail": "killed"
+          },
+          "why": "Lord Cull dies (killed) in book 6; before that the chart must show them as they were."
+        }
+      ],
+      "bioByBook": [
+        {
+          "book": 5,
+          "text": "Slade's biological Fae father. Broke the bridge between worlds, destroying the Seventh Kingdom. Killed by Slade in the finale."
+        }
+      ]
     },
     {
       "id": "isolte",
@@ -762,12 +1069,18 @@
       "region": "annwyn",
       "book": 5,
       "lastBook": 6,
+      "status": "alive",
       "size": "side",
       "x": 575,
-      "status": "alive",
-      "bio": "A Fae queen allied with King Carrick. Has a 'pinch' magic used for pain and submission.",
+      "y": 605,
       "magic": "none",
-      "y": 605
+      "bio": "A Fae queen allied with King Carrick. Has a 'pinch' magic used for pain and submission.",
+      "bioByBook": [
+        {
+          "book": 5,
+          "text": "A Fae queen allied with King Carrick. Has a 'pinch' magic used for pain and submission."
+        }
+      ]
     },
     {
       "id": "una",
@@ -777,12 +1090,18 @@
       "region": "annwyn",
       "book": 6,
       "lastBook": 6,
+      "status": "alive",
       "size": "side",
       "x": 780,
-      "status": "alive",
-      "bio": "A fae with memory-stealing abilities. Works for King Carrick. Strips Auren of her memories in Book 6.",
+      "y": 665,
       "magic": "memory",
-      "y": 665
+      "bio": "A fae with memory-stealing abilities. Works for King Carrick. Strips Auren of her memories in Book 6.",
+      "bioByBook": [
+        {
+          "book": 6,
+          "text": "A fae with memory-stealing abilities. Works for King Carrick. Strips Auren of her memories in Book 6."
+        }
+      ]
     },
     {
       "id": "brennur",
@@ -792,12 +1111,18 @@
       "region": "annwyn",
       "book": 6,
       "lastBook": 6,
+      "status": "alive",
       "size": "side",
       "x": 635,
-      "status": "alive",
-      "bio": "Appears to be part of the Vulmin rebels but secretly betrays them, leading Auren's group into a trap.",
+      "y": 668,
       "magic": "none",
-      "y": 668
+      "bio": "Appears to be part of the Vulmin rebels but secretly betrays them, leading Auren's group into a trap.",
+      "bioByBook": [
+        {
+          "book": 6,
+          "text": "Appears to be part of the Vulmin rebels but secretly betrays them, leading Auren's group into a trap."
+        }
+      ]
     },
     {
       "id": "wick",
@@ -807,12 +1132,18 @@
       "region": "annwyn",
       "book": 5,
       "lastBook": 6,
+      "status": "alive",
       "size": "side",
       "x": 98,
-      "status": "alive",
-      "bio": "Leader of the Vulmin Dyrunia rebel resistance. Bleeds gold — secretly a Turley, related to Auren's bloodline.",
+      "y": 605,
       "magic": "gold",
-      "y": 605
+      "bio": "Leader of the Vulmin Dyrunia rebel resistance. Bleeds gold — secretly a Turley, related to Auren's bloodline.",
+      "bioByBook": [
+        {
+          "book": 5,
+          "text": "Leader of the Vulmin Dyrunia rebel resistance. Bleeds gold — secretly a Turley, related to Auren's bloodline."
+        }
+      ]
     },
     {
       "id": "emonie",
@@ -822,12 +1153,18 @@
       "region": "annwyn",
       "book": 5,
       "lastBook": 6,
+      "status": "alive",
       "size": "side",
       "x": 220,
-      "status": "alive",
-      "bio": "The only other female fae in the Vulmin. Has glamour magic. Becomes one of Auren's closest friends in Annwyn.",
+      "y": 605,
       "magic": "glamour",
-      "y": 605
+      "bio": "The only other female fae in the Vulmin. Has glamour magic. Becomes one of Auren's closest friends in Annwyn.",
+      "bioByBook": [
+        {
+          "book": 5,
+          "text": "The only other female fae in the Vulmin. Has glamour magic. Becomes one of Auren's closest friends in Annwyn."
+        }
+      ]
     },
     {
       "id": "nenet",
@@ -837,12 +1174,18 @@
       "region": "annwyn",
       "book": 5,
       "lastBook": 6,
+      "status": "alive",
       "size": "side",
       "x": 98,
-      "status": "alive",
-      "bio": "An elderly Turley loyalist who first recognizes Auren as the Lyäri Ulvêre. Stabbed in Book 6.",
+      "y": 685,
       "magic": "none",
-      "y": 685
+      "bio": "An elderly Turley loyalist who first recognizes Auren as the Lyäri Ulvêre. Stabbed in Book 6.",
+      "bioByBook": [
+        {
+          "book": 5,
+          "text": "An elderly Turley loyalist who first recognizes Auren as the Lyäri Ulvêre. Stabbed in Book 6."
+        }
+      ]
     },
     {
       "id": "estelia",
@@ -852,12 +1195,18 @@
       "region": "annwyn",
       "book": 5,
       "lastBook": 6,
+      "status": "alive",
       "size": "side",
       "x": 220,
-      "status": "alive",
-      "bio": "A fae healer and Turley loyalist. In a relationship with Thursil. Heals Rissa in Book 5.",
+      "y": 685,
       "magic": "none",
-      "y": 685
+      "bio": "A fae healer and Turley loyalist. In a relationship with Thursil. Heals Rissa in Book 5.",
+      "bioByBook": [
+        {
+          "book": 5,
+          "text": "A fae healer and Turley loyalist. In a relationship with Thursil. Heals Rissa in Book 5."
+        }
+      ]
     },
     {
       "id": "thursil",
@@ -867,12 +1216,18 @@
       "region": "annwyn",
       "book": 5,
       "lastBook": 6,
+      "status": "alive",
       "size": "side",
       "x": 340,
-      "status": "alive",
-      "bio": "Nenet's grandson and Estelia's lover. Part of the Turley loyalist network in Annwyn.",
+      "y": 660,
       "magic": "none",
-      "y": 660
+      "bio": "Nenet's grandson and Estelia's lover. Part of the Turley loyalist network in Annwyn.",
+      "bioByBook": [
+        {
+          "book": 5,
+          "text": "Nenet's grandson and Estelia's lover. Part of the Turley loyalist network in Annwyn."
+        }
+      ]
     },
     {
       "id": "saira",
@@ -882,13 +1237,28 @@
       "region": "annwyn",
       "book": 5,
       "lastBook": 6,
+      "status": "alive",
       "size": "side",
       "x": 468,
-      "status": "dead",
-      "statusDetail": "killed",
-      "bio": "Auren's distant ancestor. The Turley line descends from Saira. Her family once ruled Annwyn before being displaced by the Carricks.",
+      "y": 605,
       "magic": "gold",
-      "y": 605
+      "bio": "Auren's distant ancestor. The Turley line descends from Saira. Her family once ruled Annwyn before being displaced by the Carricks.",
+      "changes": [
+        {
+          "book": 6,
+          "set": {
+            "status": "dead",
+            "statusDetail": "killed"
+          },
+          "why": "Saira Turley dies (killed) in book 6; before that the chart must show them as they were."
+        }
+      ],
+      "bioByBook": [
+        {
+          "book": 5,
+          "text": "Auren's distant ancestor. The Turley line descends from Saira. Her family once ruled Annwyn before being displaced by the Carricks."
+        }
+      ]
     },
     {
       "id": "auren_parents",
@@ -898,13 +1268,19 @@
       "region": "annwyn",
       "book": 5,
       "lastBook": 5,
-      "size": "side",
-      "x": 468,
       "status": "dead",
       "statusDetail": "killed",
-      "bio": "Auren's Fae parents. Both killed or lost during the Fae war. Auren was taken from them as a child and transported to Orea.",
+      "size": "side",
+      "x": 468,
+      "y": 685,
       "magic": "none",
-      "y": 685
+      "bio": "Auren's Fae parents. Both killed or lost during the Fae war. Auren was taken from them as a child and transported to Orea.",
+      "bioByBook": [
+        {
+          "book": 5,
+          "text": "Auren's Fae parents. Both killed or lost during the Fae war. Auren was taken from them as a child and transported to Orea."
+        }
+      ]
     }
   ],
   "relationships": [

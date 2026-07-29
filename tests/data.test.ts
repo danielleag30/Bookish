@@ -11,6 +11,28 @@ import { contrastRatio, MIN_ACCENT_CONTRAST } from '../src/contrast.ts';
  * through unnoticed.
  */
 
+/**
+ * A character's state at the end of the series: the base record with every
+ * `changes` entry folded on in book order. Tests that care about "did they die"
+ * must use this — reading `status` directly asks "what were they at the start",
+ * which for anyone who dies later is `alive`.
+ */
+function endState(c: {
+  status: string;
+  statusDetail?: string;
+  changes?: { book: number; set: { status?: string; statusDetail?: string } }[];
+}): { status: string; statusDetail?: string } {
+  return [...(c.changes ?? [])]
+    .sort((a, b) => a.book - b.book)
+    .reduce(
+      (acc, ch) => ({
+        status: ch.set.status ?? acc.status,
+        statusDetail: ch.set.statusDetail ?? acc.statusDetail,
+      }),
+      { status: c.status, statusDetail: c.statusDetail },
+    );
+}
+
 const dataDir = resolve(import.meta.dirname, '..', 'data');
 const load = (name: string) =>
   SeriesSchema.parse(JSON.parse(readFileSync(join(dataDir, name), 'utf8')));
@@ -128,16 +150,23 @@ describe('empyrean', () => {
   });
 
   it('normalised status but kept the original wording', () => {
+    // These now assert the RESOLVED end state. `status` is the base record —
+    // what a character is when first seen — and a death is a `changes` entry at
+    // the book it happens in, so that the chart does not report it early. Fen
+    // dies in the only book he appears in, so he needs no entry.
     const lilith = s.characters.find((c) => c.id === 'lilith');
-    expect(lilith?.status).toBe('dead');
-    expect(lilith?.statusDetail).toBe('sacrificed');
+    expect(endState(lilith!).status).toBe('dead');
+    expect(endState(lilith!).statusDetail).toBe('sacrificed');
+    expect(lilith?.changes?.some((ch) => ch.book === 2)).toBe(true);
 
     const fen = s.characters.find((c) => c.id === 'fen');
-    expect(fen?.statusDetail).toBe('executed');
+    expect(endState(fen!).statusDetail).toBe('executed');
   });
 
   it('kept "missing" and "prisoner" distinct from "dead"', () => {
-    const missing = s.characters.filter((c) => c.status === 'missing').map((c) => c.id);
+    const missing = s.characters
+      .filter((c) => endState(c).status === 'missing')
+      .map((c) => c.id);
     expect(missing).toEqual(expect.arrayContaining(['garrick', 'bodhi', 'aaric']));
 
     // Jack's BASE record is now his book-1 state (alive rider); `prisoner`

@@ -127,7 +127,12 @@ export function graphSchema(relTypeIds: string[]): unknown {
             status: {
               type: 'string',
               enum: ['alive', 'dead', 'missing', 'prisoner', 'unknown'],
-              description: 'Their state by the end of this passage. Use unknown if unstated.',
+              description:
+                'Their state WHEN THIS PASSAGE FIRST SHOWS THEM, not at the end ' +
+                'of it. Someone who is alive for most of the passage and dies at ' +
+                'the end is "alive" — the death is a later fact, and reporting it ' +
+                'here puts it on the chart from their first appearance. Use ' +
+                'unknown if the passage does not say.',
             },
             place: {
               type: 'string',

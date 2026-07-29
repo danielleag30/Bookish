@@ -51,10 +51,11 @@ jobs:
         id: draft
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          USE_MODEL: ${{ inputs.use_model }}
         run: |
           # Default off: only the explicit opt-in turns the model on.
           FLAGS="--no-model"
-          if [ "${{ inputs.use_model }}" = "true" ]; then FLAGS=""; fi
+          if [ "$USE_MODEL" = "true" ]; then FLAGS=""; fi
           # The script prints "changed" or "unchanged" on stdout; its progress
           # goes to stderr so this stays parseable.
           RESULT=$(npm run --silent changelog -- $FLAGS)

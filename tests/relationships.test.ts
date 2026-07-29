@@ -146,7 +146,15 @@ describe('the real data conforms', () => {
       for (const r of s.relationships.filter((x) => x.type === 'killed')) {
         const key = `${s.id}:${r.from}>${r.to}:killed`;
         if (key === 'empyrean:violet>jack:killed') continue; // revived — documented
-        expect(byId.get(r.to)?.status, key).not.toBe('alive');
+        // Resolve the victim's changes first: `status` is their state at first
+        // appearance, so anyone who dies later reads `alive` there by design.
+        const v = byId.get(r.to);
+        const final = v
+          ? [...(v.changes ?? [])]
+              .sort((a, b) => a.book - b.book)
+              .reduce<string>((acc, ch) => ch.set.status ?? acc, v.status)
+          : undefined;
+        expect(final, key).not.toBe('alive');
       }
     }
   });
