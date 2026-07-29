@@ -9,7 +9,15 @@ pages under `Empyrean-Chart/`, `DCC-Chart/` and `Plated-Prisoner-Chart/` are now
 `NODES` / `BANDS` / `ALL_NODES` arrays the migration reads no longer exist there.
 
 **`data/*.json` is the source of truth going forward.** These files are not
-edited and are not served. They exist so the migration stays re-runnable and
+edited, and as of the `.vercelignore` added alongside this note they are no
+longer served either — which they had been. `vercel.json` sets
+`outputDirectory: "."`, so every path in the repository was published, and
+these charts carry the full cast and every reveal with no spoiler gate at all.
+Anyone who found `/sources/Empyrean-Chart.html` could read the ending of a
+series the live chart is built to withhold. The claim below was a statement of
+intent that nothing enforced.
+
+They exist so the migration stays re-runnable and
 every transformation applied to the data — the canon corrections, the status
 normalisation, the temporal backfill, the relationship-vocabulary mapping — can
 be re-derived and reviewed rather than taken on trust.

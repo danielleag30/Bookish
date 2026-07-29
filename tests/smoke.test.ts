@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { readdirSync, existsSync } from 'node:fs';
+import { readdirSync, existsSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
 /**
@@ -59,5 +59,53 @@ describe('repo layout', () => {
 
   it('is licensed', () => {
     expect(existsSync(resolve(root, 'LICENSE'))).toBe(true);
+  });
+});
+
+/**
+ * Deploy hygiene.
+ *
+ * `vercel.json` publishes the repository root, so anything not excluded ships.
+ * `sources/` holds the three original charts with every reveal inline and no
+ * spoiler gate — they were live at /sources/Empyrean-Chart.html while the whole
+ * project existed to withhold exactly that. A missing line in a config file
+ * undid the feature.
+ */
+describe('what gets deployed', () => {
+  const ignorePath = join(root, '.vercelignore');
+
+  it('has a .vercelignore, because the deploy root is the repo root', () => {
+    const cfg = JSON.parse(readFileSync(join(root, 'vercel.json'), 'utf8')) as {
+      outputDirectory?: string;
+    };
+    if (cfg.outputDirectory && cfg.outputDirectory !== '.') return; // scoped output, no need
+    expect(existsSync(ignorePath), 'vercel.json publishes "." with nothing excluded').toBe(true);
+  });
+
+  it('excludes every directory that must never be public', () => {
+    const ignored = readFileSync(ignorePath, 'utf8')
+      .split('\n')
+      .map((l) => l.trim())
+      .filter((l) => l && !l.startsWith('#'));
+
+    // sources/ is the spoiler one. The rest are source, tooling and tests that
+    // have no business being served.
+    for (const dir of ['sources', 'src', 'tests', 'scripts', 'pipeline', 'evals', 'mcp']) {
+      expect(ignored, `${dir} would be published`).toContain(dir);
+    }
+  });
+
+  it('still ships everything the site needs', () => {
+    const ignored = new Set(
+      readFileSync(ignorePath, 'utf8')
+        .split('\n')
+        .map((l) => l.trim())
+        .filter((l) => l && !l.startsWith('#')),
+    );
+    // data/ is fetched by the chart at runtime, and is safe to ship because
+    // gate() withholds at read time rather than at build time.
+    for (const needed of ['data', 'images', 'chart', 'index.html', 'how-it-works']) {
+      expect(ignored.has(needed), `${needed} is required by the site`).toBe(false);
+    }
   });
 });

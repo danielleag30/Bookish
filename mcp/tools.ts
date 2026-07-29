@@ -120,9 +120,18 @@ export function getCharacter(
     `First appears: book ${p.firstBook}`,
   ];
   if (c.magic) lines.push(`Power: ${c.magic}`);
+  // Not `else if`. Bios are segmented now, so a reader can have part of one and
+  // still be missing later parts — and with `else if` they were shown a
+  // truncated biography with nothing to say it was truncated, which reads as
+  // the whole thing.
   if (p.bio) lines.push('', p.bio);
-  else if (p.bioWithheld) {
-    lines.push('', '(Biography withheld — it describes later books.)');
+  if (p.bioWithheld) {
+    lines.push(
+      '',
+      p.bio
+        ? '(More of this biography is withheld — it describes later books.)'
+        : '(Biography withheld — it describes later books.)',
+    );
   }
   return lines.filter(Boolean).join('\n');
 }

@@ -7,57 +7,57 @@
       "id": 1,
       "title": "Dungeon Crawler Carl",
       "short": "DCC",
-      "floor": "Floors 1–2",
-      "year": 2020
+      "year": 2020,
+      "floor": "Floors 1–2"
     },
     {
       "id": 2,
       "title": "Carl's Doomsday Scenario",
       "short": "Doomsday",
-      "floor": "Floors 3–4",
-      "year": 2021
+      "year": 2021,
+      "floor": "Floors 3–4"
     },
     {
       "id": 3,
       "title": "The Dungeon Anarchist's Cookbook",
       "short": "Anarchist",
-      "floor": "Floor 5",
-      "year": 2021
+      "year": 2021,
+      "floor": "Floor 5"
     },
     {
       "id": 4,
       "title": "The Gate of the Feral Gods",
       "short": "Feral Gods",
-      "floor": "Floor 6",
-      "year": 2021
+      "year": 2021,
+      "floor": "Floor 6"
     },
     {
       "id": 5,
       "title": "The Butcher's Masquerade",
       "short": "Masquerade",
-      "floor": "Floor 7",
-      "year": 2022
+      "year": 2022,
+      "floor": "Floor 7"
     },
     {
       "id": 6,
       "title": "The Eye of the Bedlam Bride",
       "short": "Bedlam Bride",
-      "floor": "Floor 8",
-      "year": 2023
+      "year": 2023,
+      "floor": "Floor 8"
     },
     {
       "id": 7,
       "title": "This Inevitable Ruin",
       "short": "Inevitable Ruin",
-      "floor": "Floor 9",
-      "year": 2024
+      "year": 2024,
+      "floor": "Floor 9"
     },
     {
       "id": 8,
       "title": "A Parade of Horribles",
       "short": "Parade",
-      "floor": "Floor 10",
-      "year": 2026
+      "year": 2026,
+      "floor": "Floor 10"
     }
   ],
   "regions": [
@@ -203,14 +203,24 @@
       "region": "f12",
       "book": 1,
       "lastBook": 8,
+      "status": "alive",
       "size": "main",
       "x": 140,
-      "status": "alive",
-      "bio": "27yr Coast Guard vet. Trapped in heart boxers & leather jacket. Master improviser, reluctant rebel. Worships Emberus (Floor 5), Devotee rank (Floor 8). Co-Warlord of Princess Posse on Floor 9. Suppresses SlugPox as a weapon because of course he does.",
       "magic": "Agent Provocateur / Explosives",
+      "bio": "27yr Coast Guard vet. Trapped in heart boxers & leather jacket. Master improviser, reluctant rebel. Worships Emberus (Floor 5), Devotee rank (Floor 8). Co-Warlord of Princess Posse on Floor 9. Suppresses SlugPox as a weapon because of course he does.",
       "attrs": {
         "f9": "princess_posse"
-      }
+      },
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "27yr Coast Guard vet. Trapped in heart boxers & leather jacket. Master improviser, reluctant rebel. Co-Warlord of Princess Posse on Floor 9. Suppresses SlugPox as a weapon because of course he does."
+        },
+        {
+          "book": 3,
+          "text": "Worships Emberus (Floor 5), Devotee rank (Floor 8)."
+        }
+      ]
     },
     {
       "id": "donut",
@@ -220,14 +230,20 @@
       "region": "f12",
       "book": 1,
       "lastBook": 8,
+      "status": "alive",
       "size": "main",
       "x": 260,
-      "status": "alive",
-      "bio": "Award-winning tortoiseshell Persian cat. Enhanced Pet Biscuit → sapience. Charisma 25. Adopted Mongo. Co-Warlord of Princess Posse. Helped kill god Diwata. Never lets anyone forget she is a champion show cat.",
       "magic": "Aristocrat Cat / Charm / Summoning",
+      "bio": "Award-winning tortoiseshell Persian cat. Enhanced Pet Biscuit → sapience. Charisma 25. Adopted Mongo. Co-Warlord of Princess Posse. Helped kill god Diwata. Never lets anyone forget she is a champion show cat.",
       "attrs": {
         "f9": "princess_posse"
-      }
+      },
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "Award-winning tortoiseshell Persian cat. Enhanced Pet Biscuit → sapience. Charisma 25. Adopted Mongo. Co-Warlord of Princess Posse. Helped kill god Diwata. Never lets anyone forget she is a champion show cat."
+        }
+      ]
     },
     {
       "id": "mongo",
@@ -237,14 +253,24 @@
       "region": "f12",
       "book": 1,
       "lastBook": 8,
+      "status": "alive",
       "size": "side",
       "x": 195,
-      "status": "alive",
-      "bio": "Baby velociraptor from Floor 2 egg reward. Donut's child. Pink downy feathers. Helped kill hunter Vrah alongside Kiwi. Keeps growing. Everyone is fine with this.",
       "magic": "Physical / Bite / Getting Bigger",
+      "bio": "Baby velociraptor from Floor 2 egg reward. Donut's child. Pink downy feathers. Helped kill hunter Vrah alongside Kiwi. Keeps growing. Everyone is fine with this.",
       "attrs": {
         "f9": "princess_posse"
-      }
+      },
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "Baby velociraptor from Floor 2 egg reward. Donut's child. Pink downy feathers. Keeps growing. Everyone is fine with this."
+        },
+        {
+          "book": 5,
+          "text": "Helped kill hunter Vrah alongside Kiwi."
+        }
+      ]
     },
     {
       "id": "rend",
@@ -254,14 +280,20 @@
       "region": "f7",
       "book": 5,
       "lastBook": 8,
+      "status": "alive",
       "size": "side",
       "x": 195,
-      "status": "alive",
-      "bio": "Ugly-cute meatball creature gifted to Carl by Tserendelgor before her death. Named Rend in her memory. Carl did not ask for this responsibility.",
       "magic": "Tummy-Acher",
+      "bio": "Ugly-cute meatball creature gifted to Carl by Tserendelgor before her death. Named Rend in her memory. Carl did not ask for this responsibility.",
       "attrs": {
         "f9": "princess_posse"
-      }
+      },
+      "bioByBook": [
+        {
+          "book": 5,
+          "text": "Ugly-cute meatball creature gifted to Carl by Tserendelgor before her death. Named Rend in her memory. Carl did not ask for this responsibility."
+        }
+      ]
     },
     {
       "id": "kiwi",
@@ -271,14 +303,20 @@
       "region": "f7",
       "book": 5,
       "lastBook": 8,
+      "status": "alive",
       "size": "side",
       "x": 140,
-      "status": "alive",
-      "bio": "A kiwi bird who joined the Royal Court on Floor 7. Helped Mongo kill hunter Vrah. Deceptively dangerous for a small round bird.",
       "magic": "Kiwi / Stealth",
+      "bio": "A kiwi bird who joined the Royal Court on Floor 7. Helped Mongo kill hunter Vrah. Deceptively dangerous for a small round bird.",
       "attrs": {
         "f9": "princess_posse"
-      }
+      },
+      "bioByBook": [
+        {
+          "book": 5,
+          "text": "A kiwi bird who joined the Royal Court on Floor 7. Helped Mongo kill hunter Vrah. Deceptively dangerous for a small round bird."
+        }
+      ]
     },
     {
       "id": "mordecai",
@@ -288,14 +326,20 @@
       "region": "f12",
       "book": 1,
       "lastBook": 8,
+      "status": "alive",
       "size": "main",
       "x": 330,
-      "status": "alive",
-      "bio": "Ancient former crawler. Indentured to Borant Corp. Expert potionmaker. Complicated romantic history with Odette. Donut's manager from Floor 3. Grumpy. Actually cares deeply about all of them. Don't tell him you noticed.",
       "magic": "Potions / Changeling (orig. Skyfowl)",
+      "bio": "Ancient former crawler. Indentured to Borant Corp. Expert potionmaker. Complicated romantic history with Odette. Donut's manager from Floor 3. Grumpy. Actually cares deeply about all of them. Don't tell him you noticed.",
       "attrs": {
         "f9": "princess_posse"
-      }
+      },
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "Ancient former crawler. Indentured to Borant Corp. Expert potionmaker. Complicated romantic history with Odette. Donut's manager from Floor 3. Grumpy. Actually cares deeply about all of them. Don't tell him you noticed."
+        }
+      ]
     },
     {
       "id": "samantha",
@@ -305,14 +349,20 @@
       "region": "f6",
       "book": 4,
       "lastBook": 8,
+      "status": "alive",
       "size": "side",
       "x": 140,
-      "status": "alive",
-      "bio": "Demi-goddess trapped in a foam doll head. Hired NPC follower of Donut. Unhinged, vulgar, hilarious, and capable of causing catastrophic damage. Fan favorite. Do not give her unsupervised access to anything.",
       "magic": "Demi-goddess / Chaos",
+      "bio": "Demi-goddess trapped in a foam doll head. Hired NPC follower of Donut. Unhinged, vulgar, hilarious, and capable of causing catastrophic damage. Fan favorite. Do not give her unsupervised access to anything.",
       "attrs": {
         "f9": "princess_posse"
-      }
+      },
+      "bioByBook": [
+        {
+          "book": 4,
+          "text": "Demi-goddess trapped in a foam doll head. Hired NPC follower of Donut. Unhinged, vulgar, hilarious, and capable of causing catastrophic damage. Fan favorite. Do not give her unsupervised access to anything."
+        }
+      ]
     },
     {
       "id": "katia",
@@ -322,14 +372,24 @@
       "region": "f34",
       "book": 2,
       "lastBook": 8,
+      "status": "alive",
       "size": "main",
       "x": 520,
-      "status": "alive",
-      "bio": "Former Icelandic art professor. Can sculpt her mass into any shape. Killed Eva on Floor 7. Romantic partner Bautista. Cursed Crown of the Sepsis Whore on Floor 9 — one of only two who can leave normally. Not having a great time but handling it.",
       "magic": "Doppelganger / Monster Truck Driver",
+      "bio": "Former Icelandic art professor. Can sculpt her mass into any shape. Killed Eva on Floor 7. Romantic partner Bautista. Cursed Crown of the Sepsis Whore on Floor 9 — one of only two who can leave normally. Not having a great time but handling it.",
       "attrs": {
         "f9": "princess_posse"
-      }
+      },
+      "bioByBook": [
+        {
+          "book": 2,
+          "text": "Former Icelandic art professor. Can sculpt her mass into any shape. Killed Eva on Floor 7. Cursed Crown of the Sepsis Whore on Floor 9 — one of only two who can leave normally. Not having a great time but handling it."
+        },
+        {
+          "book": 3,
+          "text": "Romantic partner Bautista."
+        }
+      ]
     },
     {
       "id": "florin",
@@ -339,14 +399,20 @@
       "region": "f5",
       "book": 3,
       "lastBook": 8,
+      "status": "alive",
       "size": "main",
       "x": 600,
-      "status": "alive",
-      "bio": "Gruff mercenary. Claims French accent. Sounds Australian. Has an unlimited-ammo Mossberg named — well, just Mossberg. Lost Ifechi on Floor 6 and never fully recovered. Complex evolving relationship with Lucia Mar.",
       "magic": "Crocodilian / Unlimited-Ammo Shotgun",
+      "bio": "Gruff mercenary. Claims French accent. Sounds Australian. Has an unlimited-ammo Mossberg named — well, just Mossberg. Lost Ifechi on Floor 6 and never fully recovered. Complex evolving relationship with Lucia Mar.",
       "attrs": {
         "f9": "princess_posse"
-      }
+      },
+      "bioByBook": [
+        {
+          "book": 3,
+          "text": "Gruff mercenary. Claims French accent. Sounds Australian. Has an unlimited-ammo Mossberg named — well, just Mossberg. Lost Ifechi on Floor 6 and never fully recovered. Complex evolving relationship with Lucia Mar."
+        }
+      ]
     },
     {
       "id": "ifechi",
@@ -356,11 +422,26 @@
       "region": "f5",
       "book": 3,
       "lastBook": 4,
+      "status": "alive",
       "size": "side",
       "x": 700,
-      "status": "dead",
+      "magic": "Healing / Leech",
       "bio": "Red Cross medic. Florin's combat partner. Killed Floor 6 when Lucia's Rubber Spell reflected Florin's own shotgun blasts back at her. Nobody has really been okay since.",
-      "magic": "Healing / Leech"
+      "changes": [
+        {
+          "book": 4,
+          "set": {
+            "status": "dead"
+          },
+          "why": "Ifechi dies in book 4; before that the chart must show them as they were."
+        }
+      ],
+      "bioByBook": [
+        {
+          "book": 3,
+          "text": "Red Cross medic. Florin's combat partner. Killed Floor 6 when Lucia's Rubber Spell reflected Florin's own shotgun blasts back at her. Nobody has really been okay since."
+        }
+      ]
     },
     {
       "id": "bautista",
@@ -370,14 +451,20 @@
       "region": "f5",
       "book": 3,
       "lastBook": 8,
+      "status": "alive",
       "size": "side",
       "x": 520,
-      "status": "alive",
-      "bio": "South American crawler. Tiger-like race. Witnessed most of his family die on Floor 3. Summons magical beanie baby creatures in combat which is both adorable and terrifying. Fell in love with Katia.",
       "magic": "Tiger race / Beanie Baby Summoner",
+      "bio": "South American crawler. Tiger-like race. Witnessed most of his family die on Floor 3. Summons magical beanie baby creatures in combat which is both adorable and terrifying. Fell in love with Katia.",
       "attrs": {
         "f9": "princess_posse"
-      }
+      },
+      "bioByBook": [
+        {
+          "book": 3,
+          "text": "South American crawler. Tiger-like race. Witnessed most of his family die on Floor 3. Summons magical beanie baby creatures in combat which is both adorable and terrifying. Fell in love with Katia."
+        }
+      ]
     },
     {
       "id": "louis",
@@ -387,14 +474,24 @@
       "region": "f5",
       "book": 3,
       "lastBook": 8,
+      "status": "alive",
       "size": "side",
       "x": 460,
-      "status": "alive",
-      "bio": "Florida crawler who spent his early floors drunk and hiding. Carl and Katia helped him find purpose. Became team pilot. Married Juice Box on Floor 9 to seal the Good Guys alliance. Florida Man energy: channeled for good.",
       "magic": "Various / Florida Man",
+      "bio": "Florida crawler who spent his early floors drunk and hiding. Carl and Katia helped him find purpose. Became team pilot. Married Juice Box on Floor 9 to seal the Good Guys alliance. Florida Man energy: channeled for good.",
       "attrs": {
         "f9": "princess_posse"
-      }
+      },
+      "bioByBook": [
+        {
+          "book": 3,
+          "text": "Florida crawler who spent his early floors drunk and hiding. Carl and Katia helped him find purpose. Became team pilot. Florida Man energy: channeled for good."
+        },
+        {
+          "book": 5,
+          "text": "Married Juice Box on Floor 9 to seal the Good Guys alliance."
+        }
+      ]
     },
     {
       "id": "firas",
@@ -404,14 +501,20 @@
       "region": "f5",
       "book": 3,
       "lastBook": 8,
+      "status": "alive",
       "size": "side",
       "x": 390,
-      "status": "alive",
-      "bio": "Louis's partner from Florida. Co-converted a van into the dungeon. Evolved into a capable team member alongside Louis. The other Florida Man.",
       "magic": "Various",
+      "bio": "Louis's partner from Florida. Co-converted a van into the dungeon. Evolved into a capable team member alongside Louis. The other Florida Man.",
       "attrs": {
         "f9": "princess_posse"
-      }
+      },
+      "bioByBook": [
+        {
+          "book": 3,
+          "text": "Louis's partner from Florida. Co-converted a van into the dungeon. Evolved into a capable team member alongside Louis. The other Florida Man."
+        }
+      ]
     },
     {
       "id": "juicebox",
@@ -421,14 +524,20 @@
       "region": "f7",
       "book": 5,
       "lastBook": 8,
+      "status": "alive",
       "size": "side",
       "x": 520,
-      "status": "alive",
-      "bio": "Changeling NPC who became self-aware. Sister of Henrik. Fell for Louis because he was completely genuine with her — no pretense. Led NPC awakening on Floor 9. Married Louis to seal the Good Guys alliance. Leader of Team Retribution. Doing better than most people who discover they're NPCs.",
       "magic": "Changeling / Awakened NPC",
+      "bio": "Changeling NPC who became self-aware. Sister of Henrik. Fell for Louis because he was completely genuine with her — no pretense. Led NPC awakening on Floor 9. Married Louis to seal the Good Guys alliance. Leader of Team Retribution. Doing better than most people who discover they're NPCs.",
       "attrs": {
         "f9": "team_retribution"
-      }
+      },
+      "bioByBook": [
+        {
+          "book": 5,
+          "text": "Changeling NPC who became self-aware. Sister of Henrik. Fell for Louis because he was completely genuine with her — no pretense. Led NPC awakening on Floor 9. Married Louis to seal the Good Guys alliance. Leader of Team Retribution. Doing better than most people who discover they're NPCs."
+        }
+      ]
     },
     {
       "id": "imani",
@@ -438,14 +547,20 @@
       "region": "f12",
       "book": 1,
       "lastBook": 8,
+      "status": "alive",
       "size": "side",
       "x": 600,
-      "status": "alive",
-      "bio": "Nurse from Meadow Lark Retirement Home. Named her guild Safehome Yolanda after a fallen colleague. Steady moral center throughout the series. One of the few adults in the room.",
       "magic": "Healing / Leadership",
+      "bio": "Nurse from Meadow Lark Retirement Home. Named her guild Safehome Yolanda after a fallen colleague. Steady moral center throughout the series. One of the few adults in the room.",
       "attrs": {
         "f9": "princess_posse"
-      }
+      },
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "Nurse from Meadow Lark Retirement Home. Named her guild Safehome Yolanda after a fallen colleague. Steady moral center throughout the series. One of the few adults in the room."
+        }
+      ]
     },
     {
       "id": "elle",
@@ -455,14 +570,20 @@
       "region": "f12",
       "book": 1,
       "lastBook": 8,
+      "status": "alive",
       "size": "side",
       "x": 700,
-      "status": "alive",
-      "bio": "Elderly Meadow Lark resident. Unexpectedly durable. Upgraded to Hailstorm Queen class on Floor 9. Absolutely no nonsense. Fan favorite. Do not underestimate the old women.",
       "magic": "Hailstorm Queen (Floor 9 upgrade)",
+      "bio": "Elderly Meadow Lark resident. Unexpectedly durable. Upgraded to Hailstorm Queen class on Floor 9. Absolutely no nonsense. Fan favorite. Do not underestimate the old women.",
       "attrs": {
         "f9": "princess_posse"
-      }
+      },
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "Elderly Meadow Lark resident. Unexpectedly durable. Upgraded to Hailstorm Queen class on Floor 9. Absolutely no nonsense. Fan favorite. Do not underestimate the old women."
+        }
+      ]
     },
     {
       "id": "lucia",
@@ -472,14 +593,24 @@
       "region": "f34",
       "book": 2,
       "lastBook": 8,
+      "status": "alive",
       "size": "main",
       "x": 680,
-      "status": "alive",
-      "bio": "Appears to be a 13yr Ecuadorian street kid. Actually contains multiple children's consciousnesses. #1 on the Leaderboard. Remotely controlled by her Rottweiler Gustavo 3. Accidentally killed Ifechi via reflected spell. It is complicated.",
       "magic": "Rubber Spell / Rottweilers",
+      "bio": "Appears to be a 13yr Ecuadorian street kid. Actually contains multiple children's consciousnesses. #1 on the Leaderboard. Remotely controlled by her Rottweiler Gustavo 3. Accidentally killed Ifechi via reflected spell. It is complicated.",
       "attrs": {
         "f9": "princess_posse"
-      }
+      },
+      "bioByBook": [
+        {
+          "book": 2,
+          "text": "Appears to be a 13yr Ecuadorian street kid. Actually contains multiple children's consciousnesses. #1 on the Leaderboard. Remotely controlled by her Rottweiler Gustavo 3. It is complicated."
+        },
+        {
+          "book": 3,
+          "text": "Accidentally killed Ifechi via reflected spell."
+        }
+      ]
     },
     {
       "id": "prepotente",
@@ -489,14 +620,20 @@
       "region": "f12",
       "book": 1,
       "lastBook": 8,
+      "status": "alive",
       "size": "side",
       "x": 790,
-      "status": "alive",
-      "bio": "One of shepherd Miriam Dom's goats. Ate an Enhanced Pet Biscuit. Became a sapient humanoid crawler. Did not ask for this. Is handling it better than most humans would. Recurring fan favorite.",
       "magic": "Sapient Goat",
+      "bio": "One of shepherd Miriam Dom's goats. Ate an Enhanced Pet Biscuit. Became a sapient humanoid crawler. Did not ask for this. Is handling it better than most humans would. Recurring fan favorite.",
       "attrs": {
         "f9": "princess_posse"
-      }
+      },
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "One of shepherd Miriam Dom's goats. Ate an Enhanced Pet Biscuit. Became a sapient humanoid crawler. Did not ask for this. Is handling it better than most humans would. Recurring fan favorite."
+        }
+      ]
     },
     {
       "id": "tserendelgor",
@@ -506,11 +643,30 @@
       "region": "f34",
       "book": 2,
       "lastBook": 5,
+      "status": "alive",
       "size": "side",
       "x": 790,
-      "status": "dead",
+      "magic": "Flamethrower 'Velma'",
       "bio": "'Tserendelgor' — everyone called her Ren because no one could say it. Mongolian crawler. Carried a legendary flamethrower named Velma. Sacrificed herself on Floor 7's Capital Building when she had nothing left to give. Gifted Carl her tummy-acher (named Rend). Gone too soon.",
-      "magic": "Flamethrower 'Velma'"
+      "changes": [
+        {
+          "book": 5,
+          "set": {
+            "status": "dead"
+          },
+          "why": "Ren dies in book 5; before that the chart must show them as they were."
+        }
+      ],
+      "bioByBook": [
+        {
+          "book": 2,
+          "text": "'Tserendelgor' — everyone called her Ren because no one could say it. Mongolian crawler. Carried a legendary flamethrower named Velma. Sacrificed herself on Floor 7's Capital Building when she had nothing left to give. Gone too soon."
+        },
+        {
+          "book": 5,
+          "text": "Gifted Carl her tummy-acher (named Rend)."
+        }
+      ]
     },
     {
       "id": "signet",
@@ -520,14 +676,29 @@
       "region": "f34",
       "book": 2,
       "lastBook": 7,
+      "status": "alive",
       "size": "side",
       "x": 870,
-      "status": "dead",
-      "bio": "Half-Naiad, half-High-Elf elite NPC in 'Vengeance of the Daughter.' Awakened to her NPC status Floor 6. Sacrificed herself Floor 9 — accepted eternal torment — to save her family and give crawlers a path forward. The sacrifice the story did not deserve to need.",
       "magic": "Blood Magic / Ink Marauder",
+      "bio": "Half-Naiad, half-High-Elf elite NPC in 'Vengeance of the Daughter.' Awakened to her NPC status Floor 6. Sacrificed herself Floor 9 — accepted eternal torment — to save her family and give crawlers a path forward. The sacrifice the story did not deserve to need.",
       "attrs": {
         "f9": "princess_posse"
-      }
+      },
+      "changes": [
+        {
+          "book": 7,
+          "set": {
+            "status": "dead"
+          },
+          "why": "Tsarina Signet dies in book 7; before that the chart must show them as they were."
+        }
+      ],
+      "bioByBook": [
+        {
+          "book": 2,
+          "text": "Half-Naiad, half-High-Elf elite NPC in 'Vengeance of the Daughter.' Awakened to her NPC status Floor 6. Sacrificed herself Floor 9 — accepted eternal torment — to save her family and give crawlers a path forward. The sacrifice the story did not deserve to need."
+        }
+      ]
     },
     {
       "id": "eva",
@@ -537,11 +708,26 @@
       "region": "f34",
       "book": 2,
       "lastBook": 5,
+      "status": "alive",
       "size": "side",
       "x": 600,
-      "status": "dead",
+      "magic": "4-armed Cobra / Player Killer",
       "bio": "Katia's friend before the apocalypse. Became Hekla's enforcer. Green opalescent skin, four arms, cobra head. 13 Player Killer skulls. Killed by Katia on Floor 7. The tragedy of the apocalypse: it takes good people and makes them something else.",
-      "magic": "4-armed Cobra / Player Killer"
+      "changes": [
+        {
+          "book": 5,
+          "set": {
+            "status": "dead"
+          },
+          "why": "Eva Sigrid dies in book 5; before that the chart must show them as they were."
+        }
+      ],
+      "bioByBook": [
+        {
+          "book": 2,
+          "text": "Katia's friend before the apocalypse. Became Hekla's enforcer. Green opalescent skin, four arms, cobra head. 13 Player Killer skulls. Killed by Katia on Floor 7. The tragedy of the apocalypse: it takes good people and makes them something else."
+        }
+      ]
     },
     {
       "id": "zev",
@@ -551,11 +737,17 @@
       "region": "outside",
       "book": 1,
       "lastBook": 8,
+      "status": "alive",
       "size": "main",
       "x": 160,
-      "status": "alive",
+      "magic": "Kua-Tin / Admin access",
       "bio": "Fish-like Kua-Tin alien. Assigned as the Royal Court's PR manager by Borant Corp. Secretly a member of the Borant Emancipation Front working to dismantle the system from within. Genuinely cares. Possibly the only Borant employee with a conscience.",
-      "magic": "Kua-Tin / Admin access"
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "Fish-like Kua-Tin alien. Assigned as the Royal Court's PR manager by Borant Corp. Secretly a member of the Borant Emancipation Front working to dismantle the system from within. Genuinely cares. Possibly the only Borant employee with a conscience."
+        }
+      ]
     },
     {
       "id": "odette",
@@ -565,14 +757,24 @@
       "region": "outside",
       "book": 1,
       "lastBook": 8,
+      "status": "alive",
       "size": "main",
       "x": 330,
-      "status": "alive",
-      "bio": "Host of Dungeon Crawler After Hours. Survived to Floor 12. Lost legs on Floor 11, replaced with monster parts. Complicated history with Mordecai. Secretly working against Borant. Sponsored goddess Nekhebit. On Floor 9 enters the dungeon herself as Nekhebit. One of the most dangerous people in this story.",
       "magic": "Former Crawler / Monster legs / Vulture Goddess",
+      "bio": "Host of Dungeon Crawler After Hours. Survived to Floor 12. Lost legs on Floor 11, replaced with monster parts. Complicated history with Mordecai. Secretly working against Borant. Sponsored goddess Nekhebit. On Floor 9 enters the dungeon herself as Nekhebit. One of the most dangerous people in this story.",
       "attrs": {
         "f9": "princess_posse"
-      }
+      },
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "Host of Dungeon Crawler After Hours. Survived to Floor 12. Lost legs on Floor 11, replaced with monster parts. Complicated history with Mordecai. Secretly working against Borant. One of the most dangerous people in this story."
+        },
+        {
+          "book": 6,
+          "text": "Sponsored goddess Nekhebit. On Floor 9 enters the dungeon herself as Nekhebit."
+        }
+      ]
     },
     {
       "id": "quasar",
@@ -582,11 +784,17 @@
       "region": "outside",
       "book": 4,
       "lastBook": 8,
+      "status": "alive",
       "size": "side",
       "x": 500,
-      "status": "alive",
+      "magic": "Legal / Grey alien",
       "bio": "Grey-like alien lawyer retained as Carl's counsel as his actions gain galactic consequences. Did not expect this much work when he took the case.",
-      "magic": "Legal / Grey alien"
+      "bioByBook": [
+        {
+          "book": 4,
+          "text": "Grey-like alien lawyer retained as Carl's counsel as his actions gain galactic consequences. Did not expect this much work when he took the case."
+        }
+      ]
     },
     {
       "id": "beatrice",
@@ -596,11 +804,17 @@
       "region": "outside",
       "book": 1,
       "lastBook": 6,
+      "status": "alive",
       "size": "side",
       "x": 680,
-      "status": "alive",
+      "magic": "None",
       "bio": "Carl's ex-girlfriend. Donut's original owner. Went to the Bahamas with her ex Brad before the apocalypse. Rescued by Odette, then used as leverage against Borant Corp. Having a terrible time.",
-      "magic": "None"
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "Carl's ex-girlfriend. Donut's original owner. Went to the Bahamas with her ex Brad before the apocalypse. Rescued by Odette, then used as leverage against Borant Corp. Having a terrible time."
+        }
+      ]
     },
     {
       "id": "borant",
@@ -610,11 +824,17 @@
       "region": "outside",
       "book": 1,
       "lastBook": 8,
+      "status": "alive",
       "size": "main",
       "x": 840,
-      "status": "alive",
+      "magic": "System Control / Reality Show Corp",
       "bio": "Alien corporation that destroyed Earth and turned it into a dungeon for their reality show Dungeon Crawler World. Run by the fascist Bloom Party. Their control deteriorates as the System AI glitches. The villain hiding behind paperwork and broadcast rights.",
-      "magic": "System Control / Reality Show Corp"
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "Alien corporation that destroyed Earth and turned it into a dungeon for their reality show Dungeon Crawler World. Run by the fascist Bloom Party. Their control deteriorates as the System AI glitches. The villain hiding behind paperwork and broadcast rights."
+        }
+      ]
     },
     {
       "id": "sysai",
@@ -624,11 +844,17 @@
       "region": "outside",
       "book": 1,
       "lastBook": 8,
+      "status": "alive",
       "size": "main",
       "x": 940,
-      "status": "alive",
+      "magic": "Omnipotent / Glitching",
       "bio": "The AI governing the dungeon. Increasingly unstable. Shows unexpected autonomy and hints of sympathy toward crawlers. Its deterioration is one of the central mysteries of the series. Is it breaking down or waking up?",
-      "magic": "Omnipotent / Glitching"
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "The AI governing the dungeon. Increasingly unstable. Shows unexpected autonomy and hints of sympathy toward crawlers. Its deterioration is one of the central mysteries of the series. Is it breaking down or waking up?"
+        }
+      ]
     },
     {
       "id": "hekla",
@@ -638,11 +864,26 @@
       "region": "f34",
       "book": 2,
       "lastBook": 3,
+      "status": "alive",
       "size": "side",
       "x": 460,
-      "status": "dead",
+      "magic": "Crossbow / Manipulation",
       "bio": "Icelandic psychiatrist turned dangerous crawler. Built her team around herself with zero concern for their survival. Tried to recruit Donut by engineering Katia's death. Fatally misjudged Carl. Killed Floor 5. The dungeon occasionally takes out its own trash.",
-      "magic": "Crossbow / Manipulation"
+      "changes": [
+        {
+          "book": 3,
+          "set": {
+            "status": "dead"
+          },
+          "why": "Hekla dies in book 3; before that the chart must show them as they were."
+        }
+      ],
+      "bioByBook": [
+        {
+          "book": 2,
+          "text": "Icelandic psychiatrist turned dangerous crawler. Built her team around herself with zero concern for their survival. Tried to recruit Donut by engineering Katia's death. Fatally misjudged Carl. Killed Floor 5. The dungeon occasionally takes out its own trash."
+        }
+      ]
     },
     {
       "id": "gustavo",
@@ -652,11 +893,17 @@
       "region": "f34",
       "book": 2,
       "lastBook": 8,
+      "status": "alive",
       "size": "side",
       "x": 870,
-      "status": "alive",
+      "magic": "Remote-control Rottweiler",
       "bio": "The Rottweiler who remotely controls Lucia Mar's body on behalf of a man named Alexandro. The key to freeing Lucia's multiple personalities. An evil dog. There's no other way to say it.",
-      "magic": "Remote-control Rottweiler"
+      "bioByBook": [
+        {
+          "book": 2,
+          "text": "The Rottweiler who remotely controls Lucia Mar's body on behalf of a man named Alexandro. The key to freeing Lucia's multiple personalities. An evil dog. There's no other way to say it."
+        }
+      ]
     },
     {
       "id": "vrah",
@@ -666,11 +913,17 @@
       "region": "f7",
       "book": 5,
       "lastBook": 5,
+      "status": "dead",
       "size": "side",
       "x": 720,
-      "status": "dead",
+      "magic": "Mantis Hunter / Predator",
       "bio": "Feared Mantis huntress and mayor of Zockau. Entered Floor 7 to collect Carl as a trophy. Killed by Mongo and Kiwi — eye punctured, limbs removed, generally destroyed. Carl earned a rare celestial reward. She really should have read the room.",
-      "magic": "Mantis Hunter / Predator"
+      "bioByBook": [
+        {
+          "book": 5,
+          "text": "Feared Mantis huntress and mayor of Zockau. Entered Floor 7 to collect Carl as a trophy. Killed by Mongo and Kiwi — eye punctured, limbs removed, generally destroyed. Carl earned a rare celestial reward. She really should have read the room."
+        }
+      ]
     },
     {
       "id": "emberus",
@@ -680,11 +933,17 @@
       "region": "outside",
       "book": 3,
       "lastBook": 8,
+      "status": "alive",
       "size": "main",
       "x": 400,
-      "status": "alive",
+      "magic": "Sun / Ash / Celestial Ascendancy",
       "bio": "Stoic, unhinged god of Sun and Ash. Contender for the Celestial Throne. Blinded himself in grief after son Geyrun's murder. Carl's patron god — Martyr (Floor 5), Devotee (Floor 8). Has extremely poor coping mechanisms. Carl is somehow fine with this.",
-      "magic": "Sun / Ash / Celestial Ascendancy"
+      "bioByBook": [
+        {
+          "book": 3,
+          "text": "Stoic, unhinged god of Sun and Ash. Contender for the Celestial Throne. Blinded himself in grief after son Geyrun's murder. Carl's patron god — Martyr (Floor 5), Devotee (Floor 8). Has extremely poor coping mechanisms. Carl is somehow fine with this."
+        }
+      ]
     },
     {
       "id": "nekhebit",
@@ -694,11 +953,17 @@
       "region": "outside",
       "book": 6,
       "lastBook": 8,
+      "status": "alive",
       "size": "side",
       "x": 560,
-      "status": "alive",
+      "magic": "Vulture goddess / Scavenger Mother",
       "bio": "Long-forgotten vulture goddess with arms instead of wings. Jealous. Terrible. Cursed the High Elves, creating the Fae Diaspora. Sponsored by Odette starting Floor 8. Odette physically enters the dungeon as Nekhebit on Floor 9. Not what Nekhebit expected from a sponsor relationship.",
-      "magic": "Vulture goddess / Scavenger Mother"
+      "bioByBook": [
+        {
+          "book": 6,
+          "text": "Long-forgotten vulture goddess with arms instead of wings. Jealous. Terrible. Cursed the High Elves, creating the Fae Diaspora. Sponsored by Odette starting Floor 8. Odette physically enters the dungeon as Nekhebit on Floor 9. Not what Nekhebit expected from a sponsor relationship."
+        }
+      ]
     },
     {
       "id": "eileithyia",
@@ -708,11 +973,17 @@
       "region": "outside",
       "book": 6,
       "lastBook": 8,
+      "status": "alive",
       "size": "side",
       "x": 720,
-      "status": "alive",
+      "magic": "Birth goddess / Messaging loopholes",
       "bio": "Goddess who coerces Carl through messaging loopholes into political arrangements. Tied to Katia's celestial orchid — three seals could grant Katia permanent boons or escape to Floor 12. Finds terms like 'consent' somewhat optional.",
-      "magic": "Birth goddess / Messaging loopholes"
+      "bioByBook": [
+        {
+          "book": 6,
+          "text": "Goddess who coerces Carl through messaging loopholes into political arrangements. Tied to Katia's celestial orchid — three seals could grant Katia permanent boons or escape to Floor 12. Finds terms like 'consent' somewhat optional."
+        }
+      ]
     }
   ],
   "relationships": [

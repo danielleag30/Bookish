@@ -111,12 +111,15 @@ describe('what the reader believes', () => {
 });
 
 describe('biographies', () => {
-  it('withholds them below the final book', () => {
-    for (const book of [1, 2, 3]) {
+  it('serves the reached segments and flags that there is more', () => {
+    // Was: withheld entirely below book four. Bios are segmented now, so a
+    // reader gets what they have reached — and Onyx Storm content stays out
+    // until book three, which is when Onyx Storm is.
+    for (const book of [1, 2]) {
       setReadingPosition(all, state, 'empyrean', book);
       const out = getCharacter(all, state, 'empyrean', 'brennan');
       expect(out, `book ${book}`).toMatch(/withheld/);
-      expect(out).not.toMatch(/Onyx Storm/);
+      expect(out, `book ${book}`).not.toMatch(/Onyx Storm/);
     }
   });
 

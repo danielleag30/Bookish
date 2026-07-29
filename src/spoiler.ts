@@ -71,7 +71,7 @@ export function gate(series: Series, position: number): GatedSeries {
   // temporal fold happens exactly once and cannot be forgotten downstream.
   const characters = series.characters
     .filter((c) => c.book <= pos)
-    .map((c) => resolveCharacter(c, pos));
+    .map((c) => applyPerceived(resolveCharacter(c, pos), pos));
   const visible = new Set(characters.map((c) => c.id));
 
   const relationships = series.relationships
@@ -124,6 +124,36 @@ export function resolveRelationship(r: Relationship, position: number): Relation
   let out: Relationship = { ...r };
   for (const ch of applicable) out = { ...out, ...ch.set };
   return out;
+}
+
+/**
+ * Fold a character's `perceived` state onto them, so what `gate()` returns is
+ * already what the reader believes.
+ *
+ * This used to live only in `present()`, which meant a consumer that read
+ * `gate().characters` directly got the truth. The chart renderer did exactly
+ * that — src/engine/view.ts iterates the gated characters and draws them — so
+ * Aaric was drawn as "Aaric / Cam Tauri", role "Hidden Prince", in book two,
+ * two books before the reveal. The ask box and the MCP server were safe only
+ * because they happened to call `present()`.
+ *
+ * The module's one rule is that every read goes through `gate()`. Resolution
+ * belongs there too, or the rule only protects whoever remembers to opt in.
+ *
+ * `perceived` is deliberately left on the record so `present()` can still say
+ * whether what it is showing is a belief; re-applying it is a no-op.
+ */
+export function applyPerceived(c: Character, position: number): Character {
+  if (!c.perceived || position > c.perceived.untilBook) return c;
+  const p = c.perceived;
+  return {
+    ...c,
+    ...(p.identity !== undefined ? { label: p.identity } : {}),
+    ...(p.status !== undefined ? { status: p.status } : {}),
+    ...(p.role !== undefined ? { role: p.role } : {}),
+    ...(p.affil !== undefined ? { affil: p.affil } : {}),
+    ...(p.region !== undefined ? { region: p.region } : {}),
+  };
 }
 
 /**

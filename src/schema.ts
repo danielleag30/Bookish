@@ -169,11 +169,22 @@ export const CharacterSchema = z.object({
   region: z.string().min(1).describe('Region id — must exist in the series regions'),
   book: z.number().int().positive().describe('First book this character appears in'),
   lastBook: z.number().int().positive().describe('Last book this character appears in'),
-  status: StatusSchema.describe('Normalised status as of the end of the series'),
+  status: StatusSchema.describe(
+    'Their status WHEN FIRST SEEN, not at the end of the series. A character ' +
+      'who dies in book five is `alive` here, with a `changes` entry moving them ' +
+      'to `dead` at book five — otherwise the chart reports the death from book ' +
+      'one and spoils it. This description previously said "as of the end of the ' +
+      'series", and since it is handed to the extraction model as a field ' +
+      'description, it was instructing every run to produce exactly that leak.',
+  ),
   statusDetail: z
     .string()
     .optional()
-    .describe('Original, more specific wording where it differs, e.g. "sacrificed", "executed"'),
+    .describe(
+      'More specific wording for the status where it differs, e.g. "sacrificed", ' +
+        '"executed". Same rule as `status`: this describes them when first seen, ' +
+        'and a later change belongs in `changes`.',
+    ),
   size: z.string().describe('Relative node size, e.g. "main" or "side"'),
   x: z.number().describe('Horizontal position in chart units'),
   y: z
@@ -527,11 +538,17 @@ export function checkIntegrity(series: Series): Issue[] {
       }
     }
 
-    // Segmented bios must stay inside the character's own window.
+    // Segmented bios must not start before the character does. The upper bound
+    // is the series, not `lastBook`: `gate()` filters on `book <= position`
+    // only, so a character stays on the chart after the book they die in — and
+    // a sentence that is only safe once a later character exists still has to
+    // land somewhere reachable. Liam dies in book one and his bio names someone
+    // from book two; that segment is correct at book two.
+    const seriesFinal = Math.max(...series.books.map((b) => b.id));
     for (const seg of c.bioByBook ?? []) {
-      if (seg.book < c.book || seg.book > c.lastBook) {
+      if (seg.book < c.book || seg.book > seriesFinal) {
         err('bio-segment-out-of-window', at,
-          `bioByBook segment for book ${seg.book} is outside this character's ${c.book}-${c.lastBook}`);
+          `bioByBook segment for book ${seg.book} is outside book ${c.book}-${seriesFinal}`);
       }
     }
     // A character marked dead who is still listed through the final book is
@@ -660,9 +677,19 @@ export function checkIntegrity(series: Series): Issue[] {
     }
 
     // `killed` means the victim died. "Struck down" is `enemy`.
+    //
+    // Read the victim's status at the END of the series, not the base record.
+    // `status` is what they are when first seen — a character who dies in book
+    // five is `alive` on the base record with a `changes` entry moving them, and
+    // reading the field directly called every one of those a false `killed`.
     if (r.type === 'killed') {
       const victim = charById.get(r.to);
-      if (victim && victim.status === 'alive') {
+      const finalStatus = victim
+        ? [...(victim.changes ?? [])]
+            .sort((a, b) => a.book - b.book)
+            .reduce<string>((acc, ch) => ch.set.status ?? acc, victim.status)
+        : undefined;
+      if (victim && finalStatus === 'alive') {
         warn(
           'killed-victim-alive',
           at,

