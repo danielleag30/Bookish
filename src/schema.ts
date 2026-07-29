@@ -775,14 +775,18 @@ export function checkIntegrity(series: Series): Issue[] {
           `involves "${id}" whose first book is ${c.book}`,
         );
       }
-      // The mirror case: the chart hides this character by this book, yet the
-      // book's own event log talks about them. One of the two is wrong.
+      // An event in a book after this character's last appearance. The chart
+      // does NOT hide them — it is cumulative on purpose, see gate() — so this
+      // is not a visibility bug. It is a data smell: either `lastBook` is too
+      // early, or the event is linking someone who is only being referred to in
+      // retrospect rather than taking part.
       if (e.book > c.lastBook) {
         warn(
           'event-after-character-leaves',
           at,
-          `involves "${id}" whose lastBook is ${c.lastBook}, so the chart hides ` +
-            `them in book ${e.book} while this event still references them`,
+          `involves "${id}" whose last appearance is book ${c.lastBook}. Either ` +
+            `lastBook is too early, or this event only mentions them in passing ` +
+            `and should not link them`,
         );
       }
     }

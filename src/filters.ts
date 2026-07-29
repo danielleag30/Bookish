@@ -55,6 +55,17 @@ export interface FilterDimension {
   appliesTo?: string;
   /** True when this dimension is bounded by the reading position. */
   spoilerGated: boolean;
+  /**
+   * Whether the chart engine actually renders a control for this.
+   *
+   * This taxonomy was designed as the full hierarchy the data could support,
+   * and read as a description of the UI — so it claimed nine controls that do
+   * not exist. A design document that describes itself as shipped is how a gap
+   * survives. `built: false` says "designed, not yet wired", and a test in
+   * tests/filters.test.ts fails if the flag and the engine disagree in either
+   * direction, so this cannot rot in either direction.
+   */
+  built: boolean;
 }
 
 export const FILTER_DIMENSIONS: FilterDimension[] = [
@@ -69,6 +80,7 @@ export const FILTER_DIMENSIONS: FilterDimension[] = [
     effect:
       'Sets how far the reader has read. Gates every other dimension: nothing ' +
       'first appearing after this book may be shown, by any route.',
+    built: true,
     spoilerGated: false, // it *is* the gate
   },
 
@@ -81,6 +93,7 @@ export const FILTER_DIMENSIONS: FilterDimension[] = [
     selectMode: 'multi',
     source: 'series.bands[].id',
     effect: 'Shows or hides a horizontal region of the chart and everyone in it.',
+    built: false,
     spoilerGated: true,
   },
   {
@@ -91,6 +104,7 @@ export const FILTER_DIMENSIONS: FilterDimension[] = [
     selectMode: 'multi',
     source: 'series.affiliations keys',
     effect: 'Filters by allegiance — riders, scribes, venin, gods, Royal Court.',
+    built: true,
     spoilerGated: true,
   },
   {
@@ -102,6 +116,7 @@ export const FILTER_DIMENSIONS: FilterDimension[] = [
     source: 'series.characterTypes keys',
     effect: 'Filters by species or kind, which also controls node shape.',
     appliesTo: 'series that define characterTypes (Empyrean; DCC has none)',
+    built: true,
     spoilerGated: true,
   },
   {
@@ -112,6 +127,7 @@ export const FILTER_DIMENSIONS: FilterDimension[] = [
     selectMode: 'multi',
     source: 'character.status enum',
     effect: 'Filters by alive / dead / missing / prisoner / unknown.',
+    built: false,
     spoilerGated: true,
   },
   {
@@ -122,6 +138,7 @@ export const FILTER_DIMENSIONS: FilterDimension[] = [
     selectMode: 'multi',
     source: 'character.size',
     effect: 'Shows only main characters, or includes side characters too.',
+    built: false,
     spoilerGated: true,
   },
 
@@ -138,6 +155,7 @@ export const FILTER_DIMENSIONS: FilterDimension[] = [
     // clears the global-facet threshold, but conditionality is semantic and a
     // coverage number cannot detect it: only dragons can have a den at all.
     appliesTo: 'characters of type dragon or irid',
+    built: false,
     spoilerGated: true,
   },
   {
@@ -149,6 +167,7 @@ export const FILTER_DIMENSIONS: FilterDimension[] = [
     source: 'character.attrs.f9',
     effect: 'Filters by Floor 9 war allegiance — Princess Posse or Team Retribution.',
     appliesTo: 'DCC characters who fought on Floor 9 (19 of 33)',
+    built: false,
     spoilerGated: true,
   },
 
@@ -163,6 +182,7 @@ export const FILTER_DIMENSIONS: FilterDimension[] = [
     effect:
       'Shows or hides edges by type. An edge is drawn only when its type is on ' +
       'AND both endpoints are visible.',
+    built: true,
     spoilerGated: true,
   },
 
@@ -175,6 +195,7 @@ export const FILTER_DIMENSIONS: FilterDimension[] = [
     selectMode: 'multi',
     source: 'event.kind enum',
     effect: 'Filters the event log by death / battle / betrayal / reveal / bond / other.',
+    built: false,
     spoilerGated: true,
   },
 
@@ -188,6 +209,7 @@ export const FILTER_DIMENSIONS: FilterDimension[] = [
     selectMode: 'multi',
     source: 'ui',
     effect: 'Draws the banded background behind the graph.',
+    built: true,
     spoilerGated: false,
   },
   {
@@ -198,6 +220,7 @@ export const FILTER_DIMENSIONS: FilterDimension[] = [
     selectMode: 'multi',
     source: 'ui',
     effect: 'Shows names beside nodes.',
+    built: true,
     spoilerGated: false,
   },
   {
@@ -208,6 +231,7 @@ export const FILTER_DIMENSIONS: FilterDimension[] = [
     selectMode: 'multi',
     source: 'ui',
     effect: 'Shows the gloss on each edge, e.g. "mother", "executed him".',
+    built: true,
     spoilerGated: false,
   },
   {
@@ -218,6 +242,7 @@ export const FILTER_DIMENSIONS: FilterDimension[] = [
     selectMode: 'multi',
     source: 'series.glyphs',
     effect: 'Shows the small power badge next to characters that have one.',
+    built: false,
     spoilerGated: false,
   },
   {
@@ -228,6 +253,7 @@ export const FILTER_DIMENSIONS: FilterDimension[] = [
     selectMode: 'multi',
     source: 'ui',
     effect: 'Rings characters whose first book equals the reading position.',
+    built: false,
     spoilerGated: false,
   },
   {
@@ -238,6 +264,7 @@ export const FILTER_DIMENSIONS: FilterDimension[] = [
     selectMode: 'multi',
     source: 'ui',
     effect: 'Shows, collapses, or hides the draggable legend.',
+    built: false,
     spoilerGated: false,
   },
 ];

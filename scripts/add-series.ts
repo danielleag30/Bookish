@@ -24,6 +24,7 @@
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 import { applyCorrections, type Corrections } from '../pipeline/corrections.ts';
+import { mentions } from '../src/regex.ts';
 import { SeriesSchema, checkIntegrity, type Series } from '../src/schema.ts';
 import { RELATIONSHIP_TYPES } from '../src/relationships.ts';
 import { extractSeries } from '../pipeline/extract.ts';
@@ -106,6 +107,37 @@ const result = has('single')
   : await orchestrate(shell, chunks, { model, onProgress: (m) => process.stdout.write(`  ${m}\r`) });
 const graph = result.graph;
 
+// ── Did every book actually make it? ───────────────────────────────────────
+// A failed chunk pushes no graph, so its book's characters are simply absent —
+// and the file still validates, because missing data is valid data. That is the
+// worst failure mode available: a silent, plausible, incomplete chart.
+const failures: string[] = [];
+if ('chunks' in result) {
+  for (const [i, t] of result.chunks.entries()) {
+    if (t.error) failures.push(`book ${books[i]?.id ?? i + 1} (${books[i]?.title ?? '?'}): ${t.error}`);
+  }
+}
+if ('audit' in result) {
+  for (const a of result.audit.agents) {
+    if (a.status === 'failed') {
+      const where = a.chunk === null ? 'the resolver' : `book ${books[a.chunk]?.id ?? a.chunk + 1}`;
+      failures.push(`${a.role} on ${where}: agent failed after ${a.attempts} attempt(s)`);
+    }
+  }
+}
+if (failures.length) {
+  console.error(`\n${failures.length} extraction failure(s) — this draft would be missing whole books:\n`);
+  for (const f of failures) console.error(`  ${f}`);
+  if (!has('allow-partial')) {
+    console.error(
+      `\nRefusing to write a partial chart. Re-run when the model is responsive, ` +
+      `or pass --allow-partial if you genuinely want what did come back.`,
+    );
+    process.exit(1);
+  }
+  console.warn('\n--allow-partial given; writing an incomplete draft anyway.\n');
+}
+
 // Write the audit for a multi-agent run. Without this there is no record of what
 // the verifier rejected, and reaching for "the most recent run file" picks up a
 // different series' audit — which is worse than having none.
@@ -129,6 +161,38 @@ if (!has('single') || true) {
   }
 }
 const lastBook = Math.max(...books.map((b) => b.id));
+
+/**
+ * Where a character leaves the chart. Someone who dies is last seen in the book
+ * they die in; everyone else runs to the end of what is published.
+ */
+function endsAt(c: { id: string; status: string }): number {
+  return c.status === 'alive' || c.status === 'unknown'
+    ? lastBook
+    : (diesIn.get(c.id) ?? lastBook);
+}
+
+/**
+ * Split an end-state status into a first-seen status plus a dated change.
+ *
+ * Returns the base record's `status` and, when the character is on the chart
+ * before the state changes, the `changes` entry that moves them.
+ */
+function temporalStatus(c: { id: string; label: string; status: Series['characters'][number]['status'] }) {
+  const ends = endsAt(c);
+  const starts = firstSeen.get(c.id) ?? 1;
+  if (c.status === 'alive' || c.status === 'unknown' || starts >= ends) {
+    return { status: c.status };
+  }
+  return {
+    status: 'alive' as const,
+    changes: [{
+      book: ends,
+      set: { status: c.status },
+      why: `${c.label} is ${c.status} as of book ${ends}; before that the chart must show them as they were.`,
+    }],
+  };
+}
 
 // ── Regions and factions, from the extraction ──────────────────────────────
 // These used to be a single "main" region and a single "Unsorted" affiliation,
@@ -182,16 +246,16 @@ for (const [i, f] of factions.entries()) {
 function inferPlace(label: string): string | undefined {
   const first = label.split(/\s+/)[0];
   if (!first || first.length < 3) return undefined;
-  const mentions = notes
+  const lines = notes
     .split('\n')
-    .filter((line) => new RegExp(`(?<!\\w)${first}(?!\\w)`, 'i').test(line));
-  if (mentions.length === 0) return undefined;
+    .filter((line) => mentions(line, first));
+  if (lines.length === 0) return undefined;
 
   const hits = new Set<string>();
   for (const place of places) {
     const name = place.label.split(/\s+/)[0];
     if (!name) continue;
-    if (mentions.some((line) => new RegExp(`(?<!\\w)${name}(?!\\w)`, 'i').test(line))) {
+    if (lines.some((line) => mentions(line, name))) {
       hits.add(place.id);
     }
   }
@@ -254,12 +318,16 @@ function position(regionId: string): { x: number; y: number } {
 
 // A character who dies is last seen in the book they die in. Blanket-assigning
 // the final book kept Malcolm on the chart in book two, a book he is not in.
+// The LAST book that mentions them, not the first. `status` is the end state,
+// so a character alive in book one and dead in book three is `dead` here — and
+// taking the first mention put the death in book one, which is both wrong and
+// a spoiler.
 const diesIn = new Map<string, number>();
 for (const [i, chunk] of chunks.entries()) {
   for (const c of graph.characters) {
-    if (c.status !== 'dead' || diesIn.has(c.id)) continue;
+    if (c.status === 'alive' || c.status === 'unknown') continue;
     const first = c.label.split(/\s+/)[0];
-    if (first && new RegExp(`(?<!\\w)${first}(?!\\w)`, 'i').test(chunk)) {
+    if (first && mentions(chunk, first)) {
       diesIn.set(c.id, books[i]?.id ?? 1);
     }
   }
@@ -278,8 +346,14 @@ const draft: Series = {
     affil: c.faction && affiliations[c.faction] ? c.faction : 'unsorted',
     region: placeOf.get(c.id) ?? 'main',
     book: firstSeen.get(c.id) ?? 1,
-    lastBook: c.status === 'dead' ? (diesIn.get(c.id) ?? lastBook) : lastBook,
-    status: c.status, size: i < 4 ? 'main' : 'side',
+    lastBook: endsAt(c),
+    // `status` is their state WHEN FIRST SEEN. A death that happens later is a
+    // `changes` entry at the book it happens in, or the chart reports it from
+    // their first appearance — the exact leak the adversarial spoiler test
+    // exists to catch. Doing this here means new series arrive correct rather
+    // than needing the backfill the three migrated ones needed.
+    ...temporalStatus(c),
+    size: i < 4 ? 'main' : 'side',
     ...position(placeOf.get(c.id) ?? 'main'),
   })),
   // A symmetric type says the same thing in both directions, so storing both is
@@ -312,7 +386,7 @@ const draft: Series = {
       // not a participant, and linking him points the event at someone the
       // timeline has already removed.
       involves: graph.characters
-        .filter((c) => new RegExp(`(?<!\\w)${c.label.split(/\s+/)[0]}(?!\\w)`, 'i').test(m[1]!))
+        .filter((c) => mentions(m[1]!, c.label.split(/\s+/)[0] ?? ''))
         .filter((c) => {
           const bookId = books[i]?.id ?? 1;
           const last = c.status === 'dead' ? (diesIn.get(c.id) ?? lastBook) : lastBook;

@@ -14,6 +14,7 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 import { SeriesSchema, type Series, type Character } from '../src/schema.ts';
+import { mentions } from '../src/regex.ts';
 
 const dataDir = resolve(import.meta.dirname, '..', 'data');
 
@@ -60,15 +61,15 @@ function auditSeries(series: Series) {
 
   for (const c of series.characters) {
     if (!c.bio) continue;
-    const mentions = needles
+    const named = needles
       .filter((n) => n.id !== c.id)
-      .filter((n) => new RegExp(`(?<!\\w)${n.needle}(?!\\w)`).test(c.bio!))
+      .filter((n) => mentions(c.bio!, n.needle))
       .map((n) => byId.get(n.id)!)
       // A leak only matters if the mentioned character appears later than the
       // one whose bio it is: reading that bio then reveals someone unmet.
       .filter((m) => m.book > c.book);
 
-    const unique = [...new Map(mentions.map((m) => [m.id, m])).values()];
+    const unique = [...new Map(named.map((m) => [m.id, m])).values()];
     if (unique.length > 0) {
       leaks.push({
         character: c,

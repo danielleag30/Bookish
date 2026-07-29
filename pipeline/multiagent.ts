@@ -29,7 +29,8 @@ import type { Series } from '../src/schema.ts';
 import { RELATIONSHIP_BY_ID } from '../src/relationships.ts';
 import { call, DEFAULT_MODEL, OllamaError } from './ollama.ts';
 import {
-  checkGraph, checkPlan, normaliseIds, collapseAliases, dropNonPeople, dropPlaceholderRoles, graphSchema,
+  checkGraph, checkPlan,
+  prunePlan, normaliseIds, collapseAliases, dropNonPeople, dropPlaceholderRoles, graphSchema,
   type ExtractedGraph, type ExtractedCharacter, type Plan,
 } from './extract.ts';
 
@@ -74,7 +75,7 @@ export interface Conflict {
 
 export interface Recovery {
   chunk: number;
-  action: 'retried' | 'salvaged' | 'escalated';
+  action: 'retried' | 'salvaged' | 'escalated' | 'pruned';
   why: string;
 }
 
@@ -187,6 +188,16 @@ async function runExtractor(
     audit.totals.calls++;
 
     const planProblems = checkPlan(planned.value, chunk);
+    // Act on the finding rather than only recording it.
+    const { plan: cleanPlan, dropped } = prunePlan(planned.value, chunk);
+    if (dropped.length) {
+      audit.recoveries.push({
+        chunk: index,
+        action: 'pruned',
+        why: `plan named ${dropped.length} character(s) absent from the passage: ${dropped.join(', ')}`,
+      });
+    }
+    planned.value = cleanPlan;
     if (planned.value.characters.length === 0) {
       rec.status = 'failed';
       rec.note = 'plan named nobody';
