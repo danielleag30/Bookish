@@ -537,3 +537,51 @@ describe('a concealed identity leaks nothing around the edges', () => {
     });
   }
 });
+
+/**
+ * A concealed name must not appear in someone else's data either.
+ *
+ * Rip is concealed as "Rip" until the end of Glint, but Ryatt's own role read
+ * "Slade's brother · Commander" from his first appearance — naming the brother
+ * names the man, and no test looked outside the concealed character's own
+ * record. Found by an ad-hoc scan, which is exactly why it is a test now.
+ */
+describe('a concealed name appears nowhere before the reveal', () => {
+  for (const file of readdirSync(dataDir).filter((f) => f.endsWith('.json'))) {
+    const series = load(file);
+
+    it(`${file}: no visible role or edge label names a concealed identity`, () => {
+      const offenders: string[] = [];
+
+      for (const c of series.characters) {
+        const hidden = c.perceived?.identity;
+        if (!hidden) continue;
+        const until = c.perceived!.untilBook;
+
+        // Words in the true name that the cover story does not contain.
+        const secret = new Set(c.label.split(/[\s·/,]+/).filter((t) => t.length >= 4));
+        for (const t of hidden.split(/[\s·/,]+/)) secret.delete(t);
+
+        for (const token of secret) {
+          const re = new RegExp(`(?<!\\w)${token}(?!\\w)`, 'i');
+
+          for (const pos of series.books.map((b) => b.id).filter((b) => b <= until)) {
+            const g = gate(series, pos);
+            for (const other of g.characters) {
+              if (other.id === c.id) continue;
+              if (re.test(other.role)) {
+                offenders.push(`${other.id} role "${other.role}" names "${token}" at book ${pos}`);
+              }
+            }
+            for (const r of g.relationships) {
+              if (r.label && re.test(r.label)) {
+                offenders.push(`${r.from}->${r.to} label "${r.label}" names "${token}" at book ${pos}`);
+              }
+            }
+          }
+        }
+      }
+      expect(offenders, [...new Set(offenders)].join('\n')).toEqual([]);
+    });
+  }
+});

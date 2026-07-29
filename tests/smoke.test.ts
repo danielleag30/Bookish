@@ -108,3 +108,45 @@ describe('what gets deployed', () => {
     expect(builder).toMatch(/endsWith\('-Chart'\)/);
   });
 });
+
+/**
+ * The architecture page has to describe the code that exists.
+ *
+ * Several structural changes shipped without it being touched — perceived-state
+ * resolution moving into `gate()`, the corrections file, the dist/ build step —
+ * so it described a pipeline the code no longer had. A confidently wrong
+ * architecture page is worse than no page.
+ *
+ * These are shallow checks by design: they cannot verify the prose is *right*,
+ * only that every load-bearing piece of the flow is named. If you add a stage
+ * and CI fails here, the page needs a paragraph, not a workaround.
+ */
+describe('how-it-works tracks the code', () => {
+  const page = readFileSync(join(root, 'how-it-works', 'index.html'), 'utf8');
+
+  it('has a mermaid diagram of the data flow', () => {
+    expect(page).toMatch(/class="mermaid"/);
+    expect(page).toMatch(/flowchart/);
+  });
+
+  it('names every stage the data actually passes through', () => {
+    for (const stage of [
+      'extractor',       // pipeline/multiagent.ts
+      'verifier',
+      'resolver',
+      'corrections',     // pipeline/input/*.corrections.json
+      'theme agent',     // scripts/propose-theme.ts
+      'checkIntegrity',  // src/schema.ts
+      'gate(',           // src/spoiler.ts — the one rule
+      'build-site',      // scripts/build-site.ts
+    ]) {
+      expect(page, `the flow diagram does not mention ${stage}`).toContain(stage);
+    }
+  });
+
+  it('names each surface that reads through the gate', () => {
+    for (const surface of ['chart renderer', 'ask box', 'MCP server', 'eval runner']) {
+      expect(page, `${surface} reads through gate() but is not on the page`).toContain(surface);
+    }
+  });
+});

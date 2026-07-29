@@ -287,6 +287,16 @@
       "y": 205,
       "magic": "gold",
       "bio": "Born 'Barden East', a flesh trader. Has no real power — uses Auren's gold touch as his own. Manipulates Auren for a decade before she kills him by melting the castle around him in Book 3.",
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "Born 'Barden East', a flesh trader. Manipulates Auren for a decade before she kills him by melting the castle around him in Book 3."
+        },
+        {
+          "book": 5,
+          "text": "Has no real power — uses Auren's gold touch as his own."
+        }
+      ],
       "attrs": {
         "king": "midas"
       },
@@ -298,16 +308,6 @@
             "statusDetail": "killed"
           },
           "why": "King Midas dies (killed) in book 3; before that the chart must show them as they were."
-        }
-      ],
-      "bioByBook": [
-        {
-          "book": 1,
-          "text": "Born 'Barden East', a flesh trader. Manipulates Auren for a decade before she kills him by melting the castle around him in Book 3."
-        },
-        {
-          "book": 5,
-          "text": "Has no real power — uses Auren's gold touch as his own."
         }
       ]
     },
@@ -325,6 +325,12 @@
       "y": 205,
       "magic": "ice",
       "bio": "Midas's wife. Cold and arrogant initially. Gradually becomes the series' most surprising redemption arc — eventually sacrificing herself to protect her kingdom from the Fae invasion.",
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "Midas's wife. Cold and arrogant initially. Gradually becomes the series' most surprising redemption arc — eventually sacrificing herself to protect her kingdom from the Fae invasion."
+        }
+      ],
       "attrs": {
         "king": "malina"
       },
@@ -336,12 +342,6 @@
             "statusDetail": "sacrifices"
           },
           "why": "Queen Malina dies (sacrifices) in book 6; before that the chart must show them as they were."
-        }
-      ],
-      "bioByBook": [
-        {
-          "book": 1,
-          "text": "Midas's wife. Cold and arrogant initially. Gradually becomes the series' most surprising redemption arc — eventually sacrificing herself to protect her kingdom from the Fae invasion."
         }
       ]
     },
@@ -455,16 +455,6 @@
       "y": 380,
       "magic": "none",
       "bio": "One of Midas's saddles who becomes pregnant with his child. Killed by Kaila in Book 3.",
-      "changes": [
-        {
-          "book": 3,
-          "set": {
-            "status": "dead",
-            "statusDetail": "killed"
-          },
-          "why": "Mist dies (killed) in book 3; before that the chart must show them as they were."
-        }
-      ],
       "bioByBook": [
         {
           "book": 1,
@@ -473,6 +463,16 @@
         {
           "book": 3,
           "text": "Killed by Kaila in Book 3."
+        }
+      ],
+      "changes": [
+        {
+          "book": 3,
+          "set": {
+            "status": "dead",
+            "statusDetail": "killed"
+          },
+          "why": "Mist dies (killed) in book 3; before that the chart must show them as they were."
         }
       ]
     },
@@ -534,9 +534,6 @@
       "y": 68,
       "magic": "none",
       "bio": "King of the Fifth Kingdom. Killed by Digby after threatening Auren in Book 1.",
-      "attrs": {
-        "king": "fulke"
-      },
       "bioByBook": [
         {
           "book": 1,
@@ -546,7 +543,10 @@
           "book": 4,
           "text": "King of the Fifth Kingdom."
         }
-      ]
+      ],
+      "attrs": {
+        "king": "fulke"
+      }
     },
     {
       "id": "niven",
@@ -562,6 +562,16 @@
       "y": 68,
       "magic": "none",
       "bio": "Son of King Fulke. Killed by Kaila to justify crowning puppet king Hagan.",
+      "bioByBook": [
+        {
+          "book": 3,
+          "text": "Son of King Fulke."
+        },
+        {
+          "book": 4,
+          "text": "Killed by Kaila to justify crowning puppet king Hagan."
+        }
+      ],
       "attrs": {
         "king": "niven"
       },
@@ -573,16 +583,6 @@
             "statusDetail": "killed"
           },
           "why": "Prince Niven dies (killed) in book 4; before that the chart must show them as they were."
-        }
-      ],
-      "bioByBook": [
-        {
-          "book": 3,
-          "text": "Son of King Fulke."
-        },
-        {
-          "book": 4,
-          "text": "Killed by Kaila to justify crowning puppet king Hagan."
         }
       ]
     },
@@ -600,15 +600,15 @@
       "y": 95,
       "magic": "none",
       "bio": "Installed as puppet king of the Fifth Kingdom by Kaila after Niven's death.",
-      "attrs": {
-        "king": "hagan"
-      },
       "bioByBook": [
         {
           "book": 4,
           "text": "Installed as puppet king of the Fifth Kingdom by Kaila after Niven's death."
         }
-      ]
+      ],
+      "attrs": {
+        "king": "hagan"
+      }
     },
     {
       "id": "kaila",
@@ -624,9 +624,6 @@
       "y": 68,
       "magic": "word",
       "bio": "Queen of the Third Kingdom with the ability to 'pull' words and replay them. Frames Auren as a magic thief, turning all of Orea against her.",
-      "attrs": {
-        "king": "kaila"
-      },
       "bioByBook": [
         {
           "book": 3,
@@ -636,7 +633,10 @@
           "book": 4,
           "text": "Queen of the Third Kingdom with the ability to 'pull' words and replay them."
         }
-      ]
+      ],
+      "attrs": {
+        "king": "kaila"
+      }
     },
     {
       "id": "manu",
@@ -673,15 +673,15 @@
       "y": 68,
       "magic": "none",
       "bio": "King of the First Kingdom. A pragmatic ruler who eventually allies with Slade against the Fae threat.",
-      "attrs": {
-        "king": "thold"
-      },
       "bioByBook": [
         {
           "book": 5,
           "text": "King of the First Kingdom. A pragmatic ruler who eventually allies with Slade against the Fae threat."
         }
-      ]
+      ],
+      "attrs": {
+        "king": "thold"
+      }
     },
     {
       "id": "second_temple",
@@ -741,6 +741,12 @@
       "y": 153,
       "magic": "none",
       "bio": "Captain of the Red Raids. Kills Sail in Book 1. Abuses Rissa. Hunted down by Slade in Book 5.",
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "Captain of the Red Raids. Kills Sail in Book 1. Abuses Rissa. Hunted down by Slade in Book 5."
+        }
+      ],
       "changes": [
         {
           "book": 5,
@@ -749,12 +755,6 @@
             "statusDetail": "killed"
           },
           "why": "Capt. Fane dies (killed) in book 5; before that the chart must show them as they were."
-        }
-      ],
-      "bioByBook": [
-        {
-          "book": 1,
-          "text": "Captain of the Red Raids. Kills Sail in Book 1. Abuses Rissa. Hunted down by Slade in Book 5."
         }
       ]
     },
@@ -798,20 +798,26 @@
       "x": 800,
       "y": 220,
       "magic": "rot",
-      "bio": "King of the Fourth Kingdom, also known as Commander Rip. Has rot and shape-shifting powers. The first person who truly sees Auren. Confirmed fated mate (Päyur) to Auren in Book 5.",
-      "attrs": {
-        "king": "rip"
+      "perceived": {
+        "identity": "Rip",
+        "role": "Commander of the Fourth Kingdom army",
+        "untilBook": 2,
+        "note": "Revealed at the very end of Glint (book 2) to be King Slade Ravinger of the Fourth Kingdom, able to shift between Commander Rip and Ravinger."
       },
+      "bio": "King of the Fourth Kingdom, also known as Commander Rip. Has rot and shape-shifting powers. The first person who truly sees Auren. Confirmed fated mate (Päyur) to Auren in Book 5.",
       "bioByBook": [
         {
-          "book": 1,
+          "book": 3,
           "text": "Has rot and shape-shifting powers. The first person who truly sees Auren. Confirmed fated mate (Päyur) to Auren in Book 5."
         },
         {
           "book": 4,
           "text": "King of the Fourth Kingdom, also known as Commander Rip."
         }
-      ]
+      ],
+      "attrs": {
+        "king": "rip"
+      }
     },
     {
       "id": "ryatt",
@@ -826,10 +832,15 @@
       "x": 700,
       "y": 200,
       "magic": "none",
+      "perceived": {
+        "role": "Commander",
+        "untilBook": 2,
+        "note": "His role names Slade, whose identity is concealed until the end of Glint (book 2). Naming the brother names the man."
+      },
       "bio": "Slade's half-brother. Secretly played 'Fake Rip' as Commander. Kills King Carrick in the finale.",
       "bioByBook": [
         {
-          "book": 2,
+          "book": 3,
           "text": "Slade's half-brother. Secretly played 'Fake Rip' as Commander."
         },
         {
@@ -894,6 +905,12 @@
       "y": 415,
       "magic": "none",
       "bio": "Wrath commander known for humor. Killed in the final battle — one of the series' most devastating losses.",
+      "bioByBook": [
+        {
+          "book": 2,
+          "text": "Wrath commander known for humor. Killed in the final battle — one of the series' most devastating losses."
+        }
+      ],
       "changes": [
         {
           "book": 6,
@@ -902,12 +919,6 @@
             "statusDetail": "killed"
           },
           "why": "Judd dies (killed) in book 6; before that the chart must show them as they were."
-        }
-      ],
-      "bioByBook": [
-        {
-          "book": 2,
-          "text": "Wrath commander known for humor. Killed in the final battle — one of the series' most devastating losses."
         }
       ]
     },
@@ -975,16 +986,6 @@
       "y": 295,
       "magic": "divination",
       "bio": "Slade and Ryatt's mother. An Orean woman with divination powers. Stabbed by Lord Cull in Book 6.",
-      "changes": [
-        {
-          "book": 6,
-          "set": {
-            "status": "dead",
-            "statusDetail": "killed"
-          },
-          "why": "Elore Ravinger dies (killed) in book 6; before that the chart must show them as they were."
-        }
-      ],
       "bioByBook": [
         {
           "book": 4,
@@ -993,6 +994,16 @@
         {
           "book": 5,
           "text": "Stabbed by Lord Cull in Book 6."
+        }
+      ],
+      "changes": [
+        {
+          "book": 6,
+          "set": {
+            "status": "dead",
+            "statusDetail": "killed"
+          },
+          "why": "Elore Ravinger dies (killed) in book 6; before that the chart must show them as they were."
         }
       ]
     },
@@ -1010,6 +1021,12 @@
       "y": 605,
       "magic": "none",
       "bio": "The tyrannical Fae king of Annwyn. Has Auren's memories stolen to brainwash her. Killed by Ryatt in the finale.",
+      "bioByBook": [
+        {
+          "book": 5,
+          "text": "The tyrannical Fae king of Annwyn. Has Auren's memories stolen to brainwash her. Killed by Ryatt in the finale."
+        }
+      ],
       "attrs": {
         "king": "carrick"
       },
@@ -1021,12 +1038,6 @@
             "statusDetail": "killed"
           },
           "why": "King Carrick dies (killed) in book 6; before that the chart must show them as they were."
-        }
-      ],
-      "bioByBook": [
-        {
-          "book": 5,
-          "text": "The tyrannical Fae king of Annwyn. Has Auren's memories stolen to brainwash her. Killed by Ryatt in the finale."
         }
       ]
     },
@@ -1044,6 +1055,12 @@
       "y": 605,
       "magic": "breaking",
       "bio": "Slade's biological Fae father. Broke the bridge between worlds, destroying the Seventh Kingdom. Killed by Slade in the finale.",
+      "bioByBook": [
+        {
+          "book": 5,
+          "text": "Slade's biological Fae father. Broke the bridge between worlds, destroying the Seventh Kingdom. Killed by Slade in the finale."
+        }
+      ],
       "changes": [
         {
           "book": 6,
@@ -1052,12 +1069,6 @@
             "statusDetail": "killed"
           },
           "why": "Lord Cull dies (killed) in book 6; before that the chart must show them as they were."
-        }
-      ],
-      "bioByBook": [
-        {
-          "book": 5,
-          "text": "Slade's biological Fae father. Broke the bridge between worlds, destroying the Seventh Kingdom. Killed by Slade in the finale."
         }
       ]
     },
@@ -1243,6 +1254,12 @@
       "y": 605,
       "magic": "gold",
       "bio": "Auren's distant ancestor. The Turley line descends from Saira. Her family once ruled Annwyn before being displaced by the Carricks.",
+      "bioByBook": [
+        {
+          "book": 5,
+          "text": "Auren's distant ancestor. The Turley line descends from Saira. Her family once ruled Annwyn before being displaced by the Carricks."
+        }
+      ],
       "changes": [
         {
           "book": 6,
@@ -1251,12 +1268,6 @@
             "statusDetail": "killed"
           },
           "why": "Saira Turley dies (killed) in book 6; before that the chart must show them as they were."
-        }
-      ],
-      "bioByBook": [
-        {
-          "book": 5,
-          "text": "Auren's distant ancestor. The Turley line descends from Saira. Her family once ruled Annwyn before being displaced by the Carricks."
         }
       ]
     },
@@ -1444,7 +1455,7 @@
       "from": "rip",
       "to": "ryatt",
       "type": "family",
-      "book": 2,
+      "book": 3,
       "label": "sibling"
     },
     {
