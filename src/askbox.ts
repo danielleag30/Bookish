@@ -14,7 +14,7 @@
 // Type-only import: the data is validated by `npm run validate` in CI, so
 // re-running Zod in every visitor's browser would ship ~90 kB for nothing.
 import type { Series } from './schema.ts';
-import { ask, gate, mostConnected, findCharacters, type Answer } from './spoiler.ts';
+import { ask, gate, mostConnected, findCharacters, phrase, type Answer } from './spoiler.ts';
 
 export interface AskBoxHandle {
   /** Discard the current answer and collapse. */
@@ -33,24 +33,25 @@ export interface AskBoxOptions {
 const CSS = `
 .bk-ask{position:fixed;right:14px;bottom:14px;width:340px;max-height:min(70vh,620px);
   display:flex;flex-direction:column;z-index:9000;font-family:'DM Sans',system-ui,sans-serif;
-  background:rgba(16,12,28,.96);border:1px solid rgba(212,175,55,.35);border-radius:14px;
+  background:rgba(16,12,28,.96);border:1px solid color-mix(in srgb,var(--bkc-accent,#d4af37) 35%,transparent);border-radius:14px;
   box-shadow:0 18px 50px rgba(0,0,0,.55);color:#e8e6f0;overflow:hidden;
   backdrop-filter:blur(8px)}
 .bk-ask.bk-collapsed{max-height:44px}
 .bk-ask-hdr{display:flex;align-items:center;gap:8px;padding:11px 13px;cursor:pointer;
-  background:linear-gradient(135deg,rgba(212,175,55,.16),rgba(155,89,208,.14));
-  border-bottom:1px solid rgba(212,175,55,.22);flex:0 0 auto}
+  background:linear-gradient(135deg,color-mix(in srgb,var(--bkc-accent,#d4af37) 16%,transparent),
+    color-mix(in srgb,var(--bkc-accent2,#9b59d0) 14%,transparent));
+  border-bottom:1px solid color-mix(in srgb,var(--bkc-accent,#d4af37) 22%,transparent);flex:0 0 auto}
 .bk-ask-hdr h3{margin:0;font-size:.83rem;font-weight:600;letter-spacing:.02em;flex:1;
-  font-family:'Cinzel',serif;color:#f0d98a}
+  font-family:var(--bkc-display,'Cinzel',serif);color:var(--bkc-accent,#f0d98a)}
 .bk-ask-pos{font-size:.66rem;color:#a49bba;white-space:nowrap}
 .bk-ask-tog{font-size:.85rem;color:#a49bba;line-height:1}
 .bk-ask-body{padding:11px 13px 13px;overflow-y:auto;flex:1 1 auto}
 .bk-ask-form{display:flex;gap:6px}
 .bk-ask-form input{flex:1;min-width:0;background:rgba(0,0,0,.35);color:#e8e6f0;
-  border:1px solid rgba(212,175,55,.25);border-radius:8px;padding:7px 9px;font-size:.78rem;
+  border:1px solid color-mix(in srgb,var(--bkc-accent,#d4af37) 25%,transparent);border-radius:8px;padding:7px 9px;font-size:.78rem;
   font-family:inherit}
-.bk-ask-form input:focus{outline:none;border-color:rgba(212,175,55,.6)}
-.bk-ask-form button{background:rgba(212,175,55,.2);color:#f0d98a;border:1px solid rgba(212,175,55,.4);
+.bk-ask-form input:focus{outline:none;border-color:color-mix(in srgb,var(--bkc-accent,#d4af37) 60%,transparent)}
+.bk-ask-form button{background:color-mix(in srgb,var(--bkc-accent,#d4af37) 20%,transparent);color:var(--bkc-accent,#f0d98a);border:1px solid color-mix(in srgb,var(--bkc-accent,#d4af37) 40%,transparent);
   border-radius:8px;padding:7px 11px;font-size:.78rem;cursor:pointer;font-family:inherit}
 .bk-ask-form button:hover{background:rgba(212,175,55,.32)}
 .bk-ask-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}
@@ -59,33 +60,13 @@ const CSS = `
   font-family:inherit}
 .bk-ask-chips button:hover{background:rgba(155,89,208,.26)}
 .bk-ask-out{margin-top:12px;font-size:.76rem;line-height:1.55}
-.bk-ask-head{font-weight:600;color:#f0d98a;margin-bottom:6px}
+.bk-ask-head{font-weight:600;color:var(--bkc-accent,#f0d98a);margin-bottom:6px}
 .bk-ask-line{padding:2px 0;color:#d5d0e0;white-space:pre-wrap;word-break:break-word}
 .bk-ask-note{margin-top:9px;padding:6px 8px;font-size:.68rem;color:#a49bba;
   background:rgba(212,175,55,.07);border-left:2px solid rgba(212,175,55,.4);border-radius:4px}
 .bk-ask-belief{color:#f0b86a}
 .bk-ask-empty{color:#8b839c;font-style:italic}
 `;
-
-/** Turn a relationship type id into something that reads as a question. */
-function phrase(type: string): string {
-  switch (type) {
-    case 'bonded': return 'bonded to';
-    case 'family': return 'related to';
-    case 'romantic': return 'involved with';
-    case 'squad': return 'in a squad with';
-    case 'friend': return 'friends with';
-    case 'ally': return 'allied with';
-    case 'enemy': return 'enemies with';
-    case 'mentor': return 'mentoring';
-    case 'killed': return 'killed by';
-    case 'mated': return 'mated to';
-    case 'captor': return 'the captor of';  // "captive" collides with the status word
-    case 'commands': return 'commanding';
-    case 'betrayer': return 'betrayed by';
-    default: return `${type} with`;
-  }
-}
 
 function el<K extends keyof HTMLElementTagNameMap>(
   tag: K, cls?: string, text?: string,
@@ -157,7 +138,10 @@ export async function mountAskBox(opts: AskBoxOptions): Promise<AskBoxHandle | n
   const form = el('form', 'bk-ask-form');
   const input = el('input');
   input.type = 'text';
-  input.placeholder = 'e.g. who is Violet bonded to';
+  // Neutral until buildChips() derives one from this series. The old default
+  // named Violet, an Empyrean character, on every chart — a reader on the Fae
+  // & Alchemy page was being shown a name from a series they may not read.
+  input.placeholder = 'ask about a character';
   input.autocomplete = 'off';
   const go = el('button', undefined, 'Ask');
   go.type = 'submit';
@@ -239,6 +223,10 @@ export async function mountAskBox(opts: AskBoxOptions): Promise<AskBoxHandle | n
       qs.push(`what happened to ${firstName}`);
     }
     qs.push(...GENERIC_SUGGESTIONS);
+
+    // Same derivation as the chips, so the placeholder can never name a
+    // character from another series — or one this reader has not met yet.
+    if (qs[0]) input.placeholder = `e.g. ${qs[0]}`;
 
     for (const q of qs.slice(0, 4)) {
       const b = el('button', undefined, q);

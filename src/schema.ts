@@ -144,7 +144,15 @@ export function changeSchema<T extends z.ZodRawShape>(settable: T) {
 }
 
 export const CharacterSchema = z.object({
-  id: z.string().min(1).describe('Stable lowercase slug, e.g. "violet" — never a display name'),
+  id: z
+    .string()
+    .min(1)
+    .regex(
+      /^[a-z0-9][a-z0-9_-]*$/,
+      'must be a lowercase slug: letters, digits, underscore and hyphen only. ' +
+        'Ids are keys — a space in one breaks every relationship that points at it.',
+    )
+    .describe('Stable lowercase slug, e.g. "violet" — never a display name'),
   label: z.string().min(1).describe("The character's name as readers know it, e.g. \"Violet Sorrengail\""),
   aliases: z
     .array(z.string().min(1))
@@ -320,6 +328,14 @@ export const EventSchema = z.object({
  */
 export const ThemeSchema = z.object({
   accent: z.string().optional().describe('Headings, active states, glyphs'),
+  accent2: z
+    .string()
+    .optional()
+    .describe(
+      'Counterpoint accent, for series built on an opposition — Fae & Alchemy ' +
+        'is quicksilver against brimstone, ice against fire, and one hue ' +
+        'cannot carry that. Optional: most series do not need it.',
+    ),
   ground: z.string().optional().describe('Page background'),
   panel: z.string().optional().describe('Sidebar and panel background'),
   line: z.string().optional().describe('Borders and rules'),
@@ -349,6 +365,15 @@ export const SeriesSchema = z.object({
   events: z.array(EventSchema),
 
   theme: ThemeSchema.optional(),
+
+  // Set by `npm run add-series`, cleared by a human. A draft has real
+  // characters and relationships but only the scaffolded single region and
+  // single "Unsorted" affiliation, because extraction deliberately does not
+  // invent geography or factions (see pipeline/extract.ts). Tests that demand
+  // rich dimensions apply to curated series only — holding a fresh draft to
+  // that bar would just pressure the next person to invent canon to make CI
+  // green, which is the opposite of what this repo is for.
+  draft: z.boolean().optional(),
 
   // Optional, series-specific presentation data.
   characterTypes: z.record(z.string(), CharacterTypeSchema).optional(),

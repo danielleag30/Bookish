@@ -29,7 +29,8 @@ import type { Series } from '../src/schema.ts';
 import { RELATIONSHIP_BY_ID } from '../src/relationships.ts';
 import { call, DEFAULT_MODEL, OllamaError } from './ollama.ts';
 import {
-  checkGraph, checkPlan, type ExtractedGraph, type ExtractedCharacter, type Plan,
+  checkGraph, checkPlan, normaliseIds, collapseAliases, dropNonPeople, graphSchema,
+  type ExtractedGraph, type ExtractedCharacter, type Plan,
 } from './extract.ts';
 
 const RUNS_DIR = resolve(import.meta.dirname, 'runs');
@@ -113,41 +114,6 @@ const PLAN_SCHEMA = {
   },
   required: ['characters', 'summary'],
 };
-
-function graphSchema(relTypeIds: string[]): unknown {
-  return {
-    type: 'object',
-    properties: {
-      characters: {
-        type: 'array',
-        items: {
-          type: 'object',
-          properties: {
-            id: { type: 'string', description: 'lowercase slug of the given name' },
-            label: { type: 'string', description: 'the name as written' },
-            role: { type: 'string' },
-            status: { type: 'string', enum: ['alive', 'dead', 'missing', 'prisoner', 'unknown'] },
-          },
-          required: ['id', 'label', 'role', 'status'],
-        },
-      },
-      relationships: {
-        type: 'array',
-        items: {
-          type: 'object',
-          properties: {
-            from: { type: 'string' },
-            to: { type: 'string' },
-            type: { type: 'string', enum: relTypeIds },
-            label: { type: 'string' },
-          },
-          required: ['from', 'to', 'type', 'label'],
-        },
-      },
-    },
-    required: ['characters', 'relationships'],
-  };
-}
 
 const VERDICT_SCHEMA = {
   type: 'object',
@@ -246,6 +212,15 @@ Rules: ids are lowercase slugs. Every id used in a relationship must appear in
 characters. Only state what the passage supports. \`killed\` means the character
 died; if they survived use \`enemy\`.
 
+Also separate out places and factions. A realm, city or location goes in
+\`places\`. A group, court, army or allegiance goes in \`factions\`. Neither
+belongs in \`characters\` — only people go there. An id is always a slug of the
+name itself ("zilvaren", "lupo_proelia"), never a counter like "place1".
+
+For each person, set \`place\` and \`faction\` to the id of the place or faction
+the passage puts them in. These take an id from the lists above or the empty
+string — never a description, never "N/A". If the passage does not say, use "".
+
 PASSAGE:
 ${chunk}`;
 
@@ -269,6 +244,11 @@ ${chunk}`;
           relationships: got.value.relationships.filter(
             (r) => ids.has(r.from) && ids.has(r.to) && relTypeSet.has(r.type) && r.from !== r.to,
           ),
+          // Carry these through. Rebuilding the object without them meant a
+          // chunk that needed salvaging silently lost every place and faction
+          // it had found — a partial result quietly becoming a wrong one.
+          ...(got.value.places ? { places: got.value.places } : {}),
+          ...(got.value.factions ? { factions: got.value.factions } : {}),
         };
         rec.status = 'partial';
         rec.note = `salvaged after ${issues.length} structural issue(s)`;
@@ -346,7 +326,11 @@ async function runVerifier(
       from: id, to: 'resolver', chunk: index,
       carried: `${kept.length} verified edge(s), ${graph.characters.length} character(s)`,
     });
-    return { kept: { characters: graph.characters, relationships: kept }, rejected };
+    // Spread the incoming graph rather than naming two fields. Listing fields
+    // here meant every field added later — places, factions — was silently
+    // dropped by the verifier, which only judges relationships and has no
+    // business discarding anything else.
+    return { kept: { ...graph, relationships: kept }, rejected };
   } catch (err) {
     // A failed verifier must not delete the extractor's work.
     rec.status = 'failed';
@@ -441,10 +425,23 @@ export function runResolver(
              `settled, ${duplicates} duplicate edge(s) collapsed`;
   audit.agents.push(rec);
 
-  return {
+  // Places and factions union by id — book two naming Yvelia again is the same
+  // realm, not a second one.
+  const places = new Map<string, NonNullable<ExtractedGraph['places']>[number]>();
+  const factions = new Map<string, NonNullable<ExtractedGraph['factions']>[number]>();
+  for (const { graph } of parts) {
+    for (const p of graph.places ?? []) if (!places.has(p.id)) places.set(p.id, p);
+    for (const f of graph.factions ?? []) if (!factions.has(f.id)) factions.set(f.id, f);
+  }
+
+  // Slugify first, then collapse — the alias rule compares slugs, so it has to
+  // run after ids are normalised or "Saeris Fane" and "saeris" never match.
+  return dropNonPeople(collapseAliases(normaliseIds({
     characters: [...chars.values()].map(({ from: _from, ...c }) => c),
     relationships: [...rels.values()],
-  };
+    places: [...places.values()],
+    factions: [...factions.values()],
+  })));
 }
 
 // ── Orchestration ──────────────────────────────────────────────────────────

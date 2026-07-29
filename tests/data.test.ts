@@ -18,8 +18,14 @@ const load = (name: string) =>
 describe('every data file', () => {
   const files = readdirSync(dataDir).filter((f) => f.endsWith('.json'));
 
-  it('has all three migrated series', () => {
-    expect(files.sort()).toEqual(['dcc.json', 'empyrean.json', 'plated-prisoner.json']);
+  // The three hand-migrated series must never silently vanish. New series are
+  // expected to appear alongside them, so this is a subset check, not equality
+  // — an exact list would fail every time an agent drafts a series, which is
+  // the pipeline working, not breaking.
+  it('still has all three migrated series', () => {
+    expect(files.sort()).toEqual(
+      expect.arrayContaining(['dcc.json', 'empyrean.json', 'plated-prisoner.json']),
+    );
   });
 
   for (const file of files) {
@@ -321,4 +327,46 @@ describe('theme contrast', () => {
     const errs = checkIntegrity(bad).filter((i) => i.severity === 'error');
     expect(errs.some((e) => e.rule === 'theme-colour-unparseable')).toBe(true);
   });
+});
+
+/**
+ * Twice now a character name has been hardcoded into shared UI and shown on
+ * every chart — first a `bonded` suggestion chip that returned nothing on DCC,
+ * then a placeholder naming Violet on all four pages. Both are spoiler leaks in
+ * miniature: a name from a series the reader may not have opened. Shared source
+ * files must not name characters outside comments.
+ */
+describe('shared UI never hardcodes a character name', () => {
+  const shared = ['askbox.ts', 'spoiler.ts'];
+  const srcDir = resolve(import.meta.dirname, '..', 'src');
+
+  // Every character label from every series, first names included. Titles and
+  // common nouns are excluded — "King Midas" contributes "midas", not "king",
+  // or the check would fire on askbox.ts's own list of title words.
+  const notNames = new Set([
+    'king', 'queen', 'prince', 'princess', 'lord', 'lady', 'major', 'general',
+    'colonel', 'captain', 'commander', 'viscount', 'kingdom', 'system', 'seventh',
+  ]);
+  const names = new Set<string>();
+  for (const f of readdirSync(dataDir).filter((f) => f.endsWith('.json'))) {
+    for (const c of load(f).characters) {
+      for (const part of c.label.split(/[\s'’/()-]+/)) {
+        const w = part.toLowerCase();
+        if (w.length > 3 && !notNames.has(w)) names.add(w);
+      }
+    }
+  }
+
+  for (const file of shared) {
+    it(`${file} names no character in executable code`, () => {
+      const code = readFileSync(join(srcDir, file), 'utf8')
+        .replace(/\/\*[\s\S]*?\*\//g, '')  // block comments
+        .replace(/^\s*\/\/.*$/gm, '');     // line comments
+
+      const found = [...names].filter((n) =>
+        new RegExp(`\\b${n}\\b`, 'i').test(code),
+      );
+      expect(found, `${file} hardcodes: ${found.join(', ')}`).toEqual([]);
+    });
+  }
 });

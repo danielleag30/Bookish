@@ -1,0 +1,50 @@
+{
+  "_why": [
+    "Human decisions that must survive re-extraction. The same idea as the",
+    "CORRECTIONS block in scripts/extract-charts.mjs: a judgement made once, by",
+    "someone who read the books, should not have to be made again every time the",
+    "model is re-run. add-series applies this file after extraction.",
+    "",
+    "Anything here is a claim about canon, so each entry says why."
+  ],
+  "dropCharacters": [
+    {
+      "id": "lupo_proelia",
+      "why": "Lupo Proelia is the rebellion, not a person. dropNonPeople cannot catch it: the model listed the faction under the id `rebellion` and separately emitted `lupo_proelia` as a character, so neither the id nor the label matches anything in the factions list. A human knows they are the same group."
+    }
+  ],
+  "mergeCharacters": [
+    {
+      "from": "carrion_daianthus",
+      "into": "carrion_swift",
+      "alias": "Carrion Daianthus",
+      "role": "Smuggler and gambler out of Zilvaren; revealed as heir to the Yvelian throne",
+      "why": "One person, not two. The extractor emitted both names and joined them with a `family` edge labelled 'identity' — it spotted the reveal and had no field to put it in. The reveal happens inside book 1, so there is no reading position at which he is only a smuggler, which is why this is a merge and not a `perceived` entry."
+    }
+  ],
+  "retypeRelationships": [
+    {
+      "from": "rurik_daianthus",
+      "to": "amelia_daianthus",
+      "type": "mated",
+      "label": "Former king and queen of Yvelia",
+      "why": "Extracted as `family` labelled 'former_royal_pair'. They were married, and `family` is for kinship."
+    }
+  ],
+  "addRelationships": [
+    {
+      "from": "saeris_fane",
+      "to": "kingfisher",
+      "type": "ally",
+      "label": "Open hostility → reluctant alliance. Slow burn.",
+      "why": "The verifier rejected this, reasoning that the notes say they 'move to a reluctant alliance' without stating outright that they are allies. Overruled by a reader: moving to an alliance is arriving at one."
+    },
+    {
+      "from": "saeris_fane",
+      "to": "carrion_swift",
+      "type": "complicated",
+      "label": "A rogue from her past in Zilvaren, pulled through the portal with her.",
+      "why": "Carrion had no edges at all despite being a main character. A recall miss, not a judgement call."
+    }
+  ]
+}

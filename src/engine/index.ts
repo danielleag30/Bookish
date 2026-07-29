@@ -50,8 +50,20 @@ export async function boot(opts: BootOptions): Promise<ChartHandle | null> {
   // what makes a palette a reviewable data change rather than a CSS edit.
   if (series.theme) {
     const t = series.theme;
-    const set = (prop: string, v?: string) => { if (v) container.style.setProperty(prop, v); };
+    // Set on :root as well as the chart container. The chart is not the only
+    // themed surface — the page header and the ask box are chrome outside the
+    // container, and while the vars lived only on the container those two
+    // stayed gold no matter what the agent proposed, which made "the palette is
+    // a data change" only two-thirds true.
+    const set = (prop: string, v?: string) => {
+      if (!v) return;
+      container.style.setProperty(prop, v);
+      document.documentElement.style.setProperty(prop, v);
+    };
     set('--bkc-accent', t.accent);
+    // Falls back to the built-in purple when a series has no counterpoint, so
+    // the three original charts look exactly as they did.
+    set('--bkc-accent2', t.accent2);
     set('--bkc-panel', t.panel);
     set('--bkc-line', t.line);
     if (t.ground) document.body.style.background = t.ground;
