@@ -46,5 +46,255 @@
       "label": "A rogue from her past in Zilvaren, pulled through the portal with her.",
       "why": "Carrion had no edges at all despite being a main character. A recall miss, not a judgement call."
     }
+  ],
+  "addFactions": [
+    {
+      "id": "yvelian_court",
+      "label": "Yvelian Court",
+      "color": "#5b6f8f",
+      "border": "#8fa8c8",
+      "why": "Belikon rules Yvelia from the Winter Palace, per the notes, and Orious is his right hand. Listed as a faction in the Fantasy Fangirls guide used for the research."
+    },
+    {
+      "id": "cahlish",
+      "label": "Cahlish",
+      "color": "#4a7c6f",
+      "border": "#7fc0ae",
+      "why": "Cahlish is a fiefdom warded against Belikon — the notes make it a separate allegiance from his court, not a place within it."
+    },
+    {
+      "id": "zilvaren",
+      "label": "Zilvaren",
+      "color": "#a8642c",
+      "border": "#d4903f",
+      "why": "Madra rules Zilvaren as an immortal queen. The mortal city is its own power, not part of either Fae side."
+    }
+  ],
+  "addCharacterTypes": [
+    {
+      "id": "human",
+      "label": "Human",
+      "shape": "circle"
+    },
+    {
+      "id": "fae",
+      "label": "Fae",
+      "shape": "diamond"
+    },
+    {
+      "id": "vampire",
+      "label": "Vampire",
+      "shape": "square"
+    },
+    {
+      "id": "other",
+      "label": "Other",
+      "shape": "triangle"
+    }
+  ],
+  "placeCharacters": [
+    {
+      "id": "saeris_fane",
+      "why": "A thief in Zilvaren who is pulled into Yvelia and joins Kingfisher at Cahlish; the chart shows where she acts, not where she was born. Base record is her book-1 state — the Blood Court crown is book 2. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "region": "yvelia",
+      "affil": "cahlish",
+      "type": "human"
+    },
+    {
+      "id": "hayden_fane",
+      "why": "Saeris's younger brother, a store clerk in Zilvaren's seventh ward, and he stays there. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "region": "zilvaren",
+      "affil": "zilvaren",
+      "type": "human"
+    },
+    {
+      "id": "iris_fane",
+      "why": "Saeris and Hayden's mother, dead before the story opens, of Zilvaren. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "region": "zilvaren",
+      "affil": "zilvaren",
+      "type": "human"
+    },
+    {
+      "id": "carrion_swift",
+      "why": "A smuggler out of Zilvaren pulled through with Saeris; revealed as the Yvelian heir, glamoured to pass as human. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "region": "yvelia",
+      "affil": "cahlish",
+      "type": "fae"
+    },
+    {
+      "id": "kingfisher",
+      "why": "Lord of Cahlish. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "region": "yvelia",
+      "affil": "cahlish",
+      "type": "fae"
+    },
+    {
+      "id": "everlayne",
+      "why": "Kingfisher's half-sister; welcomes Saeris to the court at Cahlish. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "region": "yvelia",
+      "affil": "cahlish",
+      "type": "fae"
+    },
+    {
+      "id": "te_lena",
+      "why": "Healer at Cahlish. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "region": "yvelia",
+      "affil": "cahlish",
+      "type": "fae"
+    },
+    {
+      "id": "archer",
+      "why": "Fire sprite, head caretaker at Cahlish. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "region": "yvelia",
+      "affil": "cahlish",
+      "type": "other"
+    },
+    {
+      "id": "edina",
+      "why": "Oracle at Cahlish. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "region": "yvelia",
+      "affil": "cahlish",
+      "type": "fae"
+    },
+    {
+      "id": "onyx",
+      "why": "A fox who attaches himself to the group. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "region": "yvelia",
+      "affil": "cahlish",
+      "type": "other"
+    },
+    {
+      "id": "renfis_orithian",
+      "why": "Commands the Yvelian army — Belikon's, whatever his sympathies. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "region": "yvelia",
+      "affil": "yvelian_court",
+      "type": "fae"
+    },
+    {
+      "id": "belikon_de_barra",
+      "why": "King of Yvelia, rules from the Winter Palace. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "region": "yvelia",
+      "affil": "yvelian_court",
+      "type": "fae"
+    },
+    {
+      "id": "orious",
+      "why": "King Belikon's right hand. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "region": "yvelia",
+      "affil": "yvelian_court",
+      "type": "fae"
+    },
+    {
+      "id": "rurik_daianthus",
+      "why": "Former king of Yvelia, of Carrion's line. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "region": "yvelia",
+      "affil": "yvelian_court",
+      "type": "fae"
+    },
+    {
+      "id": "amelia_daianthus",
+      "why": "Former queen of Yvelia. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "region": "yvelia",
+      "affil": "yvelian_court",
+      "type": "fae"
+    },
+    {
+      "id": "lorreth",
+      "why": "A Fae warrior and bard who fights alongside Kingfisher. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "region": "yvelia",
+      "affil": "rebellion",
+      "type": "fae"
+    },
+    {
+      "id": "danya",
+      "why": "Named in the notes as fighting in Lupo Proelia, the rebellion opposing Belikon. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "region": "yvelia",
+      "affil": "rebellion",
+      "type": "fae"
+    },
+    {
+      "id": "korrix",
+      "why": "Named in the notes as fighting in Lupo Proelia. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "region": "yvelia",
+      "affil": "rebellion",
+      "type": "fae"
+    },
+    {
+      "id": "foley",
+      "why": "Named in the notes as fighting in Lupo Proelia. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "region": "yvelia",
+      "affil": "rebellion",
+      "type": "fae"
+    },
+    {
+      "id": "merelle",
+      "why": "Named in the notes as fighting in Lupo Proelia. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "region": "yvelia",
+      "affil": "rebellion",
+      "type": "fae"
+    },
+    {
+      "id": "vashgidyan",
+      "why": "Named in the notes as fighting in Lupo Proelia. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "region": "yvelia",
+      "affil": "rebellion",
+      "type": "fae"
+    },
+    {
+      "id": "finran",
+      "why": "Kingfisher's father, who carried the infant Carrion to Zilvaren. Placed in Yvelia rather than Zilvaren: the errand is not where he belongs. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "region": "yvelia",
+      "affil": "cahlish",
+      "type": "fae"
+    },
+    {
+      "id": "madra",
+      "why": "Immortal queen of Zilvaren. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "region": "zilvaren",
+      "affil": "zilvaren",
+      "type": "human"
+    },
+    {
+      "id": "harron",
+      "why": "Commander of Madra's guard in Zilvaren. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "region": "zilvaren",
+      "affil": "zilvaren",
+      "type": "human"
+    },
+    {
+      "id": "eric",
+      "why": "Carrion's partner in the Brigand's Bank, in Zilvaren's Silver City. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "region": "zilvaren",
+      "affil": "zilvaren",
+      "type": "human"
+    },
+    {
+      "id": "vorath_shah",
+      "why": "A vault breaker in Zilvaren's Silver City. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "region": "zilvaren",
+      "affil": "zilvaren",
+      "type": "human"
+    },
+    {
+      "id": "malcolm",
+      "why": "Vampire king of Sanasroth. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "region": "sanasroth",
+      "affil": "blood_court",
+      "type": "vampire"
+    },
+    {
+      "id": "taladius",
+      "why": "A vampire lord of Sanasroth, and the one who made Saeris what she is. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "region": "sanasroth",
+      "affil": "blood_court",
+      "type": "vampire"
+    },
+    {
+      "id": "ereth",
+      "why": "A vampire lord who attempts an assassination in book 2. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "region": "sanasroth",
+      "affil": "blood_court",
+      "type": "vampire"
+    }
   ]
 }

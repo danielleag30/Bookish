@@ -700,15 +700,26 @@ export function checkIntegrity(series: Series): Issue[] {
     }
 
     // Endpoint constraints, e.g. `bonded` joins a person to a creature.
+    //
+    // Only enforceable when this series actually uses the types the rule names.
+    // `bonded` expects dragon/irid/gryphon because that is what a bond is in the
+    // Empyrean. Fae & Alchemy's quicksilver bond joins two people, and there is
+    // no dragon in the series to expect — applying a rule about creatures that
+    // do not exist here would force the wrong relationship type onto correct
+    // data. The rule still bites in any series that declares those types.
+    const declared = new Set(Object.keys(series.characterTypes ?? {}));
+    const enforceable = (types?: string[]) =>
+      !types || types.some((t) => declared.has(t));
+
     const ep = canon.endpoints;
     if (ep) {
       const from = charById.get(r.from);
       const to = charById.get(r.to);
-      if (ep.fromTypes && from?.type && !ep.fromTypes.includes(from.type)) {
+      if (ep.fromTypes && enforceable(ep.fromTypes) && from?.type && !ep.fromTypes.includes(from.type)) {
         warn('endpoint-type-mismatch', at,
           `from "${from.id}" is type "${from.type}"; ${r.type} expects ${ep.fromTypes.join('/')}`);
       }
-      if (ep.toTypes && to?.type && !ep.toTypes.includes(to.type)) {
+      if (ep.toTypes && enforceable(ep.toTypes) && to?.type && !ep.toTypes.includes(to.type)) {
         warn('endpoint-type-mismatch', at,
           `to "${to.id}" is type "${to.type}"; ${r.type} expects ${ep.toTypes.join('/')}`);
       }
