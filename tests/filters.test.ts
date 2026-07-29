@@ -259,3 +259,58 @@ describe('bio spoiler containment', () => {
     }
   });
 });
+
+/**
+ * The taxonomy must not claim controls the engine does not render.
+ *
+ * FILTER_DIMENSIONS was designed as the full hierarchy the data could support
+ * and read as a description of the UI, so it advertised nine controls that do
+ * not exist. A design document that describes itself as shipped is how a gap
+ * survives review. This test fails in BOTH directions: mark something built
+ * that isn't, or build something and forget to mark it.
+ */
+describe('declared filters match the engine', () => {
+  const engine =
+    readFileSync(resolve(import.meta.dirname, '..', 'src', 'engine', 'chart.ts'), 'utf8');
+
+  // Every control the engine renders, by the state it toggles.
+  const CONTROLS: Record<string, RegExp> = {
+    book: /state\.book\s*=|setBook\(/,
+    affil: /state\.filters\.affils/,
+    charType: /state\.filters\.charTypes/,
+    relType: /state\.filters\.relTypes/,
+    band: /state\.filters\.bands/,
+    status: /state\.filters\.statuses/,
+    size: /state\.filters\.sizes/,
+    den: /state\.filters\.dens/,
+    f9: /state\.filters\.f9/,
+    eventKind: /state\.filters\.eventKinds/,
+    showBands: /state\.showRegions/,
+    showLabels: /state\.showLabels/,
+    showEdgeLabels: /state\.showEdgeLabels/,
+    showGlyphs: /state\.showGlyphs/,
+    showNewRing: /state\.showNewRing/,
+    legend: /state\.showLegend/,
+  };
+
+  for (const d of FILTER_DIMENSIONS) {
+    const probe = CONTROLS[d.id];
+    if (!probe) continue; // a dimension with no known state key yet
+    it(`${d.id}: built flag matches the engine`, () => {
+      const wired = probe.test(engine);
+      expect(
+        wired,
+        d.built
+          ? `${d.id} is marked built but the engine has no control for it`
+          : `${d.id} IS wired in the engine — set built: true`,
+      ).toBe(d.built);
+    });
+  }
+
+  it('every tier-1 dimension is either built or honestly flagged', () => {
+    const unbuiltTier1 = FILTER_DIMENSIONS.filter((d) => d.tier === 1 && !d.built).map((d) => d.id);
+    // Not an assertion that they are all built — they are not. This records the
+    // remaining tier-1 gap so shrinking it is visible and growing it fails.
+    expect(unbuiltTier1.sort()).toEqual(['band', 'size', 'status']);
+  });
+});

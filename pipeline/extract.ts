@@ -281,6 +281,27 @@ export function checkGraph(g: ExtractedGraph, relTypeIds: Set<string>): GraphIss
 }
 
 /** A plan is worth acting on only if it looks like the chunk was actually read. */
+/**
+ * Drop planned names the passage does not contain.
+ *
+ * `checkPlan` detected these and the plan was handed to the extractor anyway,
+ * hallucinated names included — so a name the planner invented arrived in the
+ * extraction prompt as a thing to go and find, which is the most effective way
+ * to talk a model into inventing a character. Detecting a problem and then
+ * proceeding as if it had not been detected is worse than not checking.
+ */
+export function prunePlan(plan: Plan, chunk: string): { plan: Plan; dropped: string[] } {
+  const lower = chunk.toLowerCase();
+  const kept: string[] = [];
+  const dropped: string[] = [];
+  for (const n of plan.characters) {
+    const first = n.split(/\s+/)[0];
+    const invented = first !== undefined && first.length > 2 && !lower.includes(first.toLowerCase());
+    (invented ? dropped : kept).push(n);
+  }
+  return { plan: { ...plan, characters: kept }, dropped };
+}
+
 export function checkPlan(plan: Plan, chunk: string): string[] {
   const problems: string[] = [];
   if (!plan.summary.trim()) problems.push('summary is empty');
@@ -480,7 +501,13 @@ export function mergeGraphs(parts: ExtractedGraph[]): ExtractedGraph {
       const prev = chars.get(c.id);
       if (!prev) { chars.set(c.id, { ...c }); continue; }
       if (!prev.role && c.role) prev.role = c.role;
-      if (prev.status === 'unknown' && c.status !== 'unknown') prev.status = c.status;
+      // Later chunk wins. Chunks arrive in book order, so a book-2 `dead` is a
+      // later fact than a book-1 `alive` and must replace it. The old rule only
+      // upgraded from `unknown`, which meant a character alive in book one
+      // stayed alive forever and their death was silently discarded — the
+      // multi-agent path already resolved conflicts this way, and the two
+      // should not disagree about what a merge means.
+      if (c.status !== 'unknown') prev.status = c.status;
     }
   }
   const rels = new Map<string, ExtractedRelationship>();

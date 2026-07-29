@@ -74,6 +74,19 @@ export async function callCiModel(
     );
   }
 
-  const body = (await res.json()) as { choices?: { message?: { content?: string } }[] };
+  // A 200 is not a promise of JSON. A proxy, a captive portal or an outage page
+  // returns HTML with a 200, and `res.json()` throws a SyntaxError — which is
+  // not a ModelUnavailable, so it escaped the degradation path and failed the
+  // whole workflow instead of falling back to the deterministic draft. This
+  // client's entire contract is that it degrades rather than throws.
+  let body: { choices?: { message?: { content?: string } }[] };
+  try {
+    body = (await res.json()) as typeof body;
+  } catch {
+    throw new ModelUnavailable(
+      'GitHub Models returned a 200 that was not JSON. Falling back to the ' +
+      'deterministic draft.',
+    );
+  }
   return { text: body.choices?.[0]?.message?.content ?? '', ms: Date.now() - started };
 }

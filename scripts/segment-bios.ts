@@ -25,6 +25,7 @@
 import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 import { SeriesSchema, type Series, type Character } from '../src/schema.ts';
+import { mentions } from '../src/regex.ts';
 
 const root = resolve(import.meta.dirname, '..');
 const dataDir = join(root, 'data');
@@ -107,12 +108,11 @@ for (const file of readdirSync(dataDir).filter((f) => f.endsWith('.json'))) {
       let earliest = floor;
       for (const n of needles) {
         if (n.id === c.id) continue;
-        if (!new RegExp(`(?<!\\w)${n.needle}(?!\\w)`).test(sentence)) continue;
+        if (!mentions(sentence, n.needle)) continue;
         earliest = Math.max(earliest, bookOf.get(n.id) ?? c.book);
       }
       for (const t of titles) {
-        const esc = t.needle.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        if (new RegExp(`(?<!\\w)${esc}(?!\\w)`, 'i').test(sentence)) {
+        if (mentions(sentence, t.needle)) {
           earliest = Math.max(earliest, t.book);
         }
       }

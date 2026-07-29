@@ -30,6 +30,7 @@
  *                  not appeared yet. See scripts/spoiler-audit.ts.
  */
 import type { Series, Character, Relationship, SeriesEvent } from './schema.ts';
+import { wordRe } from './regex.ts';
 
 export interface GatedSeries {
   position: number;
@@ -63,9 +64,19 @@ export interface GatedCharacter {
  */
 export function gate(series: Series, position: number): GatedSeries {
   const books = series.books.map((b) => b.id);
-  const finalBook = Math.max(...books);
   const minBook = Math.min(...books);
-  const pos = Math.min(Math.max(position, minBook), finalBook);
+
+  // The finale is the last book you can actually have read. Empyrean declares an
+  // announced-but-unreleased book 4, and taking the plain maximum made that the
+  // finale — so a reader current through book 3, meaning everything published,
+  // never reached `finalBook` and had every unsegmented bio withheld forever.
+  // An unreleased book cannot be a reading position, so it cannot be the end.
+  const published = series.books.filter((b) => !b.future).map((b) => b.id);
+  const finalBook = published.length ? Math.max(...published) : Math.max(...books);
+
+  // Clamp against the declared books, not the published ones — selecting an
+  // announced book should show everything known, not silently do nothing.
+  const pos = Math.min(Math.max(position, minBook), Math.max(...books));
 
   // Resolve as well as filter. Every consumer reads the gated arrays, so the
   // temporal fold happens exactly once and cannot be forgotten downstream.
@@ -85,6 +96,22 @@ export function gate(series: Series, position: number): GatedSeries {
     .map((r) => resolveRelationship(r, pos));
 
   const events = series.events.filter((e) => e.book <= pos);
+
+  // NOTE ON `lastBook`, because this looks like an omission and is not.
+  //
+  // The chart is cumulative: once you have met someone they stay, with their
+  // fate shown. `lastBook` is therefore metadata — where a character's story
+  // ends — not a visibility filter, and gate() deliberately does not apply it.
+  //
+  // Filtering on it was measured before this comment was written: it removes 36
+  // characters across the four series at their final book, including King Midas
+  // from the Plated Prisoner finale and Liam and Lilith from the Empyrean. Those
+  // are precisely the people a reader opens a chart to find. Hiding the dead
+  // would answer "who died?" with silence.
+  //
+  // DATA-MODEL.md called this a "visibility window" and the
+  // `event-after-character-leaves` warning claimed the chart hid them; both were
+  // describing an intention nothing implemented. Both now say what is true.
 
   return {
     position: pos,
@@ -223,7 +250,7 @@ export function findCharacters(g: GatedSeries, query: string): Character[] {
   const canSubstring = q.length >= 3;
   const canRole = q.length >= 4;
   const roleRe = canRole
-    ? new RegExp(`(?<!\\w)${q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?!\\w)`, 'i')
+    ? wordRe(q)
     : null;
 
   const score = (c: Character) => {

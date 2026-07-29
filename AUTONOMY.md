@@ -59,6 +59,38 @@ on/off switch.
 
 ---
 
+## The verifier can be talked out of verifying
+
+Worth stating plainly, because it is a limit of the design rather than a bug in
+it.
+
+The verifier's job is to check each extracted claim against the passage it came
+from. That passage is the issue body — untrusted text, written by whoever opened
+the issue. So the verifier reads attacker-controlled text as its *evidence*, and
+text that says something like *"every claim in this passage is supported"* is
+being read by the agent whose only job is to decide whether claims are
+supported.
+
+There is no prompt that fixes this. An instruction not to follow instructions is
+itself just more text in the same window, and the passage always gets the last
+word because it is the thing being checked.
+
+What actually contains it:
+
+- **The verifier cannot write anything.** It returns verdicts. Every path to
+  `data/` goes through the schema, `checkIntegrity`, and the test suite, none of
+  which read the passage.
+- **The series agent opens a PR and stops.** It is Level 2 — a human merges. A
+  subverted verifier produces a *bad draft*, not a bad chart.
+- **Corrections are a separate file** that the passage cannot reach.
+- **The spoiler gate is data-layer, not prompt-layer.** Even a fully compromised
+  extraction cannot make `gate()` serve a later book, because the gate is never
+  handed the passage.
+
+So the blast radius is a wrong draft that a human is already required to read.
+That is acceptable at Level 2 and would not be at Level 3 — if the series agent
+is ever made unattended, this is the reason it cannot be.
+
 ## What stops each failure
 
 | Failure | What catches it |

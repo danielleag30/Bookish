@@ -585,3 +585,41 @@ describe('a concealed name appears nowhere before the reveal', () => {
     });
   }
 });
+
+/**
+ * Decisions that look like bugs, pinned so nobody "fixes" them.
+ */
+describe('deliberate behaviour', () => {
+  it('keeps characters on the chart after their last book', () => {
+    // Filtering on lastBook would remove 36 characters across the four series
+    // at their final book — King Midas, Liam, Lilith, Malcolm. The chart is
+    // cumulative because "who died?" is a question it exists to answer.
+    for (const file of readdirSync(dataDir).filter((f) => f.endsWith('.json'))) {
+      const series = load(file);
+      const published = series.books.filter((b) => !b.future).map((b) => b.id);
+      const final = Math.max(...published);
+      const departed = series.characters.filter((c) => c.book <= final && c.lastBook < final);
+      if (departed.length === 0) continue;
+
+      const visible = new Set(gate(series, final).characters.map((c) => c.id));
+      for (const c of departed) {
+        expect(visible.has(c.id), `${file}:${c.id} vanished from book ${final}`).toBe(true);
+      }
+    }
+  });
+
+  it('treats the last PUBLISHED book as the finale, not an announced one', () => {
+    // Empyrean declares an unreleased book 4. Taking the plain maximum made a
+    // reader who is current — book 3, everything published — never reach the
+    // finale, so every unsegmented bio stayed withheld forever.
+    const emp = load('empyrean.json');
+    expect(emp.books.some((b) => b.future)).toBe(true);
+    expect(gate(emp, 3).finalBook).toBe(3);
+
+    // Selecting the announced book still shows everything known rather than
+    // silently doing nothing.
+    expect(gate(emp, 4).characters.length).toBeGreaterThanOrEqual(
+      gate(emp, 3).characters.length,
+    );
+  });
+});

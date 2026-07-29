@@ -8,7 +8,9 @@ A design question raised before migrating The Plated Prisoner. Answered from the
 
 ## The diagnosis
 
-The current model gives each character **one row plus a visibility window**: a single `affil`, `band`, `status`, `role`, with `book` (first appearance) and `lastBook` (last). Relationships get a single `book` meaning "visible from".
+The current model gives each character **one row plus a lifespan**: a single `affil`, `band`, `status`, `role`, with `book` (first appearance) and `lastBook` (last).
+
+`lastBook` is **not** a visibility filter. The chart is cumulative — once a reader has met someone, that character stays on it, with their fate shown. Hiding the dead would answer *"who died?"* with an empty chart, and measuring it showed a filter would remove 36 characters across the four series at their final book, King Midas and Liam among them. `lastBook` marks where a story ends; it is used to place bio segments and to flag events that reference someone after they have gone. Relationships get a single `book` meaning "visible from".
 
 That models *when someone is on the chart*. It does not model *the story changing around them*. Four independent pieces of evidence say the gap is real and already causing bugs.
 
