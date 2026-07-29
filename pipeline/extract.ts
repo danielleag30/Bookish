@@ -117,7 +117,12 @@ export function graphSchema(relTypeIds: string[]): unknown {
             },
             role: {
               type: 'string',
-              description: 'Short role or title if the passage states one, otherwise "".',
+              description:
+                'Their role or title AS THE PASSAGE STATES IT — "immortal queen of ' +
+                'Zilvaren", "commands the Yvelian army", "vampire king of Sanasroth". ' +
+                'Never the word "Character": that is not a role, and it is what ' +
+                'gets printed on the chart under their name. Empty string if the ' +
+                'passage really does not say.',
             },
             status: {
               type: 'string',
@@ -347,6 +352,25 @@ export function slugifyId(id: string): string {
  * Deterministic on purpose. Asking a second model call "is Zilvaren a person?"
  * would be slower, cost more and be less reliable than an id comparison.
  */
+/**
+ * Blank out roles that carry no information.
+ *
+ * Asked for a role "if the passage states one, otherwise empty", the model
+ * answered "Character" for 28 of 29 people — so the chart printed the word
+ * "character" under each name, and the ask box led its answer with it. An empty
+ * role renders as nothing, which is honest; a placeholder renders as content.
+ */
+const EMPTY_ROLES = new Set(['character', 'person', 'unknown', 'n/a', 'na', 'none', 'entity']);
+
+export function dropPlaceholderRoles(g: ExtractedGraph): ExtractedGraph {
+  return {
+    ...g,
+    characters: g.characters.map((c) =>
+      EMPTY_ROLES.has(c.role.trim().toLowerCase().replace(/[.\s]+$/, '')) ? { ...c, role: '' } : c,
+    ),
+  };
+}
+
 export function dropNonPeople(g: ExtractedGraph): ExtractedGraph {
   // Match on label as well as id. The model called the faction `rebellion` but
   // listed the same group as the character `lupo_proelia`, so an id-only

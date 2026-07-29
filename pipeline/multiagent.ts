@@ -29,7 +29,7 @@ import type { Series } from '../src/schema.ts';
 import { RELATIONSHIP_BY_ID } from '../src/relationships.ts';
 import { call, DEFAULT_MODEL, OllamaError } from './ollama.ts';
 import {
-  checkGraph, checkPlan, normaliseIds, collapseAliases, dropNonPeople, graphSchema,
+  checkGraph, checkPlan, normaliseIds, collapseAliases, dropNonPeople, dropPlaceholderRoles, graphSchema,
   type ExtractedGraph, type ExtractedCharacter, type Plan,
 } from './extract.ts';
 
@@ -436,12 +436,12 @@ export function runResolver(
 
   // Slugify first, then collapse — the alias rule compares slugs, so it has to
   // run after ids are normalised or "Saeris Fane" and "saeris" never match.
-  return dropNonPeople(collapseAliases(normaliseIds({
+  return dropPlaceholderRoles(dropNonPeople(collapseAliases(normaliseIds({
     characters: [...chars.values()].map(({ from: _from, ...c }) => c),
     relationships: [...rels.values()],
     places: [...places.values()],
     factions: [...factions.values()],
-  })));
+  }))));
 }
 
 // ── Orchestration ──────────────────────────────────────────────────────────

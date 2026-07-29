@@ -21,7 +21,9 @@
       "x": 0,
       "y": 0,
       "w": 400,
-      "h": 606
+      "h": 606,
+      "color": "#3A303D",
+      "border": "#1A151E"
     },
     {
       "id": "zilvaren",
@@ -29,7 +31,9 @@
       "x": 440,
       "y": 0,
       "w": 400,
-      "h": 234
+      "h": 234,
+      "color": "#CC6600",
+      "border": "#B0C4DE"
     },
     {
       "id": "yvelia",
@@ -37,7 +41,9 @@
       "x": 0,
       "y": 646,
       "w": 400,
-      "h": 200
+      "h": 200,
+      "color": "#B0C4DE",
+      "border": "#3A303D"
     },
     {
       "id": "sanasroth",
@@ -45,7 +51,9 @@
       "x": 440,
       "y": 646,
       "w": 400,
-      "h": 200
+      "h": 200,
+      "color": "#8B0000",
+      "border": "#1A151E"
     },
     {
       "id": "silver_city",
@@ -53,7 +61,9 @@
       "x": 0,
       "y": 886,
       "w": 400,
-      "h": 200
+      "h": 200,
+      "color": "#B0C4DE",
+      "border": "#3A303D"
     },
     {
       "id": "ammontraieth",
@@ -61,7 +71,9 @@
       "x": 440,
       "y": 886,
       "w": 400,
-      "h": 200
+      "h": 200,
+      "color": "#282330",
+      "border": "#3A303D"
     }
   ],
   "affiliations": {
@@ -72,13 +84,13 @@
     },
     "rebellion": {
       "label": "Rebellion",
-      "color": "#8a7eaa",
-      "border": "#5a4a7a"
+      "color": "#B0C4DE",
+      "border": "#CC6600"
     },
     "blood_court": {
       "label": "Blood Court",
-      "color": "#7e9aaa",
-      "border": "#4a6a7a"
+      "color": "#8B0000",
+      "border": "#3A303D"
     }
   },
   "relationshipTypes": [
@@ -185,7 +197,7 @@
     {
       "id": "madra",
       "label": "Madra",
-      "role": "character",
+      "role": "",
       "affil": "unsorted",
       "region": "zilvaren",
       "book": 1,
@@ -198,7 +210,7 @@
     {
       "id": "saeris_fane",
       "label": "Saeris Fane",
-      "role": "character",
+      "role": "",
       "affil": "unsorted",
       "region": "main",
       "book": 1,
@@ -211,7 +223,7 @@
     {
       "id": "hayden_fane",
       "label": "Hayden Fane",
-      "role": "character",
+      "role": "",
       "affil": "unsorted",
       "region": "zilvaren",
       "book": 1,
@@ -224,7 +236,7 @@
     {
       "id": "iris_fane",
       "label": "Iris Fane",
-      "role": "character",
+      "role": "",
       "affil": "unsorted",
       "region": "main",
       "book": 1,
@@ -253,7 +265,7 @@
     {
       "id": "kingfisher",
       "label": "Kingfisher",
-      "role": "character",
+      "role": "",
       "affil": "unsorted",
       "region": "main",
       "book": 1,
@@ -266,7 +278,7 @@
     {
       "id": "everlayne",
       "label": "Everlayne",
-      "role": "character",
+      "role": "",
       "affil": "unsorted",
       "region": "main",
       "book": 1,
@@ -279,7 +291,7 @@
     {
       "id": "te_lena",
       "label": "Te Léna",
-      "role": "character",
+      "role": "",
       "affil": "unsorted",
       "region": "main",
       "book": 1,
@@ -292,7 +304,7 @@
     {
       "id": "renfis_orithian",
       "label": "Renfis Orithian",
-      "role": "character",
+      "role": "",
       "affil": "unsorted",
       "region": "main",
       "book": 1,
@@ -305,7 +317,7 @@
     {
       "id": "lorreth",
       "label": "Lorreth",
-      "role": "character",
+      "role": "",
       "affil": "unsorted",
       "region": "main",
       "book": 1,
@@ -318,7 +330,7 @@
     {
       "id": "belikon_de_barra",
       "label": "Belikon De Barra",
-      "role": "character",
+      "role": "",
       "affil": "unsorted",
       "region": "main",
       "book": 1,
@@ -331,7 +343,7 @@
     {
       "id": "malcolm",
       "label": "Malcolm",
-      "role": "character",
+      "role": "",
       "affil": "unsorted",
       "region": "sanasroth",
       "book": 1,
@@ -344,7 +356,7 @@
     {
       "id": "danya",
       "label": "Danya",
-      "role": "character",
+      "role": "",
       "affil": "unsorted",
       "region": "main",
       "book": 1,
@@ -357,7 +369,7 @@
     {
       "id": "korrix",
       "label": "Korrix",
-      "role": "character",
+      "role": "",
       "affil": "unsorted",
       "region": "main",
       "book": 1,
@@ -370,7 +382,7 @@
     {
       "id": "foley",
       "label": "Foley",
-      "role": "character",
+      "role": "",
       "affil": "unsorted",
       "region": "main",
       "book": 1,
@@ -383,7 +395,7 @@
     {
       "id": "merelle",
       "label": "Merelle",
-      "role": "character",
+      "role": "",
       "affil": "unsorted",
       "region": "main",
       "book": 1,
@@ -396,7 +408,7 @@
     {
       "id": "vashgidyan",
       "label": "Vashgidyan",
-      "role": "character",
+      "role": "",
       "affil": "unsorted",
       "region": "main",
       "book": 1,
@@ -409,7 +421,7 @@
     {
       "id": "finran",
       "label": "Finran",
-      "role": "character",
+      "role": "",
       "affil": "unsorted",
       "region": "zilvaren",
       "book": 1,
@@ -422,7 +434,7 @@
     {
       "id": "rurik_daianthus",
       "label": "Rurik Daianthus",
-      "role": "character",
+      "role": "",
       "affil": "unsorted",
       "region": "yvelia",
       "book": 1,
@@ -435,7 +447,7 @@
     {
       "id": "amelia_daianthus",
       "label": "Amelia Daianthus",
-      "role": "character",
+      "role": "",
       "affil": "unsorted",
       "region": "yvelia",
       "book": 1,
@@ -448,7 +460,7 @@
     {
       "id": "onyx",
       "label": "Onyx",
-      "role": "character",
+      "role": "",
       "affil": "unsorted",
       "region": "main",
       "book": 1,
@@ -461,7 +473,7 @@
     {
       "id": "archer",
       "label": "Archer",
-      "role": "character",
+      "role": "",
       "affil": "unsorted",
       "region": "main",
       "book": 1,
@@ -474,7 +486,7 @@
     {
       "id": "edina",
       "label": "Edina",
-      "role": "character",
+      "role": "",
       "affil": "unsorted",
       "region": "main",
       "book": 1,
@@ -487,7 +499,7 @@
     {
       "id": "harron",
       "label": "Harron",
-      "role": "character",
+      "role": "",
       "affil": "unsorted",
       "region": "zilvaren",
       "book": 1,
@@ -500,7 +512,7 @@
     {
       "id": "taladius",
       "label": "Taladius",
-      "role": "character",
+      "role": "",
       "affil": "unsorted",
       "region": "sanasroth",
       "book": 1,
@@ -1172,11 +1184,11 @@
   "draft": true,
   "theme": {
     "accent": "#B0C4DE",
-    "ground": "#1A1A2E",
-    "panel": "#25253D",
-    "line": "#3A3A50",
-    "accent2": "#FF6347",
-    "mood": "The contrast between icy silver and burning orange/red perfectly embodies the core conflict of opposing elemental forces within the series.",
+    "ground": "#1A151E",
+    "panel": "#282330",
+    "line": "#3A303D",
+    "accent2": "#CC6600",
+    "mood": "The contrast between icy silver and burning amber perfectly captures the series' core conflict: controlled, magical cold versus volatile, passionate heat.",
     "display": "'Cinzel', serif"
   }
 }
