@@ -348,13 +348,18 @@ export function slugifyId(id: string): string {
  * would be slower, cost more and be less reliable than an id comparison.
  */
 export function dropNonPeople(g: ExtractedGraph): ExtractedGraph {
-  const notPeople = new Set([
-    ...(g.places ?? []).map((p) => p.id),
-    ...(g.factions ?? []).map((f) => f.id),
-  ]);
+  // Match on label as well as id. The model called the faction `rebellion` but
+  // listed the same group as the character `lupo_proelia`, so an id-only
+  // comparison missed it and Lupo Proelia stayed on the chart as a person.
+  const norm = (v: string) => slugifyId(v);
+  const notPeople = new Set<string>();
+  for (const p of g.places ?? []) { notPeople.add(p.id); notPeople.add(norm(p.label)); }
+  for (const f of g.factions ?? []) { notPeople.add(f.id); notPeople.add(norm(f.label)); }
   if (notPeople.size === 0) return g;
 
-  const characters = g.characters.filter((c) => !notPeople.has(c.id));
+  const characters = g.characters.filter(
+    (c) => !notPeople.has(c.id) && !notPeople.has(norm(c.label)),
+  );
   const kept = new Set(characters.map((c) => c.id));
   return {
     ...g,

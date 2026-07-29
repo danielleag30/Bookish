@@ -21,47 +21,47 @@
       "x": 0,
       "y": 0,
       "w": 400,
-      "h": 300
+      "h": 606
     },
     {
       "id": "zilvaren",
       "label": "Zilvaren",
-      "x": 420,
+      "x": 440,
       "y": 0,
       "w": 400,
-      "h": 300
+      "h": 234
     },
     {
       "id": "yvelia",
       "label": "Yvelia",
-      "x": 840,
-      "y": 0,
+      "x": 0,
+      "y": 646,
       "w": 400,
-      "h": 300
+      "h": 200
     },
     {
       "id": "sanasroth",
       "label": "Sanasroth",
-      "x": 0,
-      "y": 320,
+      "x": 440,
+      "y": 646,
       "w": 400,
-      "h": 300
+      "h": 200
     },
     {
       "id": "silver_city",
       "label": "Silver City",
-      "x": 420,
-      "y": 320,
+      "x": 0,
+      "y": 886,
       "w": 400,
-      "h": 300
+      "h": 200
     },
     {
       "id": "ammontraieth",
       "label": "Ammontraíeth",
-      "x": 840,
-      "y": 320,
+      "x": 440,
+      "y": 886,
       "w": 400,
-      "h": 300
+      "h": 200
     }
   ],
   "affiliations": {
@@ -192,8 +192,8 @@
       "lastBook": 2,
       "status": "alive",
       "size": "main",
-      "x": 120,
-      "y": 110
+      "x": 510,
+      "y": 60
     },
     {
       "id": "saeris_fane",
@@ -205,21 +205,21 @@
       "lastBook": 2,
       "status": "alive",
       "size": "main",
-      "x": 290,
-      "y": 230
+      "x": 70,
+      "y": 60
     },
     {
       "id": "hayden_fane",
       "label": "Hayden Fane",
       "role": "character",
       "affil": "unsorted",
-      "region": "main",
+      "region": "zilvaren",
       "book": 1,
       "lastBook": 2,
       "status": "alive",
       "size": "main",
-      "x": 460,
-      "y": 110
+      "x": 640,
+      "y": 60
     },
     {
       "id": "iris_fane",
@@ -228,15 +228,18 @@
       "affil": "unsorted",
       "region": "main",
       "book": 1,
-      "lastBook": 2,
+      "lastBook": 1,
       "status": "dead",
       "size": "main",
-      "x": 630,
-      "y": 230
+      "x": 200,
+      "y": 60
     },
     {
       "id": "carrion_swift",
       "label": "Carrion Swift",
+      "aliases": [
+        "Carrion Daianthus"
+      ],
       "role": "Smuggler and gambler out of Zilvaren; revealed as heir to the Yvelian throne",
       "affil": "unsorted",
       "region": "main",
@@ -244,11 +247,8 @@
       "lastBook": 2,
       "status": "alive",
       "size": "side",
-      "x": 800,
-      "y": 110,
-      "aliases": [
-        "Carrion Daianthus"
-      ]
+      "x": 330,
+      "y": 60
     },
     {
       "id": "kingfisher",
@@ -260,8 +260,8 @@
       "lastBook": 2,
       "status": "alive",
       "size": "side",
-      "x": 120,
-      "y": 490
+      "x": 70,
+      "y": 122
     },
     {
       "id": "everlayne",
@@ -273,8 +273,8 @@
       "lastBook": 2,
       "status": "alive",
       "size": "side",
-      "x": 290,
-      "y": 370
+      "x": 200,
+      "y": 122
     },
     {
       "id": "te_lena",
@@ -286,8 +286,8 @@
       "lastBook": 2,
       "status": "alive",
       "size": "side",
-      "x": 460,
-      "y": 490
+      "x": 330,
+      "y": 122
     },
     {
       "id": "renfis_orithian",
@@ -299,8 +299,8 @@
       "lastBook": 2,
       "status": "alive",
       "size": "side",
-      "x": 630,
-      "y": 370
+      "x": 70,
+      "y": 184
     },
     {
       "id": "lorreth",
@@ -312,8 +312,8 @@
       "lastBook": 2,
       "status": "alive",
       "size": "side",
-      "x": 800,
-      "y": 490
+      "x": 200,
+      "y": 184
     },
     {
       "id": "belikon_de_barra",
@@ -325,34 +325,21 @@
       "lastBook": 2,
       "status": "alive",
       "size": "side",
-      "x": 120,
-      "y": 630
+      "x": 330,
+      "y": 184
     },
     {
       "id": "malcolm",
       "label": "Malcolm",
       "role": "character",
       "affil": "unsorted",
-      "region": "main",
+      "region": "sanasroth",
       "book": 1,
-      "lastBook": 2,
+      "lastBook": 1,
       "status": "dead",
       "size": "side",
-      "x": 290,
-      "y": 750
-    },
-    {
-      "id": "lupo_proelia",
-      "label": "Lupo Proelia",
-      "role": "character",
-      "affil": "unsorted",
-      "region": "main",
-      "book": 1,
-      "lastBook": 2,
-      "status": "alive",
-      "size": "side",
-      "x": 460,
-      "y": 630
+      "x": 510,
+      "y": 706
     },
     {
       "id": "danya",
@@ -364,8 +351,8 @@
       "lastBook": 2,
       "status": "alive",
       "size": "side",
-      "x": 630,
-      "y": 750
+      "x": 200,
+      "y": 246
     },
     {
       "id": "korrix",
@@ -377,8 +364,8 @@
       "lastBook": 2,
       "status": "alive",
       "size": "side",
-      "x": 800,
-      "y": 630
+      "x": 330,
+      "y": 246
     },
     {
       "id": "foley",
@@ -390,8 +377,8 @@
       "lastBook": 2,
       "status": "alive",
       "size": "side",
-      "x": 120,
-      "y": 1010
+      "x": 70,
+      "y": 308
     },
     {
       "id": "merelle",
@@ -403,8 +390,8 @@
       "lastBook": 2,
       "status": "alive",
       "size": "side",
-      "x": 290,
-      "y": 890
+      "x": 200,
+      "y": 308
     },
     {
       "id": "vashgidyan",
@@ -416,47 +403,47 @@
       "lastBook": 2,
       "status": "alive",
       "size": "side",
-      "x": 460,
-      "y": 1010
+      "x": 330,
+      "y": 308
     },
     {
       "id": "finran",
       "label": "Finran",
       "role": "character",
       "affil": "unsorted",
-      "region": "main",
+      "region": "zilvaren",
       "book": 1,
       "lastBook": 2,
       "status": "alive",
       "size": "side",
-      "x": 800,
-      "y": 1010
+      "x": 770,
+      "y": 60
     },
     {
       "id": "rurik_daianthus",
       "label": "Rurik Daianthus",
       "role": "character",
       "affil": "unsorted",
-      "region": "main",
+      "region": "yvelia",
       "book": 1,
       "lastBook": 2,
       "status": "alive",
       "size": "side",
-      "x": 120,
-      "y": 1150
+      "x": 70,
+      "y": 706
     },
     {
       "id": "amelia_daianthus",
       "label": "Amelia Daianthus",
       "role": "character",
       "affil": "unsorted",
-      "region": "main",
+      "region": "yvelia",
       "book": 1,
       "lastBook": 2,
       "status": "alive",
       "size": "side",
-      "x": 290,
-      "y": 1270
+      "x": 200,
+      "y": 706
     },
     {
       "id": "onyx",
@@ -468,8 +455,8 @@
       "lastBook": 2,
       "status": "alive",
       "size": "side",
-      "x": 460,
-      "y": 1150
+      "x": 200,
+      "y": 370
     },
     {
       "id": "archer",
@@ -481,8 +468,8 @@
       "lastBook": 2,
       "status": "alive",
       "size": "side",
-      "x": 630,
-      "y": 1270
+      "x": 330,
+      "y": 370
     },
     {
       "id": "edina",
@@ -494,34 +481,34 @@
       "lastBook": 2,
       "status": "alive",
       "size": "side",
-      "x": 800,
-      "y": 1150
+      "x": 70,
+      "y": 432
     },
     {
       "id": "harron",
       "label": "Harron",
       "role": "character",
       "affil": "unsorted",
-      "region": "main",
+      "region": "zilvaren",
       "book": 1,
-      "lastBook": 2,
+      "lastBook": 1,
       "status": "dead",
       "size": "side",
-      "x": 120,
-      "y": 1530
+      "x": 510,
+      "y": 122
     },
     {
       "id": "taladius",
       "label": "Taladius",
       "role": "character",
       "affil": "unsorted",
-      "region": "main",
+      "region": "sanasroth",
       "book": 1,
       "lastBook": 2,
       "status": "alive",
       "size": "side",
-      "x": 290,
-      "y": 1410
+      "x": 640,
+      "y": 706
     },
     {
       "id": "eric",
@@ -533,8 +520,8 @@
       "lastBook": 2,
       "status": "alive",
       "size": "side",
-      "x": 460,
-      "y": 1530
+      "x": 640,
+      "y": 122
     },
     {
       "id": "vorath_shah",
@@ -546,8 +533,8 @@
       "lastBook": 2,
       "status": "alive",
       "size": "side",
-      "x": 630,
-      "y": 1410
+      "x": 200,
+      "y": 432
     },
     {
       "id": "ereth",
@@ -559,8 +546,8 @@
       "lastBook": 2,
       "status": "dead",
       "size": "side",
-      "x": 800,
-      "y": 1530
+      "x": 330,
+      "y": 432
     },
     {
       "id": "orious",
@@ -572,8 +559,8 @@
       "lastBook": 2,
       "status": "alive",
       "size": "side",
-      "x": 120,
-      "y": 1670
+      "x": 70,
+      "y": 494
     }
   ],
   "relationships": [
@@ -674,6 +661,20 @@
       "type": "romantic",
       "book": 1,
       "label": "Kingfisher told Saeris he loves her and wants to marry her, and she said it back"
+    },
+    {
+      "from": "saeris_fane",
+      "to": "kingfisher",
+      "type": "ally",
+      "book": 1,
+      "label": "Open hostility → reluctant alliance. Slow burn."
+    },
+    {
+      "from": "saeris_fane",
+      "to": "carrion_swift",
+      "type": "complicated",
+      "book": 1,
+      "label": "A rogue from her past in Zilvaren, pulled through the portal with her."
     }
   ],
   "events": [
@@ -844,7 +845,6 @@
       "text": "Lupo Proelia is the rebellion opposing Belikon; Danya, Korrix, Foley, Merelle and Vashgidyan fight in it",
       "involves": [
         "belikon_de_barra",
-        "lupo_proelia",
         "danya",
         "korrix",
         "foley",
@@ -983,8 +983,7 @@
       "book": 2,
       "text": "Saeris rules Sanasroth as queen of the Blood Court, having killed Malcolm",
       "involves": [
-        "saeris_fane",
-        "malcolm"
+        "saeris_fane"
       ],
       "kind": "other"
     },

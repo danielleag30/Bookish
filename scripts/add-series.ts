@@ -167,6 +167,103 @@ for (const [i, f] of factions.entries()) {
   };
 }
 
+/**
+ * Work out where a character sits from the notes themselves.
+ *
+ * The model fills `place` for only a handful of characters — allegiance is
+ * rarely stated as a property, it is implied by the sentence someone appears in
+ * ("Hayden Fane ... works as a store clerk in the seventh ward" sits in a line
+ * that names Zilvaren). So: read every note line mentioning this character, and
+ * if exactly one place is named across them, that is where they are. If two
+ * places are named, the notes are genuinely ambiguous and they stay unplaced —
+ * guessing between them would be inventing.
+ */
+function inferPlace(label: string): string | undefined {
+  const first = label.split(/\s+/)[0];
+  if (!first || first.length < 3) return undefined;
+  const mentions = notes
+    .split('\n')
+    .filter((line) => new RegExp(`(?<!\\w)${first}(?!\\w)`, 'i').test(line));
+  if (mentions.length === 0) return undefined;
+
+  const hits = new Set<string>();
+  for (const place of places) {
+    const name = place.label.split(/\s+/)[0];
+    if (!name) continue;
+    if (mentions.some((line) => new RegExp(`(?<!\\w)${name}(?!\\w)`, 'i').test(line))) {
+      hits.add(place.id);
+    }
+  }
+  return hits.size === 1 ? [...hits][0] : undefined;
+}
+
+// Where each character ends up, resolved once so the layout below can use it.
+const placeOf = new Map<string, string>();
+for (const c of graph.characters) {
+  const stated = c.place && regionIds.has(c.place) ? c.place : undefined;
+  placeOf.set(c.id, stated ?? inferPlace(c.label) ?? 'main');
+}
+
+// Size each region to what it actually holds, then stack them without overlap.
+// Fixed 400x300 boxes were arbitrary: "Unplaced" holds most of the cast and
+// overflowed, while a realm with two people in it wasted a third of the canvas.
+{
+  const COLS = 3;
+  const counts = new Map<string, number>();
+  for (const id of placeOf.values()) counts.set(id, (counts.get(id) ?? 0) + 1);
+
+  const GAP = 40;
+  let x = 0;
+  let rowY = 0;
+  let rowH = 0;
+  for (const r of regions) {
+    const n = counts.get(r.id) ?? 0;
+    r.h = Math.max(200, Math.ceil(n / COLS) * 62 + 110);
+    r.w = 400;
+    if (x > 0 && x + r.w > 900) { x = 0; rowY += rowH + GAP; rowH = 0; }
+    r.x = x;
+    r.y = rowY;
+    x += r.w + GAP;
+    rowH = Math.max(rowH, r.h);
+  }
+}
+
+/**
+ * Lay each character out inside their own region box.
+ *
+ * The previous scaffold placed nodes on a grid that knew nothing about regions,
+ * so once regions became real, 29 of 30 characters were drawn outside the box
+ * they belonged to — which reads as a rendering bug rather than a draft.
+ */
+const perRegion = new Map<string, number>();
+function position(regionId: string): { x: number; y: number } {
+  const r = regions.find((x) => x.id === regionId) ?? regions[0]!;
+  const n = perRegion.get(regionId) ?? 0;
+  perRegion.set(regionId, n + 1);
+  const cols = 3;
+  const padX = 70;
+  const padY = 60;
+  const stepX = ((r.w ?? 400) - padX * 2) / (cols - 1);
+  const stepY = 62;
+  return {
+    x: (r.x ?? 0) + padX + (n % cols) * stepX,
+    y: r.y + padY + Math.floor(n / cols) * stepY,
+  };
+}
+
+// A character who dies is last seen in the book they die in. Blanket-assigning
+// the final book kept Malcolm on the chart in book two, a book he is not in.
+const diesIn = new Map<string, number>();
+for (const [i, chunk] of chunks.entries()) {
+  for (const c of graph.characters) {
+    if (c.status !== 'dead' || diesIn.has(c.id)) continue;
+    const first = c.label.split(/\s+/)[0];
+    if (first && new RegExp(`(?<!\\w)${first}(?!\\w)`, 'i').test(chunk)) {
+      diesIn.set(c.id, books[i]?.id ?? 1);
+    }
+  }
+}
+
 const draft: Series = {
   ...shell,
   regions,
@@ -178,33 +275,123 @@ const draft: Series = {
     // Fall back rather than trust: a model naming a faction that is not in the
     // factions list would otherwise produce an unresolvable id and fail validation.
     affil: c.faction && affiliations[c.faction] ? c.faction : 'unsorted',
-    region: c.place && regionIds.has(c.place) ? c.place : 'main',
+    region: placeOf.get(c.id) ?? 'main',
     book: firstSeen.get(c.id) ?? 1,
-    lastBook,
+    lastBook: c.status === 'dead' ? (diesIn.get(c.id) ?? lastBook) : lastBook,
     status: c.status, size: i < 4 ? 'main' : 'side',
-    // A flat row puts every edge on the same horizontal line, so edge labels
-    // land on top of the name labels and the draft reads as broken rather than
-    // unfinished. Alternating rows costs nothing and keeps edges legible until
-    // a human places the nodes properly.
-    x: 120 + (i % 5) * 170,
-    y: 110 + (i % 2) * 120 + Math.floor(i / 5) * 260,
+    ...position(placeOf.get(c.id) ?? 'main'),
   })),
-  relationships: graph.relationships.map((r) => ({
-    from: r.from, to: r.to, type: r.type,
-    book: Math.max(firstSeen.get(r.from) ?? 1, firstSeen.get(r.to) ?? 1),
-    label: r.label,
-  })),
+  // A symmetric type says the same thing in both directions, so storing both is
+  // a duplicate the validator rejects. Keep whichever direction arrived first.
+  relationships: (() => {
+    const symmetric = new Set(
+      RELATIONSHIP_TYPES.filter((t) => t.symmetric).map((t) => t.id),
+    );
+    const seen = new Set<string>();
+    return graph.relationships
+      .filter((r) => {
+        if (!symmetric.has(r.type)) return true;
+        const key = [r.from, r.to].sort().join('|') + ':' + r.type;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      })
+      .map((r) => ({
+        from: r.from, to: r.to, type: r.type,
+        book: Math.max(firstSeen.get(r.from) ?? 1, firstSeen.get(r.to) ?? 1),
+        label: r.label,
+      }));
+  })(),
   events: chunks.flatMap((chunk, i) =>
     [...chunk.matchAll(/^-\s+(.+)$/gm)].map((m) => ({
       book: books[i]?.id ?? 1,
       text: m[1]!.trim(),
+      // Only link a character the chart actually shows in this book. Book two
+      // says Saeris rules "having killed Malcolm" — Malcolm is backstory there,
+      // not a participant, and linking him points the event at someone the
+      // timeline has already removed.
       involves: graph.characters
         .filter((c) => new RegExp(`(?<!\\w)${c.label.split(/\s+/)[0]}(?!\\w)`, 'i').test(m[1]!))
+        .filter((c) => {
+          const bookId = books[i]?.id ?? 1;
+          const last = c.status === 'dead' ? (diesIn.get(c.id) ?? lastBook) : lastBook;
+          return (firstSeen.get(c.id) ?? 1) <= bookId && last >= bookId;
+        })
         .map((c) => c.id),
       kind: 'other' as const,
     })),
   ),
 };
+
+// ── Corrections ────────────────────────────────────────────────────────────
+// Human judgements, re-applied after every extraction. Without this, curating a
+// draft means the next `add-series` run silently throws that work away — which
+// is how the Carrion merge would have been lost the moment the notes changed.
+const correctionsPath = join(root, 'pipeline', 'input', `${slug}.corrections.json`);
+if (existsSync(correctionsPath)) {
+  const fix = JSON.parse(readFileSync(correctionsPath, 'utf8')) as {
+    dropCharacters?: { id: string }[];
+    mergeCharacters?: { from: string; into: string; alias?: string; role?: string }[];
+    retypeRelationships?: { from: string; to: string; type: string; label?: string }[];
+    addRelationships?: { from: string; to: string; type: string; label?: string }[];
+  };
+  let applied = 0;
+
+  for (const drop of fix.dropCharacters ?? []) {
+    if (!draft.characters.some((c) => c.id === drop.id)) continue;
+    draft.characters = draft.characters.filter((c) => c.id !== drop.id);
+    draft.relationships = draft.relationships.filter(
+      (r) => r.from !== drop.id && r.to !== drop.id,
+    );
+    for (const e of draft.events) e.involves = e.involves.filter((id) => id !== drop.id);
+    applied++;
+  }
+
+  for (const m of fix.mergeCharacters ?? []) {
+    const target = draft.characters.find((c) => c.id === m.into);
+    if (!target || !draft.characters.some((c) => c.id === m.from)) continue;
+    if (m.alias) target.aliases = [...new Set([...(target.aliases ?? []), m.alias])];
+    if (m.role) target.role = m.role;
+    draft.characters = draft.characters.filter((c) => c.id !== m.from);
+    draft.relationships = draft.relationships
+      .map((r) => ({
+        ...r,
+        from: r.from === m.from ? m.into : r.from,
+        to: r.to === m.from ? m.into : r.to,
+      }))
+      .filter((r) => r.from !== r.to);
+    // Events point at ids too, and leaving them behind fails integrity.
+    for (const e of draft.events) {
+      e.involves = [...new Set(e.involves.map((id) => (id === m.from ? m.into : id)))];
+    }
+    applied++;
+  }
+
+  for (const t of fix.retypeRelationships ?? []) {
+    const edge = draft.relationships.find((r) => r.from === t.from && r.to === t.to);
+    if (!edge) continue;
+    edge.type = t.type;
+    if (t.label) edge.label = t.label;
+    applied++;
+  }
+
+  const has = (a: string, b: string, type: string) =>
+    draft.relationships.some(
+      (r) => r.type === type && ((r.from === a && r.to === b) || (r.from === b && r.to === a)),
+    );
+  for (const a of fix.addRelationships ?? []) {
+    const known = new Set(draft.characters.map((c) => c.id));
+    if (!known.has(a.from) || !known.has(a.to) || has(a.from, a.to, a.type)) continue;
+    draft.relationships.push({
+      from: a.from, to: a.to, type: a.type,
+      book: Math.max(firstSeen.get(a.from) ?? 1, firstSeen.get(a.to) ?? 1),
+      label: a.label ?? '',
+    });
+    applied++;
+  }
+
+  console.log(`  applied ${applied} correction(s) from ${slug}.corrections.json`);
+}
 
 // ── Validate before writing ────────────────────────────────────────────────
 const parsed = SeriesSchema.safeParse(draft);

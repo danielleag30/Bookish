@@ -198,6 +198,7 @@ export function mountChart(opts: MountOptions): ChartHandle {
 
     // Edges.
     const edgeLayer = svg('g', { class: 'bkc-edges' });
+    let labelSlot = 0;
     for (const e of view.edges) {
       const [x1, y1, x2, y2] = trimToRim(
         e.from.x, e.from.y, e.to.x, e.to.y, e.from.r + 3, e.to.r + 3,
@@ -214,9 +215,26 @@ export function mountChart(opts: MountOptions): ChartHandle {
       edgeLayer.appendChild(path);
 
       if (state.showEdgeLabels && e.relationship.label) {
-        const m = edgeMidpoint(x1, y1, x2, y2);
+        // Every label used to sit at the exact midpoint, so edges sharing a
+        // node stacked their text in the same place and became unreadable.
+        // Sliding alternate labels off-centre separates them for the common
+        // case of a hub character with several edges.
+        const slide = [0.5, 0.35, 0.65, 0.42, 0.58][labelSlot % 5] ?? 0.5;
+        labelSlot++;
+        const m = {
+          x: x1 + (x2 - x1) * slide,
+          y: y1 + (y2 - y1) * slide,
+        };
         const t = svg('text', { x: m.x, y: m.y, class: 'bkc-edge-label' });
-        t.textContent = e.relationship.label;
+        // Extracted labels are whole sentences. Truncate to keep the chart
+        // legible and hang the full text off a tooltip rather than losing it.
+        const full = e.relationship.label;
+        t.textContent = full.length > 38 ? `${full.slice(0, 36).trimEnd()}…` : full;
+        if (full.length > 38) {
+          const title = svg('title');
+          title.textContent = full;
+          t.appendChild(title);
+        }
         edgeLayer.appendChild(t);
       }
     }
