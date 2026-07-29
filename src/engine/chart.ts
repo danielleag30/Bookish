@@ -167,10 +167,17 @@ export function mountChart(opts: MountOptions): ChartHandle {
     if (state.showRegions) {
       for (const r of view.regions) {
         const g = svg('g', { class: 'bkc-region' });
+        // A region is a backdrop, not a block of colour. Painted at full
+        // opacity, a saturated region colour swamps the nodes sitting on it —
+        // Zilvaren rendered as a solid orange slab. The fill is a wash and the
+        // border carries the identity, which is how a map reads.
         g.appendChild(svg('rect', {
           x: r.x ?? 0, y: r.y, width: r.w ?? w, height: r.h, rx: 10,
-          fill: r.color ?? 'rgba(255,255,255,.03)',
-          stroke: r.border ?? 'rgba(255,255,255,.08)',
+          fill: r.color ?? '#ffffff',
+          'fill-opacity': r.color ? 0.14 : 0.03,
+          stroke: r.border ?? '#ffffff',
+          'stroke-opacity': r.border ? 0.45 : 0.08,
+          'stroke-width': 1.5,
         }));
         const t = svg('text', {
           x: (r.x ?? 0) + 12, y: r.y + 20, class: 'bkc-region-label',
@@ -433,6 +440,32 @@ export function mountChart(opts: MountOptions): ChartHandle {
   }
 
   // ── Interactions ─────────────────────────────────────────────────────────
+
+  /**
+   * Client pixels -> SVG user units.
+   *
+   * The chart is drawn in its own coordinate space and scaled to fit by the
+   * viewBox, so a 10px mouse move is not a 10px move in the drawing. Panning
+   * used to add client deltas straight to `pan`, which made the content drift
+   * away from the cursor at any size but the one where they happened to match.
+   * getScreenCTM knows the real mapping, including preserveAspectRatio.
+   */
+  function toUserSpace(clientX: number, clientY: number): { x: number; y: number } {
+    const ctm = svgEl.getScreenCTM();
+    if (!ctm) return { x: clientX, y: clientY };
+    const pt = svgEl.createSVGPoint();
+    pt.x = clientX;
+    pt.y = clientY;
+    const p = pt.matrixTransform(ctm.inverse());
+    return { x: p.x, y: p.y };
+  }
+
+  /** How many SVG units one client pixel covers right now. */
+  function unitsPerPixel(): number {
+    const ctm = svgEl.getScreenCTM();
+    return ctm && ctm.a !== 0 ? 1 / ctm.a : 1;
+  }
+
   let dragging: { id: string | null; sx: number; sy: number; ox: number; oy: number } | null = null;
   let moved = false;
 
@@ -451,9 +484,12 @@ export function mountChart(opts: MountOptions): ChartHandle {
 
   window.addEventListener('mousemove', (e) => {
     if (!dragging) return;
-    const dx = e.clientX - dragging.sx;
-    const dy = e.clientY - dragging.sy;
-    if (Math.abs(dx) + Math.abs(dy) > 3) moved = true;
+    const rawX = e.clientX - dragging.sx;
+    const rawY = e.clientY - dragging.sy;
+    if (Math.abs(rawX) + Math.abs(rawY) > 3) moved = true;
+    const k = unitsPerPixel();
+    const dx = rawX * k;
+    const dy = rawY * k;
     if (dragging.id) {
       state.moved[dragging.id] = {
         x: dragging.ox + dx / state.scale,
@@ -477,11 +513,49 @@ export function mountChart(opts: MountOptions): ChartHandle {
     }
   });
 
+  /**
+   * Zoom about a point, so what is under the cursor stays under the cursor.
+   *
+   * The transform is `translate(pan) scale(s)`, so a point p in chart space is
+   * drawn at `pan + p*s`. Holding the drawn position fixed while s changes
+   * means solving for the new pan, which is what this does. Without it, zoom
+   * pivoted on the top-left corner and the chart lunged off-screen.
+   */
+  function zoomAbout(clientX: number, clientY: number, factor: number) {
+    const next = Math.min(3, Math.max(0.18, state.scale * factor));
+    if (next === state.scale) return;
+    const at = toUserSpace(clientX, clientY);
+    const world = { x: (at.x - state.pan.x) / state.scale, y: (at.y - state.pan.y) / state.scale };
+    state.pan = { x: at.x - world.x * next, y: at.y - world.y * next };
+    state.scale = next;
+    render();
+  }
+
   stage.addEventListener('wheel', (e) => {
+    // A trackpad pinch arrives as a wheel event with ctrlKey set. Everything
+    // else is a scroll, and a scroll over a canvas should move the canvas —
+    // zooming on every wheel event is why this felt wrong.
+    if (e.ctrlKey || e.metaKey) {
+      e.preventDefault();
+      // 0.01 moved a full mouse notch (~120) through 3.3x in one step, which
+      // overshoots the whole zoom range in two clicks. This is ~1.2x a notch.
+      zoomAbout(e.clientX, e.clientY, Math.exp(-e.deltaY * 0.0015));
+      return;
+    }
     e.preventDefault();
-    state.scale = Math.min(3, Math.max(0.18, state.scale - e.deltaY * 0.0012));
+    const k = unitsPerPixel();
+    state.pan = { x: state.pan.x - e.deltaX * k, y: state.pan.y - e.deltaY * k };
     render();
   }, { passive: false });
+
+  // Double-click on empty canvas resets the view. Once you can zoom freely you
+  // need a way back, and hunting for the chart by dragging is miserable.
+  stage.addEventListener('dblclick', (e) => {
+    if ((e.target as Element).closest('.bkc-node')) return;
+    state.scale = 1;
+    state.pan = { x: 0, y: 0 };
+    render();
+  });
 
   function setBook(book: number) {
     state.book = book;

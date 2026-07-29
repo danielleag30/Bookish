@@ -72,6 +72,15 @@ console.log(`${title}\ncover ${imagePath.replace(root + '/', '')}\nmodel ${model
 // knows the series knows things the cover does not show.
 const steer = arg('steer');
 
+// Named, so the agent colours the real places rather than inventing a palette
+// in the abstract. This is the difference between a theme and a decoration.
+const regionList = (series?.regions ?? [])
+  .map((r) => `  ${r.id} — ${r.label}`)
+  .join('\n') || '  (none)';
+const factionList = Object.entries(series?.affiliations ?? {})
+  .map(([id, a]) => `  ${id} — ${a.label}`)
+  .join('\n') || '  (none)';
+
 const THEME_SCHEMA = {
   type: 'object',
   properties: {
@@ -81,14 +90,41 @@ const THEME_SCHEMA = {
     line: { type: 'string', description: 'Hex. Borders. Close to the accent but much dimmer.' },
     accent2: { type: 'string', description: 'Hex. A counterpoint accent, only when the series is built on an opposition (ice vs fire). Must also read on the ground.' },
     mood: { type: 'string', description: 'One sentence on why these colours suit this series. Concrete, not marketing.' },
+    regionColors: {
+      type: 'array',
+      description: 'One entry per region listed in the prompt, using the same ids.',
+      items: {
+        type: 'object',
+        properties: {
+          id: { type: 'string' },
+          color: { type: 'string', description: 'Hex. A dark, desaturated wash for the region background.' },
+          border: { type: 'string', description: 'Hex. Brighter than color, still muted.' },
+        },
+        required: ['id', 'color', 'border'],
+      },
+    },
+    factionColors: {
+      type: 'array',
+      description: 'One entry per faction listed in the prompt, using the same ids.',
+      items: {
+        type: 'object',
+        properties: {
+          id: { type: 'string' },
+          color: { type: 'string', description: 'Hex. Node fill. Must read against the ground.' },
+          border: { type: 'string', description: 'Hex. Node stroke, brighter than color.' },
+        },
+        required: ['id', 'color', 'border'],
+      },
+    },
   },
   // Constrained decoding is the only reliable lever here: asked politely for a
   // counterpoint accent the model simply omitted it, because optional fields in
   // a JSON schema are genuinely optional. A steer means a human asked for
   // something specific, so accent2 becomes required and the decoder must fill it.
-  required: steer
-    ? ['accent', 'accent2', 'ground', 'panel', 'line', 'mood']
-    : ['accent', 'ground', 'panel', 'line', 'mood'],
+  required: [
+    'accent', 'ground', 'panel', 'line', 'mood', 'regionColors', 'factionColors',
+    ...(steer ? ['accent2'] : []),
+  ],
 };
 
 const prompt = `This is the cover of "${title}", a fantasy series.
@@ -102,6 +138,17 @@ Requirements:
 - panel is a little lighter than ground
 - line is close to accent but much dimmer
 - mood: one concrete sentence about why this palette suits THIS series
+
+This chart draws the places and the sides. Give each one its own colour, drawn
+from the same palette, so the chart reads as a map of this world rather than a
+grid of identical grey boxes. Where a place is described by an element — a
+frozen realm, a desert city, a vampire court — let its colour say so.
+
+Regions (use these exact ids):
+${regionList}
+
+Factions (use these exact ids):
+${factionList}
 ${steer ? `
 The person who has read this series asks for this specifically:
   "${steer}"
@@ -113,7 +160,13 @@ Return hex codes.`;
 
 const image = readFileSync(imagePath).toString('base64');
 const started = Date.now();
-const res = await call<Theme & { accent: string; ground: string; panel: string; line: string; mood: string }>(
+interface Swatch { id: string; color: string; border: string }
+const res = await call<
+  Theme & {
+    accent: string; ground: string; panel: string; line: string; mood: string;
+    regionColors?: Swatch[]; factionColors?: Swatch[];
+  }
+>(
   prompt, { model, format: THEME_SCHEMA, images: [image], timeoutMs: 420_000 },
 );
 const t = res.value;
@@ -170,7 +223,43 @@ if (!series) {
   process.exit(1);
 }
 
-const updated = { ...series, theme: { ...t, display: series.theme?.display ?? "'Cinzel', serif" } };
+// The per-region and per-faction palettes belong on the regions and
+// affiliations themselves, not in `theme` — that is where the chart engine
+// already looks, so no rendering code has to learn about a second source.
+const regionPalette = new Map((t.regionColors ?? []).map((r) => [r.id, r]));
+const factionPalette = new Map((t.factionColors ?? []).map((f) => [f.id, f]));
+let painted = 0;
+
+const regions = series.regions.map((r) => {
+  const c = regionPalette.get(r.id);
+  if (!c || contrastRatio(c.color, t.ground) === null) return r;
+  painted++;
+  return { ...r, color: c.color, border: c.border };
+});
+
+const affiliations = Object.fromEntries(
+  Object.entries(series.affiliations).map(([id, a]) => {
+    const c = factionPalette.get(id);
+    // A node fill has to be distinguishable from the background it sits on, or
+    // the character disappears. 1.6:1 is low, but these are large filled discs
+    // with a brighter stroke, not text.
+    const ratio = c ? contrastRatio(c.color, t.ground) : null;
+    if (!c || ratio === null || ratio < 1.6) return [id, a];
+    painted++;
+    return [id, { ...a, color: c.color, border: c.border }];
+  }),
+);
+
+// Strip the proposal arrays back out; they were the transport, not the data.
+const { regionColors: _rc, factionColors: _fc, ...themeOnly } = t;
+
+const updated = {
+  ...series,
+  regions,
+  affiliations,
+  theme: { ...themeOnly, display: series.theme?.display ?? "'Cinzel', serif" },
+};
+console.log(`  painted ${painted} region(s) and faction(s)`);
 SeriesSchema.parse(updated);
 writeFileSync(dataPath, JSON.stringify(updated, null, 2) + '\n');
 console.log(`\nwrote the theme into data/${slug}.json`);

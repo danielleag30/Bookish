@@ -466,6 +466,46 @@ export function ask(series: Series, position: number, question: string): Answer 
       };
     }
 
+    // "how did Malcolm die" used to fall through to the character card, whose
+    // headline is just the name and which buries the killer on line six under
+    // "Connections". The data answers the question outright — a `killed` edge
+    // names who did it and an event says how — so answer it outright.
+    if (/\b(die|dies|died|death|dead|killed|kill)\b/.test(lower)) {
+      const p = present(subject, g);
+      const killedBy = g.relationships.filter((r) => r.type === 'killed' && r.to === subject.id);
+      const theyKilled = g.relationships.filter((r) => r.type === 'killed' && r.from === subject.id);
+      const lines: string[] = [];
+
+      for (const r of killedBy) {
+        const killer = g.byId.get(r.from);
+        lines.push(`Killed by ${killer?.label ?? r.from}${r.label ? ` — ${r.label}` : ''} (book ${r.book})`);
+      }
+      // Events naming this character that read like a death. Cheap, but it is
+      // the sentence a reader actually wants back.
+      for (const e of eventsOf(g, subject.id)) {
+        if (/\b(kill|kills|killed|dies|died|death|slain|sacrific|execut|mortally)\b/i.test(e.text)) {
+          lines.push(`Book ${e.book} · ${e.text}`);
+        }
+      }
+      for (const r of theyKilled) {
+        const victim = g.byId.get(r.to);
+        lines.push(`Killed ${victim?.label ?? r.to}${r.label ? ` — ${r.label}` : ''} (book ${r.book})`);
+      }
+
+      let headline: string;
+      if (killedBy.length) {
+        const killer = g.byId.get(killedBy[0]!.from);
+        headline = `${p.label} — killed by ${killer?.label ?? killedBy[0]!.from}`;
+      } else if (p.status === 'dead') {
+        headline = `${p.label} — ${p.statusIsBelief ? 'dead, as far as you know' : 'dead'}`;
+        if (!lines.length) lines.push('The chart records the death but not how it happened.');
+      } else {
+        headline = `${p.label} is ${p.status} at this point.`;
+      }
+      if (p.statusIsBelief) lines.push('(That is what you believe so far — as far as you know.)');
+      return { kind: 'events', gatedNote, subject: p, headline, lines };
+    }
+
     if (/\b(happen|happened|events?|story|arc)\b/.test(lower)) {
       const evs = eventsOf(g, subject.id);
       const p = present(subject, g);
