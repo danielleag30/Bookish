@@ -23,6 +23,7 @@
  */
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { resolve, join } from 'node:path';
+import { applyCorrections, type Corrections } from '../pipeline/corrections.ts';
 import { SeriesSchema, checkIntegrity, type Series } from '../src/schema.ts';
 import { RELATIONSHIP_TYPES } from '../src/relationships.ts';
 import { extractSeries } from '../pipeline/extract.ts';
@@ -324,73 +325,17 @@ const draft: Series = {
 };
 
 // ── Corrections ────────────────────────────────────────────────────────────
-// Human judgements, re-applied after every extraction. Without this, curating a
-// draft means the next `add-series` run silently throws that work away — which
-// is how the Carrion merge would have been lost the moment the notes changed.
+// Human judgements, re-applied after every extraction. Shared with
+// scripts/apply-corrections.ts so a fresh run and a re-apply cannot diverge.
 const correctionsPath = join(root, 'pipeline', 'input', `${slug}.corrections.json`);
 if (existsSync(correctionsPath)) {
-  const fix = JSON.parse(readFileSync(correctionsPath, 'utf8')) as {
-    dropCharacters?: { id: string }[];
-    mergeCharacters?: { from: string; into: string; alias?: string; role?: string }[];
-    retypeRelationships?: { from: string; to: string; type: string; label?: string }[];
-    addRelationships?: { from: string; to: string; type: string; label?: string }[];
-  };
-  let applied = 0;
-
-  for (const drop of fix.dropCharacters ?? []) {
-    if (!draft.characters.some((c) => c.id === drop.id)) continue;
-    draft.characters = draft.characters.filter((c) => c.id !== drop.id);
-    draft.relationships = draft.relationships.filter(
-      (r) => r.from !== drop.id && r.to !== drop.id,
-    );
-    for (const e of draft.events) e.involves = e.involves.filter((id) => id !== drop.id);
-    applied++;
-  }
-
-  for (const m of fix.mergeCharacters ?? []) {
-    const target = draft.characters.find((c) => c.id === m.into);
-    if (!target || !draft.characters.some((c) => c.id === m.from)) continue;
-    if (m.alias) target.aliases = [...new Set([...(target.aliases ?? []), m.alias])];
-    if (m.role) target.role = m.role;
-    draft.characters = draft.characters.filter((c) => c.id !== m.from);
-    draft.relationships = draft.relationships
-      .map((r) => ({
-        ...r,
-        from: r.from === m.from ? m.into : r.from,
-        to: r.to === m.from ? m.into : r.to,
-      }))
-      .filter((r) => r.from !== r.to);
-    // Events point at ids too, and leaving them behind fails integrity.
-    for (const e of draft.events) {
-      e.involves = [...new Set(e.involves.map((id) => (id === m.from ? m.into : id)))];
-    }
-    applied++;
-  }
-
-  for (const t of fix.retypeRelationships ?? []) {
-    const edge = draft.relationships.find((r) => r.from === t.from && r.to === t.to);
-    if (!edge) continue;
-    edge.type = t.type;
-    if (t.label) edge.label = t.label;
-    applied++;
-  }
-
-  const has = (a: string, b: string, type: string) =>
-    draft.relationships.some(
-      (r) => r.type === type && ((r.from === a && r.to === b) || (r.from === b && r.to === a)),
-    );
-  for (const a of fix.addRelationships ?? []) {
-    const known = new Set(draft.characters.map((c) => c.id));
-    if (!known.has(a.from) || !known.has(a.to) || has(a.from, a.to, a.type)) continue;
-    draft.relationships.push({
-      from: a.from, to: a.to, type: a.type,
-      book: Math.max(firstSeen.get(a.from) ?? 1, firstSeen.get(a.to) ?? 1),
-      label: a.label ?? '',
-    });
-    applied++;
-  }
-
+  const fix = JSON.parse(readFileSync(correctionsPath, 'utf8')) as Corrections;
+  const { applied, skipped } = applyCorrections(draft, fix);
   console.log(`  applied ${applied} correction(s) from ${slug}.corrections.json`);
+  if (skipped.length) {
+    console.warn(`  ${skipped.length} correction(s) did NOT apply:`);
+    for (const line of skipped) console.warn(`    ${line}`);
+  }
 }
 
 // ── Validate before writing ────────────────────────────────────────────────
