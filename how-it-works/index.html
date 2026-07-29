@@ -41,6 +41,16 @@ header nav a{color:var(--faint);text-decoration:none;border-bottom:1px solid tra
   padding-bottom:2px}
 header nav a:hover,header nav a:focus-visible{color:var(--gold);border-color:var(--gold)}
 
+/* ── Flow diagram ───────────────────────────────────────────── */
+.diagram{background:var(--surface);border:1px solid var(--line);border-radius:14px;
+  padding:22px 18px;margin:26px 0 18px;overflow-x:auto}
+.diagram .mermaid{min-width:640px}
+.diagram-key{display:flex;flex-wrap:wrap;gap:16px;margin-top:6px;
+  font-family:var(--mono);font-size:.7rem;color:var(--muted)}
+.diagram-key span{display:flex;align-items:center;gap:7px}
+.diagram-key i{width:11px;height:11px;border-radius:3px;display:inline-block}
+.fallback{font-family:var(--mono);font-size:.72rem;color:var(--faint)}
+
 /* ── Sections ───────────────────────────────────────────────── */
 section{margin-bottom:72px;scroll-margin-top:24px}
 h2{font-family:'Cinzel',serif;font-weight:500;font-size:1.5rem;margin-bottom:8px;
@@ -122,6 +132,7 @@ footer{border-top:1px solid var(--line);padding-top:28px;color:var(--faint);font
   builds the data on my laptop; <strong>the site that readers use contains no model at all.</strong>
   Keeping those apart is what makes the spoiler boundary a guarantee rather than a request.</p>
   <nav>
+    <a href="#flow">The whole flow</a>
     <a href="#two">Two systems</a>
     <a href="#pipeline">The pipeline</a>
     <a href="#gate">The gate</a>
@@ -136,6 +147,75 @@ footer{border-top:1px solid var(--line);padding-top:28px;color:var(--faint);font
   <span><i style="background:#5fd39a"></i> passes the gate</span>
   <span><i style="background:#e8697d"></i> blocked or rejected</span>
 </div>
+
+<section id="flow">
+  <h2>The whole flow, end to end</h2>
+  <p class="sub">Where every fact on a chart comes from, and what it has to survive
+  on the way. Nothing here is hypothetical — each box is a file you can open.</p>
+
+  <div class="diagram">
+    <pre class="mermaid">
+flowchart TB
+  subgraph RESEARCH["1 · Research — a human and Claude, not the local model"]
+    SRC["Public recaps, wikis,<br/>reading guides"] --> NOTES["pipeline/input/SERIES.md<br/><i>plot beats, never book text</i>"]
+  end
+
+  subgraph EXTRACT["2 · Extraction — local Ollama, gemma4, $0"]
+    NOTES --> EX["extractor<br/><i>one pass per book</i>"]
+    EX --> VER["verifier<br/><i>can each claim be grounded<br/>in the notes?</i>"]
+    VER --> RES["resolver<br/><i>merge, slugify, dedupe</i>"]
+  end
+
+  subgraph HUMAN["3 · Human judgement — survives re-extraction"]
+    RES --> CORR["SERIES.corrections.json<br/><i>drop · merge · retype · add</i>"]
+    COVER["cover image + steer"] --> THEME["theme agent<br/><i>palette per region and faction,<br/>contrast-checked</i>"]
+  end
+
+  CORR --> DATA[("data/SERIES.json")]
+  THEME --> DATA
+
+  subgraph CHECK["4 · Gates that block a merge"]
+    DATA --> VAL["checkIntegrity<br/><i>0 errors, 0 warnings</i>"]
+    VAL --> TESTS["300 tests<br/><i>incl. adversarial spoiler suite</i>"]
+  end
+
+  TESTS --> GATE{{"gate(series, position)<br/><b>the one rule</b>"}}
+
+  GATE --> CHART["chart renderer"]
+  GATE --> ASK["ask box"]
+  GATE --> MCP["MCP server"]
+  GATE --> EVAL["eval runner"]
+
+  CHART --> SITE["build-site.ts → dist/<br/><i>allowlist; sources/ never ships</i>"]
+  ASK --> SITE
+
+  classDef det fill:#241e10,stroke:#d4af37,color:#e8e4f0
+  classDef model fill:#231a33,stroke:#a67ee0,color:#e8e4f0
+  classDef human fill:#1e1830,stroke:#5fd39a,color:#e8e4f0
+  classDef gate fill:#2b1a20,stroke:#e8697d,color:#e8e4f0
+  class SRC,NOTES,DATA,VAL,TESTS,SITE det
+  class EX,VER,RES,THEME model
+  class CORR,COVER human
+  class GATE gate
+    </pre>
+    <noscript><p class="fallback">Diagram needs JavaScript. In short: research → extract →
+    verify → resolve → human corrections → validate → gate() → every reader-facing surface.</p></noscript>
+  </div>
+
+  <div class="diagram-key">
+    <span><i style="background:#d4af37"></i>deterministic</span>
+    <span><i style="background:#a67ee0"></i>model-powered</span>
+    <span><i style="background:#5fd39a"></i>human judgement</span>
+    <span><i style="background:#e8697d"></i>the spoiler gate</span>
+  </div>
+
+  <p>Three things about this shape are deliberate. <strong>The model never touches book
+  text</strong> — the corpus is plot beats, so nothing copyrighted enters the repo.
+  <strong>Human judgement is a file, not a memory</strong>: corrections are re-applied after
+  every extraction, because the Carrion Swift merge was destroyed three times by re-runs
+  before it was written down. And <strong>everything reader-facing hangs off one
+  function</strong> — if <code>gate()</code> is right, four surfaces are right.</p>
+</section>
 
 <section id="two">
   <h2>Two systems, one dataset</h2>
@@ -302,7 +382,16 @@ footer{border-top:1px solid var(--line);padding-top:28px;color:var(--faint);font
   point has met: characters whose first book has arrived, relationships whose <em>both</em>
   endpoints are visible, events up to that book. It also swaps in what the reader
   <em>believes</em> — Brennan reads as dead through book 1 because that's what you think until
-  the final paragraph of <em>Fourth Wing</em>.</p>
+  the final paragraph of <em>Fourth Wing</em>, and Rip is just Rip until the end of
+  <em>Glint</em>.</p>
+
+  <p>That last part used to be a half-truth. Belief-swapping lived in a separate
+  <code>present()</code> function, so it only protected callers that remembered to use it —
+  the ask box and the MCP server did, and <strong>the chart renderer did not</strong>. It read
+  the gated characters and drew them, which meant a hidden prince was drawn under his real
+  name and title two books before the reveal, with every spoiler test passing. Resolution
+  now happens inside <code>gate()</code>, so the rule protects everyone rather than everyone
+  who opts in.</p>
 
   <div class="tablewrap">
     <table>
@@ -374,5 +463,20 @@ footer{border-top:1px solid var(--line);padding-top:28px;color:var(--faint);font
 </footer>
 
 </div>
+<script type="module">
+  // Rendered client-side rather than checked in as SVG so the diagram stays
+  // editable as prose. If the CDN is unreachable the <pre> text is still a
+  // readable description of the flow, which is why it is written as one.
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      background: '#161221', primaryColor: '#1e1830', primaryTextColor: '#e8e4f0',
+      primaryBorderColor: '#2b2340', lineColor: '#6b6280', fontFamily: 'DM Sans, system-ui, sans-serif',
+      fontSize: '13px', clusterBkg: '#12101c', clusterBorder: '#2b2340', titleColor: '#968da8',
+    },
+  });
+</script>
 </body>
 </html>
