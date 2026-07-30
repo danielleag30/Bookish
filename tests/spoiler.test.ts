@@ -484,7 +484,23 @@ describe('what an unprepared consumer renders', () => {
           );
           const believed = truth.perceived?.status === c.status && pos <= truth.perceived.untilBook;
           const leavesHere = truth.lastBook <= pos;
-          if (!changed && !believed && !leavesHere) {
+
+          // Third case, found by Edina: someone already dead when the reader
+          // first meets them. She is killed by Belikon before Quicksilver opens
+          // and still appears in Brimstone as a spirit in the quicksilver, so
+          // she is non-alive from her first book AND present past it — which
+          // reads exactly like the leak this test exists to catch.
+          //
+          // The discriminator has to be something a careless end-state status
+          // would not have, or this exemption would swallow every real leak.
+          // `statusDetail` is that: it is optional, nothing generates it, and
+          // writing one means a human stated the cause. "Dead on arrival, and
+          // here is why" passes; a bare `dead` on a character who is around for
+          // five more books still fails.
+          const deadOnArrival =
+            truth.status === c.status && truth.book === c.book && Boolean(truth.statusDetail);
+
+          if (!changed && !believed && !leavesHere && !deadOnArrival) {
             offenders.push(`${c.id} reads "${c.status}" at book ${pos} but is present through ${truth.lastBook}`);
           }
         }

@@ -52,11 +52,6 @@
       "color": "#36454F",
       "border": "#5F798B"
     },
-    "rebellion": {
-      "label": "Rebellion",
-      "color": "#A9A9A9",
-      "border": "#778899"
-    },
     "blood_court": {
       "label": "Blood Court",
       "color": "#8B0000",
@@ -76,6 +71,11 @@
       "label": "Zilvaren",
       "color": "#a8642c",
       "border": "#d4903f"
+    },
+    "lupo_proelia": {
+      "label": "Lupo Proelia",
+      "color": "#6b8f7a",
+      "border": "#a3d4bb"
     }
   },
   "relationshipTypes": [
@@ -191,7 +191,8 @@
       "status": "alive",
       "size": "main",
       "x": 70,
-      "y": 62
+      "y": 62,
+      "magic": "Immortal; stilled the Quicksilver a thousand years ago"
     },
     {
       "id": "saeris_fane",
@@ -205,7 +206,19 @@
       "status": "alive",
       "size": "main",
       "x": 510,
-      "y": 62
+      "y": 62,
+      "magic": "Alchemist — Light, Dark, Silver, Steel, Earth, Air, Fire, Water, Salt, Brimstone and Quicksilver, worked through runes",
+      "changes": [
+        {
+          "book": 2,
+          "set": {
+            "affil": "blood_court",
+            "region": "sanasroth",
+            "role": "Queen of Sanasroth; the most powerful Alchemist in existence"
+          },
+          "why": "Turned at the end of Quicksilver and crowned Queen of the Blood Court in Brimstone. Dated to book 2 on the same convention as Brennan and Rip: an end-of-book change surfaces the book after, or she reads as a vampire for the whole of book 1."
+        }
+      ]
     },
     {
       "id": "hayden_fane",
@@ -250,7 +263,17 @@
       "status": "alive",
       "size": "side",
       "x": 640,
-      "y": 62
+      "y": 62,
+      "magic": "Glamour — passed as human for a thousand years; wields the Godsword Simon, whose power is unrevealed",
+      "changes": [
+        {
+          "book": 2,
+          "set": {
+            "region": "zilvaren"
+          },
+          "why": "Returns to Zilvaren with Kingfisher in Brimstone."
+        }
+      ]
     },
     {
       "id": "kingfisher",
@@ -264,7 +287,8 @@
       "status": "alive",
       "size": "side",
       "x": 770,
-      "y": 62
+      "y": 62,
+      "magic": "Shadow and black-smoke magic; quicksilver fused to his mind; wields the Godsword Nimerelle"
     },
     {
       "id": "everlayne",
@@ -292,14 +316,15 @@
       "status": "alive",
       "size": "side",
       "x": 640,
-      "y": 126
+      "y": 126,
+      "magic": "Healing"
     },
     {
       "id": "renfis_orithian",
       "label": "Renfis Orithian",
-      "role": "",
+      "role": "Commander of the Yvelian Army; member of the Lupo Proelia; Kingfisher's closest friend",
       "type": "fae",
-      "affil": "yvelian_court",
+      "affil": "lupo_proelia",
       "region": "yvelia",
       "book": 1,
       "lastBook": 2,
@@ -313,14 +338,15 @@
       "label": "Lorreth",
       "role": "",
       "type": "fae",
-      "affil": "rebellion",
+      "affil": "lupo_proelia",
       "region": "yvelia",
       "book": 1,
       "lastBook": 2,
       "status": "alive",
       "size": "side",
       "x": 510,
-      "y": 190
+      "y": 190,
+      "magic": "Wields the Godsword Avisiéth, 'Angel's Breath', previously Danya's"
     },
     {
       "id": "belikon_de_barra",
@@ -348,28 +374,30 @@
       "status": "dead",
       "size": "side",
       "x": 70,
-      "y": 660
+      "y": 660,
+      "magic": "Vampire venom potent enough to thrall with a single bite"
     },
     {
       "id": "danya",
       "label": "Danya",
       "role": "",
       "type": "fae",
-      "affil": "rebellion",
+      "affil": "lupo_proelia",
       "region": "yvelia",
       "book": 1,
       "lastBook": 2,
       "status": "alive",
       "size": "side",
       "x": 770,
-      "y": 190
+      "y": 190,
+      "magic": "Formerly wielded the Godsword Avisiéth, lost to Lorreth"
     },
     {
       "id": "korrix",
       "label": "Korrix",
       "role": "",
       "type": "fae",
-      "affil": "rebellion",
+      "affil": "lupo_proelia",
       "region": "yvelia",
       "book": 1,
       "lastBook": 2,
@@ -381,27 +409,33 @@
     {
       "id": "foley",
       "label": "Foley",
-      "role": "",
+      "role": "Member of the Lupo Proelia; alchemist",
       "type": "fae",
-      "affil": "rebellion",
+      "affil": "lupo_proelia",
       "region": "yvelia",
       "book": 1,
       "lastBook": 2,
       "status": "alive",
       "size": "side",
       "x": 640,
-      "y": 254
+      "y": 254,
+      "perceived": {
+        "status": "dead",
+        "untilBook": 1,
+        "note": "Believed killed at the Battle of Ajun Gate in Quicksilver. Revealed alive in Brimstone as the mysterious library attacker, and teaches Saeris the fundamentals of alchemy."
+      }
     },
     {
       "id": "merelle",
       "label": "Merelle",
-      "role": "",
+      "role": "Member of the Lupo Proelia; Renfis's twin sister",
       "type": "fae",
-      "affil": "rebellion",
+      "affil": "lupo_proelia",
       "region": "yvelia",
       "book": 1,
-      "lastBook": 2,
-      "status": "alive",
+      "lastBook": 1,
+      "status": "dead",
+      "statusDetail": "killed at the Battle of Ajun Gate",
       "size": "side",
       "x": 770,
       "y": 254
@@ -411,7 +445,7 @@
       "label": "Vashgidyan",
       "role": "",
       "type": "fae",
-      "affil": "rebellion",
+      "affil": "lupo_proelia",
       "region": "yvelia",
       "book": 1,
       "lastBook": 2,
@@ -423,16 +457,18 @@
     {
       "id": "finran",
       "label": "Finran",
-      "role": "",
+      "role": "Kingfisher's father; carried the infant Carrion to Zilvaren to hide him from Belikon",
       "type": "fae",
       "affil": "cahlish",
       "region": "yvelia",
       "book": 1,
       "lastBook": 2,
-      "status": "alive",
+      "status": "unknown",
+      "statusDetail": "supposedly deceased",
       "size": "side",
       "x": 640,
-      "y": 318
+      "y": 318,
+      "magic": "Previously bonded to the Godsword Solace"
     },
     {
       "id": "rurik_daianthus",
@@ -442,11 +478,13 @@
       "affil": "yvelian_court",
       "region": "yvelia",
       "book": 1,
-      "lastBook": 2,
-      "status": "alive",
+      "lastBook": 1,
+      "status": "dead",
+      "statusDetail": "killed by Belikon",
       "size": "side",
       "x": 770,
-      "y": 318
+      "y": 318,
+      "magic": "His blood was used to create the original blood curse"
     },
     {
       "id": "amelia_daianthus",
@@ -456,8 +494,9 @@
       "affil": "yvelian_court",
       "region": "yvelia",
       "book": 1,
-      "lastBook": 2,
-      "status": "alive",
+      "lastBook": 1,
+      "status": "dead",
+      "statusDetail": "killed by Belikon",
       "size": "side",
       "x": 510,
       "y": 382
@@ -488,21 +527,24 @@
       "status": "alive",
       "size": "side",
       "x": 770,
-      "y": 382
+      "y": 382,
+      "magic": "Fire sprite"
     },
     {
       "id": "edina",
       "label": "Edina",
-      "role": "",
+      "role": "Oracle; Edina of the Seven Towers, Lady of Cahlish; Kingfisher's mother",
       "type": "fae",
       "affil": "cahlish",
       "region": "yvelia",
       "book": 1,
       "lastBook": 2,
-      "status": "alive",
+      "status": "dead",
+      "statusDetail": "killed by Belikon",
       "size": "side",
       "x": 510,
-      "y": 446
+      "y": 446,
+      "magic": "Oracle — foresight"
     },
     {
       "id": "harron",
@@ -516,12 +558,16 @@
       "status": "dead",
       "size": "side",
       "x": 70,
-      "y": 126
+      "y": 126,
+      "magic": "Immortality, granted by Madra"
     },
     {
       "id": "taladius",
-      "label": "Taladius",
-      "role": "",
+      "label": "Taladaius",
+      "aliases": [
+        "Taladius"
+      ],
+      "role": "Malcolm's second; secretly working against him; grew up with Kingfisher",
       "type": "vampire",
       "affil": "blood_court",
       "region": "sanasroth",
@@ -530,7 +576,8 @@
       "status": "alive",
       "size": "side",
       "x": 200,
-      "y": 660
+      "y": 660,
+      "magic": "Exceptionally powerful vampire — enthralls with a single bite, an exception to the usual hierarchy"
     },
     {
       "id": "eric",
@@ -572,7 +619,8 @@
       "status": "dead",
       "size": "side",
       "x": 330,
-      "y": 660
+      "y": 660,
+      "magic": "Vampire Lord"
     },
     {
       "id": "orious",
@@ -701,6 +749,237 @@
       "type": "complicated",
       "book": 1,
       "label": "A rogue from her past in Zilvaren, pulled through the portal with her."
+    },
+    {
+      "from": "finran",
+      "to": "kingfisher",
+      "type": "family",
+      "book": 1,
+      "label": "father"
+    },
+    {
+      "from": "belikon_de_barra",
+      "to": "kingfisher",
+      "type": "family",
+      "book": 1,
+      "label": "stepfather"
+    },
+    {
+      "from": "belikon_de_barra",
+      "to": "everlayne",
+      "type": "family",
+      "book": 1,
+      "label": "father"
+    },
+    {
+      "from": "everlayne",
+      "to": "kingfisher",
+      "type": "family",
+      "book": 1,
+      "label": "half-sister — same mother"
+    },
+    {
+      "from": "rurik_daianthus",
+      "to": "carrion_swift",
+      "type": "family",
+      "book": 1,
+      "label": "father"
+    },
+    {
+      "from": "amelia_daianthus",
+      "to": "carrion_swift",
+      "type": "family",
+      "book": 1,
+      "label": "mother"
+    },
+    {
+      "from": "belikon_de_barra",
+      "to": "rurik_daianthus",
+      "type": "killed",
+      "book": 1,
+      "label": "usurped and killed him"
+    },
+    {
+      "from": "belikon_de_barra",
+      "to": "amelia_daianthus",
+      "type": "killed",
+      "book": 1,
+      "label": "killed her"
+    },
+    {
+      "from": "belikon_de_barra",
+      "to": "edina",
+      "type": "killed",
+      "book": 1,
+      "label": "killed her"
+    },
+    {
+      "from": "belikon_de_barra",
+      "to": "malcolm",
+      "type": "ally",
+      "book": 1,
+      "label": "the Triumvirate — a secret alliance a thousand years old"
+    },
+    {
+      "from": "belikon_de_barra",
+      "to": "madra",
+      "type": "ally",
+      "book": 1,
+      "label": "the Triumvirate"
+    },
+    {
+      "from": "madra",
+      "to": "malcolm",
+      "type": "ally",
+      "book": 1,
+      "label": "the Triumvirate"
+    },
+    {
+      "from": "madra",
+      "to": "harron",
+      "type": "commands",
+      "book": 1,
+      "label": "head of her guard, made immortal by her"
+    },
+    {
+      "from": "madra",
+      "to": "iris_fane",
+      "type": "enemy",
+      "book": 1,
+      "label": "Iris worked with the rebels; killed by Madra's Guardians"
+    },
+    {
+      "from": "iris_fane",
+      "to": "saeris_fane",
+      "type": "family",
+      "book": 1,
+      "label": "mother"
+    },
+    {
+      "from": "iris_fane",
+      "to": "hayden_fane",
+      "type": "family",
+      "book": 1,
+      "label": "mother"
+    },
+    {
+      "from": "renfis_orithian",
+      "to": "merelle",
+      "type": "family",
+      "book": 1,
+      "label": "twin sister"
+    },
+    {
+      "from": "kingfisher",
+      "to": "renfis_orithian",
+      "type": "commands",
+      "book": 1,
+      "label": "Renfis serves in the Lupo Proelia under him"
+    },
+    {
+      "from": "kingfisher",
+      "to": "lorreth",
+      "type": "commands",
+      "book": 1,
+      "label": "newest of the Wolves"
+    },
+    {
+      "from": "kingfisher",
+      "to": "danya",
+      "type": "commands",
+      "book": 1,
+      "label": "one of the Wolves"
+    },
+    {
+      "from": "kingfisher",
+      "to": "korrix",
+      "type": "commands",
+      "book": 1,
+      "label": "one of the Wolves"
+    },
+    {
+      "from": "kingfisher",
+      "to": "vashgidyan",
+      "type": "commands",
+      "book": 1,
+      "label": "one of the Wolves"
+    },
+    {
+      "from": "kingfisher",
+      "to": "foley",
+      "type": "commands",
+      "book": 1,
+      "label": "one of the Wolves"
+    },
+    {
+      "from": "foley",
+      "to": "saeris_fane",
+      "type": "mentor",
+      "book": 1,
+      "label": "teaches her the fundamentals of alchemy"
+    },
+    {
+      "from": "archer",
+      "to": "kingfisher",
+      "type": "friend",
+      "book": 1,
+      "label": "has cared for him since boyhood"
+    },
+    {
+      "from": "saeris_fane",
+      "to": "onyx",
+      "type": "bonded",
+      "book": 1,
+      "label": "her arctic fox"
+    },
+    {
+      "from": "te_lena",
+      "to": "kingfisher",
+      "type": "mentor",
+      "book": 1,
+      "label": "treating the quicksilver fused to his mind"
+    },
+    {
+      "from": "te_lena",
+      "to": "everlayne",
+      "type": "mentor",
+      "book": 1,
+      "label": "treating the vampire venom"
+    },
+    {
+      "from": "taladius",
+      "to": "malcolm",
+      "type": "betrayer",
+      "book": 1,
+      "label": "Malcolm's second, working against him"
+    },
+    {
+      "from": "taladius",
+      "to": "kingfisher",
+      "type": "friend",
+      "book": 1,
+      "label": "grew up together"
+    },
+    {
+      "from": "malcolm",
+      "to": "everlayne",
+      "type": "enemy",
+      "book": 1,
+      "label": "bit her; she was nearly enthralled"
+    },
+    {
+      "from": "ereth",
+      "to": "saeris_fane",
+      "type": "enemy",
+      "book": 2,
+      "label": "attempts to assassinate her at her coronation"
+    },
+    {
+      "from": "vorath_shah",
+      "to": "carrion_swift",
+      "type": "betrayer",
+      "book": 2,
+      "label": "betrays him, traps him with a scorpion-demon"
     }
   ],
   "events": [
@@ -1197,12 +1476,12 @@
   ],
   "theme": {
     "accent": "#B0C4DE",
+    "accent2": "#CC6666",
     "ground": "#1A1518",
     "panel": "#2D2327",
     "line": "#3A3034",
-    "accent2": "#CC6666",
-    "mood": "The contrast between icy silver and bruised crimson perfectly captures the volatile, opposing magical forces that define the world of Fae & Alchemy.",
-    "display": "'Cinzel', serif"
+    "display": "'Cinzel', serif",
+    "mood": "The contrast between icy silver and bruised crimson perfectly captures the volatile, opposing magical forces that define the world of Fae & Alchemy."
   },
   "characterTypes": {
     "human": {

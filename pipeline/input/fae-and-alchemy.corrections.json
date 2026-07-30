@@ -45,6 +45,237 @@
       "type": "complicated",
       "label": "A rogue from her past in Zilvaren, pulled through the portal with her.",
       "why": "Carrion had no edges at all despite being a main character. A recall miss, not a judgement call."
+    },
+    {
+      "from": "finran",
+      "to": "kingfisher",
+      "type": "family",
+      "label": "father",
+      "why": "Kingfisher's father. Researched table, FAE-ALCHEMY-GAPS-v3.md."
+    },
+    {
+      "from": "belikon_de_barra",
+      "to": "kingfisher",
+      "type": "family",
+      "label": "stepfather",
+      "why": "Belikon married Edina, Kingfisher's mother. Researched table, FAE-ALCHEMY-GAPS-v3.md."
+    },
+    {
+      "from": "belikon_de_barra",
+      "to": "everlayne",
+      "type": "family",
+      "label": "father",
+      "why": "Everlayne is Belikon's daughter. Researched table, FAE-ALCHEMY-GAPS-v3.md."
+    },
+    {
+      "from": "everlayne",
+      "to": "kingfisher",
+      "type": "family",
+      "label": "half-sister — same mother",
+      "why": "Both are Edina's children; different fathers. Researched table, FAE-ALCHEMY-GAPS-v3.md."
+    },
+    {
+      "from": "rurik_daianthus",
+      "to": "carrion_swift",
+      "type": "family",
+      "label": "father",
+      "why": "Carrion is the Daianthus heir. Researched table, FAE-ALCHEMY-GAPS-v3.md."
+    },
+    {
+      "from": "amelia_daianthus",
+      "to": "carrion_swift",
+      "type": "family",
+      "label": "mother",
+      "why": "Carrion is the Daianthus heir. Researched table, FAE-ALCHEMY-GAPS-v3.md."
+    },
+    {
+      "from": "belikon_de_barra",
+      "to": "rurik_daianthus",
+      "type": "killed",
+      "label": "usurped and killed him",
+      "why": "Belikon took the Yvelian throne from the Daianthus line. Researched table, FAE-ALCHEMY-GAPS-v3.md."
+    },
+    {
+      "from": "belikon_de_barra",
+      "to": "amelia_daianthus",
+      "type": "killed",
+      "label": "killed her",
+      "why": "Killed alongside Rurik when Belikon usurped the throne. Researched table, FAE-ALCHEMY-GAPS-v3.md."
+    },
+    {
+      "from": "belikon_de_barra",
+      "to": "edina",
+      "type": "killed",
+      "label": "killed her",
+      "why": "Belikon killed Kingfisher's mother. Researched table, FAE-ALCHEMY-GAPS-v3.md."
+    },
+    {
+      "from": "belikon_de_barra",
+      "to": "malcolm",
+      "type": "ally",
+      "label": "the Triumvirate — a secret alliance a thousand years old",
+      "why": "A three-way pact; recorded on Belikon's row, so Madra and Malcolm looked unconnected. Researched table, FAE-ALCHEMY-GAPS-v3.md."
+    },
+    {
+      "from": "belikon_de_barra",
+      "to": "madra",
+      "type": "ally",
+      "label": "the Triumvirate",
+      "why": "Same pact. Researched table, FAE-ALCHEMY-GAPS-v3.md."
+    },
+    {
+      "from": "madra",
+      "to": "malcolm",
+      "type": "ally",
+      "label": "the Triumvirate",
+      "why": "Same pact. Researched table, FAE-ALCHEMY-GAPS-v3.md."
+    },
+    {
+      "from": "madra",
+      "to": "harron",
+      "type": "commands",
+      "label": "head of her guard, made immortal by her",
+      "why": "Harron leads Madra's Guard. Researched table, FAE-ALCHEMY-GAPS-v3.md."
+    },
+    {
+      "from": "madra",
+      "to": "iris_fane",
+      "type": "enemy",
+      "label": "Iris worked with the rebels; killed by Madra's Guardians",
+      "why": "Iris is killed by the Guardians, Madra's force. Researched table, FAE-ALCHEMY-GAPS-v3.md."
+    },
+    {
+      "from": "iris_fane",
+      "to": "saeris_fane",
+      "type": "family",
+      "label": "mother",
+      "why": "Saeris and Hayden's mother. Researched table, FAE-ALCHEMY-GAPS-v3.md."
+    },
+    {
+      "from": "iris_fane",
+      "to": "hayden_fane",
+      "type": "family",
+      "label": "mother",
+      "why": "Saeris and Hayden's mother. Researched table, FAE-ALCHEMY-GAPS-v3.md."
+    },
+    {
+      "from": "renfis_orithian",
+      "to": "merelle",
+      "type": "family",
+      "label": "twin sister",
+      "why": "Renfis and Merelle are twins. Researched table, FAE-ALCHEMY-GAPS-v3.md."
+    },
+    {
+      "from": "kingfisher",
+      "to": "renfis_orithian",
+      "type": "commands",
+      "label": "Renfis serves in the Lupo Proelia under him",
+      "why": "Kingfisher leads the unit. Researched table, FAE-ALCHEMY-GAPS-v3.md."
+    },
+    {
+      "from": "kingfisher",
+      "to": "lorreth",
+      "type": "commands",
+      "label": "newest of the Wolves",
+      "why": "Kingfisher leads the unit; he shared part of his soul with Lorreth. Researched table, FAE-ALCHEMY-GAPS-v3.md."
+    },
+    {
+      "from": "kingfisher",
+      "to": "danya",
+      "type": "commands",
+      "label": "one of the Wolves",
+      "why": "Kingfisher leads the unit. Researched table, FAE-ALCHEMY-GAPS-v3.md."
+    },
+    {
+      "from": "kingfisher",
+      "to": "korrix",
+      "type": "commands",
+      "label": "one of the Wolves",
+      "why": "Kingfisher leads the unit. Researched table, FAE-ALCHEMY-GAPS-v3.md."
+    },
+    {
+      "from": "kingfisher",
+      "to": "vashgidyan",
+      "type": "commands",
+      "label": "one of the Wolves",
+      "why": "Kingfisher leads the unit. Researched table, FAE-ALCHEMY-GAPS-v3.md."
+    },
+    {
+      "from": "kingfisher",
+      "to": "foley",
+      "type": "commands",
+      "label": "one of the Wolves",
+      "why": "Kingfisher leads the unit. Researched table, FAE-ALCHEMY-GAPS-v3.md."
+    },
+    {
+      "from": "foley",
+      "to": "saeris_fane",
+      "type": "mentor",
+      "label": "teaches her the fundamentals of alchemy",
+      "why": "Book 2, after he is revealed alive. Researched table, FAE-ALCHEMY-GAPS-v3.md."
+    },
+    {
+      "from": "archer",
+      "to": "kingfisher",
+      "type": "friend",
+      "label": "has cared for him since boyhood",
+      "why": "Head caretaker at Cahlish. Researched table, FAE-ALCHEMY-GAPS-v3.md."
+    },
+    {
+      "from": "saeris_fane",
+      "to": "onyx",
+      "type": "bonded",
+      "label": "her arctic fox",
+      "why": "Onyx is Saeris's pet. Researched table, FAE-ALCHEMY-GAPS-v3.md."
+    },
+    {
+      "from": "te_lena",
+      "to": "kingfisher",
+      "type": "mentor",
+      "label": "treating the quicksilver fused to his mind",
+      "why": "Te Léna is the healer at Cahlish. Researched table, FAE-ALCHEMY-GAPS-v3.md."
+    },
+    {
+      "from": "te_lena",
+      "to": "everlayne",
+      "type": "mentor",
+      "label": "treating the vampire venom",
+      "why": "Te Léna is the healer at Cahlish. Researched table, FAE-ALCHEMY-GAPS-v3.md."
+    },
+    {
+      "from": "taladius",
+      "to": "malcolm",
+      "type": "betrayer",
+      "label": "Malcolm's second, working against him",
+      "why": "Stated in book-1 sources — known to the reader early, hidden in-world. Researched table, FAE-ALCHEMY-GAPS-v3.md."
+    },
+    {
+      "from": "taladius",
+      "to": "kingfisher",
+      "type": "friend",
+      "label": "grew up together",
+      "why": "Long friendship predating the series. Researched table, FAE-ALCHEMY-GAPS-v3.md."
+    },
+    {
+      "from": "malcolm",
+      "to": "everlayne",
+      "type": "enemy",
+      "label": "bit her; she was nearly enthralled",
+      "why": "Everlayne is recovering from the bite. Researched table, FAE-ALCHEMY-GAPS-v3.md."
+    },
+    {
+      "from": "ereth",
+      "to": "saeris_fane",
+      "type": "enemy",
+      "label": "attempts to assassinate her at her coronation",
+      "why": "Book 2, Lord of Midnight. Researched table, FAE-ALCHEMY-GAPS-v3.md."
+    },
+    {
+      "from": "vorath_shah",
+      "to": "carrion_swift",
+      "type": "betrayer",
+      "label": "betrays him, traps him with a scorpion-demon",
+      "why": "Book 2 vault plot. Researched table, FAE-ALCHEMY-GAPS-v3.md."
     }
   ],
   "addFactions": [
@@ -68,6 +299,13 @@
       "color": "#a8642c",
       "border": "#d4903f",
       "why": "Madra rules Zilvaren as an immortal queen. The mortal city is its own power, not part of either Fae side."
+    },
+    {
+      "id": "lupo_proelia",
+      "label": "Lupo Proelia",
+      "color": "#6b8f7a",
+      "border": "#a3d4bb",
+      "why": "Kingfisher's Wolves — an elite warrior unit he leads, operating openly with wolf sigils on their armour. It is NOT a rebel cell. The extractor filed all six members under a faction it called `rebellion`, which was wrong for every one of them: they are not opposed to the crown, they are Kingfisher's own people. Given its own faction rather than folded into Cahlish because six named members is a group worth seeing."
     }
   ],
   "addCharacterTypes": [
@@ -95,10 +333,23 @@
   "placeCharacters": [
     {
       "id": "saeris_fane",
-      "why": "A thief in Zilvaren who is pulled into Yvelia and joins Kingfisher at Cahlish; the chart shows where she acts, not where she was born. Base record is her book-1 state — the Blood Court crown is book 2. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "why": "Human thief in book 1, half-fae half-vampire queen of another realm in book 2. One row cannot say that. Researched table, FAE-ALCHEMY-GAPS-v3.md, sourced to the Fantasy Fangirls guide and the Quicksilver fandom wiki.",
       "region": "yvelia",
       "affil": "cahlish",
-      "type": "human"
+      "type": "human",
+      "magic": "Alchemist — Light, Dark, Silver, Steel, Earth, Air, Fire, Water, Salt, Brimstone and Quicksilver, worked through runes",
+      "changes": [
+        {
+          "book": 2,
+          "set": {
+            "region": "sanasroth",
+            "affil": "blood_court",
+            "type": "vampire",
+            "role": "Queen of Sanasroth; the most powerful Alchemist in existence"
+          },
+          "why": "Turned at the end of Quicksilver and crowned Queen of the Blood Court in Brimstone. Dated to book 2 on the same convention as Brennan and Rip: an end-of-book change surfaces the book after, or she reads as a vampire for the whole of book 1."
+        }
+      ]
     },
     {
       "id": "hayden_fane",
@@ -116,17 +367,28 @@
     },
     {
       "id": "carrion_swift",
-      "why": "A smuggler out of Zilvaren pulled through with Saeris; revealed as the Yvelian heir, glamoured to pass as human. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "why": "In Yvelia in book 1, back in Zilvaren in book 2. Researched table, FAE-ALCHEMY-GAPS-v3.md, sourced to the Fantasy Fangirls guide and the Quicksilver fandom wiki.",
       "region": "yvelia",
       "affil": "cahlish",
-      "type": "fae"
+      "type": "fae",
+      "magic": "Glamour — passed as human for a thousand years; wields the Godsword Simon, whose power is unrevealed",
+      "changes": [
+        {
+          "book": 2,
+          "set": {
+            "region": "zilvaren"
+          },
+          "why": "Returns to Zilvaren with Kingfisher in Brimstone."
+        }
+      ]
     },
     {
       "id": "kingfisher",
-      "why": "Lord of Cahlish. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "why": "Power recorded from the researched table. Researched table, FAE-ALCHEMY-GAPS-v3.md, sourced to the Fantasy Fangirls guide and the Quicksilver fandom wiki.",
       "region": "yvelia",
       "affil": "cahlish",
-      "type": "fae"
+      "type": "fae",
+      "magic": "Shadow and black-smoke magic; quicksilver fused to his mind; wields the Godsword Nimerelle"
     },
     {
       "id": "everlayne",
@@ -137,24 +399,31 @@
     },
     {
       "id": "te_lena",
-      "why": "Healer at Cahlish. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "why": "Power recorded from the researched table. Researched table, FAE-ALCHEMY-GAPS-v3.md, sourced to the Fantasy Fangirls guide and the Quicksilver fandom wiki.",
       "region": "yvelia",
       "affil": "cahlish",
-      "type": "fae"
+      "type": "fae",
+      "magic": "Healing"
     },
     {
       "id": "archer",
-      "why": "Fire sprite, head caretaker at Cahlish. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "why": "Power recorded from the researched table. Researched table, FAE-ALCHEMY-GAPS-v3.md, sourced to the Fantasy Fangirls guide and the Quicksilver fandom wiki.",
       "region": "yvelia",
       "affil": "cahlish",
-      "type": "other"
+      "type": "other",
+      "magic": "Fire sprite"
     },
     {
       "id": "edina",
-      "why": "Oracle at Cahlish. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "why": "Power recorded from the researched table. Researched table, FAE-ALCHEMY-GAPS-v3.md, sourced to the Fantasy Fangirls guide and the Quicksilver fandom wiki.",
       "region": "yvelia",
       "affil": "cahlish",
-      "type": "fae"
+      "type": "fae",
+      "status": "dead",
+      "statusDetail": "killed by Belikon",
+      "lastBook": 2,
+      "role": "Oracle; Edina of the Seven Towers, Lady of Cahlish; Kingfisher's mother",
+      "magic": "Oracle — foresight"
     },
     {
       "id": "onyx",
@@ -165,10 +434,11 @@
     },
     {
       "id": "renfis_orithian",
-      "why": "Commands the Yvelian army — Belikon's, whatever his sympathies. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "why": "Commander of the Yvelian Army is his formal rank, and the Lupo Proelia is a unit role nested under it — a general who also leads an elite detachment. Filed with the wolves because that is the group this chart makes visible; the rank lives in his role. Flip him to yvelian_court if the formal position matters more. Researched table, FAE-ALCHEMY-GAPS-v3.md, sourced to the Fantasy Fangirls guide and the Quicksilver fandom wiki.",
       "region": "yvelia",
-      "affil": "yvelian_court",
-      "type": "fae"
+      "affil": "lupo_proelia",
+      "type": "fae",
+      "role": "Commander of the Yvelian Army; member of the Lupo Proelia; Kingfisher's closest friend"
     },
     {
       "id": "belikon_de_barra",
@@ -186,80 +456,109 @@
     },
     {
       "id": "rurik_daianthus",
-      "why": "Former king of Yvelia, of Carrion's line. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "why": "Power recorded from the researched table. Researched table, FAE-ALCHEMY-GAPS-v3.md, sourced to the Fantasy Fangirls guide and the Quicksilver fandom wiki.",
       "region": "yvelia",
       "affil": "yvelian_court",
-      "type": "fae"
+      "type": "fae",
+      "status": "dead",
+      "statusDetail": "killed by Belikon",
+      "book": 1,
+      "lastBook": 1,
+      "magic": "His blood was used to create the original blood curse"
     },
     {
       "id": "amelia_daianthus",
-      "why": "Former queen of Yvelia. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "why": "Former king and queen of Yvelia, killed by Belikon before the series opens. The chart had them alive through book 2. Researched table, FAE-ALCHEMY-GAPS-v3.md, sourced to the Fantasy Fangirls guide and the Quicksilver fandom wiki.",
       "region": "yvelia",
       "affil": "yvelian_court",
-      "type": "fae"
+      "type": "fae",
+      "status": "dead",
+      "statusDetail": "killed by Belikon",
+      "book": 1,
+      "lastBook": 1
     },
     {
       "id": "lorreth",
-      "why": "A Fae warrior and bard who fights alongside Kingfisher. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "why": "Power recorded from the researched table. Researched table, FAE-ALCHEMY-GAPS-v3.md, sourced to the Fantasy Fangirls guide and the Quicksilver fandom wiki.",
       "region": "yvelia",
-      "affil": "rebellion",
-      "type": "fae"
+      "affil": "lupo_proelia",
+      "type": "fae",
+      "magic": "Wields the Godsword Avisiéth, 'Angel's Breath', previously Danya's"
     },
     {
       "id": "danya",
-      "why": "Named in the notes as fighting in Lupo Proelia, the rebellion opposing Belikon. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "why": "Power recorded from the researched table. Researched table, FAE-ALCHEMY-GAPS-v3.md, sourced to the Fantasy Fangirls guide and the Quicksilver fandom wiki.",
       "region": "yvelia",
-      "affil": "rebellion",
-      "type": "fae"
+      "affil": "lupo_proelia",
+      "type": "fae",
+      "magic": "Formerly wielded the Godsword Avisiéth, lost to Lorreth"
     },
     {
       "id": "korrix",
-      "why": "Named in the notes as fighting in Lupo Proelia. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "why": "Member of the Lupo Proelia, Kingfisher's elite unit — not a rebellion. Researched table, FAE-ALCHEMY-GAPS-v3.md, sourced to the Fantasy Fangirls guide and the Quicksilver fandom wiki.",
       "region": "yvelia",
-      "affil": "rebellion",
+      "affil": "lupo_proelia",
       "type": "fae"
     },
     {
       "id": "foley",
-      "why": "Named in the notes as fighting in Lupo Proelia. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "why": "Not a source contradiction — a reveal, the same shape as Brennan. He is alive the whole time; the reader believes otherwise until book 2. Researched table, FAE-ALCHEMY-GAPS-v3.md, sourced to the Fantasy Fangirls guide and the Quicksilver fandom wiki.",
       "region": "yvelia",
-      "affil": "rebellion",
-      "type": "fae"
+      "affil": "lupo_proelia",
+      "type": "fae",
+      "status": "alive",
+      "role": "Member of the Lupo Proelia; alchemist",
+      "perceived": {
+        "status": "dead",
+        "untilBook": 1,
+        "note": "Believed killed at the Battle of Ajun Gate in Quicksilver. Revealed alive in Brimstone as the mysterious library attacker, and teaches Saeris the fundamentals of alchemy."
+      }
     },
     {
       "id": "merelle",
-      "why": "Named in the notes as fighting in Lupo Proelia. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "why": "Dies at the Battle of Ajun Gate, a book-1 event. The chart had her running to book 2. NOTE: Danielle flagged that 'two separate Ajun Gate incidents' is inferred from Brimstone describing the pool as *reopening*, not from a source stating it outright — plausible, not confirmed. Researched table, FAE-ALCHEMY-GAPS-v3.md, sourced to the Fantasy Fangirls guide and the Quicksilver fandom wiki.",
       "region": "yvelia",
-      "affil": "rebellion",
-      "type": "fae"
+      "affil": "lupo_proelia",
+      "type": "fae",
+      "book": 1,
+      "lastBook": 1,
+      "status": "dead",
+      "statusDetail": "killed at the Battle of Ajun Gate",
+      "role": "Member of the Lupo Proelia; Renfis's twin sister"
     },
     {
       "id": "vashgidyan",
-      "why": "Named in the notes as fighting in Lupo Proelia. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "why": "Member of the Lupo Proelia, Kingfisher's elite unit — not a rebellion. Researched table, FAE-ALCHEMY-GAPS-v3.md, sourced to the Fantasy Fangirls guide and the Quicksilver fandom wiki.",
       "region": "yvelia",
-      "affil": "rebellion",
+      "affil": "lupo_proelia",
       "type": "fae"
     },
     {
       "id": "finran",
-      "why": "Kingfisher's father, who carried the infant Carrion to Zilvaren. Placed in Yvelia rather than Zilvaren: the errand is not where he belongs. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "why": "Sources say 'supposedly deceased' — unknown is the honest value; asserting either would be inventing. Researched table, FAE-ALCHEMY-GAPS-v3.md, sourced to the Fantasy Fangirls guide and the Quicksilver fandom wiki.",
       "region": "yvelia",
       "affil": "cahlish",
-      "type": "fae"
+      "type": "fae",
+      "status": "unknown",
+      "statusDetail": "supposedly deceased",
+      "magic": "Previously bonded to the Godsword Solace",
+      "role": "Kingfisher's father; carried the infant Carrion to Zilvaren to hide him from Belikon"
     },
     {
       "id": "madra",
-      "why": "Immortal queen of Zilvaren. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "why": "Power recorded from the researched table. Researched table, FAE-ALCHEMY-GAPS-v3.md, sourced to the Fantasy Fangirls guide and the Quicksilver fandom wiki.",
       "region": "zilvaren",
       "affil": "zilvaren",
-      "type": "human"
+      "type": "human",
+      "magic": "Immortal; stilled the Quicksilver a thousand years ago"
     },
     {
       "id": "harron",
-      "why": "Commander of Madra's guard in Zilvaren. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "why": "Power recorded from the researched table. Researched table, FAE-ALCHEMY-GAPS-v3.md, sourced to the Fantasy Fangirls guide and the Quicksilver fandom wiki.",
       "region": "zilvaren",
       "affil": "zilvaren",
-      "type": "human"
+      "type": "human",
+      "magic": "Immortality, granted by Madra"
     },
     {
       "id": "eric",
@@ -277,24 +576,38 @@
     },
     {
       "id": "malcolm",
-      "why": "Vampire king of Sanasroth. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "why": "Power recorded from the researched table. Researched table, FAE-ALCHEMY-GAPS-v3.md, sourced to the Fantasy Fangirls guide and the Quicksilver fandom wiki.",
       "region": "sanasroth",
       "affil": "blood_court",
-      "type": "vampire"
+      "type": "vampire",
+      "magic": "Vampire venom potent enough to thrall with a single bite"
     },
     {
       "id": "taladius",
-      "why": "A vampire lord of Sanasroth, and the one who made Saeris what she is. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "why": "Every source spells him Taladaius; the chart's 'Taladius' was the extractor's. The id stays as-is because ids are keys. His work against Malcolm is stated in book-1-scoped sources, so it is not a `perceived` case — the reader knows early, it is only hidden in-world. Researched table, FAE-ALCHEMY-GAPS-v3.md, sourced to the Fantasy Fangirls guide and the Quicksilver fandom wiki.",
       "region": "sanasroth",
       "affil": "blood_court",
-      "type": "vampire"
+      "type": "vampire",
+      "label": "Taladaius",
+      "aliases": [
+        "Taladius"
+      ],
+      "role": "Malcolm's second; secretly working against him; grew up with Kingfisher",
+      "magic": "Exceptionally powerful vampire — enthralls with a single bite, an exception to the usual hierarchy"
     },
     {
       "id": "ereth",
-      "why": "A vampire lord who attempts an assassination in book 2. Stated in pipeline/input/fae-and-alchemy.md, which is sourced. The pipeline only infers a place when exactly one is named in the lines mentioning a character, so anyone described across two realms stayed Unplaced.",
+      "why": "Power recorded from the researched table. Researched table, FAE-ALCHEMY-GAPS-v3.md, sourced to the Fantasy Fangirls guide and the Quicksilver fandom wiki.",
       "region": "sanasroth",
       "affil": "blood_court",
-      "type": "vampire"
+      "type": "vampire",
+      "magic": "Vampire Lord"
+    }
+  ],
+  "dropFactions": [
+    {
+      "id": "rebellion",
+      "why": "Never existed. It was the extractor's reading of Lupo Proelia as an anti-Belikon rebellion; the wiki is explicit that it is Kingfisher's elite unit. Every member has moved to `lupo_proelia`."
     }
   ]
 }

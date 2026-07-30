@@ -27,13 +27,34 @@ export interface Corrections {
   addFactions?: { id: string; label: string; color: string; border?: string; why: string }[];
   /** Character kinds, which drive node shape. */
   addCharacterTypes?: { id: string; label: string; shape: string }[];
-  /** Where someone belongs, and what they are. */
+  /** Factions that turned out not to exist, once their members moved elsewhere. */
+  dropFactions?: { id: string; why: string }[];
+  /**
+   * Anything about a character a human knows and the extractor could not.
+   *
+   * Started as placement only; grew as the research came in. A researcher
+   * reading the books produces facts the notes never stated — that Merelle dies
+   * at Ajun Gate, that Foley is only *believed* dead, that Saeris is a different
+   * species by book two — and every one of those needs somewhere to land or it
+   * gets applied by hand and lost on the next run.
+   */
   placeCharacters?: {
     id: string;
+    label?: string;
+    aliases?: string[];
     region?: string;
     affil?: string;
     type?: string;
     role?: string;
+    magic?: string;
+    status?: 'alive' | 'dead' | 'missing' | 'prisoner' | 'unknown';
+    statusDetail?: string;
+    book?: number;
+    lastBook?: number;
+    /** What the reader believes, while they still believe it. */
+    perceived?: Record<string, unknown>;
+    /** Dated changes — the temporal model, for anyone who is not one fixed thing. */
+    changes?: { book: number; set: Record<string, unknown>; why: string }[];
     why: string;
   }[];
   retypeRelationships?: { from: string; to: string; type: string; label?: string; why: string }[];
@@ -116,6 +137,32 @@ export function applyCorrections(series: Series, fix: Corrections): CorrectionRe
     else if (p.affil) skipped.push(`placeCharacters: ${p.id} -> unknown faction ${p.affil}`);
     if (p.type) c.type = p.type;
     if (p.role) c.role = p.role;
+    if (p.label) c.label = p.label;
+    if (p.aliases) c.aliases = [...new Set([...(c.aliases ?? []), ...p.aliases])];
+    if (p.magic) c.magic = p.magic;
+    if (p.status) c.status = p.status;
+    if (p.statusDetail) c.statusDetail = p.statusDetail;
+    if (p.book !== undefined) c.book = p.book;
+    if (p.lastBook !== undefined) c.lastBook = p.lastBook;
+    if (p.perceived) c.perceived = p.perceived as typeof c.perceived;
+    if (p.changes) c.changes = p.changes as typeof c.changes;
+    applied++;
+  }
+
+  // After placeCharacters, deliberately: a faction can only be dropped once
+  // its members have somewhere else to be, and the corrections that move them
+  // are directly above. Running this first reported every drop as blocked.
+  for (const f of fix.dropFactions ?? []) {
+    if (!series.affiliations[f.id]) continue;
+    const stillUsed = series.characters.filter((c) => c.affil === f.id);
+    if (stillUsed.length) {
+      skipped.push(
+        `dropFactions: ${f.id} still has ${stillUsed.length} member(s) — ` +
+        `move them first (${stillUsed.map((c) => c.id).join(', ')})`,
+      );
+      continue;
+    }
+    delete series.affiliations[f.id];
     applied++;
   }
 
