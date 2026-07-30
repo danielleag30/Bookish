@@ -54,11 +54,27 @@ export interface MountOptions {
    * anything that needs to know is told directly.
    */
   onSelectionChange?: (id: string | null) => void;
+  /**
+   * Reading position to open at, from the gate dialog. Without it the chart
+   * mounts at book one and is corrected a frame later, which shows the reader a
+   * flash of a position they did not choose.
+   */
+  startAtBook?: number;
+  /**
+   * Re-open the gate dialog. The gate remembers, which is right — being asked
+   * the same question every visit is a toll — but "remembers forever with no way
+   * back" is a trap, especially on a shared machine.
+   */
+  onChangeReadThrough?: () => void;
 }
 
 export function mountChart(opts: MountOptions): ChartHandle {
   const { container, series } = opts;
   let state: ChartState = initialState(series);
+  if (opts.startAtBook !== undefined) {
+    const known = series.books.some((b) => b.id === opts.startAtBook);
+    if (known) state.book = opts.startAtBook;
+  }
 
   container.classList.add('bkc');
   container.replaceChildren();
@@ -66,9 +82,22 @@ export function mountChart(opts: MountOptions): ChartHandle {
   // ── Chrome ───────────────────────────────────────────────────────────────
   const controls = el('div', 'bkc-controls');
   const bookRow = el('div', 'bkc-books');
+  // Captured before any filtering, so turning a chip off does not remove the
+  // chip that turns it back on.
+  const allStatuses: string[] = [...new Set(
+    series.characters.flatMap((c) => [
+      c.status as string,
+      ...(c.changes ?? [])
+        .map((ch) => ch.set.status as string | undefined)
+        .filter((v): v is string => typeof v === 'string'),
+    ]),
+  )];
+  const allSizes: string[] = [...new Set(series.characters.map((c) => c.size))];
+
+  const facetRow = el('div', 'bkc-facets');
   const layerRow = el('div', 'bkc-layers');
   const relRow = el('div', 'bkc-rels');
-  controls.append(bookRow, layerRow, relRow);
+  controls.append(bookRow, facetRow, layerRow, relRow);
 
   const stage = el('div', 'bkc-stage');
   const svgEl = svg('svg', { class: 'bkc-svg' });
@@ -98,6 +127,12 @@ export function mountChart(opts: MountOptions): ChartHandle {
       btn.onclick = () => setBook(b.id);
       bookRow.appendChild(btn);
     }
+    if (opts.onChangeReadThrough) {
+      const reset = el('button', 'bkc-book bkc-reask', 'Where am I? ↺');
+      reset.title = 'Set how far you have read';
+      reset.onclick = () => opts.onChangeReadThrough?.();
+      bookRow.appendChild(reset);
+    }
   }
 
   function chip(label: string, on: boolean, onClick: () => void, color?: string) {
@@ -106,6 +141,55 @@ export function mountChart(opts: MountOptions): ChartHandle {
     if (color) b.style.borderColor = color;
     b.onclick = onClick;
     return b;
+  }
+
+  /** A small caption before a group of chips, so the bar reads as sections. */
+  function groupLabel(text: string) {
+    return el('span', 'bkc-group', text);
+  }
+
+  const STATUS_LABEL: Record<string, string> = {
+    alive: 'Alive', dead: 'Dead', missing: 'Missing',
+    prisoner: 'Prisoner', unknown: 'Unknown',
+  };
+  const SIZE_LABEL: Record<string, string> = { main: 'Main', side: 'Side' };
+
+  function renderFacets() {
+    facetRow.replaceChildren();
+
+    // Region. The filter has always existed in the view; it had no control, so
+    // there was no way to ask "just Yvelia" on a chart with three realms.
+    if (series.regions.length > 1) {
+      facetRow.appendChild(groupLabel('Where'));
+      for (const r of series.regions) {
+        facetRow.appendChild(chip(r.label, state.filters.regions.has(r.id), () => {
+          state.filters.regions = toggle(state.filters.regions, r.id);
+          render();
+        }, r.border ?? r.color));
+      }
+    }
+
+    // Status, resolved at the reading position — "who is dead" means dead as of
+    // the book you are on, which is the whole point of asking.
+    if (allStatuses.length > 1) {
+      facetRow.appendChild(groupLabel('Status'));
+      for (const st of allStatuses) {
+        facetRow.appendChild(chip(STATUS_LABEL[st] ?? st, state.filters.statuses.has(st), () => {
+          state.filters.statuses = toggle(state.filters.statuses, st);
+          render();
+        }));
+      }
+    }
+
+    if (allSizes.length > 1) {
+      facetRow.appendChild(groupLabel('Cast'));
+      for (const sz of allSizes) {
+        facetRow.appendChild(chip(SIZE_LABEL[sz] ?? sz, state.filters.sizes.has(sz), () => {
+          state.filters.sizes = toggle(state.filters.sizes, sz);
+          render();
+        }));
+      }
+    }
   }
 
   function renderLayers() {
@@ -432,6 +516,7 @@ export function mountChart(opts: MountOptions): ChartHandle {
   function render() {
     const view = buildView(series, state);
     renderBooks();
+    renderFacets();
     renderLayers();
     renderRelBar();
     renderSvg(view);

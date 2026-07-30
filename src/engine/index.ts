@@ -8,6 +8,7 @@ import type { Series } from '../schema.ts';
 import { mountChart, type ChartHandle } from './chart.ts';
 import { CHART_CSS } from './chart.css.ts';
 import { mountAskBox } from '../askbox.ts';
+import { askReadingPosition, forgetPosition } from '../gate-prompt.ts';
 
 export interface BootOptions {
   /** Series id — loads /data/<id>.json */
@@ -70,6 +71,15 @@ export async function boot(opts: BootOptions): Promise<ChartHandle | null> {
     if (t.display) container.style.setProperty('--bkc-display', t.display);
   }
 
+  // Ask before drawing. The theme is applied above so the dialog wears the
+  // series' own palette, and the chart mounts at the answered position rather
+  // than rendering book one and correcting itself in front of the reader.
+  const choice = await askReadingPosition({
+    series: opts.series,
+    title: series.title,
+    books: series.books,
+  });
+
   const handle = mountChart({
     container,
     series,
@@ -79,6 +89,16 @@ export async function boot(opts: BootOptions): Promise<ChartHandle | null> {
     // Selecting a character is the reader moving on, so an answer about someone
     // else should not stay open over the chart.
     onSelectionChange: () => askBox?.reset(),
+    startAtBook: choice.book,
+    onChangeReadThrough: () => {
+      forgetPosition(opts.series);
+      void askReadingPosition({
+        series: opts.series,
+        title: series.title,
+        books: series.books,
+        force: true,
+      }).then((next) => handle.setBook(next.book));
+    },
   });
 
   if (opts.askBox !== false) {

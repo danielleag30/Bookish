@@ -179,7 +179,8 @@ flowchart TB
     VAL --> TESTS["300 tests<br/><i>incl. adversarial spoiler suite</i>"]
   end
 
-  TESTS --> GATE{{"gate(series, position)<br/><b>the one rule</b>"}}
+  TESTS --> ASK["the gate dialog<br/><i>which book have you finished?</i>"]
+  ASK --> GATE{{"gate(series, position)<br/><b>the one rule</b>"}}
 
   GATE --> CHART["chart renderer"]
   GATE --> ASK["ask box"]
@@ -194,6 +195,7 @@ flowchart TB
   classDef human fill:#1e1830,stroke:#5fd39a,color:#e8e4f0
   classDef gate fill:#2b1a20,stroke:#e8697d,color:#e8e4f0
   class SRC,NOTES,DATA,VAL,TESTS,SITE det
+  class ASK human
   class EX,VER,RES,THEME model
   class CORR,COVER human
   class GATE gate
@@ -208,6 +210,14 @@ flowchart TB
     <span><i style="background:#5fd39a"></i>human judgement</span>
     <span><i style="background:#e8697d"></i>the spoiler gate</span>
   </div>
+
+  <p>The reading position is the one input the data cannot supply, so the chart
+  asks for it before drawing anything — <strong>which book have you finished?</strong>
+  Not which you are reading: someone halfway through book three has finished
+  book two, and book two is what is safe to show them. The answer is remembered
+  per series, and dismissing the dialog means book one, because a reader who
+  closes it has told you nothing and the safe reading of nothing is the
+  beginning.</p>
 
   <p>Three things about this shape are deliberate. <strong>The model never touches book
   text</strong> — the corpus is plot beats, so nothing copyrighted enters the repo.
