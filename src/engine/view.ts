@@ -18,6 +18,16 @@ export interface ChartFilters {
   regions: Set<string>;
   /** Affiliation ids that are on. */
   affils: Set<string>;
+  /**
+   * Statuses that are on — alive, dead, missing, prisoner, unknown.
+   *
+   * Resolved at the reading position, not from the base record, so "show me who
+   * is dead" means dead *as of the book you are on*. Filtering on the raw field
+   * would answer with everyone who ever dies.
+   */
+  statuses: Set<string>;
+  /** Prominence values that are on, usually `main` and `side`. */
+  sizes: Set<string>;
 }
 
 export interface ChartState {
@@ -34,6 +44,23 @@ export interface ChartState {
   moved: Record<string, { x: number; y: number }>;
 }
 
+/**
+ * Every value a field takes anywhere in the series — base record or any dated
+ * change. Filter sets must cover both, or a value that only ever arrives via
+ * `changes` is missing from the set and silently filters its holders out.
+ */
+function valuesOf(series: Series, field: 'status' | 'size'): string[] {
+  const out: string[] = [];
+  for (const c of series.characters) {
+    out.push(c[field]);
+    for (const ch of c.changes ?? []) {
+      const v = ch.set[field];
+      if (typeof v === 'string') out.push(v);
+    }
+  }
+  return out;
+}
+
 /** All filters on, everything visible, at the first book. */
 export function initialState(series: Series): ChartState {
   return {
@@ -43,6 +70,14 @@ export function initialState(series: Series): ChartState {
       charTypes: new Set(Object.keys(series.characterTypes ?? {})),
       regions: new Set(series.regions.map((r) => r.id)),
       affils: new Set(Object.keys(series.affiliations)),
+      // From the data rather than the enum, so a series where nobody is
+      // `missing` does not offer a chip that always yields nothing — but it has
+      // to include values that only appear in `changes`. `dead` now lives there
+      // almost exclusively: base records hold the first-seen state, so building
+      // this from base statuses alone left `dead` out of the set entirely and
+      // hid every character at the exact book they died in.
+      statuses: new Set(valuesOf(series, 'status')),
+      sizes: new Set(valuesOf(series, 'size')),
     },
     selected: null,
     showRegions: true,
@@ -105,6 +140,11 @@ export function buildView(series: Series, state: ChartState): ChartView {
     // A series with no characterTypes has an empty set, so type filtering is
     // skipped entirely rather than hiding everyone.
     if (f.charTypes.size > 0 && c.type !== undefined && !f.charTypes.has(c.type)) continue;
+    // `c` comes from gate(), so its status and size are already resolved to this
+    // reading position — Malcolm is `alive` at book 1 and `dead` at book 2, and
+    // the filter follows.
+    if (!f.statuses.has(c.status)) continue;
+    if (!f.sizes.has(c.size)) continue;
 
     const moved = state.moved[c.id];
     nodes.push({

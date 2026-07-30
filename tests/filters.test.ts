@@ -8,6 +8,8 @@ import {
   classifyCandidate,
 } from '../src/filters.ts';
 import { SeriesSchema } from '../src/schema.ts';
+import { gate } from '../src/spoiler.ts';
+import { initialState } from '../src/engine/view.ts';
 
 const dataDir = resolve(import.meta.dirname, '..', 'data');
 const load = (n: string) => SeriesSchema.parse(JSON.parse(readFileSync(join(dataDir, n), 'utf8')));
@@ -279,7 +281,9 @@ describe('declared filters match the engine', () => {
     affil: /state\.filters\.affils/,
     charType: /state\.filters\.charTypes/,
     relType: /state\.filters\.relTypes/,
-    band: /state\.filters\.bands/,
+    // The dimension is `band` for historical reasons; the state key is
+    // `regions`, because Plated Prisoner replaced horizontal bands with boxes.
+    band: /state\.filters\.regions/,
     status: /state\.filters\.statuses/,
     size: /state\.filters\.sizes/,
     den: /state\.filters\.dens/,
@@ -309,8 +313,44 @@ describe('declared filters match the engine', () => {
 
   it('every tier-1 dimension is either built or honestly flagged', () => {
     const unbuiltTier1 = FILTER_DIMENSIONS.filter((d) => d.tier === 1 && !d.built).map((d) => d.id);
-    // Not an assertion that they are all built — they are not. This records the
-    // remaining tier-1 gap so shrinking it is visible and growing it fails.
-    expect(unbuiltTier1.sort()).toEqual(['band', 'size', 'status']);
+    // Tier 1 is the set of facets every series has, so every one of them should
+    // work everywhere. Region, Status and Prominence were the last three; this
+    // now asserts the gap is closed rather than recording its size.
+    expect(unbuiltTier1).toEqual([]);
+  });
+});
+
+/**
+ * The status filter must follow the reading position, not the base record.
+ *
+ * `status` on a character is their state when first seen — almost every death
+ * lives in `changes` now. A filter reading the raw field would answer "who is
+ * dead?" with everyone who ever dies, at every position, which is both wrong
+ * and a spoiler.
+ */
+describe('status filtering is temporal', () => {
+  it('counts more dead the further you have read', () => {
+    const s = load('empyrean.json');
+    const deadAt = (pos: number) =>
+      gate(s, pos).characters.filter((c) => c.status === 'dead').length;
+
+    const counts = [1, 2, 3].map(deadAt);
+    // Monotonic and strictly growing: nobody comes back, and each book kills.
+    expect(counts[0]!).toBeLessThan(counts[1]!);
+    expect(counts[1]!).toBeLessThan(counts[2]!);
+  });
+
+  it('offers every value a filter chip, including ones only reachable via changes', () => {
+    // Built from base records alone, the set omitted `dead` entirely and the
+    // filter hid every character at the exact book they died in.
+    for (const file of files) {
+      const s = load(file);
+      const offered = initialState(s).filters.statuses;
+      for (const pos of s.books.map((b) => b.id)) {
+        for (const c of gate(s, pos).characters) {
+          expect(offered.has(c.status), `${file}: no chip for "${c.status}" (${c.id} @${pos})`).toBe(true);
+        }
+      }
+    }
   });
 });

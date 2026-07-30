@@ -13,7 +13,10 @@ export const CHART_CSS = `
   gap:10px;height:100%;min-height:620px;color:var(--bkc-fg);
   font-family:'DM Sans',system-ui,sans-serif}
 .bkc-controls{grid-column:1/-1;display:flex;flex-direction:column;gap:6px}
-.bkc-books,.bkc-layers,.bkc-rels{display:flex;flex-wrap:wrap;gap:5px}
+.bkc-books,.bkc-layers,.bkc-rels,.bkc-facets{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+.bkc-group{font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--bkc-dim);opacity:.75;margin-left:2px}
+.bkc-group:not(:first-child){margin-left:12px}
 .bkc-book{background:rgba(0,0,0,.3);color:var(--bkc-dim);border:1px solid var(--bkc-line);
   border-radius:8px;padding:7px 13px;font:inherit;font-size:.8rem;cursor:pointer}
 .bkc-book:hover{color:var(--bkc-fg)}
@@ -22,6 +25,8 @@ export const CHART_CSS = `
     color-mix(in srgb,var(--bkc-accent2) 24%,transparent));
   color:var(--bkc-fg);border-color:var(--bkc-accent)}
 .bkc-book.future{opacity:.5;font-style:italic}
+.bkc-reask{margin-left:10px;font-size:.72rem;opacity:.7;border-style:dashed}
+.bkc-reask:hover{opacity:1}
 .bkc-chip{background:rgba(0,0,0,.25);color:var(--bkc-dim);border:1px solid rgba(255,255,255,.13);
   border-radius:16px;padding:3px 10px;font:inherit;font-size:.68rem;cursor:pointer}
 .bkc-chip:hover{color:var(--bkc-fg)}

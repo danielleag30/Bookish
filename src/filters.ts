@@ -93,7 +93,7 @@ export const FILTER_DIMENSIONS: FilterDimension[] = [
     selectMode: 'multi',
     source: 'series.bands[].id',
     effect: 'Shows or hides a horizontal region of the chart and everyone in it.',
-    built: false,
+    built: true,
     spoilerGated: true,
   },
   {
@@ -127,7 +127,7 @@ export const FILTER_DIMENSIONS: FilterDimension[] = [
     selectMode: 'multi',
     source: 'character.status enum',
     effect: 'Filters by alive / dead / missing / prisoner / unknown.',
-    built: false,
+    built: true,
     spoilerGated: true,
   },
   {
@@ -138,7 +138,7 @@ export const FILTER_DIMENSIONS: FilterDimension[] = [
     selectMode: 'multi',
     source: 'character.size',
     effect: 'Shows only main characters, or includes side characters too.',
-    built: false,
+    built: true,
     spoilerGated: true,
   },
 
