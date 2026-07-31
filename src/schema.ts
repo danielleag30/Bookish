@@ -378,6 +378,22 @@ export const SeriesSchema = z.object({
   theme: ThemeSchema.optional(),
 
   /**
+   * What this world calls things.
+   *
+   * `magic` is the schema's name for the field; it is not what any of these
+   * series call it. The Empyrean has signets — a rider manifests one, they are
+   * not "powers" — and calling Violet's lightning a power on a chart about the
+   * Empyrean is the kind of wrong that tells a reader the chart was not made by
+   * someone who read the books. Every series had it labelled "Power", which was
+   * right for none of them.
+   */
+  terms: z
+    .object({
+      magic: z.string().optional().describe('What a character\'s ability is called here'),
+    })
+    .optional(),
+
+  /**
    * Per-series presentation defaults — the state the chart opens in.
    *
    * Only what a reader can change afterwards; anything they cannot is not a

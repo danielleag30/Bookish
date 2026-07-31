@@ -119,7 +119,7 @@ export function getCharacter(
     `Affiliation: ${s.affiliations[p.affil]?.label ?? p.affil}`,
     `First appears: book ${p.firstBook}`,
   ];
-  if (c.magic) lines.push(`Power: ${c.magic}`);
+  if (c.magic) lines.push(`${s.terms?.magic ?? 'Power'}: ${c.magic}`);
   // Not `else if`. Bios are segmented now, so a reader can have part of one and
   // still be missing later parts — and with `else if` they were shown a
   // truncated biography with nothing to say it was truncated, which reads as

@@ -1510,5 +1510,8 @@
   },
   "display": {
     "edgeLabels": false
+  },
+  "terms": {
+    "magic": "Magic"
   }
 }
