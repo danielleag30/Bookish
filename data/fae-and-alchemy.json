@@ -12,6 +12,13 @@
       "id": 2,
       "title": "Brimstone",
       "short": "Brimstone"
+    },
+    {
+      "id": 3,
+      "title": "Untitled (Book 3)",
+      "short": "Book 3",
+      "future": true,
+      "era": "Announced. Hachette lists it as concluding the story begun in Quicksilver; no date confirmed."
     }
   ],
   "regions": [
