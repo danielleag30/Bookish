@@ -1500,5 +1500,8 @@
       "label": "Other",
       "shape": "triangle"
     }
+  },
+  "display": {
+    "edgeLabels": false
   }
 }

@@ -1,0 +1,109 @@
+# Monthly: has any charted series gained a book?
+#
+# AUTONOMY LEVEL 2 — it opens an issue and stops. It never edits data.
+#
+# The reasoning here is deliberately not a model. "Did this author publish
+# something" is a lookup, and Open Library answers it for free with no key. A
+# model in the middle would cost money, depend on a service that is being
+# retired, and give it a way to be wrong in a confident-sounding voice. The
+# agent is the schedule and the judgement about what is worth a human's
+# attention; the lookup is plain code, and both are testable.
+name: New books watch
+
+on:
+  schedule:
+    # 07:00 UTC on the 1st. Monthly is the right cadence: a book announcement is
+    # not urgent, and a daily check would train everyone to ignore the issue.
+    - cron: '0 7 1 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: new-books-watch
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+
+      - name: Look for new books
+        id: check
+        run: npx tsx scripts/check-new-books.ts --json > report.json
+
+      - name: Open or update an issue, only if there is something to say
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          BODY=$(node -e '
+            const r = require("./report.json");
+            const hits = r.filter(s => s.candidates.length > 0);
+            const errs = r.filter(s => s.error);
+            if (!hits.length && !errs.length) { process.exit(3); }
+
+            const L = [];
+            L.push("Open Library lists titles for these authors that are not on their charts.");
+            L.push("");
+            L.push("**These are candidates, not findings.** Open Library is community-maintained and");
+            L.push("carries re-issues, mis-titled records and box sets. Check before adding anything.");
+            L.push("");
+            for (const s of hits) {
+              L.push(`### ${s.title} — ${s.author}`);
+              L.push("");
+              L.push(`Charted: ${s.known.map(b => `${b.id}. ${b.title}${b.future ? " *(announced)*" : ""}`).join(" · ")}`);
+              L.push("");
+              L.push("| Title | First published | Why it is here |");
+              L.push("|---|---|---|");
+              for (const c of s.candidates.slice(0, 10)) {
+                L.push(`| ${c.title} | ${c.firstPublished ?? "—"} | ${c.signal ?? "—"} |`);
+              }
+              L.push("");
+            }
+            if (errs.length) {
+              L.push("### Lookups that failed");
+              L.push("");
+              for (const s of errs) L.push(`- **${s.title}** — ${s.error}`);
+              L.push("");
+              L.push("A failed lookup is not a result. These series were not checked this month.");
+              L.push("");
+            }
+            L.push("---");
+            L.push("");
+            L.push("To add a book: update `books` in the series data file, then re-run");
+            L.push("`npx tsx scripts/apply-corrections.ts` and the extraction if the notes change.");
+            L.push("Mark it `future: true` if it is announced but not out — the gate dialog only");
+            L.push("offers published books, and `finalBook` ignores unreleased ones.");
+            console.log(L.join("\n"));
+          ') || {
+            code=$?
+            if [ "$code" = "3" ]; then
+              echo "Nothing to report."
+              exit 0
+            fi
+            exit "$code"
+          }
+
+          TITLE="New books watch — $(date -u '+%B %Y')"
+
+          # One rolling issue rather than twelve a year. An open one gets a
+          # comment; a closed one means it was dealt with, so a new month with
+          # new findings deserves a fresh issue.
+          EXISTING=$(gh issue list --state open --label new-books --limit 1 --json number --jq '.[0].number // empty')
+          if [ -n "$EXISTING" ]; then
+            printf '%s\n' "$BODY" | gh issue comment "$EXISTING" --body-file -
+            echo "commented on #$EXISTING"
+          else
+            gh label create new-books --description "Release watch findings" --color BFD4F2 2>/dev/null || true
+            printf '%s\n' "$BODY" | gh issue create --title "$TITLE" --label new-books --body-file -
+          fi
