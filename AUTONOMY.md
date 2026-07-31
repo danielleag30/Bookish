@@ -59,6 +59,26 @@ on/off switch.
 
 ---
 
+## The new-books watch
+
+Runs on the 1st of each month, opens an issue, stops. Level 2.
+
+It has no model in it at all, and that is the point. "Did this author publish
+something" is a lookup — Open Library answers it free, with no key — and the
+comparison against the books already charted is string matching. A model in the
+middle would add cost, a retiring dependency, and a way to be wrong in a
+confident voice. The agent here is the schedule and the decision about what
+deserves a human's attention; the lookup is plain code with tests.
+
+Its real failure mode is not missing a book, it is crying wolf. Open Library is
+community-maintained and carries translations, box sets, re-issues and typos —
+the first live run surfaced the Spanish editions of all three Empyrean books and
+twenty-seven unrelated titles by the same author. A watcher that reports those
+gets ignored, and then a real release goes unnoticed too. So it filters
+non-English records and repackagings, and splits what is left into "names this
+series" and "other work by this author", reporting only the first. The issue
+says *candidates*, never *found*.
+
 ## The verifier can be talked out of verifying
 
 Worth stating plainly, because it is a limit of the design rather than a bug in

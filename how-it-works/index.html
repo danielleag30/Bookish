@@ -187,6 +187,7 @@ flowchart TB
   GATE --> MCP["MCP server"]
   GATE --> EVAL["eval runner"]
 
+  WATCH["monthly release watch<br/><i>Open Library; no model</i>"] -.->|"opens an issue"| SRC
   CHART --> SITE["build-site.ts → dist/<br/><i>allowlist; sources/ never ships</i>"]
   ASK --> SITE
 
@@ -196,6 +197,7 @@ flowchart TB
   classDef gate fill:#2b1a20,stroke:#e8697d,color:#e8e4f0
   class SRC,NOTES,DATA,VAL,TESTS,SITE det
   class ASK human
+  class WATCH det
   class EX,VER,RES,THEME model
   class CORR,COVER human
   class GATE gate

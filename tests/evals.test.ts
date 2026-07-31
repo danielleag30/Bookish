@@ -291,3 +291,26 @@ describe('changelog agent', () => {
     expect(cleanBody('x '.repeat(5000)).length).toBeLessThanOrEqual(1200);
   });
 });
+
+/**
+ * The release watcher's matching rules.
+ *
+ * Its only real failure mode is crying wolf: a watcher that reports the Spanish
+ * edition of book one as a new release stops being read, and then a real
+ * release goes unnoticed. These pin the cases that were actually wrong on the
+ * first run against live data.
+ */
+describe('new-books watch', () => {
+  it('treats edition differences as the same title', async () => {
+    const { normaliseTitle } = await import('../scripts/check-new-books.ts');
+    expect(normaliseTitle('Quicksilver (Fae & Alchemy #1)')).toBe(normaliseTitle('Quicksilver'));
+    expect(normaliseTitle("Carl's Doomsday Scenario")).toBe(normaliseTitle('Carls Doomsday Scenario'));
+    expect(normaliseTitle('Iron Flame: A Novel')).toBe(normaliseTitle('Iron Flame'));
+  });
+
+  it('does not collapse genuinely different titles', async () => {
+    const { normaliseTitle } = await import('../scripts/check-new-books.ts');
+    expect(normaliseTitle('Gild')).not.toBe(normaliseTitle('Glint'));
+    expect(normaliseTitle('Quicksilver')).not.toBe(normaliseTitle('Brimstone'));
+  });
+});

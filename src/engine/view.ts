@@ -80,9 +80,11 @@ export function initialState(series: Series): ChartState {
       sizes: new Set(valuesOf(series, 'size')),
     },
     selected: null,
-    showRegions: true,
-    showLabels: true,
-    showEdgeLabels: true,
+    // Series defaults, where the data states one. Everything here is a toggle
+    // the reader owns after the first paint.
+    showRegions: series.display?.regions ?? true,
+    showLabels: series.display?.labels ?? true,
+    showEdgeLabels: series.display?.edgeLabels ?? true,
     pan: { x: 20, y: 20 },
     scale: 0.9,
     moved: {},

@@ -377,6 +377,25 @@ export const SeriesSchema = z.object({
 
   theme: ThemeSchema.optional(),
 
+  /**
+   * Per-series presentation defaults — the state the chart opens in.
+   *
+   * Only what a reader can change afterwards; anything they cannot is not a
+   * default, it is a rule. Exists because edge labels are genuinely useful on a
+   * sparse chart and unreadable on a dense one, and "unreadable by default with
+   * a toggle to fix it" is a bad first impression. A field rather than a
+   * density threshold: the point at which a chart becomes a hairball depends on
+   * how the nodes are laid out, not just how many edges there are, and a
+   * threshold would quietly change behaviour for every series at once.
+   */
+  display: z
+    .object({
+      edgeLabels: z.boolean().optional().describe('Start with relationship labels drawn'),
+      regions: z.boolean().optional().describe('Start with region backgrounds drawn'),
+      labels: z.boolean().optional().describe('Start with character names drawn'),
+    })
+    .optional(),
+
   // Set by `npm run add-series`, cleared by a human. A draft has real
   // characters and relationships but only the scaffolded single region and
   // single "Unsorted" affiliation, because extraction deliberately does not
