@@ -446,7 +446,9 @@ export function mountChart(opts: MountOptions): ChartHandle {
         meta.textContent = [
           `Status: ${shown.status}${shown.statusIsBelief ? ' — as far as you know' : ''}`,
           series.affiliations[node.character.affil]?.label,
-          node.character.magic,
+          node.character.magic
+            ? `${series.terms?.magic ?? 'Power'}: ${node.character.magic}`
+            : undefined,
         ].filter(Boolean).join(' · ');
         sidebar.appendChild(meta);
 

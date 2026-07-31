@@ -399,3 +399,27 @@ describe('shared UI never hardcodes a character name', () => {
     });
   }
 });
+
+/**
+ * A chart that calls a signet a "power" reads as one made by someone who did
+ * not read the books. `magic` is the schema's name for the field, not the
+ * world's name for the thing — every series had it labelled "Power", which was
+ * correct for none of them.
+ */
+describe('each series names its own abilities', () => {
+  it('does not call an Empyrean signet a power', () => {
+    expect(load('empyrean.json').terms?.magic).toBe('Signet');
+  });
+
+  it('gives a term to every series that records abilities', () => {
+    const missing: string[] = [];
+    for (const file of readdirSync(dataDir).filter((f) => f.endsWith('.json'))) {
+      const s = load(file);
+      if (!s.characters.some((c) => c.magic)) continue;
+      if (!s.terms?.magic) missing.push(file);
+    }
+    // DCC is the open one — "Agent Provocateur / Explosives" is a class and a
+    // skill, and naming it wrongly is the mistake this test exists to stop.
+    expect(missing).toEqual(['dcc.json']);
+  });
+});
