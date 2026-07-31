@@ -5,40 +5,60 @@ merged by a human. See `.github/workflows/changelog-agent.yml`.
 
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [Unreleased] — 2026-07-28
+## [Unreleased] — 2026-07-31
 
 ### Added
 
-- Two new agents are introduced to draft changelogs and propose new series, with a clear boundary that only humans can merge changes to the main branch. ([#20](https://github.com/danielleag30/Bookish/pull/20))
-- The site now includes a new server that restricts AI access to character information based on the reading position, ensuring that users cannot inadvertently access details from later books. ([#17](https://github.com/danielleag30/Bookish/pull/17))
-- The update introduces three specialized agents for data extraction, verification, and resolution, improving precision while highlighting limitations in the F1 metric used for evaluation. ([#16](https://github.com/danielleag30/Bookish/pull/16))
-- The extraction pipeline now processes character data and evaluates it against hand-labelled ground truth, running entirely on local Ollama at no cost, with 220 tests passing. ([#15](https://github.com/danielleag30/Bookish/pull/15))
-- The chart engine is now unified across all three series, improving performance and consistency while maintaining distinct visual identities for each page. ([#12](https://github.com/danielleag30/Bookish/pull/12))
-- A new feature on the Empyrean and DCC charts provides a spoiler-bounded ask box that answers questions based on the reader's progress in the story. ([#10](https://github.com/danielleag30/Bookish/pull/10))
+- Add the theme agent: read a cover, propose a palette, prove it is legible ([#33](https://github.com/danielleag30/Bookish/pull/33))
+- Add series: Fae & Alchemy (source notes) ([#29](https://github.com/danielleag30/Bookish/pull/29))
+- Phase 7: two agents that propose, and a written boundary on what they may do ([#20](https://github.com/danielleag30/Bookish/pull/20))
+- Phase 6: spoiler-bounded MCP server ([#17](https://github.com/danielleag30/Bookish/pull/17))
+- Phase 5: extractor, verifier and resolver ([#16](https://github.com/danielleag30/Bookish/pull/16))
+- Phase 3 + 4: extraction pipeline and eval harness ([#15](https://github.com/danielleag30/Bookish/pull/15))
+- Phase 2: one chart engine for all three series ([#12](https://github.com/danielleag30/Bookish/pull/12))
+- Phase 1.5: spoiler-bounded ask box on the Empyrean and DCC charts ([#10](https://github.com/danielleag30/Bookish/pull/10))
 - Plan: add Phase 1.5 — spoiler-safe ask box ([#5](https://github.com/danielleag30/Bookish/pull/5))
 - Phase 0: TypeScript/Vitest toolchain, CI, and licensing ([#3](https://github.com/danielleag30/Bookish/pull/3))
 
 ### Changed
 
-- The changelog agent now continues to function and provides a draft even if it cannot create a pull request due to repository settings. ([#21](https://github.com/danielleag30/Bookish/pull/21))
-- The how-it-works page is now easily accessible from a new navigation button on the landing page. ([#19](https://github.com/danielleag30/Bookish/pull/19))
-- The filter hierarchy is defined to improve spoiler safety by categorizing content and enforcing rules for visibility based on user reading position. ([#9](https://github.com/danielleag30/Bookish/pull/9))
+- Each series names its own abilities ([#44](https://github.com/danielleag30/Bookish/pull/44))
+- Fae & Alchemy book 3, announced and undated ([#43](https://github.com/danielleag30/Bookish/pull/43))
+- Monthly release watch, and per-series display defaults ([#42](https://github.com/danielleag30/Bookish/pull/42))
+- The gate dialog, and the last three tier-1 filters ([#41](https://github.com/danielleag30/Bookish/pull/41))
+- Fae & Alchemy from the researched table: 16 relationships to 49 ([#40](https://github.com/danielleag30/Bookish/pull/40))
+- Fae & Alchemy out of draft: real regions, factions and character kinds ([#38](https://github.com/danielleag30/Bookish/pull/38))
+- Rip's reveal at the end of Glint, and a mermaid flow on how-it-works ([#37](https://github.com/danielleag30/Bookish/pull/37))
+- Close five spoiler and security holes, with a test for each ([#36](https://github.com/danielleag30/Bookish/pull/36))
+- Extract locally on Ollama, and turn reasoning off by default ([#32](https://github.com/danielleag30/Bookish/pull/32))
+- Give the changelog agent one branch instead of one per run ([#30](https://github.com/danielleag30/Bookish/pull/30))
+- Put the coming-soon card back, and close an unbalanced div ([#25](https://github.com/danielleag30/Bookish/pull/25))
+- Close the model-cost surface, and make a series' look a data decision ([#24](https://github.com/danielleag30/Bookish/pull/24))
+- Changelog draft (from the changelog agent) ([#22](https://github.com/danielleag30/Bookish/pull/22))
+- Let the changelog agent degrade when it cannot open a pull request ([#21](https://github.com/danielleag30/Bookish/pull/21))
+- Surface the how-it-works page on the landing page ([#19](https://github.com/danielleag30/Bookish/pull/19))
+- Define the filter hierarchy, and model perceived state for spoiler safety ([#9](https://github.com/danielleag30/Bookish/pull/9))
 - Link DCC card to the in-repo chart ([#4](https://github.com/danielleag30/Bookish/pull/4))
 - Landing page ([#1](https://github.com/danielleag30/Bookish/pull/1))
 
 ### Fixed
 
-- All pending data questions are resolved, and the `VOCAB_PENDING_REVIEW` edges are now cleared, ensuring accurate information in the system. ([#14](https://github.com/danielleag30/Bookish/pull/14))
-- The ask box now refreshes when its answer is no longer valid, ensuring users see accurate information based on their current selections. ([#13](https://github.com/danielleag30/Bookish/pull/13))
-- All data warnings against the series canon are resolved, ensuring accurate character and relationship information with no errors or warnings. ([#7](https://github.com/danielleag30/Bookish/pull/7))
+- Pipeline robustness: 8 of 9 fixed, 1 scoped out with reasons ([#39](https://github.com/danielleag30/Bookish/pull/39))
+- Fix zoom, answer death questions, make the theme mean something ([#35](https://github.com/danielleag30/Bookish/pull/35))
+- Add Fae & Alchemy (agent-drafted) + fix 3 pipeline bugs and 2 name leaks ([#34](https://github.com/danielleag30/Bookish/pull/34))
+- Fix the slug the add-series agent derives, and let it degrade like the other one ([#27](https://github.com/danielleag30/Bookish/pull/27))
+- Resolve every pending data question against canon ([#14](https://github.com/danielleag30/Bookish/pull/14))
+- Refresh the ask box when its answer stops being true ([#13](https://github.com/danielleag30/Bookish/pull/13))
+- Resolve all 6 data warnings against series canon ([#7](https://github.com/danielleag30/Bookish/pull/7))
 
 ### Data
 
-- The data model is now organized by book, improving accuracy and fixing a reporting error in the first book's chart. ([#11](https://github.com/danielleag30/Bookish/pull/11))
-- Relationship vocabulary is now standardized to ensure consistency across the site as new books are added. ([#8](https://github.com/danielleag30/Bookish/pull/8))
+- Gap reports for every series, in each world's own vocabulary ([#45](https://github.com/danielleag30/Bookish/pull/45))
+- Per-book data model, and Plated Prisoner migrated into it ([#11](https://github.com/danielleag30/Bookish/pull/11))
+- Define a controlled relationship vocabulary and enforce it in CI ([#8](https://github.com/danielleag30/Bookish/pull/8))
 - Phase 1: extract chart data to validated JSON behind a Zod schema ([#6](https://github.com/danielleag30/Bookish/pull/6))
 
 ### Docs
 
-- A new "how it works" page is added to explain the data flow and clarify that the site operates without a language model, detailing the two systems that share one dataset. ([#18](https://github.com/danielleag30/Bookish/pull/18))
+- Add a "how it works" page explaining the data flow ([#18](https://github.com/danielleag30/Bookish/pull/18))
 
