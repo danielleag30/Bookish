@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" role="img"
+     aria-label="Fire &amp; Metal — placeholder cover">
+  <!-- Placeholder, not the published cover. Swap in the real jacket art when
+       it is cleared for use; the card markup already points at this filename.
+       Palette matches data/fire-and-metal.json's theme. -->
+  <defs>
+    <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#12303D"/>
+      <stop offset="1" stop-color="#0B1622"/>
+    </linearGradient>
+    <linearGradient id="foil" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#E8E4DC"/>
+      <stop offset=".5" stop-color="#C9CED4"/>
+      <stop offset="1" stop-color="#8C97A0"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="500" fill="url(#sea)"/>
+  <g stroke="#1E4A52" stroke-width="1" opacity=".55">
+    <path d="M0 372h400M0 400h400M0 428h400M0 456h400"/>
+  </g>
+  <g fill="none" stroke="#C08A4A" stroke-width="1.5" opacity=".5">
+    <circle cx="200" cy="196" r="92"/>
+    <circle cx="200" cy="196" r="120"/>
+  </g>
+  <!-- a blade, for the hearthstone dagger -->
+  <path d="M200 96 L214 150 L200 306 L186 150 Z" fill="url(#foil)"/>
+  <rect x="176" y="150" width="48" height="7" rx="3" fill="#8C6A3F"/>
+  <rect x="195" y="157" width="10" height="34" rx="4" fill="#8C6A3F"/>
+  <text x="200" y="376" text-anchor="middle" fill="#C9CED4"
+        font-family="Cinzel, Georgia, serif" font-size="34" letter-spacing="3">FIRE &amp; METAL</text>
+  <text x="200" y="404" text-anchor="middle" fill="#8C97A0"
+        font-family="DM Sans, system-ui, sans-serif" font-size="15" letter-spacing="2">RACHEL SCHNEIDER</text>
+  <text x="200" y="470" text-anchor="middle" fill="#6E7C86"
+        font-family="DM Sans, system-ui, sans-serif" font-size="12" letter-spacing="1">placeholder cover</text>
+</svg>

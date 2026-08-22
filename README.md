@@ -18,7 +18,7 @@ I read fast-moving series with huge, shifting casts — new characters every boo
 
 This repo answers all three, and I'm using it as a hands-on capstone for the GitHub Certified: Agentic AI Developer (GH-600) exam — each addition maps to a real exam domain, not just a portfolio bullet.
 
-**Four series charted**, each a hand-authored, pannable/zoomable SVG relationship map: The Empyrean (72 characters, 115 relationships), Dungeon Crawler Carl (8 books → 10 dungeon floors), The Plated Prisoner, and Fae and Alchemy — the newest, extracted from source text by the pipeline below rather than hand-entered.
+**Five series charted**, each a pannable/zoomable SVG relationship map: The Empyrean (72 characters, 115 relationships), Dungeon Crawler Carl (8 books → 10 dungeon floors), The Plated Prisoner, Fae and Alchemy — extracted from source text by the pipeline below rather than hand-entered — and Fire & Metal, the newest, authored from sourced research notes and covering book one only.
 
 ---
 
@@ -55,7 +55,7 @@ Worth stating plainly rather than glossing over: the verifier's evidence is the 
 
 | Layer | Technology |
 |---|---|
-| Charts | Shared TypeScript SVG engine (`src/engine/`) driving all four series — replaced three separate copy-pasted implementations |
+| Charts | Shared TypeScript SVG engine (`src/engine/`) driving all five series — replaced three separate copy-pasted implementations |
 | Data | Zod-validated JSON per series, extracted and reviewed rather than hand-typed for new additions |
 | Extraction pipeline | Multi-agent (extract → verify → resolve), local Ollama, GitHub Models for CI-run agents, $0 |
 | Eval harness | Custom scorer against hand-labeled ground truth, results committed to `evals/results.md` |
@@ -69,7 +69,7 @@ Worth stating plainly rather than glossing over: the verifier's evidence is the 
 ```
 Bookish/
 ├── src/
-│   ├── engine/            # Shared chart-rendering engine (all 4 series)
+│   ├── engine/            # Shared chart-rendering engine (all 5 series)
 │   ├── spoiler.ts          # gate() — the single choke point every surface reads through
 │   ├── askbox.ts            # In-page spoiler-bounded Q&A (no LLM — structured lookups)
 │   └── schema.ts             # Zod schema for chart data
@@ -81,7 +81,7 @@ Bookish/
 ├── data/*.json                    # Validated chart data, one file per series
 ├── AUTONOMY.md                     # What each agent may do without asking, and why
 ├── CHANGELOG.md                     # Drafted by the changelog agent, human-reviewed
-└── {Empyrean,DCC,Plated-Prisoner,Fae-And-Alchemy}-Chart/
+└── {Empyrean,DCC,Plated-Prisoner,Fae-And-Alchemy,Fire-And-Metal}-Chart/
 ```
 
 ## Local Development

@@ -1,0 +1,1621 @@
+{
+  "id": "fire-and-metal",
+  "title": "Fire & Metal",
+  "author": "Rachel Schneider",
+  "books": [
+    {
+      "id": 1,
+      "title": "Metal Slinger",
+      "short": "Metal Slinger",
+      "year": 2025,
+      "era": "A century of exile, breaking · the Alaha rebellion moves into the open"
+    }
+  ],
+  "regions": [
+    {
+      "id": "alaha",
+      "label": "Alaha",
+      "x": 0,
+      "y": 0,
+      "w": 350,
+      "h": 430,
+      "power": "the floating city",
+      "color": "#12303D",
+      "border": "#2E6B7A"
+    },
+    {
+      "id": "kenta",
+      "label": "Kenta",
+      "x": 400,
+      "y": 0,
+      "w": 440,
+      "h": 430,
+      "power": "the Capitol",
+      "color": "#3A2E1C",
+      "border": "#8C6A3F"
+    },
+    {
+      "id": "maile",
+      "label": "Maile",
+      "x": 890,
+      "y": 0,
+      "w": 200,
+      "h": 200,
+      "power": "air elemental",
+      "color": "#20313F",
+      "border": "#52739C"
+    },
+    {
+      "id": "roison",
+      "label": "Roison",
+      "x": 0,
+      "y": 480,
+      "w": 380,
+      "h": 250,
+      "power": "rebel country",
+      "color": "#1B3328",
+      "border": "#3E6B52"
+    },
+    {
+      "id": "dark_forest",
+      "label": "The Dark Forest",
+      "x": 430,
+      "y": 480,
+      "w": 350,
+      "h": 250,
+      "power": "an unbroken curse",
+      "color": "#16161E",
+      "border": "#3A3A46"
+    }
+  ],
+  "affiliations": {
+    "alaha": {
+      "label": "The Alaha",
+      "color": "#1E4A52",
+      "border": "#4E8B99"
+    },
+    "rebellion": {
+      "label": "Jovie's rebellion",
+      "color": "#7A4A2E",
+      "border": "#C08A4A"
+    },
+    "kenta_crown": {
+      "label": "The Kenta crown",
+      "color": "#5A4322",
+      "border": "#C9A05B"
+    },
+    "kenta_army": {
+      "label": "The Kenta army",
+      "color": "#4A3A3A",
+      "border": "#9C7A6A"
+    },
+    "roison": {
+      "label": "Roison",
+      "color": "#2A4A38",
+      "border": "#5E9B78"
+    },
+    "roison_rebels": {
+      "label": "Roison rebels",
+      "color": "#3A4A28",
+      "border": "#7A9B4E"
+    },
+    "maile_crown": {
+      "label": "The Maile crown",
+      "color": "#2E4360",
+      "border": "#6E93C4"
+    },
+    "strou": {
+      "label": "Strou",
+      "color": "#3E3450",
+      "border": "#7E6BA0"
+    }
+  },
+  "relationshipTypes": [
+    {
+      "id": "family",
+      "label": "Family",
+      "color": "#fbbf24",
+      "dash": null,
+      "symmetric": false
+    },
+    {
+      "id": "mated",
+      "label": "Mated",
+      "color": "#f472b6",
+      "dash": null,
+      "symmetric": true
+    },
+    {
+      "id": "romantic",
+      "label": "Romantic",
+      "color": "#ec4899",
+      "dash": "6 2",
+      "symmetric": true
+    },
+    {
+      "id": "friend",
+      "label": "Friend",
+      "color": "#34d399",
+      "dash": null,
+      "symmetric": true
+    },
+    {
+      "id": "ally",
+      "label": "Ally",
+      "color": "#60a5fa",
+      "dash": null,
+      "symmetric": true
+    },
+    {
+      "id": "commands",
+      "label": "Commands",
+      "color": "#94a3b8",
+      "dash": null,
+      "symmetric": false
+    },
+    {
+      "id": "mentor",
+      "label": "Mentor",
+      "color": "#22d3ee",
+      "dash": null,
+      "symmetric": false
+    },
+    {
+      "id": "enemy",
+      "label": "Enemy",
+      "color": "#ef4444",
+      "dash": "3 3",
+      "symmetric": false
+    },
+    {
+      "id": "betrayer",
+      "label": "Betrayer",
+      "color": "#f59e0b",
+      "dash": "5 3",
+      "symmetric": false
+    },
+    {
+      "id": "captor",
+      "label": "Captor",
+      "color": "#a78bfa",
+      "dash": "4 3",
+      "symmetric": false
+    },
+    {
+      "id": "killed",
+      "label": "Killed",
+      "color": "#7f1d1d",
+      "dash": "1 3",
+      "symmetric": false
+    }
+  ],
+  "characters": [
+    {
+      "id": "brynn",
+      "label": "Brynn",
+      "role": "Alaha guard trainee · Princess of Maile · leader of the rebellion",
+      "type": "heir",
+      "affil": "rebellion",
+      "region": "kenta",
+      "book": 1,
+      "lastBook": 1,
+      "status": "alive",
+      "size": "main",
+      "x": 460,
+      "y": 60,
+      "statusDetail": "fugitive",
+      "aliases": [
+        "Jovie",
+        "Jovinnia",
+        "Princess of Maile"
+      ],
+      "magic": "Light wielding — the first in millennia",
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "Raised on Urchin Row as an orphan of the Alaha, copper-haired among a fair-haired people, and a guard trainee alongside Kai and Messer. Her magic is dormant only because she has never touched land. She is Jovinnia, Princess of Maile, whom Captain Wren abducted as a child — and she remembered it the whole time. The escape from Alaha, the helplessness Acker believed, and Kai's visible influence over her were all her design. She awakens in Roison as the first light wielder in millennia, burns the Dark Forest away, and takes the Kenta court by poison before fleeing the palace."
+        }
+      ]
+    },
+    {
+      "id": "acker",
+      "label": "Acker",
+      "role": "Prince of Kenta",
+      "type": "heir",
+      "affil": "kenta_crown",
+      "region": "kenta",
+      "book": 1,
+      "lastBook": 1,
+      "status": "alive",
+      "size": "main",
+      "x": 570,
+      "y": 60,
+      "aliases": [
+        "The Metal Slinger",
+        "Soldier of Chaos"
+      ],
+      "magic": "Elemental — metal",
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "The Metal Slinger, the Soldier of Chaos, and — unknown to Brynn for a third of the book — the prince of Kenta. He has been searching for the lost princess of Maile for fifteen years under a blood oath that limits what he can say. He surrenders himself at the Alaha dock deliberately, kills Commander Dupre in the escape, and crosses an ocean and a cursed forest with her. He declares her his match before the Kenta court against his father and his betrothal to Strou, and is collared with mangi stone at the coup."
+        }
+      ]
+    },
+    {
+      "id": "kai",
+      "label": "Kai",
+      "role": "Heir to the Alaha · Brynn's betrothed",
+      "type": "heir",
+      "affil": "rebellion",
+      "region": "alaha",
+      "book": 1,
+      "lastBook": 1,
+      "status": "alive",
+      "size": "main",
+      "x": 285,
+      "y": 55,
+      "magic": "Influence — amplifies emotion through touch",
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "Captain Wren's son and heir, a guard trainee, and Brynn's lifelong protector. He inherited his father's gift of influence and has been amplifying Brynn's feelings toward him through touch for years — at her instruction, so that Acker would believe her a manipulated innocent. He and Brynn conspired to depose both Edmond of Kenta and his own father."
+        }
+      ]
+    },
+    {
+      "id": "messer",
+      "label": "Messer",
+      "role": "Commander of the Alaha guard",
+      "type": "shifter",
+      "affil": "rebellion",
+      "region": "kenta",
+      "book": 1,
+      "lastBook": 1,
+      "status": "alive",
+      "size": "main",
+      "x": 680,
+      "y": 60,
+      "aliases": [
+        "Blue"
+      ],
+      "magic": "Shifting — eyun, giant squid, leopard",
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "A guard trainee named commander at graduation, abused by his father Johannes, arranged-matched to Aurora and in love with Masie. He is a shifter, and he is Blue: the midnight-blue eyun that finds Brynn and Acker at sea followed her across the entire ocean in bird form. He fights Sven into the Dark Forest, is branded by Acker with a hearthstone scar, and flees the Kenta palace with Brynn."
+        }
+      ]
+    },
+    {
+      "id": "wren",
+      "label": "Captain Wren",
+      "role": "Leader of the Alaha",
+      "type": "heir",
+      "affil": "alaha",
+      "region": "alaha",
+      "book": 1,
+      "lastBook": 1,
+      "status": "alive",
+      "size": "main",
+      "x": 70,
+      "y": 55,
+      "magic": "Influence; over three centuries old",
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "Leader of the Alaha, over three centuries old, and an Heir whose gift is influence — the reason the Alaha were exiled. He abducted Jovinnia of Maile as a child, raised her as Brynn, and bound Acker under a blood oath to keep him silent about her. He shields her from Kenta by betrothing her to his son, and intends to let Acker drown in the flooding brig."
+        }
+      ]
+    },
+    {
+      "id": "faline",
+      "label": "Faline",
+      "role": "Wren's wife · Kai's mother",
+      "type": "no_gift",
+      "affil": "alaha",
+      "region": "alaha",
+      "book": 1,
+      "lastBook": 1,
+      "status": "alive",
+      "size": "side",
+      "x": 180,
+      "y": 55,
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "Wren's wife and Kai's mother, and the closest thing Brynn has to a mother in Alaha."
+        }
+      ]
+    },
+    {
+      "id": "edmond",
+      "label": "King Edmond",
+      "role": "King of Kenta",
+      "type": "heir",
+      "affil": "kenta_crown",
+      "region": "kenta",
+      "book": 1,
+      "lastBook": 1,
+      "status": "alive",
+      "size": "main",
+      "x": 460,
+      "y": 132,
+      "statusDetail": "magic severed",
+      "magic": "Recorded as fire — he behaves as though it is influence",
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "King of Kenta and Acker's father. He forces Brynn to kneel at court and presses Acker to keep her as a consort while marrying Irina for Strou's army. The Kenta archives record his gift as fire, not the influence he appears to wield — a discrepancy the book raises and does not answer. Brynn severs his magic with the hearthstone dagger and spares his life at Acker's request."
+        }
+      ]
+    },
+    {
+      "id": "beau",
+      "label": "Beau",
+      "role": "Third in command of Kenta",
+      "type": "heir",
+      "affil": "rebellion",
+      "region": "kenta",
+      "book": 1,
+      "lastBook": 1,
+      "status": "alive",
+      "size": "main",
+      "x": 570,
+      "y": 132,
+      "magic": "Aura reading",
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "Third in command of Kenta, Acker's half-sister, and an Heir who reads emotional auras. She confirms that Brynn and Acker are matched and vouches for Messer's loyalty. She has joined Brynn's rebellion, which is revealed only when she binds her own half-brother at the coup."
+        }
+      ]
+    },
+    {
+      "id": "hallis",
+      "label": "Hallis",
+      "role": "Kenta advisor and instructor",
+      "type": "no_gift",
+      "affil": "kenta_crown",
+      "region": "kenta",
+      "book": 1,
+      "lastBook": 1,
+      "status": "alive",
+      "size": "main",
+      "x": 680,
+      "y": 132,
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "Acker's closest friend since childhood, a one-handed Kenta advisor and instructor, and — from before her abduction — a childhood friend of Jovie's. He is romantically involved with Beau."
+        }
+      ]
+    },
+    {
+      "id": "aurora",
+      "label": "Aurora",
+      "role": "Alaha guard trainee",
+      "type": "no_gift",
+      "affil": "rebellion",
+      "region": "alaha",
+      "book": 1,
+      "lastBook": 1,
+      "status": "unknown",
+      "size": "side",
+      "x": 285,
+      "y": 264,
+      "statusDetail": "fate unrecorded",
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "The only other female guard trainee of the Alaha and a childhood rival of Brynn's, arranged-matched to Messer. She detonates the kerosene booth that collapses the Market and breaks a century of peace. Kenta demands her as a prisoner, and no source records what becomes of her."
+        }
+      ]
+    },
+    {
+      "id": "dupre",
+      "label": "Commander Dupre",
+      "role": "Commander of the Alaha guard",
+      "type": "no_gift",
+      "affil": "alaha",
+      "region": "alaha",
+      "book": 1,
+      "lastBook": 1,
+      "status": "dead",
+      "size": "side",
+      "x": 95,
+      "y": 128,
+      "statusDetail": "killed in the escape",
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "Commander of the Alaha guard and Captain Wren's right hand. He catches Brynn and Acker at the boats on the night of the Matching Ceremony, and Acker kills him with a thrown blade."
+        }
+      ]
+    },
+    {
+      "id": "johannes",
+      "label": "Commander Johannes",
+      "role": "Third in command of the Alaha",
+      "type": "no_gift",
+      "affil": "alaha",
+      "region": "alaha",
+      "book": 1,
+      "lastBook": 1,
+      "status": "alive",
+      "size": "side",
+      "x": 265,
+      "y": 128,
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "Third in command of the Alaha and Messer's father, who physically abuses him."
+        }
+      ]
+    },
+    {
+      "id": "danuh",
+      "label": "Danuh",
+      "role": "Messer's mother",
+      "type": "no_gift",
+      "affil": "alaha",
+      "region": "alaha",
+      "book": 1,
+      "lastBook": 1,
+      "status": "alive",
+      "size": "side",
+      "x": 285,
+      "y": 196,
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "Messer's mother, in Alaha."
+        }
+      ]
+    },
+    {
+      "id": "gramble",
+      "label": "Gramble",
+      "role": "Instructor of the Alaha guard trainees",
+      "type": "no_gift",
+      "affil": "alaha",
+      "region": "alaha",
+      "book": 1,
+      "lastBook": 1,
+      "status": "alive",
+      "size": "side",
+      "x": 70,
+      "y": 196,
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "Instructor of the Alaha guard trainees and Masie's father."
+        }
+      ]
+    },
+    {
+      "id": "masie",
+      "label": "Masie",
+      "role": "Scriber in Alaha",
+      "type": "no_gift",
+      "affil": "alaha",
+      "region": "alaha",
+      "book": 1,
+      "lastBook": 1,
+      "status": "alive",
+      "size": "side",
+      "x": 180,
+      "y": 196,
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "A scriber in Alaha, Gramble's daughter, and Messer's lover."
+        }
+      ]
+    },
+    {
+      "id": "paul",
+      "label": "Paul",
+      "role": "Alaha guard trainee",
+      "type": "no_gift",
+      "affil": "alaha",
+      "region": "alaha",
+      "book": 1,
+      "lastBook": 1,
+      "status": "alive",
+      "size": "side",
+      "x": 70,
+      "y": 264,
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "An Alaha guard trainee who bullies Brynn."
+        }
+      ]
+    },
+    {
+      "id": "lawson",
+      "label": "Lawson",
+      "role": "Alaha guard trainee",
+      "type": "no_gift",
+      "affil": "alaha",
+      "region": "alaha",
+      "book": 1,
+      "lastBook": 1,
+      "status": "alive",
+      "size": "side",
+      "x": 180,
+      "y": 264,
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "An Alaha guard trainee and a classmate of Brynn's."
+        }
+      ]
+    },
+    {
+      "id": "shirlane",
+      "label": "Shirlane",
+      "role": "Primary school teacher in Alaha",
+      "type": "no_gift",
+      "affil": "alaha",
+      "region": "alaha",
+      "book": 1,
+      "lastBook": 1,
+      "status": "alive",
+      "size": "side",
+      "x": 100,
+      "y": 336,
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "A primary school teacher in Alaha."
+        }
+      ]
+    },
+    {
+      "id": "grenadine",
+      "label": "Grenadine",
+      "role": "Former Queen of Kenta",
+      "type": "no_gift",
+      "affil": "kenta_crown",
+      "region": "alaha",
+      "book": 1,
+      "lastBook": 1,
+      "status": "alive",
+      "size": "main",
+      "x": 250,
+      "y": 336,
+      "statusDetail": "in hiding; believed dead",
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "Brynn's elderly neighbour on Urchin Row — and, as Brynn discovers from a portrait in the Kenta archives, the former Queen of Kenta and Acker's mother, believed dead and living in hiding among the people her kingdom exiled."
+        }
+      ]
+    },
+    {
+      "id": "greta",
+      "label": "Greta",
+      "role": "Royal librarian of Kenta",
+      "type": "heir",
+      "affil": "kenta_crown",
+      "region": "kenta",
+      "book": 1,
+      "lastBook": 1,
+      "status": "alive",
+      "size": "main",
+      "x": 785,
+      "y": 132,
+      "magic": "Foresight",
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "Royal librarian of Kenta, King Edmond's former consort, Beau's mother, and an Heir with foresight. She keeps a secret library of forbidden books and gives Brynn the run of it."
+        }
+      ]
+    },
+    {
+      "id": "wells",
+      "label": "Wells",
+      "role": "Blacksmith · one of Acker's five elite soldiers",
+      "type": "heir",
+      "affil": "kenta_army",
+      "region": "kenta",
+      "book": 1,
+      "lastBook": 1,
+      "status": "alive",
+      "size": "side",
+      "x": 570,
+      "y": 204,
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "One of Acker's five elite soldiers, now a blacksmith. He and Olivia are secretly matched, and they explain to Brynn what a resisted matching bond does to the person resisting it."
+        }
+      ]
+    },
+    {
+      "id": "olivia",
+      "label": "Olivia",
+      "role": "Wells's wife",
+      "type": "heir",
+      "affil": "kenta_crown",
+      "region": "kenta",
+      "book": 1,
+      "lastBook": 1,
+      "status": "alive",
+      "size": "side",
+      "x": 680,
+      "y": 204,
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "Wells's wife, secretly matched to him."
+        }
+      ]
+    },
+    {
+      "id": "irina",
+      "label": "Irina",
+      "role": "Princess of Strou · Acker's betrothed",
+      "type": "no_gift",
+      "affil": "strou",
+      "region": "kenta",
+      "book": 1,
+      "lastBook": 1,
+      "status": "alive",
+      "size": "side",
+      "x": 460,
+      "y": 204,
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "Princess of Strou and Acker's political betrothed, living at the Kenta palace. Her marriage is the price of Strou's army; Acker repudiates it publicly."
+        }
+      ]
+    },
+    {
+      "id": "rango",
+      "label": "Rango",
+      "role": "Senior commanding officer of Kenta",
+      "type": "no_gift",
+      "affil": "kenta_army",
+      "region": "kenta",
+      "book": 1,
+      "lastBook": 1,
+      "status": "alive",
+      "size": "side",
+      "x": 460,
+      "y": 276,
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "A senior commanding officer of Kenta."
+        }
+      ]
+    },
+    {
+      "id": "imen",
+      "label": "Commander Imen",
+      "role": "Kenta commander",
+      "type": "no_gift",
+      "affil": "kenta_army",
+      "region": "kenta",
+      "book": 1,
+      "lastBook": 1,
+      "status": "alive",
+      "size": "side",
+      "x": 570,
+      "y": 276,
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "A commander of Kenta."
+        }
+      ]
+    },
+    {
+      "id": "talon",
+      "label": "Talon",
+      "role": "Kenta soldier",
+      "type": "no_gift",
+      "affil": "kenta_army",
+      "region": "kenta",
+      "book": 1,
+      "lastBook": 1,
+      "status": "alive",
+      "size": "side",
+      "x": 680,
+      "y": 276,
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "A soldier of Kenta."
+        }
+      ]
+    },
+    {
+      "id": "stassia",
+      "label": "Stassia",
+      "role": "Maidservant of the Kenta palace",
+      "type": "no_gift",
+      "affil": "kenta_crown",
+      "region": "kenta",
+      "book": 1,
+      "lastBook": 1,
+      "status": "unknown",
+      "size": "side",
+      "x": 460,
+      "y": 348,
+      "statusDetail": "at the poisoned dinner",
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "A maidservant at the Kenta palace, present at the dinner the rebellion poisons."
+        }
+      ]
+    },
+    {
+      "id": "henry",
+      "label": "Henry",
+      "role": "Cook of the Kenta palace",
+      "type": "no_gift",
+      "affil": "kenta_crown",
+      "region": "kenta",
+      "book": 1,
+      "lastBook": 1,
+      "status": "alive",
+      "size": "side",
+      "x": 570,
+      "y": 348,
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "A cook at the Kenta palace."
+        }
+      ]
+    },
+    {
+      "id": "samasu",
+      "label": "General Samasu",
+      "role": "Sentry of Maile · Queen Evelyn's messenger",
+      "type": "no_gift",
+      "affil": "maile_crown",
+      "region": "kenta",
+      "book": 1,
+      "lastBook": 1,
+      "status": "alive",
+      "size": "side",
+      "x": 785,
+      "y": 204,
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "A sentry of Maile and Queen Evelyn's messenger, related to Captain Wren. He intercepts Brynn and Acker on the Kenta road to bring the princess home, and witnesses the blood bond Acker makes."
+        }
+      ]
+    },
+    {
+      "id": "vad",
+      "label": "Vad",
+      "role": "Oracle of Roison",
+      "type": "heir",
+      "affil": "roison_rebels",
+      "region": "roison",
+      "book": 1,
+      "lastBook": 1,
+      "status": "alive",
+      "size": "main",
+      "x": 80,
+      "y": 590,
+      "magic": "Mind reading",
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "An oracle of Roison who reads minds and leads a band of rebels. He was a comrade of Acker's in the Kenta army and betrayed his own battalion. He identifies Brynn as the lost princess of Maile and tells her she is dying, then trades a healer's location for thirty seconds inside Acker's memories."
+        }
+      ]
+    },
+    {
+      "id": "fia",
+      "label": "Fia",
+      "role": "Healer of Roison",
+      "type": "heir",
+      "affil": "roison",
+      "region": "roison",
+      "book": 1,
+      "lastBook": 1,
+      "status": "alive",
+      "size": "side",
+      "x": 190,
+      "y": 555,
+      "magic": "Healing",
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "A healer in Roison who reveres Heirs, Jorgen's wife and Sven's mother. She forces Brynn's awakening to completion on a stone slab and saves her life."
+        }
+      ]
+    },
+    {
+      "id": "jorgen",
+      "label": "Jorgen",
+      "role": "Illusionist of Roison",
+      "type": "heir",
+      "affil": "roison",
+      "region": "roison",
+      "book": 1,
+      "lastBook": 1,
+      "status": "alive",
+      "size": "side",
+      "x": 300,
+      "y": 590,
+      "magic": "Illusion",
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "An illusionist of Roison, Fia's husband and Sven's father."
+        }
+      ]
+    },
+    {
+      "id": "sven",
+      "label": "Sven",
+      "role": "Bounty hunter of Roison",
+      "type": "shifter",
+      "affil": "roison",
+      "region": "dark_forest",
+      "book": 1,
+      "lastBook": 1,
+      "status": "unknown",
+      "size": "side",
+      "x": 600,
+      "y": 600,
+      "statusDetail": "last seen in the Dark Forest",
+      "magic": "Shifting — panther",
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "Fia and Jorgen's son, a shifter and a bounty hunter. He ambushes Brynn and Acker in panther form for the price on Acker's head, and was last seen fighting Messer into the Dark Forest that Brynn then burned away."
+        }
+      ]
+    },
+    {
+      "id": "evelyn",
+      "label": "Queen Evelyn",
+      "role": "Queen of Maile · Jovie's mother",
+      "type": "heir",
+      "affil": "maile_crown",
+      "region": "maile",
+      "book": 1,
+      "lastBook": 1,
+      "status": "alive",
+      "size": "main",
+      "x": 990,
+      "y": 100,
+      "magic": "Elemental — air",
+      "bioByBook": [
+        {
+          "book": 1,
+          "text": "Queen of Maile, an air elemental, and Jovie's mother, who has never stopped searching for her. She does not appear on the page: Brynn glimpses a copper-haired woman holding the hearthstone dagger she sends home as proof of who she is."
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "from": "brynn",
+      "to": "acker",
+      "type": "mated",
+      "book": 1,
+      "label": "matched"
+    },
+    {
+      "from": "brynn",
+      "to": "acker",
+      "type": "romantic",
+      "book": 1,
+      "label": "mutual and declared, and it survives the betrayal"
+    },
+    {
+      "from": "brynn",
+      "to": "acker",
+      "type": "betrayer",
+      "book": 1,
+      "label": "poisons his court and collars him with mangi stone"
+    },
+    {
+      "from": "acker",
+      "to": "brynn",
+      "type": "ally",
+      "book": 1,
+      "label": "sworn under a blood oath to bring her home",
+      "untilBook": 1
+    },
+    {
+      "from": "brynn",
+      "to": "evelyn",
+      "type": "family",
+      "book": 1,
+      "label": "mother"
+    },
+    {
+      "from": "brynn",
+      "to": "kai",
+      "type": "romantic",
+      "book": 1,
+      "label": "betrothed by Wren's decree; his influence amplified her feelings",
+      "untilBook": 1
+    },
+    {
+      "from": "brynn",
+      "to": "kai",
+      "type": "ally",
+      "book": 1,
+      "label": "co-conspirators in the rebellion"
+    },
+    {
+      "from": "brynn",
+      "to": "messer",
+      "type": "friend",
+      "book": 1,
+      "label": "lifelong; he follows her across an ocean"
+    },
+    {
+      "from": "wren",
+      "to": "brynn",
+      "type": "captor",
+      "book": 1,
+      "label": "abducted her as a child and raised her under a false name",
+      "untilBook": 1
+    },
+    {
+      "from": "wren",
+      "to": "kai",
+      "type": "family",
+      "book": 1,
+      "label": "son"
+    },
+    {
+      "from": "wren",
+      "to": "faline",
+      "type": "romantic",
+      "book": 1,
+      "label": "wife"
+    },
+    {
+      "from": "wren",
+      "to": "dupre",
+      "type": "commands",
+      "book": 1,
+      "label": "his right hand",
+      "untilBook": 1
+    },
+    {
+      "from": "wren",
+      "to": "acker",
+      "type": "captor",
+      "book": 1,
+      "label": "imprisons him in the Alaha brig and intends him to drown",
+      "untilBook": 1
+    },
+    {
+      "from": "wren",
+      "to": "acker",
+      "type": "enemy",
+      "book": 1,
+      "label": "bound him under a blood oath silencing him about Jovie"
+    },
+    {
+      "from": "faline",
+      "to": "brynn",
+      "type": "family",
+      "book": 1,
+      "label": "foster daughter"
+    },
+    {
+      "from": "acker",
+      "to": "dupre",
+      "type": "killed",
+      "book": 1,
+      "label": "killed him during the escape from Alaha",
+      "untilBook": 1
+    },
+    {
+      "from": "acker",
+      "to": "kai",
+      "type": "enemy",
+      "book": 1,
+      "label": "chokes him unconscious and spares him"
+    },
+    {
+      "from": "acker",
+      "to": "edmond",
+      "type": "family",
+      "book": 1,
+      "label": "father"
+    },
+    {
+      "from": "acker",
+      "to": "grenadine",
+      "type": "family",
+      "book": 1,
+      "label": "mother"
+    },
+    {
+      "from": "acker",
+      "to": "beau",
+      "type": "family",
+      "book": 1,
+      "label": "half-sister"
+    },
+    {
+      "from": "acker",
+      "to": "hallis",
+      "type": "friend",
+      "book": 1,
+      "label": "closest friend since childhood"
+    },
+    {
+      "from": "acker",
+      "to": "irina",
+      "type": "romantic",
+      "book": 1,
+      "label": "political betrothed; he repudiates it publicly"
+    },
+    {
+      "from": "acker",
+      "to": "wells",
+      "type": "commands",
+      "book": 1,
+      "label": "one of his five elite soldiers"
+    },
+    {
+      "from": "acker",
+      "to": "messer",
+      "type": "captor",
+      "book": 1,
+      "label": "imprisons and brands him, then releases him",
+      "untilBook": 1
+    },
+    {
+      "from": "edmond",
+      "to": "beau",
+      "type": "family",
+      "book": 1,
+      "label": "daughter"
+    },
+    {
+      "from": "edmond",
+      "to": "greta",
+      "type": "romantic",
+      "book": 1,
+      "label": "former consort",
+      "untilBook": 1
+    },
+    {
+      "from": "edmond",
+      "to": "acker",
+      "type": "commands",
+      "book": 1,
+      "label": "his king as well as his father"
+    },
+    {
+      "from": "greta",
+      "to": "beau",
+      "type": "family",
+      "book": 1,
+      "label": "daughter"
+    },
+    {
+      "from": "greta",
+      "to": "brynn",
+      "type": "mentor",
+      "book": 1,
+      "label": "gives her the forbidden archives"
+    },
+    {
+      "from": "beau",
+      "to": "hallis",
+      "type": "romantic",
+      "book": 1,
+      "label": "mutual"
+    },
+    {
+      "from": "beau",
+      "to": "brynn",
+      "type": "ally",
+      "book": 1,
+      "label": "joins her rebellion"
+    },
+    {
+      "from": "beau",
+      "to": "acker",
+      "type": "betrayer",
+      "book": 1,
+      "label": "binds him at the coup"
+    },
+    {
+      "from": "hallis",
+      "to": "brynn",
+      "type": "friend",
+      "book": 1,
+      "label": "childhood friend from Maile, before her abduction"
+    },
+    {
+      "from": "johannes",
+      "to": "messer",
+      "type": "family",
+      "book": 1,
+      "label": "son"
+    },
+    {
+      "from": "johannes",
+      "to": "messer",
+      "type": "enemy",
+      "book": 1,
+      "label": "physically abuses him"
+    },
+    {
+      "from": "danuh",
+      "to": "messer",
+      "type": "family",
+      "book": 1,
+      "label": "son"
+    },
+    {
+      "from": "messer",
+      "to": "aurora",
+      "type": "romantic",
+      "book": 1,
+      "label": "arranged match, tolerated rather than embraced"
+    },
+    {
+      "from": "messer",
+      "to": "masie",
+      "type": "romantic",
+      "book": 1,
+      "label": "his lover in Alaha"
+    },
+    {
+      "from": "gramble",
+      "to": "masie",
+      "type": "family",
+      "book": 1,
+      "label": "daughter"
+    },
+    {
+      "from": "gramble",
+      "to": "brynn",
+      "type": "mentor",
+      "book": 1,
+      "label": "her guard instructor"
+    },
+    {
+      "from": "aurora",
+      "to": "brynn",
+      "type": "ally",
+      "book": 1,
+      "label": "detonates the Market for the rebellion"
+    },
+    {
+      "from": "paul",
+      "to": "brynn",
+      "type": "enemy",
+      "book": 1,
+      "label": "bullies her"
+    },
+    {
+      "from": "vad",
+      "to": "acker",
+      "type": "betrayer",
+      "book": 1,
+      "label": "betrayed his battalion in the Kenta army"
+    },
+    {
+      "from": "vad",
+      "to": "brynn",
+      "type": "enemy",
+      "book": 1,
+      "label": "his band shoots her through the chest"
+    },
+    {
+      "from": "fia",
+      "to": "jorgen",
+      "type": "romantic",
+      "book": 1,
+      "label": "husband"
+    },
+    {
+      "from": "fia",
+      "to": "sven",
+      "type": "family",
+      "book": 1,
+      "label": "son"
+    },
+    {
+      "from": "jorgen",
+      "to": "sven",
+      "type": "family",
+      "book": 1,
+      "label": "son"
+    },
+    {
+      "from": "fia",
+      "to": "brynn",
+      "type": "ally",
+      "book": 1,
+      "label": "completes her awakening and saves her life"
+    },
+    {
+      "from": "sven",
+      "to": "acker",
+      "type": "enemy",
+      "book": 1,
+      "label": "ambushes him for the bounty on his head"
+    },
+    {
+      "from": "sven",
+      "to": "messer",
+      "type": "enemy",
+      "book": 1,
+      "label": "they fight into the Dark Forest"
+    },
+    {
+      "from": "wells",
+      "to": "olivia",
+      "type": "mated",
+      "book": 1,
+      "label": "secretly matched and married"
+    },
+    {
+      "from": "wells",
+      "to": "brynn",
+      "type": "mentor",
+      "book": 1,
+      "label": "explains the stages and dangers of the matching bond"
+    },
+    {
+      "from": "samasu",
+      "to": "evelyn",
+      "type": "ally",
+      "book": 1,
+      "label": "her messenger and sentry"
+    },
+    {
+      "from": "samasu",
+      "to": "wren",
+      "type": "family",
+      "book": 1,
+      "label": "kin; the exact tie is not stated"
+    }
+  ],
+  "events": [
+    {
+      "book": 1,
+      "text": "Acker forces Brynn's palm to the Market wall and her dormant magic flares",
+      "involves": [
+        "brynn",
+        "acker"
+      ],
+      "kind": "reveal"
+    },
+    {
+      "book": 1,
+      "text": "Aurora detonates the Market and the century-old peace treaty breaks",
+      "involves": [
+        "aurora",
+        "brynn",
+        "kai",
+        "messer"
+      ],
+      "kind": "battle"
+    },
+    {
+      "book": 1,
+      "text": "Kenta demands Brynn and Aurora as prisoners; Wren shields Brynn by betrothing her to Kai",
+      "involves": [
+        "wren",
+        "kai",
+        "brynn",
+        "aurora"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Acker surrenders himself at the Alaha dock and is imprisoned",
+      "involves": [
+        "acker",
+        "wren"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Acker tells Brynn her name is Jovie and that she is not Alaha",
+      "involves": [
+        "acker",
+        "brynn"
+      ],
+      "kind": "reveal"
+    },
+    {
+      "book": 1,
+      "text": "Brynn summons the hearthstone dagger from the ocean floor and frees Acker from the flooding brig",
+      "involves": [
+        "brynn",
+        "acker"
+      ],
+      "kind": "reveal"
+    },
+    {
+      "book": 1,
+      "text": "Acker reveals Wren's abduction of Jovie and Kai's influence over her",
+      "involves": [
+        "acker",
+        "brynn",
+        "wren",
+        "kai"
+      ],
+      "kind": "reveal"
+    },
+    {
+      "book": 1,
+      "text": "Acker kills Commander Dupre and two guards during the escape",
+      "involves": [
+        "acker",
+        "dupre",
+        "kai"
+      ],
+      "kind": "death"
+    },
+    {
+      "book": 1,
+      "text": "Kai orders Acker killed; Acker chokes Kai unconscious and spares him at Brynn's plea",
+      "involves": [
+        "kai",
+        "acker",
+        "brynn"
+      ],
+      "kind": "betrayal"
+    },
+    {
+      "book": 1,
+      "text": "Brynn and Acker escape Alaha by stolen fishing boat",
+      "involves": [
+        "brynn",
+        "acker"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Brynn's awakening begins when she reaches land in Roison",
+      "involves": [
+        "brynn",
+        "acker"
+      ],
+      "kind": "reveal"
+    },
+    {
+      "book": 1,
+      "text": "Vad's rebels ambush them; Brynn is shot through the chest",
+      "involves": [
+        "vad",
+        "brynn",
+        "acker"
+      ],
+      "kind": "battle"
+    },
+    {
+      "book": 1,
+      "text": "Acker swears a blood oath to Vad, trading memories for a healer's location",
+      "involves": [
+        "acker",
+        "vad"
+      ],
+      "kind": "bond"
+    },
+    {
+      "book": 1,
+      "text": "Fia forces Brynn's awakening to completion; Brynn is revealed as a light wielder",
+      "involves": [
+        "fia",
+        "brynn",
+        "acker"
+      ],
+      "kind": "reveal"
+    },
+    {
+      "book": 1,
+      "text": "Sven ambushes them as a panther; Blue is revealed to be Messer",
+      "involves": [
+        "sven",
+        "messer",
+        "brynn",
+        "acker"
+      ],
+      "kind": "reveal"
+    },
+    {
+      "book": 1,
+      "text": "Brynn destroys the entire Dark Forest with a single burst of light",
+      "involves": [
+        "brynn",
+        "acker",
+        "messer"
+      ],
+      "kind": "battle"
+    },
+    {
+      "book": 1,
+      "text": "Kenta soldiers greet Acker as prince",
+      "involves": [
+        "acker",
+        "brynn"
+      ],
+      "kind": "reveal"
+    },
+    {
+      "book": 1,
+      "text": "Beau confirms Brynn and Acker are matched",
+      "involves": [
+        "beau",
+        "brynn",
+        "acker"
+      ],
+      "kind": "bond"
+    },
+    {
+      "book": 1,
+      "text": "Acker brands Messer with a hearthstone scar and releases him",
+      "involves": [
+        "acker",
+        "messer",
+        "beau"
+      ],
+      "kind": "betrayal"
+    },
+    {
+      "book": 1,
+      "text": "Brynn learns of Acker's betrothal to Irina through a consciousness projection",
+      "involves": [
+        "brynn",
+        "acker",
+        "hallis",
+        "irina"
+      ],
+      "kind": "reveal"
+    },
+    {
+      "book": 1,
+      "text": "Acker creates a blood bond before the Maile general, swearing protection and love",
+      "involves": [
+        "acker",
+        "brynn",
+        "samasu"
+      ],
+      "kind": "bond"
+    },
+    {
+      "book": 1,
+      "text": "Brynn finds Edmond's recorded gift is fire, not influence",
+      "involves": [
+        "brynn",
+        "edmond",
+        "greta"
+      ],
+      "kind": "reveal"
+    },
+    {
+      "book": 1,
+      "text": "Brynn recognises Grenadine in the portrait of Acker's dead mother",
+      "involves": [
+        "brynn",
+        "grenadine",
+        "acker"
+      ],
+      "kind": "reveal"
+    },
+    {
+      "book": 1,
+      "text": "Acker publicly declares Brynn his match, defying Edmond and the Strou alliance",
+      "involves": [
+        "acker",
+        "brynn",
+        "edmond",
+        "irina"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Flashback: Brynn is revealed as the architect of the escape and leader of the Alaha rebellion",
+      "involves": [
+        "brynn",
+        "kai"
+      ],
+      "kind": "reveal"
+    },
+    {
+      "book": 1,
+      "text": "The rebellion poisons the Kenta court at dinner",
+      "involves": [
+        "brynn",
+        "beau",
+        "messer"
+      ],
+      "kind": "betrayal"
+    },
+    {
+      "book": 1,
+      "text": "Brynn collars Acker with mangi stone and Beau binds him",
+      "involves": [
+        "brynn",
+        "beau",
+        "acker"
+      ],
+      "kind": "betrayal"
+    },
+    {
+      "book": 1,
+      "text": "Brynn offers Acker the throne for peace and Acker refuses",
+      "involves": [
+        "brynn",
+        "acker"
+      ],
+      "kind": "other"
+    },
+    {
+      "book": 1,
+      "text": "Brynn severs King Edmond's magic with the hearthstone dagger, sparing his life",
+      "involves": [
+        "brynn",
+        "edmond",
+        "acker"
+      ],
+      "kind": "reveal"
+    },
+    {
+      "book": 1,
+      "text": "Acker strikes Brynn and the blood bond punishes him instantly; Brynn flees with Messer",
+      "involves": [
+        "acker",
+        "brynn",
+        "messer"
+      ],
+      "kind": "betrayal"
+    }
+  ],
+  "theme": {
+    "accent": "#C9CED4",
+    "accent2": "#C08A4A",
+    "ground": "#0B1622",
+    "panel": "#12222E",
+    "line": "#1E4A52",
+    "display": "'Cinzel', serif",
+    "mood": "Cold silver against Kenta gold — sea-exile and foil-stamped metal rather than the gilded register of court romantasy. Provisional: drawn from documented cover descriptions, not sampled from the cover art."
+  },
+  "terms": {
+    "magic": "Gift"
+  },
+  "display": {
+    "edgeLabels": false
+  },
+  "characterTypes": {
+    "heir": {
+      "label": "Heir",
+      "shape": "diamond"
+    },
+    "shifter": {
+      "label": "Shifter (Heir)",
+      "shape": "star6"
+    },
+    "no_gift": {
+      "label": "No gift attested",
+      "shape": "circle"
+    }
+  }
+}
