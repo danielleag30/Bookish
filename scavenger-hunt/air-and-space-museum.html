@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content="A phone-friendly scavenger hunt for kids aged 5-10 at the National Air and Space Museum in Washington DC."/>
+<title>Mission: Air &amp; Space</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Rubik:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap"/>
+<style>
+/* ============ tokens — dark-first "night hangar" ============ */
+:root{
+  --bg:#0d1526; --bg2:#141f36; --bg3:#1c2a45; --tint:#101b30;
+  --ink:#eef3ff; --ink2:#a3b2cf; --line:#26344f;
+  --accent:#ff7a2f; --accent-soft:#ffb37a; --on-accent:#231107;
+  --go:#4fd6a9; --on-go:#052018;
+  --sky:#6fc3ff; --gold:#ffd166;
+  --shadow:0 12px 30px rgba(0,0,0,.45);
+  --stripe:rgba(111,195,255,.06);
+  --r:18px;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#e7edf7; --bg2:#ffffff; --bg3:#dae3f2; --tint:#f0f4fb;
+    --ink:#16223a; --ink2:#55637f; --line:#c9d5e8;
+    --accent:#c9500f; --accent-soft:#a03f0a; --on-accent:#fff6f0;
+    --go:#0f7a60; --on-go:#f2fffb;
+    --sky:#12608f; --gold:#9a6a05;
+    --shadow:0 10px 24px rgba(23,40,80,.12);
+    --stripe:rgba(18,96,143,.05);
+  }
+}
+:root[data-theme="light"]{
+  --bg:#e7edf7; --bg2:#ffffff; --bg3:#dae3f2; --tint:#f0f4fb;
+  --ink:#16223a; --ink2:#55637f; --line:#c9d5e8;
+  --accent:#c9500f; --accent-soft:#a03f0a; --on-accent:#fff6f0;
+  --go:#0f7a60; --on-go:#f2fffb;
+  --sky:#12608f; --gold:#9a6a05;
+  --shadow:0 10px 24px rgba(23,40,80,.12);
+  --stripe:rgba(18,96,143,.05);
+}
+
+/* ============ base ============ */
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--bg);
+  background-image:
+    repeating-linear-gradient(90deg, var(--stripe) 0 1px, transparent 1px 44px),
+    repeating-linear-gradient(0deg, var(--stripe) 0 1px, transparent 1px 44px);
+  color:var(--ink);
+  font-family:"Rubik", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size:17px; line-height:1.55;
+  -webkit-text-size-adjust:100%;
+}
+h1,h2,h3{margin:0; text-wrap:balance; line-height:1.15}
+p{margin:0}
+button{font:inherit; color:inherit; cursor:pointer}
+:focus-visible{outline:3px solid var(--sky); outline-offset:3px; border-radius:6px}
+.wrap{max-width:760px; margin:0 auto; padding:0 16px 72px}
+.mono{font-family:"Space Mono", ui-monospace, "SFMono-Regular", monospace}
+.eyebrow{
+  font-family:"Space Mono", monospace; font-size:11px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--sky);
+}
+
+/* ============ hero ============ */
+.hero{
+  position:relative; overflow:hidden;
+  padding:34px 16px 26px; margin-bottom:18px;
+  border-bottom:2px solid var(--line);
+  background:linear-gradient(180deg, var(--bg3), transparent);
+}
+.hero-in{max-width:760px; margin:0 auto; position:relative; z-index:2}
+.hero h1{
+  font-family:"Bungee", "Rubik", sans-serif; font-weight:400;
+  font-size:clamp(30px, 8.4vw, 52px); letter-spacing:.01em;
+  margin:8px 0 10px; color:var(--ink);
+}
+.hero h1 .hi{color:var(--accent); display:block}
+.hero p.lede{color:var(--ink2); max-width:44ch; font-size:16px}
+.contrail{
+  position:absolute; right:-40px; top:14px; width:280px; height:150px;
+  opacity:.55; z-index:1; pointer-events:none;
+}
+.contrail .trail{fill:none; stroke:var(--sky); stroke-linecap:round}
+.contrail .jet{fill:var(--accent)}
+
+/* ============ status bar ============ */
+.status{
+  position:sticky; top:0; z-index:30;
+  background:var(--bg2); border-bottom:2px solid var(--line);
+  box-shadow:var(--shadow);
+}
+.status-in{
+  max-width:760px; margin:0 auto; padding:10px 16px;
+  display:flex; align-items:center; gap:12px;
+}
+.gauge{width:46px; height:46px; flex:none; display:block}
+.gauge-track{stroke:var(--bg3)}
+.gauge-fill{stroke:var(--accent); transition:stroke-dasharray .5s ease}
+.gauge-txt{
+  font-family:"Space Mono", monospace; font-weight:700; font-size:13px;
+  fill:var(--ink); text-anchor:middle;
+}
+.status-meta{flex:1; min-width:0}
+.rank{font-family:"Bungee", sans-serif; font-size:15px; line-height:1.2}
+.tally{font-size:12.5px; color:var(--ink2); font-family:"Space Mono", monospace}
+.tally b{color:var(--gold); font-weight:700}
+.iconbtn{
+  background:var(--bg3); border:1.5px solid var(--line); border-radius:10px;
+  width:38px; height:38px; flex:none; display:grid; place-items:center;
+  font-size:16px; line-height:1;
+}
+.iconbtn:hover{border-color:var(--accent)}
+
+/* ============ generic card ============ */
+.card{
+  background:var(--bg2); border:1.5px solid var(--line); border-radius:var(--r);
+  box-shadow:var(--shadow); margin:16px 0; overflow:hidden;
+}
+.card-pad{padding:18px}
+.card h2{
+  font-family:"Bungee", sans-serif; font-weight:400;
+  font-size:17px; letter-spacing:.02em; margin-bottom:4px;
+}
+
+/* ============ crew ============ */
+.crew-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-top:14px}
+@media(min-width:560px){.crew-grid{grid-template-columns:repeat(4,1fr)}}
+.crew-card{
+  background:var(--tint); border:1.5px solid var(--line); border-radius:14px;
+  padding:10px; text-align:center;
+}
+.avatar{
+  background:var(--bg3); border:1.5px solid var(--line); border-radius:50%;
+  width:52px; height:52px; font-size:26px; display:grid; place-items:center;
+  margin:0 auto 6px; line-height:1;
+}
+.avatar:hover{border-color:var(--accent); transform:rotate(-6deg)}
+.crew-card input{
+  width:100%; text-align:center; background:transparent; border:none;
+  border-bottom:2px dashed var(--line); color:var(--ink);
+  font:700 15px "Rubik", sans-serif; padding:2px 0; border-radius:0;
+}
+.crew-card input:focus{border-bottom-color:var(--accent); outline:none}
+.crew-card input::placeholder{color:var(--ink2); font-weight:400}
+.stars{
+  font-family:"Space Mono", monospace; font-size:12px; color:var(--gold);
+  margin-top:5px; min-height:18px; letter-spacing:.06em;
+}
+
+/* ============ code word ============ */
+.code-row{display:flex; gap:7px; justify-content:center; flex-wrap:wrap; margin-top:14px}
+.tile{
+  width:38px; height:46px; border-radius:9px; display:grid; place-items:center;
+  background:var(--bg3); border:2px solid var(--line);
+  font-family:"Bungee", sans-serif; font-size:20px; color:transparent;
+}
+.tile.on{
+  background:var(--accent); border-color:var(--accent); color:var(--on-accent);
+  animation:pop .45s cubic-bezier(.2,1.5,.4,1);
+}
+@keyframes pop{from{transform:scale(.55) rotate(-12deg)} to{transform:none}}
+
+/* ============ stop cards ============ */
+.stop{
+  background:var(--bg2); border:1.5px solid var(--line); border-radius:var(--r);
+  box-shadow:var(--shadow); margin:16px 0; overflow:hidden;
+  border-left:6px solid var(--accent);
+}
+.stop.done{border-left-color:var(--go)}
+.stop-head{
+  display:flex; gap:12px; align-items:flex-start; padding:16px 16px 0;
+}
+.num{
+  font-family:"Bungee", sans-serif; font-size:20px; color:var(--accent);
+  line-height:1; padding-top:3px; flex:none; width:34px;
+}
+.stop.done .num{color:var(--go)}
+.stop-head h3{font-size:20px; margin-bottom:3px}
+.where{font-family:"Space Mono", monospace; font-size:12px; color:var(--sky)}
+.captain{
+  display:inline-block; margin:10px 16px 0; padding:5px 11px;
+  background:var(--tint); border:1.5px dashed var(--line); border-radius:99px;
+  font-size:13px; color:var(--ink2);
+}
+.captain b{color:var(--ink)}
+.clue{padding:14px 16px 0; font-size:17px}
+.little{
+  margin:12px 16px 0; padding:11px 13px; border-radius:12px;
+  background:var(--tint); border:1.5px solid var(--line); font-size:15.5px;
+}
+.little .eyebrow{display:block; margin-bottom:3px}
+details{margin:12px 16px 0}
+summary{
+  list-style:none; cursor:pointer; display:inline-block;
+  padding:6px 12px; border-radius:99px; font-size:13.5px; font-weight:500;
+  background:var(--bg3); border:1.5px solid var(--line); color:var(--ink2);
+}
+summary::-webkit-details-marker{display:none}
+summary:hover{border-color:var(--sky); color:var(--ink)}
+details[open] summary{border-color:var(--sky); color:var(--ink)}
+details p{margin-top:9px; font-size:15px; color:var(--ink2); padding:0 2px}
+.found-btn{
+  display:block; width:calc(100% - 32px); margin:16px; padding:15px;
+  border:none; border-radius:14px; background:var(--accent); color:var(--on-accent);
+  font-family:"Bungee", sans-serif; font-size:16px; letter-spacing:.02em;
+}
+.found-btn:hover{filter:brightness(1.08)}
+.found-btn.is-done{background:var(--go); color:var(--on-go)}
+
+/* quiz */
+.quiz{margin:0 16px 16px; padding:15px; border-radius:14px; background:var(--tint); border:1.5px solid var(--line)}
+.quiz-q{font-weight:700; margin:6px 0 11px; font-size:16px}
+.opts{display:flex; flex-direction:column; gap:8px}
+.opt{
+  text-align:left; padding:11px 13px; border-radius:11px; font-size:15px;
+  background:var(--bg2); border:1.5px solid var(--line); color:var(--ink);
+}
+.opt:hover:not(:disabled){border-color:var(--sky)}
+.opt:disabled{cursor:default}
+.opt.right{background:var(--go); border-color:var(--go); color:var(--on-go); font-weight:700}
+.opt.wrong{background:var(--bg3); border-color:var(--accent); color:var(--ink2); text-decoration:line-through}
+.fact{
+  margin-top:11px; padding:11px 13px; border-radius:11px; font-size:15px;
+  background:var(--bg2); border-left:4px solid var(--gold); color:var(--ink2);
+}
+.fact b{color:var(--ink)}
+
+/* ============ bonus ============ */
+.bonus{
+  background:var(--tint); border:1.5px solid var(--line); border-radius:14px;
+  padding:13px; margin-top:10px;
+}
+.bonus.done{border-color:var(--go); background:var(--bg2)}
+.bonus p{font-size:15.5px}
+.who{display:flex; gap:7px; margin-top:10px; flex-wrap:wrap; align-items:center}
+.who span{font-size:12px; color:var(--ink2); font-family:"Space Mono", monospace}
+.chip{
+  width:36px; height:36px; border-radius:50%; font-size:17px; line-height:1;
+  background:var(--bg3); border:1.5px solid var(--line); display:grid; place-items:center;
+}
+.chip:hover{border-color:var(--accent)}
+.chip.on{background:var(--go); border-color:var(--go); transform:scale(1.08)}
+
+/* ============ finale + certificate ============ */
+.finale{border:2px dashed var(--line); text-align:center}
+.finale.locked{opacity:.7}
+.locktxt{font-family:"Space Mono", monospace; color:var(--ink2); font-size:14px; margin-top:8px}
+.bigword{
+  font-family:"Bungee", sans-serif; font-size:clamp(26px,9vw,44px);
+  color:var(--accent); letter-spacing:.06em; margin:10px 0;
+}
+.cert{
+  border:4px double var(--accent); border-radius:12px; padding:22px 18px;
+  background:var(--bg2); text-align:center; margin-top:14px;
+}
+.cert h3{font-family:"Bungee", sans-serif; font-size:20px; color:var(--accent); margin-bottom:6px}
+.cert .names{font-size:19px; font-weight:700; margin:12px 0; line-height:1.7}
+.cert .seal{font-size:40px; margin:6px 0}
+.ghost{
+  background:transparent; border:1.5px solid var(--line); border-radius:11px;
+  padding:10px 16px; font-size:14px; color:var(--ink2); margin-top:14px;
+}
+.ghost:hover{border-color:var(--accent); color:var(--ink)}
+
+/* ============ grown-up notes ============ */
+.notes ul{margin:10px 0 0; padding-left:20px; color:var(--ink2); font-size:15.5px}
+.notes li{margin-bottom:9px}
+.notes b{color:var(--ink)}
+.footer{
+  text-align:center; color:var(--ink2); font-size:13px;
+  font-family:"Space Mono", monospace; margin-top:28px; line-height:1.7;
+}
+
+#confetti{position:fixed; inset:0; pointer-events:none; z-index:99; display:none}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation:none !important; transition:none !important}
+  .avatar:hover{transform:none}
+}
+@media print{
+  body{background:#fff; color:#000}
+  .status,.hero,.stop,.notes,.ghost,.card:not(.cert-card),.footer{display:none !important}
+  .cert{border-color:#000; box-shadow:none}
+}
+</style>
+</head>
+<body>
+<canvas id="confetti"></canvas>
+
+<header class="hero">
+  <svg class="contrail" viewBox="0 0 280 150" aria-hidden="true">
+    <path class="trail" d="M-10 118 C 70 112, 130 84, 268 26" stroke-width="3" stroke-dasharray="1 14" opacity=".65"/>
+    <path class="trail" d="M-10 132 C 80 126, 150 96, 268 40" stroke-width="2" stroke-dasharray="1 20" opacity=".4"/>
+    <g transform="translate(258,26) rotate(-24)">
+      <path class="jet" d="M0 0 L-26 7 L-19 0 L-26 -7 Z"/>
+    </g>
+  </svg>
+  <div class="hero-in">
+    <span class="eyebrow">National Air &amp; Space Museum &middot; Washington DC</span>
+    <h1>Mission<span class="hi">Air &amp; Space</span></h1>
+    <p class="lede">Eight things to hunt down. Eight secret letters. One code word that tells you where the mission ends. Grab a grown-up's phone and go.</p>
+  </div>
+</header>
+
+<div class="status">
+  <div class="status-in">
+    <svg class="gauge" viewBox="0 0 40 40" aria-hidden="true">
+      <circle class="gauge-track" cx="20" cy="20" r="16" fill="none" stroke-width="5"/>
+      <circle id="gaugeFill" class="gauge-fill" cx="20" cy="20" r="16" fill="none" stroke-width="5"
+              stroke-linecap="round" transform="rotate(-90 20 20)" stroke-dasharray="0 100.5"/>
+      <text id="gaugeTxt" class="gauge-txt" x="20" y="24">0/8</text>
+    </svg>
+    <div class="status-meta">
+      <div class="rank" id="rankTxt">Ground Crew</div>
+      <div class="tally"><b id="ptsTxt">0</b> sky points &middot; <span id="bonusTxt">0</span>/10 bonus</div>
+    </div>
+    <button class="iconbtn" id="soundBtn" title="Sound on or off" aria-label="Sound on or off">&#128266;</button>
+    <button class="iconbtn" id="themeBtn" title="Switch light or dark" aria-label="Switch light or dark">&#9681;</button>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <section class="card card-pad">
+    <span class="eyebrow">Step one</span>
+    <h2>Name your crew</h2>
+    <p style="color:var(--ink2); font-size:15.5px; margin-top:6px">Type each explorer's name. Tap a face to change it. Everybody takes a turn as Clue Captain.</p>
+    <div class="crew-grid" id="crewGrid"></div>
+  </section>
+
+  <section class="card card-pad">
+    <span class="eyebrow">Secret code</span>
+    <h2>Eight letters to find</h2>
+    <p style="color:var(--ink2); font-size:15.5px; margin-top:6px">Every object you track down unlocks one letter. Fill them all in and you'll know where to finish.</p>
+    <div class="code-row" id="codeRow"></div>
+  </section>
+
+  <div id="stops"></div>
+
+  <section class="card card-pad">
+    <span class="eyebrow">Anytime, anywhere</span>
+    <h2>Bonus missions</h2>
+    <p style="color:var(--ink2); font-size:15.5px; margin-top:6px">Do these in any room, in any order, while you walk. Tap the face of whoever spotted it.</p>
+    <div id="bonusList"></div>
+  </section>
+
+  <section class="card card-pad finale locked" id="finale">
+    <span class="eyebrow">Final mission</span>
+    <h2 id="finaleTitle">Locked</h2>
+    <div id="finaleBody"><p class="locktxt">Find all 8 objects to unlock the code word.</p></div>
+  </section>
+
+  <section class="card card-pad cert-card" id="certCard" hidden>
+    <div class="cert">
+      <div class="seal">&#128640;</div>
+      <h3>Certified Sky Explorers</h3>
+      <p class="mono" style="font-size:12px; color:var(--ink2); letter-spacing:.14em">NATIONAL AIR AND SPACE MUSEUM</p>
+      <p class="names" id="certNames">The Crew</p>
+      <p style="color:var(--ink2); font-size:15px">completed the museum hunt, cracked the code word
+        <b style="color:var(--accent)">MOONROCK</b>, and touched a piece of the Moon.</p>
+      <p class="mono" style="margin-top:14px; font-size:13px"><span id="certRank">Cadet</span> &middot;
+        <span id="certPts">0</span> sky points &middot; <span id="certDate"></span></p>
+    </div>
+    <button class="ghost" id="printBtn">Print this certificate</button>
+  </section>
+
+  <section class="card card-pad notes">
+    <span class="eyebrow">For the grown-up</span>
+    <h2>Before you go</h2>
+    <ul>
+      <li><b>Entry is free, but check for timed-entry passes.</b> The Mall museum has been using free timed passes — book them online the week before so nobody gets turned away at the door.</li>
+      <li><b>The Space Shuttle is not at this museum.</b> Discovery lives at the Udvar-Hazy Center in Chantilly, Virginia, about 45 minutes away. Worth its own day.</li>
+      <li><b>Galleries rotate.</b> The museum has been renovating in stages, so a hall may be closed or an aircraft moved. Every stop below has a "Can't find it?" backup that still earns the letter.</li>
+      <li><b>Plan about 2&ndash;3 hours.</b> Eight stops with four kids is roughly that. The order below walks a rough loop rather than crisscrossing.</li>
+      <li><b>Best kid room in the building:</b> How Things Fly, where touching things is the point. Stop 5. Leave time.</li>
+      <li><b>Costs extra:</b> the planetarium and the giant-screen theater. Everything in this hunt is free.</li>
+      <li><b>Museum manners:</b> walking feet, indoor voices, hands off anything without a "please touch" sign. Museum guides love questions &mdash; bonus mission 10 is asking one.</li>
+    </ul>
+  </section>
+
+  <p class="footer">
+    Progress saves on this phone automatically.<br/>
+    <button class="ghost" id="resetBtn">Start a brand new hunt</button>
+  </p>
+</main>
+
+<script>
+/* ============================ mission data ============================ */
+const STOPS = [
+  {
+    letter: "M",
+    title: "Spirit of St. Louis",
+    where: "Milestones of Flight Hall · look UP",
+    clue: "In 1927 one man flew this silver plane alone from New York to Paris. Thirty-three and a half hours, no radio, no autopilot, no sleep — and no window in front of him. It is named after a city on the Mississippi River.",
+    little: "Look UP for a shiny silver plane with a long nose and fancy letters on the side. There is no window at the front for the pilot to see out of!",
+    hint: "It hangs high in the big bright hall in the middle of the museum. Look for RYAN NYP painted on the tail.",
+    planB: "Not hanging today? Instead, find any aircraft in this hall that flew across an ocean, and tell your crew where it started and where it landed.",
+    q: "Why did this plane have no front window?",
+    opts: ["A giant fuel tank was in the way", "The pilot was scared of heights", "Glass was too expensive"],
+    a: 0,
+    fact: "The extra gas tank sat right where a windshield would go. Lindbergh looked out the SIDE windows — and used a little periscope to peek forward."
+  },
+  {
+    letter: "O",
+    title: "Bell X-1 — Glamorous Glennis",
+    where: "Milestones of Flight Hall · bright orange",
+    clue: "Shaped like a bullet and painted like a pumpkin. In 1947 a pilot named Chuck Yeager flew it faster than sound — with two broken ribs he never told his bosses about. He painted his wife's name on the nose.",
+    little: "Find the bright ORANGE flying machine shaped like a fat carrot with tiny little wings.",
+    hint: "Orange, no propeller, and a name painted in script letters near the nose.",
+    planB: "Moved? Find any orange or red aircraft in the museum instead, and count how many wings it has.",
+    q: "How did the X-1 get up into the sky?",
+    opts: ["It took off from a runway", "A bigger airplane dropped it in mid-air", "A giant slingshot"],
+    a: 1,
+    fact: "A B-29 bomber carried it up and let go, like dropping a dart. Yeager's ribs were broken from falling off a horse two nights earlier, so he used a sawed-off broom handle to pull the hatch shut."
+  },
+  {
+    letter: "O",
+    title: "SpaceShipOne",
+    where: "Milestones of Flight Hall · look UP again",
+    clue: "White, wrinkly-winged, and covered in round windows like polka dots. This one was not built by a country — a private company built it, and in 2004 it flew to space and came back twice in two weeks.",
+    little: "Look UP for a white spaceship with lots of round windows. Count the windows out loud!",
+    hint: "It hangs near the Spirit of St. Louis. Its tail booms curve up at the ends.",
+    planB: "Can't spot it? Find any object in this hall that has actually been to space, and say how you can tell.",
+    q: "What is special about SpaceShipOne?",
+    opts: ["It was the first spaceship built by a private company", "It landed on Mars", "It is made of paper"],
+    a: 0,
+    fact: "It won a ten-million-dollar prize for being the first privately built craft to reach space twice in fourteen days. The pilot flew it back down like a glider, with no engine at all."
+  },
+  {
+    letter: "N",
+    title: "The nose of a jumbo jet",
+    where: "America by Air · you can walk inside",
+    clue: "Somewhere in this museum you are allowed to walk INSIDE an airplane. It is only the front slice of a Boeing 747 — the rest of it would not fit in the building.",
+    little: "Find the giant airplane nose you can walk into. Peek at the pilot seats and all the buttons!",
+    hint: "It is in the gallery about airlines and airline travel, on the first floor.",
+    planB: "Closed off? Find any cockpit you can see into anywhere in the museum and count the pedals or the seats.",
+    q: "How many engines does a Boeing 747 have?",
+    opts: ["Two", "Four", "Eight"],
+    a: 1,
+    fact: "Four engines, two under each wing. A 747 can carry more than 400 people — that is like your whole school flying at once."
+  },
+  {
+    letter: "R",
+    title: "The room where touching is allowed",
+    where: "How Things Fly · hands-on gallery",
+    clue: "Every other object here says do not touch. One whole room says the opposite. Find it, and every explorer must try one experiment — make air move, make something float, or fly a paper plane.",
+    little: "Find the room where you are ALLOWED to touch things. Try the wind machine and let something float!",
+    hint: "Ask any museum guide for How Things Fly — they will point you straight there.",
+    planB: "Busy or closed? Everyone in the crew flaps their arms and explains to a grown-up why flapping does not work for people.",
+    q: "What makes a wing lift a plane up?",
+    opts: ["Air rushing faster over the curved top", "Magnets in the ground", "The pilot pulling really hard"],
+    a: 0,
+    fact: "Air moving faster over the curved top of a wing presses down less than the slower air underneath. The wing gets pushed up. Stick your hand out a car window and you can feel it."
+  },
+  {
+    letter: "O",
+    title: "1903 Wright Flyer",
+    where: "The Wright Brothers gallery · second floor",
+    clue: "Wood, cloth, and bicycle parts. The very first powered flight lasted 12 seconds and went 120 feet — shorter than a jumbo jet's wingspan. The pilot did not sit. He lay flat on his stomach.",
+    little: "Find the oldest airplane here. It looks like a big kite made of wood and white cloth. Find the spot where the pilot had to lie down!",
+    hint: "It sits in its own room upstairs, with the original 1903 engine beside it.",
+    planB: "Instead, find any aircraft made of cloth and wood rather than metal, and guess how old it is.",
+    q: "What did the Wright brothers do for a living before this?",
+    opts: ["They baked bread", "They fixed and built bicycles", "They were pilots already"],
+    a: 1,
+    fact: "They ran a bicycle shop in Dayton, Ohio. All that tinkering with chains, spokes and balance is exactly what taught them how to steer a flying machine."
+  },
+  {
+    letter: "C",
+    title: "Columbia, the Apollo 11 command module",
+    where: "Destination Moon · second floor",
+    clue: "Three astronauts lived inside this cone-shaped can for eight days in 1969. Look closely at the outside: it is scorched and toasted from hitting the air at 25,000 miles an hour on the way home.",
+    little: "Find the toasted silver cone that went to the Moon and back. Look for the burn marks!",
+    hint: "It is the centerpiece of the Moon gallery. Walk all the way around it.",
+    planB: "Instead, find any object in the Moon gallery that actually flew in space, and one that is only a copy. How can you tell them apart?",
+    q: "Two astronauts walked on the Moon. What did the third one do?",
+    opts: ["Stayed home in Texas", "Flew this capsule in circles around the Moon, alone", "Walked on Mars"],
+    a: 1,
+    fact: "Michael Collins orbited alone while Armstrong and Aldrin were on the surface. Every time he passed behind the Moon he lost radio contact — the most alone any human has ever been."
+  },
+  {
+    letter: "K",
+    title: "A spacesuit somebody really wore",
+    where: "Destination Moon · look at the boots",
+    clue: "Twenty-one layers of fabric, built to survive a place with no air and no weather. Find one that was actually worn, then look hard at the bottom of the boots — those ridges printed footprints that are still up there right now.",
+    little: "Find a real spacesuit. Look at the bottom of the boots and see the bumpy pattern!",
+    hint: "The Moon gallery has several. The most famous belonged to Neil Armstrong.",
+    planB: "Instead, find any helmet in the museum and work out how the person inside breathed.",
+    q: "Why are the Moon footprints still there after all these years?",
+    opts: ["Someone repaints them", "There is no wind or rain on the Moon", "They are made of metal"],
+    a: 1,
+    fact: "No air means no wind and no rain, so nothing rubs them out. Those footprints could last millions of years."
+  }
+];
+
+const BONUS = [
+  "Spot something with MORE than four engines.",
+  "Find a plane with two sets of wings stacked up (a biplane).",
+  "Find writing on an aircraft that is not in English. What language is it?",
+  "Find an animal that went to space. Check the mission patches!",
+  "Pick one aircraft and count every single wheel.",
+  "Find the mission patch you would most want sewn on your jacket.",
+  "Find the oldest thing in one room, then the newest thing in the same room.",
+  "Take a photo of somebody in your crew pretending to fly.",
+  "Find something astronauts eat or drink in space.",
+  "Ask a museum guide one real question. Any question."
+];
+
+const AVATARS = ["🚀", "🛸", "🪐", "🛩️", "👩‍🚀", "🌟", "🦖", "👽"];
+const RANKS = [
+  [0, "Ground Crew"], [30, "Cadet"], [60, "Co-Pilot"],
+  [95, "Pilot"], [130, "Astronaut"], [165, "Mission Commander"]
+];
+const KEY = "nasm-hunt-v1";
+
+/* ============================ state ============================ */
+const blank = () => ({
+  crew: [0, 1, 2, 3].map(i => ({ name: "", av: i })),
+  found: STOPS.map(() => false),
+  quiz: STOPS.map(() => null),      /* null | index of the option tapped */
+  bonus: BONUS.map(() => null),     /* null | crew index */
+  finale: false,
+  sound: true,
+  theme: null
+});
+
+let S = blank();
+try {
+  const raw = localStorage.getItem(KEY);
+  if (raw) {
+    const saved = JSON.parse(raw);
+    const fresh = blank();
+    /* only take saved arrays that still match the current mission list */
+    const fit = (arr, ref) => Array.isArray(arr) && arr.length === ref.length ? arr : ref;
+    S = {
+      crew: fit(saved.crew, fresh.crew),
+      found: fit(saved.found, fresh.found),
+      quiz: fit(saved.quiz, fresh.quiz),
+      bonus: fit(saved.bonus, fresh.bonus),
+      finale: !!saved.finale,
+      sound: saved.sound !== false,
+      theme: saved.theme === "light" || saved.theme === "dark" ? saved.theme : null
+    };
+  }
+} catch (e) { /* private browsing — the hunt still works, it just won't save */ }
+
+function save() {
+  try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {}
+}
+
+const nameOf = i => (S.crew[i].name || "").trim() || ("Explorer " + (i + 1));
+const foundCount = () => S.found.filter(Boolean).length;
+const bonusCount = () => S.bonus.filter(b => b !== null).length;
+
+function points() {
+  let p = foundCount() * 10;
+  p += S.quiz.filter((q, i) => q !== null && q === STOPS[i].a).length * 5;
+  p += bonusCount() * 5;
+  if (S.finale) p += 20;
+  return p;
+}
+function rankFor(p) {
+  let r = RANKS[0][1];
+  for (const [min, label] of RANKS) if (p >= min) r = label;
+  return r;
+}
+function starsFor(i) {
+  let n = 0;
+  S.found.forEach((f, k) => { if (f && k % 4 === i) n++; });
+  S.bonus.forEach(b => { if (b === i) n++; });
+  return n;
+}
+
+/* ============================ sound + confetti ============================ */
+let actx = null;
+function ding(up) {
+  if (!S.sound) return;
+  try {
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+    const t = actx.currentTime;
+    const o = actx.createOscillator(), g = actx.createGain();
+    o.type = "triangle";
+    o.frequency.setValueAtTime(up ? 660 : 300, t);
+    o.frequency.exponentialRampToValueAtTime(up ? 1120 : 240, t + 0.13);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.16, t + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.28);
+    o.connect(g); g.connect(actx.destination);
+    o.start(t); o.stop(t + 0.3);
+  } catch (e) {}
+}
+
+function confetti() {
+  const cv = document.getElementById("confetti");
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const ctx = cv.getContext("2d");
+  const dpr = window.devicePixelRatio || 1;
+  cv.width = innerWidth * dpr; cv.height = innerHeight * dpr;
+  cv.style.display = "block"; ctx.scale(dpr, dpr);
+  const colors = ["#ff7a2f", "#4fd6a9", "#6fc3ff", "#ffd166", "#ffffff"];
+  const bits = Array.from({ length: 130 }, () => ({
+    x: Math.random() * innerWidth, y: -20 - Math.random() * innerHeight * 0.5,
+    r: 4 + Math.random() * 6, vy: 2 + Math.random() * 4, vx: -1.5 + Math.random() * 3,
+    rot: Math.random() * 6.3, vr: -0.14 + Math.random() * 0.28,
+    c: colors[(Math.random() * colors.length) | 0]
+  }));
+  const t0 = performance.now();
+  (function frame(now) {
+    ctx.clearRect(0, 0, innerWidth, innerHeight);
+    bits.forEach(b => {
+      b.x += b.vx; b.y += b.vy; b.rot += b.vr;
+      ctx.save(); ctx.translate(b.x, b.y); ctx.rotate(b.rot);
+      ctx.fillStyle = b.c; ctx.fillRect(-b.r / 2, -b.r / 2, b.r, b.r * 1.6);
+      ctx.restore();
+    });
+    if (now - t0 < 4200) requestAnimationFrame(frame);
+    else { ctx.clearRect(0, 0, innerWidth, innerHeight); cv.style.display = "none"; }
+  })(t0);
+}
+
+/* ============================ render ============================ */
+function renderCrew() {
+  const grid = document.getElementById("crewGrid");
+  grid.innerHTML = "";
+  S.crew.forEach((c, i) => {
+    const card = document.createElement("div");
+    card.className = "crew-card";
+
+    const av = document.createElement("button");
+    av.className = "avatar";
+    av.type = "button";
+    av.textContent = AVATARS[c.av];
+    av.title = "Tap to change";
+    av.setAttribute("aria-label", "Change explorer " + (i + 1) + " picture");
+    av.onclick = () => {
+      c.av = (c.av + 1) % AVATARS.length;
+      av.textContent = AVATARS[c.av];
+      save(); renderBonus(); renderCaptains();
+    };
+
+    const inp = document.createElement("input");
+    inp.value = c.name;
+    inp.placeholder = "Name";
+    inp.maxLength = 14;
+    inp.setAttribute("aria-label", "Explorer " + (i + 1) + " name");
+    inp.oninput = () => { c.name = inp.value; save(); renderCaptains(); renderCert(); };
+
+    const st = document.createElement("div");
+    st.className = "stars";
+    st.id = "stars" + i;
+
+    card.append(av, inp, st);
+    grid.appendChild(card);
+  });
+  renderStars();
+}
+
+function renderStars() {
+  S.crew.forEach((c, i) => {
+    const el = document.getElementById("stars" + i);
+    if (!el) return;
+    const n = starsFor(i);
+    el.textContent = n ? "★".repeat(Math.min(n, 6)) + (n > 6 ? " +" + (n - 6) : "") : "☆ no stars yet";
+  });
+}
+
+function renderCode() {
+  const row = document.getElementById("codeRow");
+  row.innerHTML = "";
+  STOPS.forEach((s, i) => {
+    const t = document.createElement("div");
+    t.className = "tile" + (S.found[i] ? " on" : "");
+    t.textContent = s.letter;
+    t.setAttribute("aria-label", S.found[i] ? "Letter " + s.letter + " unlocked" : "Letter still locked");
+    row.appendChild(t);
+  });
+}
+
+function renderStops() {
+  const host = document.getElementById("stops");
+  host.innerHTML = "";
+  STOPS.forEach((s, i) => {
+    const sec = document.createElement("section");
+    sec.className = "stop" + (S.found[i] ? " done" : "");
+    sec.id = "stop" + i;
+    sec.innerHTML =
+      '<div class="stop-head"><div class="num">' + (i + 1) + '</div>' +
+      '<div><h3>' + s.title + '</h3><div class="where">' + s.where + '</div></div></div>' +
+      '<div class="captain">Clue Captain: <b class="capname" data-i="' + i + '"></b></div>' +
+      '<p class="clue">' + s.clue + '</p>' +
+      '<div class="little"><span class="eyebrow">For the littlest explorers</span>' + s.little + '</div>' +
+      '<details><summary>Need a hint?</summary><p>' + s.hint + '</p></details>' +
+      '<details><summary>Can’t find it?</summary><p>' + s.planB + ' <b>You still earn the letter.</b></p></details>' +
+      '<button class="found-btn" type="button"></button>' +
+      '<div class="quiz" hidden><span class="eyebrow">Bonus brain question · 5 points</span>' +
+      '<p class="quiz-q">' + s.q + '</p><div class="opts"></div><div class="factbox"></div></div>';
+
+    const btn = sec.querySelector(".found-btn");
+    btn.onclick = () => {
+      S.found[i] = !S.found[i];
+      if (S.found[i]) { ding(true); }
+      save(); paintStop(i); renderCode(); renderStars(); renderStatus(); renderFinale();
+    };
+
+    const opts = sec.querySelector(".opts");
+    s.opts.forEach((text, k) => {
+      const b = document.createElement("button");
+      b.className = "opt"; b.type = "button"; b.textContent = text;
+      b.onclick = () => {
+        if (S.quiz[i] !== null) return;
+        S.quiz[i] = k;
+        ding(k === s.a);
+        save(); paintStop(i); renderStatus();
+      };
+      opts.appendChild(b);
+    });
+
+    host.appendChild(sec);
+    paintStop(i);
+  });
+  renderCaptains();
+}
+
+function paintStop(i) {
+  const s = STOPS[i];
+  const sec = document.getElementById("stop" + i);
+  sec.classList.toggle("done", S.found[i]);
+  const btn = sec.querySelector(".found-btn");
+  btn.textContent = S.found[i] ? "✓ FOUND IT — LETTER " + s.letter + " UNLOCKED" : "WE FOUND IT!";
+  btn.classList.toggle("is-done", S.found[i]);
+
+  const quiz = sec.querySelector(".quiz");
+  quiz.hidden = !S.found[i];
+
+  const pick = S.quiz[i];
+  const answered = pick !== null;
+  sec.querySelectorAll(".opt").forEach((b, k) => {
+    b.disabled = answered;
+    b.classList.remove("right", "wrong");
+    if (!answered) return;
+    if (k === s.a) b.classList.add("right");
+    else if (k === pick) b.classList.add("wrong");
+  });
+  const fb = sec.querySelector(".factbox");
+  fb.innerHTML = answered
+    ? '<div class="fact"><b>' + (pick === s.a ? "Correct! +5 points." : "Good guess — the green one is the answer.") + '</b> ' + s.fact + '</div>'
+    : "";
+}
+
+function renderCaptains() {
+  document.querySelectorAll(".capname").forEach(el => {
+    el.textContent = nameOf(Number(el.dataset.i) % 4);
+  });
+}
+
+function renderBonus() {
+  const host = document.getElementById("bonusList");
+  host.innerHTML = "";
+  BONUS.forEach((text, i) => {
+    const d = document.createElement("div");
+    d.className = "bonus" + (S.bonus[i] !== null ? " done" : "");
+    const p = document.createElement("p");
+    p.innerHTML = (S.bonus[i] !== null ? "✅ " : "") + text;
+    const who = document.createElement("div");
+    who.className = "who";
+    const lbl = document.createElement("span");
+    lbl.textContent = S.bonus[i] !== null ? "SPOTTED BY " + nameOf(S.bonus[i]).toUpperCase() : "WHO SPOTTED IT?";
+    who.appendChild(lbl);
+    S.crew.forEach((c, k) => {
+      const b = document.createElement("button");
+      b.className = "chip" + (S.bonus[i] === k ? " on" : "");
+      b.type = "button";
+      b.textContent = AVATARS[c.av];
+      b.title = nameOf(k);
+      b.setAttribute("aria-label", "Credit " + nameOf(k));
+      b.onclick = () => {
+        S.bonus[i] = (S.bonus[i] === k) ? null : k;
+        if (S.bonus[i] !== null) ding(true);
+        save(); renderBonus(); renderStars(); renderStatus();
+      };
+      who.appendChild(b);
+    });
+    d.append(p, who);
+    host.appendChild(d);
+  });
+}
+
+function renderStatus() {
+  const done = foundCount(), p = points();
+  const circ = 2 * Math.PI * 16;
+  const ring = document.getElementById("gaugeFill");
+  ring.setAttribute("stroke-dasharray", (circ * done / 8).toFixed(1) + " " + circ.toFixed(1));
+  ring.setAttribute("stroke-linecap", done ? "round" : "butt");
+  document.getElementById("gaugeTxt").textContent = done + "/8";
+  document.getElementById("rankTxt").textContent = rankFor(p);
+  document.getElementById("ptsTxt").textContent = p;
+  document.getElementById("bonusTxt").textContent = bonusCount();
+  renderCert();
+}
+
+function renderFinale() {
+  const box = document.getElementById("finale");
+  const title = document.getElementById("finaleTitle");
+  const body = document.getElementById("finaleBody");
+  const open = foundCount() === 8;
+  box.classList.toggle("locked", !open);
+
+  if (!open) {
+    title.textContent = "Locked";
+    body.innerHTML = '<p class="locktxt">Find all 8 objects to unlock the code word. ' + (8 - foundCount()) + ' to go.</p>';
+    document.getElementById("certCard").hidden = true;
+    return;
+  }
+
+  title.textContent = "Code word cracked";
+  body.innerHTML =
+    '<div class="bigword">MOONROCK</div>' +
+    '<p style="font-size:16px">Your last mission: find the piece of the Moon that you are actually allowed to <b>touch</b>. ' +
+    'It is a real rock, brought back by astronauts, worn smooth by millions of fingers. ' +
+    'If you cannot spot it, ask a museum guide — it is their favourite question.</p>' +
+    '<p style="font-size:15px; color:var(--ink2); margin-top:10px">Everybody has to touch it. No exceptions.</p>' +
+    '<button class="found-btn" id="finaleBtn" style="width:100%; margin:16px 0 0" type="button"></button>';
+
+  const fb = document.getElementById("finaleBtn");
+  fb.textContent = S.finale ? "✓ MISSION COMPLETE" : "WE ALL TOUCHED THE MOON!";
+  fb.classList.toggle("is-done", S.finale);
+  fb.onclick = () => {
+    S.finale = !S.finale;
+    save(); renderStatus(); renderFinale();
+    if (S.finale) {
+      ding(true); confetti();
+      setTimeout(() => document.getElementById("certCard").scrollIntoView({ behavior: "smooth", block: "center" }), 500);
+    }
+  };
+  document.getElementById("certCard").hidden = !S.finale;
+}
+
+function renderCert() {
+  document.getElementById("certNames").textContent = S.crew.map((c, i) => nameOf(i)).join("  ·  ");
+  document.getElementById("certRank").textContent = rankFor(points());
+  document.getElementById("certPts").textContent = points();
+  document.getElementById("certDate").textContent =
+    new Date().toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" });
+}
+
+/* ============================ chrome ============================ */
+function paintSound() {
+  document.getElementById("soundBtn").textContent = S.sound ? "🔊" : "🔇";
+}
+document.getElementById("soundBtn").onclick = () => {
+  S.sound = !S.sound; save(); paintSound(); if (S.sound) ding(true);
+};
+document.getElementById("themeBtn").onclick = () => {
+  const nowLight = S.theme
+    ? S.theme === "light"
+    : window.matchMedia("(prefers-color-scheme: light)").matches;
+  S.theme = nowLight ? "dark" : "light";
+  document.documentElement.setAttribute("data-theme", S.theme);
+  save();
+};
+document.getElementById("printBtn").onclick = () => window.print();
+document.getElementById("resetBtn").onclick = () => {
+  if (!confirm("Erase all the crew names, finds and stars, and start over?")) return;
+  S = blank(); save(); boot();
+  scrollTo({ top: 0, behavior: "smooth" });
+};
+
+function boot() {
+  if (S.theme) document.documentElement.setAttribute("data-theme", S.theme);
+  else document.documentElement.removeAttribute("data-theme");
+  paintSound();
+  renderCrew(); renderCode(); renderStops(); renderBonus(); renderStatus(); renderFinale();
+}
+boot();
+</script>
+
+</body>
+</html>
