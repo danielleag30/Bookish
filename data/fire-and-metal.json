@@ -20,8 +20,8 @@
       "w": 350,
       "h": 430,
       "power": "the floating city",
-      "color": "#12303D",
-      "border": "#2E6B7A"
+      "color": "#0E232D",
+      "border": "#3D5A66"
     },
     {
       "id": "kenta",
@@ -31,8 +31,8 @@
       "w": 440,
       "h": 430,
       "power": "the Capitol",
-      "color": "#3A2E1C",
-      "border": "#8C6A3F"
+      "color": "#281B13",
+      "border": "#83502F"
     },
     {
       "id": "maile",
@@ -42,8 +42,8 @@
       "w": 200,
       "h": 200,
       "power": "air elemental",
-      "color": "#20313F",
-      "border": "#52739C"
+      "color": "#1A2836",
+      "border": "#5A727E"
     },
     {
       "id": "roison",
@@ -64,8 +64,8 @@
       "w": 350,
       "h": 250,
       "power": "an unbroken curse",
-      "color": "#16161E",
-      "border": "#3A3A46"
+      "color": "#0D0B0A",
+      "border": "#3B3229"
     }
   ],
   "affiliations": {
@@ -1590,13 +1590,13 @@
     }
   ],
   "theme": {
-    "accent": "#C9CED4",
-    "accent2": "#C08A4A",
-    "ground": "#0B1622",
-    "panel": "#12222E",
-    "line": "#1E4A52",
+    "accent": "#F5D898",
+    "accent2": "#C7CDD2",
+    "ground": "#071319",
+    "panel": "#0E232D",
+    "line": "#2F434D",
     "display": "'Cinzel', serif",
-    "mood": "Cold silver against Kenta gold — sea-exile and foil-stamped metal rather than the gilded register of court romantasy. Provisional: drawn from documented cover descriptions, not sampled from the cover art."
+    "mood": "Sampled from the cover, not chosen: the pale gold of the magic burst at its centre, the cold teal of the drowned Alaha side, and the silver of the word METAL as the counterpoint. Gold over silver because the silver measured a near-match for Fae & Alchemy's accent, and two series should not read as one."
   },
   "terms": {
     "magic": "Gift"
