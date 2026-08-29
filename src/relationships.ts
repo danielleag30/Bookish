@@ -410,6 +410,11 @@ export const VOCAB_EXCEPTIONS: Record<string, string> = {
   'empyrean:violet>jack:killed':
     "Violet does kill Jack in book 1; he is mended by Nolon and returns, so his " +
     "final status is `prisoner` rather than `dead`. The death was real but not permanent.",
+  'fire-and-metal:samasu>wren:family':
+    "Samasu is stated to be related to Wren and the tie is never specified, so " +
+    "there is no kinship term to put in the label. `family` is the right type — " +
+    "this is kinship, not an alliance — and inventing 'cousin' to satisfy the " +
+    "rule would be inventing canon, which is the thing the rule exists to stop.",
 };
 
 /**

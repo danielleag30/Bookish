@@ -1,0 +1,160 @@
+Source notes for the add-series agent. Plot beats only — no book text.
+
+**Series:** Fire & Metal by Rachel Schneider
+**Slug:** fire-and-metal
+
+Metal Slinger is book one of the Fire & Metal series, not the series name itself; the series title is confirmed by the Goodreads series page, the Amazon series page, Macmillan/Saturday Books, and Fantastic Fiction.
+This file covers Book 1 (Metal Slinger) only. Book 2 (Light Wielder, published 9 June 2026) is deliberately excluded at the project owner's direction because sourcing for it is currently too thin to meet this project's citation bar.
+All beats below were researched from public recaps, study guides, and reader guides. No book text is reproduced.
+Metal Slinger is narrated in first person by Brynn/Jovie, and the narrator is revealed in the final chapters to have withheld the truth from the reader; beats are ordered by when the reader learns a thing, not when it was true.
+
+## Book 1: Metal Slinger
+
+- Brynn is an orphaned guard trainee of the Alaha, living alone on Urchin Row at the top of the Grove in the floating city of Alaha.
+- The Alaha are a people exiled to live at sea on a city of bridges and rooms built above open ocean after losing a war to the Kenta roughly a century before the story opens.
+- Brynn has copper hair, which marks her as visibly different from the fair-haired Alaha, and she sketches compulsively.
+- Brynn believes her parents died at sea and that Captain Wren took her in afterward.
+- Captain Wren is the leader of the Alaha, stationed in Alaha, and is Kai's father.
+- Faline is Wren's wife, Kai's mother, and the closest thing Brynn has to a maternal figure in Alaha.
+- Kai is Wren's son and heir, a guard trainee, and Brynn's lifelong friend and protector in Alaha.
+- Messer is a guard trainee of the Alaha and Brynn's other closest friend.
+- Commander Johannes is Messer's father and third in command of the Alaha; he physically abuses Messer.
+- Danuh is Messer's mother, in Alaha.
+- Aurora is the only other female guard trainee of the Alaha and a childhood rival of Brynn's; she is arranged-matched to Messer.
+- Gramble is the instructor of the Alaha guard trainees.
+- Masie is a scriber in Alaha and Gramble's daughter; she is romantically involved with Messer.
+- Commander Dupre is commander of the Alaha guard and Captain Wren's right hand.
+- Paul is an Alaha guard trainee who bullies Brynn.
+- Lawson is an Alaha guard trainee and a classmate of Brynn's.
+- Grenadine is Brynn's elderly neighbour on Urchin Row in Alaha.
+- Shirlane is a primary school teacher in Alaha.
+- The Market is the single annual day of trade between the Alaha and the Kenta, held at a cliff-side dock on Kenta territory.
+- Brynn, Kai, Messer and Aurora travel to the Market as trainees; it is the first time Brynn will stand near solid ground.
+- Kai tells Brynn at the Market that he has asked his parents for permission to marry her.
+- Acker is a Kenta soldier who follows Brynn through the Market stalls and accuses her of theft.
+- Acker forces Brynn's palm against the stone cliff wall, which causes her searing pain.
+- Brynn slashes Acker with his own black-bladed dagger and flees, keeping the dagger.
+- Aurora detonates a kerosene booth at the Market, collapsing a section of the trade dock into the sea.
+- The explosion breaks the century-old peace treaty between the Kenta and the Alaha.
+- The Alaha trainees escape back to Alaha by ship in the chaos.
+- Wren reveals to Brynn that Aurora is part of a growing Alaha uprising.
+- Kenta demands that Alaha surrender two prisoners, Brynn and Aurora.
+- Wren refuses to surrender Brynn and shields her by announcing her betrothal to Kai.
+- Kenta extends the Market trade ban to two years, threatening Alaha with starvation.
+- At the graduation ceremony, Messer is named commander and spars Brynn; Messer beats her.
+- Kai publicly claims Brynn as his match and kisses her, and both are jailed overnight in the Alaha brig for violating Alaha rules on public affection.
+- A single Kenta ship appears and one man rows ashore and surrenders himself at the Alaha dock.
+- The man is the soldier from the Market, and he gives his name as Acker.
+- Acker is imprisoned in the Alaha brig and tortured for information.
+- Acker refuses to speak to anyone but Brynn.
+- Acker tells Brynn a blood oath limits what he can say to her.
+- Acker tells Brynn that her real name is Jovie and that she is not Alaha.
+- A blue-flag storm approaches Alaha and the brig will flood; Wren intends to let Acker drown.
+- Brynn swims to the flooding cell, summons the dagger she had thrown into the ocean by reaching for it with her mind, and uses the hearthstone blade to break the cell's magical seal.
+- Brynn frees Acker and hides him in her room on Urchin Row.
+- Acker tells Brynn that Wren is over three centuries old and is an Heir whose gift is influence.
+- Acker tells Brynn that Wren's influence is why the Alaha were exiled.
+- Acker tells Brynn that Kai inherited Wren's gift of influence and has been amplifying Brynn's feelings toward him for years through touch.
+- Acker tells Brynn that her true name is Jovinnia, Princess of Maile, and that Wren kidnapped her as a child to serve his political schemes.
+- Acker tells Brynn that her mother, the Queen of Maile, is alive and has never stopped searching for her.
+- Acker tells Brynn that the hearthstone dagger, marked with a J, was forged by her own hands as a child under her father's guidance.
+- On the night of the Matching Ceremony, Brynn and Acker attempt to steal a fishing boat and escape Alaha.
+- Commander Dupre catches Brynn and Acker at swordpoint at the boats.
+- Kai arrives with guards and admits he knew he was influencing Brynn, then orders his guards to kill Acker.
+- Acker kills two of Kai's guards.
+- Acker kills Commander Dupre by throwing a blade through him.
+- Brynn pleads with Acker not to kill Kai, and Acker chokes Kai unconscious instead.
+- Brynn and Acker escape Alaha by stolen fishing boat, and Acker carries a stab wound taken in the escape.
+- Brynn and Acker drift for weeks at sea, facing starvation, dehydration and storms.
+- Brynn's unnamed midnight-blue pet bird finds them at sea, and they name it Blue.
+- Blue is identified as an eyun, a corvid-like mythological predator capable of devouring men.
+- Brynn and Acker make landfall in Roison, hostile territory east of Kenta.
+- Roison is ruled by Chryse; Osiris is Roison's previous king.
+- Touching land triggers Brynn's awakening, the violent emergence of magic dormant in her since birth.
+- Acker feeds Brynn saigon root against the pain, but the awakening lasts far longer than any recorded case and she may be dying.
+- Vad is an oracle of Roison who reads minds; he leads a band of Roison rebels that surrounds Brynn and Acker.
+- Vad is a former army comrade of Acker's who betrayed his own battalion.
+- Vad reads Brynn's mind, identifies her as the lost princess of Maile, and says she is dying because her body cannot finish the awakening without a healer.
+- One of Vad's archers shoots Brynn through the sternum with an arrow.
+- Acker swears a blood oath to Vad, trading thirty seconds of access to his memories for the location of a healer.
+- Fia is a healer in Roison who reveres Heirs; Jorgen is her husband and an illusionist of Roison.
+- Fia forces Brynn's awakening to completion on a stone slab while men hold Brynn down, and saves her life.
+- Brynn is revealed to be a light wielder, the first in millennia and the most feared power in recorded history.
+- Sven is Fia and Jorgen's son and a shifter of Roison.
+- Sven ambushes Brynn and Acker in panther form to claim the bounty on Acker's head.
+- The eyun Blue dives from the canopy and transforms mid-flight into a leopard to defend Brynn.
+- Blue is revealed to be Messer, a shifter, who followed Brynn across the entire ocean in eyun form.
+- Messer and Sven fight and tumble into the Dark Forest, the cursed barrier spanning the Roison-Kenta border from which nothing has ever returned.
+- Brynn follows Messer into the Dark Forest against Acker's warning, and Acker follows her.
+- Winged creatures in the Dark Forest attack Brynn and Acker.
+- Brynn releases a burst of light magic that incinerates the creatures and burns away the entire Dark Forest, permanently erasing the barrier between Roison and Kenta.
+- Brynn and Acker carry a barely alive Messer, in leopard form, across the Kenta border.
+- Kenta soldiers ride out and address Acker as their prince.
+- Acker is revealed to be the son of King Edmond and the prince of Kenta, known on battlefields as the Metal Slinger and the Soldier of Chaos.
+- Acker's gift is elemental control of metal.
+- King Edmond is the ruler of Kenta and Acker's father, stationed at the Kenta capitol.
+- Beau is Acker's half-sister, third in command of Kenta, and an Heir whose gift is seeing emotional auras.
+- Beau confirms that Brynn's and Acker's auras have merged and that they are matched.
+- Hallis is Acker's closest friend since childhood, a one-handed Kenta advisor and instructor, and a childhood friend of Jovie's from before her abduction.
+- Hallis is romantically involved with Beau.
+- Messer is healed and then imprisoned and interrogated by the Kenta; Beau reads his character and confirms his loyalty to Brynn.
+- Acker releases Messer at Brynn's urging but first brands him with a hearthstone scar, the mark worn by Acker's five elite soldiers, which makes Messer a target for Kenta's enemies.
+- The matching bond between Brynn and Acker escalates from shared dreams to mind-melding to involuntary consciousness projection.
+- Through a projection, Brynn learns that Acker is betrothed to Irina, Princess of Strou, in a political alliance.
+- General Samasu is a sentry of Maile and Queen Evelyn's messenger, and is related to Wren.
+- Maile soldiers intercept Brynn and Acker on the road to bring Brynn home to Maile.
+- Acker cuts both his and Brynn's palms and presses them together, creating a blood bond in which any lie kills both parties instantly.
+- Under the blood bond Acker swears to protect Jovie until his death and declares that he loves her.
+- Brynn sends the hearthstone dagger to her mother as proof of her identity, and when she summons it back she glimpses a copper-haired woman holding it.
+- The Kenta capitol receives Brynn with open hostility because she is the lost princess of Maile.
+- King Edmond forces Brynn to kneel at court and she cannot rise, which she attributes to his influence.
+- Greta is the Kenta royal librarian, Beau's mother, King Edmond's former consort, and an Heir with foresight.
+- Greta keeps a secret library of forbidden books, which Brynn uses to research matched bonds.
+- Wells is one of Acker's five elite soldiers, now a blacksmith; Olivia is his wife, and the two are secretly matched.
+- Wells and Olivia explain to Brynn that a resisted matching bond will trap the resisting person's consciousness outside her body.
+- Irina, Princess of Strou and Acker's betrothed, is revealed to be living at the Kenta palace.
+- King Edmond privately threatens Acker: keep Brynn as a consort, but marry Irina for Strou's army.
+- Rango is a senior commanding officer of Kenta; Commander Imen is a Kenta commander; Talon is a Kenta soldier.
+- Stassia is a maidservant at the Kenta palace and Henry is a cook there.
+- In the Kenta archives Brynn finds that King Edmond's recorded gift is fire, not influence.
+- In the same archives Brynn recognises her old Alaha neighbour Grenadine in a portrait of Acker's mother, who was believed dead.
+- Grenadine is revealed to be the former Queen of Kenta and Acker's mother, living in hiding on Urchin Row in Alaha.
+- Acker escorts Brynn to a court dinner in open defiance of his father, publicly declaring his intent to marry her instead of Irina.
+- Brynn and Acker consummate the matching bond and confess love to one another.
+- A flashback chapter reveals that Brynn is the true leader of the Alaha rebellion, not Aurora and not Kai.
+- The flashback reveals that Brynn deliberately broke Acker out of the Alaha brig as part of a plan she designed.
+- The flashback reveals that Brynn instructed Kai to use his influence on her visibly, so that Acker would believe her a manipulated innocent.
+- The flashback reveals that Brynn always remembered that Wren abducted her from Maile, and that her helplessness was a performance aimed at both Acker and the reader.
+- The flashback reveals that Brynn and Kai conspired to depose both King Edmond of Kenta and Captain Wren of Alaha.
+- Beau is revealed to have joined Brynn's rebellion.
+- At the celebratory dinner Acker proposes marriage to Brynn before the Kenta court.
+- Brynn's rebellion poisons the wine and the Kenta court collapses.
+- Brynn locks a mangi stone collar around Acker's neck to suppress his magic, and Beau binds him with a metal rope.
+- Messer, disguised among the soldiers, kills the guards at the dinner.
+- Brynn offers Acker his father's throne in exchange for peace between Kenta, Alaha, Maile and Roison.
+- Acker refuses the throne.
+- Brynn stabs King Edmond with the hearthstone dagger, severing his magic but leaving him alive at Acker's earlier request.
+- Acker breaks partially free, catches Brynn in a corridor, kisses her, and then strikes her face.
+- The blood bond punishes Acker instantly for striking Brynn, and he bleeds from the nose.
+- Acker orders Brynn to leave, and Brynn flees the Kenta palace with Messer.
+- Queen Evelyn, ruler of Maile and an air elemental, is Jovie's mother; she does not appear on the page in this book.
+- The fate of Jovie's father, who guided her in forging the hearthstone dagger, is not resolved in this book.
+- The magic system: people with gifts are called Heirs; recorded gifts include elemental control (Acker, metal; Edmond, recorded as fire; Evelyn, air), influence over emotions through touch (Wren, Kai), light wielding (Jovie), shifting (Messer, Sven), mind-reading oracle sight (Vad), aura reading (Beau), foresight (Greta), healing (Fia) and illusion (Jorgen).
+- Hearthstone is a rare volcanic material that answers permanently to whoever forged it and is the only substance that can sever an Heir's magic.
+- Mangi stone is an ocean-floor stone that suppresses magical gifts when worn, and is required of gifted people outside the Kenta palace walls.
+- Blood oaths bind what a person may say or do and inflict escalating pain when violated; blood bonds are banned across the territories because any lie kills both parties.
+- A matching bond ties two Heirs as destined partners and escalates through shared dreams, mind-melding and consciousness projection; resisting it is progressively dangerous.
+- An awakening is the violent emergence of an Alaha-raised Heir's magic on first sustained contact with land, because land is the source of all magic.
+
+## Sources
+
+- SuperSummary study guide for Metal Slinger (supersummary.com/metal-slinger/summary/) — full plot summary, the Wren abduction reveal, the Kai influence ruse, Greta and the secret library, Wells and Olivia, the poisoning and the severing of Edmond's magic.
+- SoBrief summary of Metal Slinger (sobrief.com/books/metal-slinger) — sixteen-section chronological plot breakdown, character profiles, and the plot-device entries for the hearthstone dagger, matching bond, mangi stone collars, blood oaths and blood bonds, and the Dark Forest.
+- Story Darlings recap (storydarlings.com/2025/03/20/metal-slinger-rachel-schneider/) — full character table with roles and gifts, table of locations, ending breakdown, and the Grenadine reveal.
+- Esta Pinto character guide (estapinto.com/books/metal-slinger-characters-spice-levels-chapters-triggers-spoilers) — the widest named-cast inventory, including minor and mentioned-only names, and the author's own statement about a book three.
+- Recap and Ruin recap (recapandruin.com/post/metal-slinger-by-rachel-schneider) — brig, storm, dagger summoning and escape sequence.
+- Book'd Out review (bookdout.wordpress.com/2025/10/15/review-metal-slinger-by-rachel-schneider/) — Brynn's age and orphan backstory as presented in book one, Kai's objection to Acker.
+- Macmillan / Saturday Books product page (us.macmillan.com/books/9781250419088/metalslinger/) — publisher, edition, official cover.
+- Goodreads Fire & Metal series page (goodreads.com/series/402374-fire-metal) — series name and book order.
+- Amazon Fire & Metal series page and Fantastic Fiction author page — independent confirmation of the series name.
+- Parade (parade.com) — self-publication in 2024 and subsequent acquisition by Macmillan.
